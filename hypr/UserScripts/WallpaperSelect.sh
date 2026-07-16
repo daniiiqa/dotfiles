@@ -157,7 +157,9 @@ apply_video_wallpaper() {
   kill_wallpaper_for_video
 
   # Apply video wallpaper using mpvpaper
-  mpvpaper '*' -o "load-scripts=no no-audio --loop" "$video_path" &
+  # Custom (dany): hwdec=auto — decodificación por hardware (AMD), un 4K por
+  # software costaba ~30% de CPU constante.
+  mpvpaper '*' -o "load-scripts=no no-audio --loop hwdec=auto" "$video_path" &
 }
 
 # Main function
