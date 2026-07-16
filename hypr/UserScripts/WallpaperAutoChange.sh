@@ -34,8 +34,10 @@ while true; do
 			swww img -o $focused_monitor "$img"
 			# Regenerate colors from the exact image path to avoid cache races
 			$HOME/.config/hypr/scripts/WallustSwww.sh "$img"
-			# Refresh UI components that depend on wallust output
-			$wallust_refresh
+			# Custom (dany): Refresh completo — WallustSwww ya no recarga
+			# waybar por su cuenta, así que aquí el NoWaybar dejaría la
+			# barra con los colores viejos
+			$HOME/.config/hypr/scripts/Refresh.sh
 			sleep $INTERVAL
 			
 		done

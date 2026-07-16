@@ -128,12 +128,10 @@ if pidof ghostty >/dev/null; then
   for pid in $(pidof ghostty); do kill -SIGUSR2 "$pid" 2>/dev/null || true; done
 fi
 
-# Prompt Waybar to reload colors
-if command -v waybar-msg >/dev/null 2>&1; then
-  waybar-msg cmd reload >/dev/null 2>&1 || true
-elif pidof waybar >/dev/null; then
-  killall -SIGUSR2 waybar 2>/dev/null || true
-fi
+# Custom (dany): aquí NO se recarga waybar. Este script genera colores;
+# recargar la barra es chamba del caller (Refresh.sh). Cuando ambos lo
+# hacían, cada cambio de wallpaper parpadeaba la barra DOS veces: una al
+# click (esta recarga) y otra al acabar la transición (la de Refresh.sh).
 
 # Custom (dany): keep SDDM background + colors in sync with the wallpaper.
 # NOTE: this file gets overwritten by JaKooLit dots updates — if the SDDM
