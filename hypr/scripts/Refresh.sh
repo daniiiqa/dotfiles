@@ -1,57 +1,42 @@
 #!/usr/bin/env bash
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# Scripts for refreshing ags, waybar, rofi, swaync, wallust
+# Scripts for refreshing waybar, rofi, swaync, quickshell, wallust
+#
+# Custom (dany): reload EN CALIENTE en lugar de matar y relanzar.
+# Lo único que este script necesita lograr tras un cambio de wallpaper es
+# que las barras relean los colores de wallust — waybar (SIGUSR2) y swaync
+# (swaync-client) saben hacerlo sin morir, así que la barra ya no parpadea
+# ni re-instancia sus módulos. El kill queda solo como fallback si el
+# proceso no está corriendo. quickshell sí se reinicia: no tiene reload.
 
-SCRIPTSDIR=$HOME/.config/hypr/scripts
 UserScripts=$HOME/.config/hypr/UserScripts
 
-# Define file_exists function
-file_exists() {
-  if [ -e "$1" ]; then
-    return 0 # File exists
-  else
-    return 1 # File does not exist
-  fi
-}
+# waybar: reload (config + CSS) si corre; lanzarlo si no
+if pidof waybar >/dev/null; then
+  killall -SIGUSR2 waybar
+else
+  waybar &
+fi
 
-# Kill already running processes
-_ps=(waybar rofi swaync ags)
-for _prs in "${_ps[@]}"; do
-  if pidof "${_prs}" >/dev/null; then
-    pkill "${_prs}"
-  fi
-done
+# swaync: reload de config y CSS en caliente; lanzarlo si no corre
+if pidof swaync >/dev/null; then
+  swaync-client --reload-config 2>/dev/null
+  swaync-client --reload-css 2>/dev/null
+else
+  swaync >/dev/null 2>&1 &
+fi
 
-# added since wallust sometimes not applying
-killall -SIGUSR2 waybar
-# Added sleep for GameMode causing multiple waybar
-sleep 0.1
+# rofi no es daemon: si quedó un menú abierto ciérralo, el próximo
+# lanzamiento lee los colores nuevos solo
+pkill rofi 2>/dev/null
 
-# quit ags & relaunch ags
-#ags -q && ags &
-
-# quit quickshell & relaunch quickshell
-pkill qs && qs &
-
-# some process to kill
-for pid in $(pidof waybar rofi swaync ags swaybg); do
-  kill -SIGUSR1 "$pid"
-  sleep 0.1
-done
-
-#Restart waybar
-sleep 0.1
-waybar &
-
-# relaunch swaync
-sleep 0.3
-swaync >/dev/null 2>&1 &
-# reload swaync
-swaync-client --reload-config
+# quickshell: sin reload de colores → restart completo
+pkill qs 2>/dev/null
+sleep 0.2
+qs -c overview >/dev/null 2>&1 &
 
 # Relaunching rainbow borders if the script exists
-sleep 1
-if file_exists "${UserScripts}/RainbowBorders.sh"; then
+if [ -e "${UserScripts}/RainbowBorders.sh" ]; then
   ${UserScripts}/RainbowBorders.sh &
 fi
 
