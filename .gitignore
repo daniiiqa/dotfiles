@@ -1,0 +1,32 @@
+# Dotfiles repo: ignora TODO por default, whitelist solo el rice.
+/*
+
+# ── Carpetas del rice (las que el copy.sh de KooL aplastaba) ──
+!/.gitignore
+!/README.md
+!/btop/
+!/cava/
+!/fastfetch/
+!/ghostty/
+!/hypr/
+!/kitty/
+!/Kvantum/
+!/qt5ct/
+!/qt6ct/
+!/quickshell/
+!/rofi/
+!/swappy/
+!/swaync/
+!/wallust/
+!/waybar/
+!/wezterm/
+!/wlogout/
+
+# ── Volátiles / generados dentro de las carpetas trackeadas ──
+# Wallpapers binarios que cambian con cada fondo (swww los regenera)
+hypr/wallpaper_effects/
+# Marker de primer arranque de los dots
+hypr/.initial_startup_done
+# Logs
+*.log
+btop/btop.log
