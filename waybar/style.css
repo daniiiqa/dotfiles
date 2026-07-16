@@ -175,10 +175,11 @@ tooltip {
 }
 
 /*-----Indicators----*/
+/* Custom (dany): sin border-bottom — los 8px inflaban la caja al activarse,
+   recorrían el icono hacia arriba y pintaban un bloque oscuro debajo */
 #custom-hypridle.notactive,
 #idle_inhibitor.activated {
 	color: #39FF14;
-    border-bottom: 8px solid rgba(0, 0, 0, 0.2);
 }
 	   
 #battery.critical:not(.charging) {
