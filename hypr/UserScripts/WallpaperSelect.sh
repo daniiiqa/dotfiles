@@ -44,17 +44,29 @@ icon_size=$(echo "scale=1; ($monitor_height * 3) / ($scale_factor * 150)" | bc)
 adjusted_icon_size=$(echo "$icon_size" | awk '{if ($1 < 15) $1 = 20; if ($1 > 25) $1 = 25; print $1}')
 rofi_override="element-icon{size:${adjusted_icon_size}%;}"
 
+# Custom (dany): wallpapers independientes por monitor.
+# swww-daemon queda SIEMPRE vivo (imágenes/gifs); mpvpaper corre una instancia
+# por monitor solo donde hay video. Matar mpvpaper únicamente en un output
+# (las instancias legacy con '*' cubrían todo, también cuentan).
+kill_mpvpaper_on() {
+  local out="$1" pid
+  for pid in $(pgrep -x mpvpaper); do
+    if ps -o args= -p "$pid" | tr ' ' '\n' | grep -qx -e "$out" -e '\*' -e "'\*'"; then
+      kill "$pid" 2>/dev/null
+    fi
+  done
+}
+
 # Kill existing wallpaper daemons for video
 kill_wallpaper_for_video() {
-  swww kill 2>/dev/null
-  pkill mpvpaper 2>/dev/null
+  kill_mpvpaper_on "$focused_monitor"
   pkill swaybg 2>/dev/null
   pkill hyprpaper 2>/dev/null
 }
 
 # Kill existing wallpaper daemons for image
 kill_wallpaper_for_image() {
-  pkill mpvpaper 2>/dev/null
+  kill_mpvpaper_on "$focused_monitor"
   pkill swaybg 2>/dev/null
   pkill hyprpaper 2>/dev/null
 }
@@ -100,28 +112,28 @@ menu() {
 }
 
 
+# Custom (dany): la persistencia de videos vive en LiveWallpaper.conf (una
+# línea exec-once por monitor), regenerado aquí — nada de seds sobre
+# Startup_Apps.conf. swww-daemon arranca siempre desde Startup_Apps.conf.
 modify_startup_config() {
   local selected_file="$1"
-  local startup_config="$HOME/.config/hypr/UserConfigs/Startup_Apps.conf"
+  local live_conf="$HOME/.config/hypr/UserConfigs/LiveWallpaper.conf"
 
-  # Check if it's a live wallpaper (video)
+  touch "$live_conf"
+  # Quitar la entrada previa de ESTE monitor (y cualquier legacy global '*').
+  # Ojo: grep -v sale con 1 si filtra todo, por eso NO se encadena con && —
+  # el tmp queda escrito (vacío) de todos modos y el mv debe correr siempre.
+  grep -v -e "mpvpaper $focused_monitor " -e "mpvpaper '\*'" "$live_conf" > "$live_conf.tmp"
+  mv "$live_conf.tmp" "$live_conf"
+
   if [[ "$selected_file" =~ \.(mp4|mkv|mov|webm)$ ]]; then
-    # For video wallpapers:
-    sed -i '/^\s*exec-once\s*=\s*swww-daemon\s*--format\s*xrgb\s*$/s/^/\#/' "$startup_config"
-    sed -i '/^\s*#\s*exec-once\s*=\s*mpvpaper\s*.*$/s/^#\s*//;' "$startup_config"
-
-    # Update the livewallpaper variable with the selected video path (using $HOME)
+    # sleep 1: mpvpaper debe mapear su superficie DESPUÉS de swww, o la imagen
+    # cacheada de swww quedaría encima del video en este monitor
     selected_file="${selected_file/#$HOME/\$HOME}" # Replace /home/user with $HOME
-    sed -i "s|^\$livewallpaper=.*|\$livewallpaper=\"$selected_file\"|" "$startup_config"
-
-    echo "Configured for live wallpaper (video)."
+    echo "exec-once = sleep 1 && mpvpaper $focused_monitor -o \"load-scripts=no no-audio --loop hwdec=auto\" \"$selected_file\"" >> "$live_conf"
+    echo "Configured live wallpaper (video) for $focused_monitor."
   else
-    # For image wallpapers:
-    sed -i '/^\s*#\s*exec-once\s*=\s*swww-daemon\s*--format\s*xrgb\s*$/s/^\s*#\s*//;' "$startup_config"
-
-    sed -i '/^\s*exec-once\s*=\s*mpvpaper\s*.*$/s/^/\#/' "$startup_config"
-
-    echo "Configured for static wallpaper (image)."
+    echo "Configured static wallpaper (image) for $focused_monitor."
   fi
 }
 
@@ -156,10 +168,16 @@ apply_video_wallpaper() {
   fi
   kill_wallpaper_for_video
 
-  # Apply video wallpaper using mpvpaper
-  # Custom (dany): hwdec=auto — decodificación por hardware (AMD), un 4K por
-  # software costaba ~30% de CPU constante.
-  mpvpaper '*' -o "load-scripts=no no-audio --loop hwdec=auto" "$video_path" &
+  # Custom (dany): swww debe estar vivo ANTES de lanzar mpvpaper — sirve los
+  # demás monitores, y su superficie tiene que quedar debajo del video.
+  if ! pgrep -x "swww-daemon" >/dev/null; then
+    swww-daemon --format xrgb &
+    sleep 1
+  fi
+
+  # Apply video wallpaper using mpvpaper — SOLO en el monitor enfocado.
+  # hwdec=auto: decodificación por hardware (un 4K por software costaba ~30% CPU)
+  mpvpaper "$focused_monitor" -o "load-scripts=no no-audio --loop hwdec=auto" "$video_path" &
 }
 
 # Main function
