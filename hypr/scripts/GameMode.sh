@@ -17,7 +17,9 @@ if [ "$HYPRGAMEMODE" = 1 ] ; then
         keyword general:border_size 1;\
         keyword decoration:rounding 0"
 	
-	hyprctl keyword "windowrule opacity 1 override 1 override 1 override, ^(.*)$"
+	# Custom (dany): sintaxis windowrule actualizada (la vieja tronaba con
+	# "invalid field" en Hyprland >= 0.53; hyprctl reload al salir la limpia)
+	hyprctl keyword windowrule "match:class .*, opacity 1 override"
 	# Custom (dany): el video también descansa en game mode, no solo swww
 	swww kill
 	pkill mpvpaper 2>/dev/null
