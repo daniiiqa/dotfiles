@@ -28,6 +28,16 @@ git checkout -f main   # ojo: pisa las carpetas del rice si ya existían
 
 ## Piezas custom (no vienen de KooL)
 
+- **Wallpapers independientes por monitor**: swww (imágenes/gifs) siempre vivo;
+  mpvpaper una instancia por monitor solo donde hay video. La persistencia vive
+  en `hypr/UserConfigs/LiveWallpaper.conf` (regenerado por WallpaperSelect.sh).
+  Requiere `mpvpaper` (AUR). GameMode pausa video+swww y los revive al salir.
+- **El theme cambia también con wallpapers vivos**: WallpaperSelect.sh extrae el
+  fotograma de en medio del video (cache en `~/.cache/video_frame/`) y lo pasa
+  por wallust — mismos colores en waybar/rofi/kitty y mismo fondo en SDDM.
+- **`hypr/scripts/Refresh.sh` recarga en caliente** (waybar SIGUSR2, swaync-client);
+  ya no mata/relanza, la barra no parpadea al cambiar de fondo.
+
 - `hypr/UserScripts/SDDMWallpaperSync.sh` — sincroniza wallpaper + colores de
   wallust al tema `simple_sddm_2` de SDDM, silencioso y sin sudo (requiere que
   el tema en `/usr/share/sddm/themes/simple_sddm_2` sea escribible por el usuario).

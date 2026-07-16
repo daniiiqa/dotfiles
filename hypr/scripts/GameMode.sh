@@ -18,17 +18,27 @@ if [ "$HYPRGAMEMODE" = 1 ] ; then
         keyword decoration:rounding 0"
 	
 	hyprctl keyword "windowrule opacity 1 override 1 override 1 override, ^(.*)$"
-    swww kill 
+	# Custom (dany): el video también descansa en game mode, no solo swww
+	swww kill
+	pkill mpvpaper 2>/dev/null
     notify-send -e -u low -i "$notif" " Gamemode:" " enabled"
     sleep 0.1
     exit
 else
-	swww-daemon --format xrgb && swww img "$HOME/.config/rofi/.current_wallpaper" &
-	sleep 0.1
-	${SCRIPTSDIR}/WallustSwww.sh
+	# Custom (dany): NADA de `swww img` global aquí — pintaba .current_wallpaper
+	# en TODOS los monitores y aplastaba las imágenes independientes. El daemon
+	# restaura solo su caché por monitor, y los videos reviven desde
+	# LiveWallpaper.conf (una línea por monitor, la fuente de verdad).
+	swww-daemon --format xrgb &
+	live_conf="$HOME/.config/hypr/UserConfigs/LiveWallpaper.conf"
+	if [ -f "$live_conf" ]; then
+		grep '^exec-once = ' "$live_conf" | sed 's/^exec-once = //' | while read -r cmd; do
+			sh -c "$cmd" &
+		done
+	fi
 	sleep 0.5
   hyprctl reload
-	${SCRIPTSDIR}/Refresh.sh	 
+	${SCRIPTSDIR}/Refresh.sh
     notify-send -e -u normal -i "$notif" " Gamemode:" " disabled"
     exit
 fi

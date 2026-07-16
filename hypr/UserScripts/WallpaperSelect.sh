@@ -178,6 +178,25 @@ apply_video_wallpaper() {
   # Apply video wallpaper using mpvpaper — SOLO en el monitor enfocado.
   # hwdec=auto: decodificación por hardware (un 4K por software costaba ~30% CPU)
   mpvpaper "$focused_monitor" -o "load-scripts=no no-audio --loop hwdec=auto" "$video_path" &
+
+  # Custom (dany): el theme TAMBIÉN cambia con un wallpaper vivo. Wallust no
+  # puede leer un video, así que se extrae el fotograma de en medio del clip
+  # (cacheado por video) y ese alimenta wallust — y por la misma tubería, el
+  # fondo de SDDM, que queda con el fotograma del video.
+  local frame_dir="$HOME/.cache/video_frame"
+  local frame="$frame_dir/$(basename "$video_path").png"
+  if [[ ! -f "$frame" ]] && command -v ffmpeg &>/dev/null; then
+    mkdir -p "$frame_dir"
+    local dur mid
+    dur=$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$video_path" 2>/dev/null)
+    mid=$(echo "${dur:-2} / 2" | bc 2>/dev/null)
+    ffmpeg -y -loglevel error -ss "${mid:-1}" -i "$video_path" -frames:v 1 "$frame" 2>/dev/null
+  fi
+  if [[ -f "$frame" ]]; then
+    "$SCRIPTSDIR/WallustSwww.sh" "$frame"
+    sleep 2
+    "$SCRIPTSDIR/Refresh.sh"
+  fi
 }
 
 # Main function
