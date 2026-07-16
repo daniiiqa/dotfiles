@@ -216,3 +216,15 @@ tooltip {
 }
 	
 	
+/* Custom (dany): Steam/Discord como glyphs tematizados (estilo Spotify) */
+#custom-steam,
+#custom-discord {
+	color: @text;
+	font-size: 16px;
+	padding: 0 4px;
+}
+
+#custom-steam.stopped,
+#custom-discord.stopped {
+	opacity: 0.4;
+}

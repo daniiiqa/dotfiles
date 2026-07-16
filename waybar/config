@@ -29,7 +29,8 @@
 	"custom/separator#blank_2",
 	"mpris",
 	"group/notify",
-	"tray",
+	"custom/steam",
+	"custom/discord",
 	],
 "modules-center": [
 	"clock",
