@@ -25,7 +25,10 @@ export SWWW_TRANSITION_TYPE=simple
 INTERVAL=1800
 
 while true; do
-	find "$1" \
+	# Custom (dany): solo imágenes — el find sin filtro metía directorios y
+	# los .mp4 a la ruleta, y cuando tocaban, swww img tronaba y esa
+	# rotación se perdía
+	find -L "$1" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.bmp" -o -iname "*.gif" \) \
 		| while read -r img; do
 			echo "$((RANDOM % 1000)):$img"
 		done \

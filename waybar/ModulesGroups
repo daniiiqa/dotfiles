@@ -40,9 +40,8 @@
 		"transition-left-to-right": true
         },
 	"modules": [
-		"temperature",		
+		"temperature",
 		"cpu",
-		"power-profiles-daemon",	
 		"memory",
 		"disk",
 	]
