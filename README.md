@@ -6,7 +6,7 @@ salen del wallpaper (incluidos los de video) vía wallust.
 ## Qué trackea
 
 Solo las carpetas del rice (whitelist en `.gitignore`): `hypr`, `waybar`, `rofi`,
-`swaync`, `wallust`, `kitty`, `cava`, `btop`, `fastfetch`, `wlogout`,
+`swaync`, `wallust`, `kitty`, `cava`, `btop`, `fastfetch`, `wlogout`, `yazi`,
 `Kvantum`, `qt5ct`, `qt6ct`, `swappy`. Todo lo demás de `~/.config` se ignora.
 
 ## Estructura
@@ -34,6 +34,7 @@ wallust/wallust.toml + templates/
 ```bash
 # 1. Paquetes (Arch): hyprland, hypridle, hyprlock, waybar, rofi-wayland,
 #    swaync, swww, mpvpaper (AUR), wallust, kitty, wlogout, cliphist, yad,
+#    yazi (+ fd ripgrep zoxide resvg ffmpeg 7zip poppler),
 #    nwg-displays, nwg-look, qt5ct, qt6ct, kvantum, sddm
 # 2. Clonar encima de ~/.config (respeta lo que ya exista fuera del whitelist):
 cd ~/.config
@@ -69,6 +70,9 @@ git checkout -f main   # ojo: pisa las carpetas del rice si ya existían
   al pasar el mouse. Click enfoca (o cicla ventanas), click medio cierra.
   Las fijadas en `hypr/conf/pinned.conf` siempre se ven; cerradas salen
   tenues y el click las abre.
+- **Archivos: yazi** en kitty (`SUPER+E`, y también para "abrir carpeta" desde
+  apps vía `~/.local/share/applications/yazi-kitty.desktop`). Colores e iconos
+  con nombres ANSI → sigue al look y al wallpaper sin configurar nada.
 - **`FitGuard.py`**: las apps con tamaño mínimo (Discord no baja de 832x542)
   flotan centradas cuando el layout les da un tile más chico, y vuelven al
   tile cuando les tocaría media pantalla. La tabla de mínimos va en el script.
