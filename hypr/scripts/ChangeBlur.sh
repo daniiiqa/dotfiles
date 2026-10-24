@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # Script for changing blurs on the fly
 
 notif="$HOME/.config/swaync/images"
@@ -13,5 +12,5 @@ if [ "${STATE}" == "2" ]; then
 else
 	hyprctl keyword decoration:blur:size 5
 	hyprctl keyword decoration:blur:passes 2
-  	notify-send -e -u low -i "$notif/ja.png" " Normal Blur"
+  	notify-send -e -u low -i "$notif/bell.png" " Normal Blur"
 fi

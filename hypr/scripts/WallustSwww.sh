@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # Wallust: derive colors from the current wallpaper and update templates
 # Usage: WallustSwww.sh [absolute_path_to_wallpaper]
 
@@ -78,8 +77,6 @@ ln -sf "$wallpaper_path" "$rofi_link" || true
 mkdir -p "$(dirname "$wallpaper_current")"
 cp -f "$wallpaper_path" "$wallpaper_current" || true
 
-# Ensure Ghostty directory exists so Wallust can write target even if Ghostty isn't installed
-mkdir -p "$HOME/.config/ghostty" || true
 wait_for_templates() {
   local start_ts="$1"
   shift
@@ -114,27 +111,13 @@ wallust_targets=(
 )
 wait_for_templates "$start_ts" "${wallust_targets[@]}" || true
 
-# Normalize Ghostty palette syntax in case ':' was used by older files
-if [ -f "$HOME/.config/ghostty/wallust.conf" ]; then
-  sed -i -E 's/^(\s*palette\s*=\s*)([0-9]{1,2}):/\1\2=/' "$HOME/.config/ghostty/wallust.conf" 2>/dev/null || true
-fi
-
-# Light wait for Ghostty colors file to be present then signal Ghostty to reload (SIGUSR2)
-for _ in 1 2 3; do
-  [ -s "$HOME/.config/ghostty/wallust.conf" ] && break
-  sleep 0.1
-done
-if pidof ghostty >/dev/null; then
-  for pid in $(pidof ghostty); do kill -SIGUSR2 "$pid" 2>/dev/null || true; done
-fi
+# kitty relee su config (incluye kitty-themes/01-Wallust.conf) con SIGUSR1
+pkill -USR1 -x kitty 2>/dev/null || true
 
 # Custom (dany): aquí NO se recarga waybar. Este script genera colores;
 # recargar la barra es chamba del caller (Refresh.sh). Cuando ambos lo
 # hacían, cada cambio de wallpaper parpadeaba la barra DOS veces: una al
 # click (esta recarga) y otra al acabar la transición (la de Refresh.sh).
 
-# Custom (dany): keep SDDM background + colors in sync with the wallpaper.
-# NOTE: this file gets overwritten by JaKooLit dots updates — if the SDDM
-# sync stops working after an update, re-add this block. The script itself
-# lives in UserScripts and survives updates.
-"$HOME/.config/hypr/UserScripts/SDDMWallpaperSync.sh" >/dev/null 2>&1 || true
+# Custom (dany): fondo + colores de SDDM en sync con el wallpaper
+"$HOME/.config/hypr/scripts/SDDMWallpaperSync.sh" >/dev/null 2>&1 || true

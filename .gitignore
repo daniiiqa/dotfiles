@@ -1,25 +1,22 @@
 # Dotfiles repo: ignora TODO por default, whitelist solo el rice.
 /*
 
-# ── Carpetas del rice (las que el copy.sh de KooL aplastaba) ──
+# ── Carpetas del rice ──
 !/.gitignore
 !/README.md
 !/btop/
 !/cava/
 !/fastfetch/
-!/ghostty/
 !/hypr/
 !/kitty/
 !/Kvantum/
 !/qt5ct/
 !/qt6ct/
-!/quickshell/
 !/rofi/
 !/swappy/
 !/swaync/
 !/wallust/
 !/waybar/
-!/wezterm/
 !/wlogout/
 
 # ── Volátiles / generados dentro de las carpetas trackeadas ──
@@ -30,3 +27,5 @@ hypr/.initial_startup_done
 # Logs
 *.log
 btop/btop.log
+# Look activo (lo escribe LookSwitch.sh)
+hypr/looks/.current

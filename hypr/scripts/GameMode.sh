@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # Game Mode. Turning off all animations
 
-notif="$HOME/.config/swaync/images/ja.png"
+notif="$HOME/.config/swaync/images/bell.png"
 SCRIPTSDIR="$HOME/.config/hypr/scripts"
 
 
@@ -15,7 +14,8 @@ if [ "$HYPRGAMEMODE" = 1 ] ; then
         keyword general:gaps_in 0;\
         keyword general:gaps_out 0;\
         keyword general:border_size 1;\
-        keyword decoration:rounding 0"
+        keyword decoration:rounding 0;\
+        keyword decoration:screen_shader [[EMPTY]]"
 	
 	# Custom (dany): sintaxis windowrule actualizada (la vieja tronaba con
 	# "invalid field" en Hyprland >= 0.53; hyprctl reload al salir la limpia)
@@ -32,7 +32,7 @@ else
 	# restaura solo su caché por monitor, y los videos reviven desde
 	# LiveWallpaper.conf (una línea por monitor, la fuente de verdad).
 	swww-daemon --format xrgb &
-	live_conf="$HOME/.config/hypr/UserConfigs/LiveWallpaper.conf"
+	live_conf="$HOME/.config/hypr/conf/livewallpaper.conf"
 	if [ -f "$live_conf" ]; then
 		grep '^exec-once = ' "$live_conf" | sed 's/^exec-once = //' | while read -r cmd; do
 			sh -c "$cmd" &

@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# This is for changing kb_layouts. Set kb_layouts in "$HOME/.config/hypr/UserConfigs/UserSettings.conf"
+# This is for changing kb_layouts. Set kb_layouts in "$HOME/.config/hypr/conf/settings.conf"
 
-notif_icon="$HOME/.config/swaync/images/ja.png"
+notif_icon="$HOME/.config/swaync/images/bell.png"
 SCRIPTSDIR="$HOME/.config/hypr/scripts"
 
 # Refined ignore list with patterns or specific device names

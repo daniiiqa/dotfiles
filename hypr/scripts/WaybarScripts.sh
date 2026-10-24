@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  #
-# This file used on waybar modules sourcing defaults set in $HOME/.config/hypr/UserConfigs/01-UserDefaults.conf
+# This file used on waybar modules sourcing defaults set in $HOME/.config/hypr/conf/defaults.conf
 
 # Define the path to the config file
-config_file=$HOME/.config/hypr/UserConfigs/01-UserDefaults.conf
+config_file=$HOME/.config/hypr/conf/defaults.conf
 
 # Check if the config file exists
 if [[ ! -f "$config_file" ]]; then
@@ -26,7 +25,7 @@ fi
 # Execute accordingly based on the passed argument
 launch_files() {
     if [[ -z "$files" ]]; then
-        notify-send -u low -i "$HOME/.config/swaync/images/error.png" "Waybar: files" "Set \$files in 01-UserDefaults.conf or install a default file manager."
+        notify-send -u low -i "$HOME/.config/swaync/images/error.png" "Waybar: files" "Set \$files in hypr/conf/defaults.conf or install a default file manager."
         return 1
     fi
     eval "$files &"

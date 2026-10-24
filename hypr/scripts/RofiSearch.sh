@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # For Searching via web browsers
 
 # Define the path to the config file
-config_file=$HOME/.config/hypr/UserConfigs/01-UserDefaults.conf
+config_file=$HOME/.config/hypr/conf/defaults.conf
 if ! command -v jq >/dev/null 2>&1; then
     notify-send -u low "Rofi Search" "jq is required for URL encoding. Please install jq."
     exit 1
@@ -29,7 +28,7 @@ fi
 
 # Rofi theme and message
 rofi_theme="$HOME/.config/rofi/config-search.rasi"
-msg='‼️ **note** ‼️ search via default web browser'
+msg='opens in your default browser'
 
 # Kill Rofi if already running before execution
 if pgrep -x "rofi" >/dev/null; then
@@ -37,7 +36,7 @@ if pgrep -x "rofi" >/dev/null; then
 fi
 
 # Open Rofi and pass the selected query to xdg-open for the configured search engine
-query=$(printf '' | rofi -dmenu -config "$rofi_theme" -mesg "$msg")
+query=$(printf '' | rofi -dmenu -p search -config "$rofi_theme" -mesg "$msg")
 
 if [[ -z "$query" ]]; then
     exit 0

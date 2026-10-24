@@ -1,39 +1,22 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# searchable enabled keybinds using rofi (supports bindd descriptions)
+# Buscador de atajos (SUPER+Shift+K): lista los `bindd` de conf/keybinds.conf
+# con su descripción. Solo consulta — Enter no ejecuta nada.
 
-# kill yad to not interfere with this binds
-pkill yad || true
+pkill yad 2>/dev/null
+pidof rofi >/dev/null && pkill rofi
 
-# check if rofi is already running
-if pidof rofi > /dev/null; then
-  pkill rofi
-fi
+conf="$HOME/.config/hypr/conf/keybinds.conf"
 
-# define the config files
-keybinds_conf="$HOME/.config/hypr/configs/Keybinds.conf"
-user_keybinds_conf="$HOME/.config/hypr/UserConfigs/UserKeybinds.conf"
-laptop_conf="$HOME/.config/hypr/UserConfigs/Laptops.conf"
-rofi_theme="$HOME/.config/rofi/config-keybinds.rasi"
-msg='☣️ NOTE ☣️: Clicking with Mouse or Pressing ENTER will have NO function'
-
-# collect raw bind lines (strip end-of-line comments) from available files
-files=("$keybinds_conf" "$user_keybinds_conf")
-[[ -f "$laptop_conf" ]] && files+=("$laptop_conf")
-
-# Parse binds using the python script for speed
-# The last argument must be the user config for override logic to work correctly
-display_keybinds=$("$HOME/.config/hypr/scripts/keybinds_parser.py" "${files[@]}")
-
-# Check for suggestions file created by python script
-if [[ -f "/tmp/hypr_keybind_suggestions_file" ]]; then
-  suggestions_file=$(cat "/tmp/hypr_keybind_suggestions_file")
-  rm "/tmp/hypr_keybind_suggestions_file"
-  if [[ -n "$suggestions_file" && -f "$suggestions_file" ]]; then
-     count=$(wc -l < "$suggestions_file")
-     msg="$msg | Overrides missing unbind: $count (suggestions: $suggestions_file)"
-  fi
-fi
-
-# use rofi to display the keybinds
-printf '%s\n' "$display_keybinds" | rofi -dmenu -i -config "$rofi_theme" -mesg "$msg"
+awk -F',' '
+  /^[[:space:]]*bind[a-z]*d[a-z]*[[:space:]]*=/ {
+    sub(/^[^=]*=[[:space:]]*/, "", $1)
+    mods = $1; key = $2; desc = $3
+    gsub(/\$mainMod/, "SUPER", mods)
+    gsub(/^[[:space:]]+|[[:space:]]+$/, "", mods)
+    gsub(/^[[:space:]]+|[[:space:]]+$/, "", key)
+    gsub(/^[[:space:]]+|[[:space:]]+$/, "", desc)
+    if (key ~ /^code:1[0-9]$/) key = (substr(key, 6) - 9) % 10   # code:10..19 → teclas 1..0
+    combo = (mods == "" ? key : mods " + " key)
+    printf "%-32s %s\n", combo, desc
+  }' "$conf" |
+  rofi -dmenu -i -config "$HOME/.config/rofi/config-keybinds.rasi" -p keys -mesg "read-only — edit in hypr/conf/keybinds.conf"

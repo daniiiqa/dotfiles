@@ -1,4 +1,3 @@
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  #
 # /* wallust template - colors-cava */
 
 ## Configuration file for CAVA.
@@ -243,14 +242,14 @@
 # for wallust
 gradient = 1
 gradient_count = 8
-gradient_color_1 = '#403D45'
-gradient_color_2 = '#1D143B'
-gradient_color_3 = '#291C50'
-gradient_color_4 = '#6D41A0'
-gradient_color_5 = '#F3EEF5'
-gradient_color_6 = '#734BB9'
-gradient_color_7 = '#9157D6'
-gradient_color_8 = '#F3EEF5'
+gradient_color_1 = '#3E3F40'
+gradient_color_2 = '#373F4C'
+gradient_color_3 = '#A8474C'
+gradient_color_4 = '#888E97'
+gradient_color_5 = '#F0DFBC'
+gradient_color_6 = '#76C79D'
+gradient_color_7 = '#B5BDC9'
+gradient_color_8 = '#F0DFBC'
 
 
 [smoothing]
