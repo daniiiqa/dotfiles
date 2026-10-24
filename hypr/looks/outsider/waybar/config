@@ -17,6 +17,7 @@
 	"modules-left": [
 		"hyprland/workspaces#minimal",
 		"mpris",
+		"custom/visualizer",
 		"custom/app-i1",
 		"custom/app-i2",
 		"custom/app-i3",
@@ -66,7 +67,7 @@
 	"mpris": {
 		"interval": 10,
 		"format": "{status_icon} {title}",
-		"format-paused": "{status_icon} {title}",
+		"format-paused": "{status_icon}",
 		"on-click-middle": "playerctl play-pause",
 		"on-click": "playerctl previous",
 		"on-click-right": "playerctl next",
@@ -75,16 +76,9 @@
 		"on-scroll-down": "$HOME/.config/hypr/scripts/Volume.sh --dec",
 		"smooth-scrolling-threshold": 1,
 		"tooltip": true,
-		"tooltip-format": "{status_icon} {dynamic}\nLeft Click: previous\nMid Click: Pause\nRight Click: Next",
+		"tooltip-format": "{status_icon} {dynamic}\nclick: anterior · medio: pausa · derecho: siguiente",
 		"player-icons": {
-			"chromium": "",
-			"default": "",
-			"firefox": "",
-			"kdeconnect": "",
-			"mopidy": "",
-			"mpv": "󰐹",
-			"spotify": "",
-			"vlc": "󰕼"
+			"default": ""
 		},
 		"status-icons": {
 			"paused": "❚❚",
@@ -492,5 +486,13 @@
 			"custom/app-d7",
 			"custom/app-d8"
 		]
+	},
+	"custom/visualizer": {
+		"exec": "$HOME/.config/hypr/scripts/Visualizer.py",
+		"return-type": "json",
+		"format": "{}",
+		"tooltip": false,
+		"escape": true,
+		"on-click": "playerctl play-pause"
 	}
 }

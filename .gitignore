@@ -4,6 +4,7 @@
 # ── Carpetas del rice ──
 !/.gitignore
 !/README.md
+!/install.sh
 !/btop/
 !/cava/
 !/fastfetch/
@@ -32,3 +33,5 @@ btop/btop.log
 hypr/looks/.current
 # Caché de Python
 __pycache__/
+# Enlace al wallpaper actual (estado de cada máquina)
+rofi/.current_wallpaper

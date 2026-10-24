@@ -20,6 +20,7 @@ especiales (dropterm, scratchpad) no cuentan.
 import json
 import os
 import re
+import shutil
 import socket
 import subprocess
 import sys
@@ -75,7 +76,8 @@ def pinned():
             line = line.split("#", 1)[0].strip()
             if "|" in line:
                 cls, cmd = (x.strip() for x in line.split("|", 1))
-                if cls and cmd:
+                # en una máquina sin esa app, no mostrar un icono que no abre nada
+                if cls and cmd and shutil.which(cmd.split()[0]):
                     out.append((cls, cmd))
     except OSError:
         pass

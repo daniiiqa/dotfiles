@@ -176,6 +176,7 @@ tooltip label {
 }
 
 .app {
+	border-top: 2px solid transparent;  /* contrapeso de la línea de abajo: icono centrado */
 	border-bottom: 2px solid transparent;
 	border-radius: 0;
 }
@@ -191,4 +192,37 @@ tooltip label {
 /* fijada pero cerrada (pinned.conf): tenue, el click la abre */
 .app.closed {
 	opacity: 0.45;
+}
+
+/* la nota de música (mpris) va en el color del tema, como los iconos de apps */
+#mpris {
+	color: @nord8;
+}
+
+/* visualizador (Visualizer.py): barras braille, solo mientras suena música */
+#custom-visualizer {
+	color: @nord8;
+	padding: 0 6px;
+	letter-spacing: 0;
+}
+
+/* iconos alineados: la variante Mono de la Nerd Font mete cada icono en una
+   celda del mismo tamaño y centrada (los sets de iconos traen tamaños y
+   líneas base distintos y se veían chuecos) */
+.app,
+.app-more,
+#mpris,
+#network,
+#bluetooth,
+#idle_inhibitor,
+#custom-power {
+	font-family: "JetBrainsMono Nerd Font Mono";
+	font-size: 20px;
+}
+
+/* braille en Adwaita Mono: solo dibuja los puntos encendidos (la fuente de
+   respaldo pintaba los apagados como círculos huecos) */
+#custom-visualizer {
+	font-family: "Adwaita Mono";
+	font-size: 14px;
 }

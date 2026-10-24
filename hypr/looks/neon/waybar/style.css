@@ -44,12 +44,9 @@ window#waybar {
 	padding: 0 6px 0 28px;
 }
 
-/* el reloj lleva su propia losa: flotando directo sobre el wallpaper no se
-   leía con fondos claros */
+/* el reloj flota solo sobre el wallpaper (sin losa) */
 .modules-center {
-	background: @slab;
-	border-bottom: 2px solid alpha(@neon, 0.6);
-	padding: 0 4px;
+	background: transparent;
 }
 
 tooltip {
@@ -118,7 +115,10 @@ tooltip label {
 	font-weight: 800;
 	letter-spacing: 2px;
 	padding: 0 14px;
-	text-shadow: 0 0 6px @neon, 0 0 16px alpha(@neon2, 0.8);
+	/* contorno oscuro pegado al texto para que se lea con fondos claros,
+	   y encima el halo doble */
+	text-shadow: 0 0 2px alpha(@background, 0.95), 0 0 4px alpha(@background, 0.85),
+		0 0 8px @neon, 0 0 18px alpha(@neon2, 0.8);
 }
 
 #mpris {
@@ -198,6 +198,7 @@ tooltip label {
 }
 
 .app {
+	border-top: 2px solid transparent;  /* contrapeso de la línea de abajo: icono centrado */
 	border-bottom: 2px solid transparent;
 }
 
@@ -212,4 +213,38 @@ tooltip label {
 /* fijada pero cerrada (pinned.conf): tenue, el click la abre */
 .app.closed {
 	opacity: 0.45;
+}
+
+/* la nota de música (mpris) va en el color del tema, como los iconos de apps */
+#mpris {
+	color: @neon;
+}
+
+/* visualizador (Visualizer.py): barras braille, solo mientras suena música */
+#custom-visualizer {
+	color: @neon;
+	padding: 0 6px;
+	letter-spacing: 0;
+	text-shadow: 0 0 6px @neon;
+}
+
+/* iconos alineados: la variante Mono de la Nerd Font mete cada icono en una
+   celda del mismo tamaño y centrada (los sets de iconos traen tamaños y
+   líneas base distintos y se veían chuecos) */
+.app,
+.app-more,
+#mpris,
+#network,
+#bluetooth,
+#idle_inhibitor,
+#custom-power {
+	font-family: "JetBrainsMono Nerd Font Mono";
+	font-size: 20px;
+}
+
+/* braille en Adwaita Mono: solo dibuja los puntos encendidos (la fuente de
+   respaldo pintaba los apagados como círculos huecos) */
+#custom-visualizer {
+	font-family: "Adwaita Mono";
+	font-size: 14px;
 }

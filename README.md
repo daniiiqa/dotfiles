@@ -31,19 +31,31 @@ wallust/wallust.toml + templates/
 
 ## Instalar en una máquina nueva
 
+En un Arch recién instalado (con internet y tu usuario con sudo):
+
 ```bash
-# 1. Paquetes (Arch): hyprland, hypridle, hyprlock, waybar, rofi-wayland,
-#    swaync, swww, mpvpaper (AUR), wallust, kitty, wlogout, cliphist, yad,
-#    yazi (+ fd ripgrep zoxide resvg ffmpeg 7zip poppler),
-#    nwg-displays, nwg-look, qt5ct, qt6ct, kvantum, sddm
-# 2. Clonar encima de ~/.config (respeta lo que ya exista fuera del whitelist):
-cd ~/.config
-git init -b main
-git remote add origin <URL-del-repo>
-git fetch origin
-git checkout -f main   # ojo: pisa las carpetas del rice si ya existían
-# 3. Sesión: cerrar sesión y entrar a Hyprland desde SDDM
+curl -fsSL https://raw.githubusercontent.com/daniiiqa/dotfiles/main/install.sh | bash
 ```
+
+Eso es todo: al terminar ofrece reiniciar, entras a Hyprland desde SDDM y
+el primer arranque pone un wallpaper, genera los colores y muestra los
+atajos. Tus wallpapers (imágenes o videos) van en `~/Pictures/wallpapers`.
+
+Qué hace `install.sh` (también se puede correr desde un clone: `./install.sh`,
+y `--dry-run` muestra todo sin tocar nada):
+
+- clona el repo en `~/dotfiles` si se corrió con curl
+- paquetes: repos oficiales con pacman; swww, mpvpaper, wallust y wlogout de
+  AUR con yay/paru (si no hay ninguno, instala yay)
+- copia las carpetas del rice a `~/.config`, respaldando lo que pise en
+  `~/.config-backup-<fecha>/`; las pantallas quedan en detección automática
+- yazi como explorador por defecto, NetworkManager y bluetooth activos
+- SDDM con el tema simple_sddm_2 si no hay otro display manager
+  (`--no-sddm` / `--sddm` para forzar)
+- en el primer login, `hypr/scripts/FirstRun.sh` termina el resto (wallpaper
+  generado si no hay ninguno, colores, tema oscuro e iconos para GTK)
+
+Se puede correr varias veces sin romper nada.
 
 ## Piezas
 

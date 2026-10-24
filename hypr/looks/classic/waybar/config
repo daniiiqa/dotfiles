@@ -17,6 +17,7 @@
 		"hyprland/workspaces#pacman",
 		"custom/separator#blank_2",
 		"mpris",
+		"custom/visualizer",
 		"group/notify",
 		"custom/app-i1",
 		"custom/app-i2",
@@ -73,8 +74,8 @@
 	},
 	"mpris": {
 		"interval": 10,
-		"format": "{player_icon} ",
-		"format-paused": "{status_icon} <i>{dynamic}</i>",
+		"format": "{player_icon}",
+		"format-paused": "{status_icon}",
 		"on-click-middle": "playerctl play-pause",
 		"on-click": "playerctl previous",
 		"on-click-right": "playerctl next",
@@ -83,19 +84,12 @@
 		"on-scroll-down": "$HOME/.config/hypr/scripts/Volume.sh --dec",
 		"smooth-scrolling-threshold": 1,
 		"tooltip": true,
-		"tooltip-format": "{status_icon} {dynamic}\nLeft Click: previous\nMid Click: Pause\nRight Click: Next",
+		"tooltip-format": "{status_icon} {dynamic}\nclick: anterior · medio: pausa · derecho: siguiente",
 		"player-icons": {
-			"chromium": "",
-			"default": "",
-			"firefox": "",
-			"kdeconnect": "",
-			"mopidy": "",
-			"mpv": "󰐹",
-			"spotify": "",
-			"vlc": "󰕼"
+			"default": ""
 		},
 		"status-icons": {
-			"paused": "󰐎",
+			"paused": "",
 			"playing": "",
 			"stopped": ""
 		},
@@ -115,7 +109,7 @@
 	"custom/swaync": {
 		"tooltip": true,
 		"tooltip-format": "Left Click: Launch Notification Center\nRight Click: Do not Disturb",
-		"format": "{} {icon} ",
+		"format": "{} {icon}",
 		"format-icons": {
 			"notification": "<span foreground='red'><sup></sup></span>",
 			"none": "",
@@ -158,8 +152,8 @@
 		"tooltip-format-deactivated": "Stay awake: off\nClick to keep the screen on",
 		"format": "{icon}",
 		"format-icons": {
-			"activated": " ",
-			"deactivated": " "
+			"activated": "",
+			"deactivated": ""
 		}
 	},
 	"group/mobo_drawer": {
@@ -298,7 +292,7 @@
 		"on-click-right": "$HOME/.config/hypr/scripts/WaybarScripts.sh --nmtui"
 	},
 	"bluetooth": {
-		"format": " ",
+		"format": "",
 		"format-disabled": "󰂳",
 		"format-connected": "󰂱 {num_connections}",
 		"tooltip-format": " {device_alias}",
@@ -308,7 +302,7 @@
 		"on-click": "blueman-manager"
 	},
 	"custom/power": {
-		"format": " ⏻ ",
+		"format": "⏻",
 		"on-click": "$HOME/.config/hypr/scripts/Wlogout.sh",
 		"on-click-right": "$HOME/.config/hypr/scripts/ChangeBlur.sh",
 		"tooltip": true,
@@ -500,5 +494,13 @@
 			"custom/app-d7",
 			"custom/app-d8"
 		]
+	},
+	"custom/visualizer": {
+		"exec": "$HOME/.config/hypr/scripts/Visualizer.py",
+		"return-type": "json",
+		"format": "{}",
+		"tooltip": false,
+		"escape": true,
+		"on-click": "playerctl play-pause"
 	}
 }
