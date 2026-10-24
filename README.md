@@ -69,6 +69,9 @@ git checkout -f main   # ojo: pisa las carpetas del rice si ya existían
   al pasar el mouse. Click enfoca (o cicla ventanas), click medio cierra.
   Las fijadas en `hypr/conf/pinned.conf` siempre se ven; cerradas salen
   tenues y el click las abre.
+- **`FitGuard.py`**: las apps con tamaño mínimo (Discord no baja de 832x542)
+  flotan centradas cuando el layout les da un tile más chico, y vuelven al
+  tile cuando les tocaría media pantalla. La tabla de mínimos va en el script.
 - **Legibilidad con cualquier wallpaper**: wallust con `check_contrast` y luego
   `ContrastFix.py` sube a 4.5:1 (WCAG AA) cualquier color de texto que haya
   quedado pegado al fondo, y re-renderiza todos los templates.
