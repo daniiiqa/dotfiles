@@ -29,3 +29,5 @@ hypr/.initial_startup_done
 btop/btop.log
 # Look activo (lo escribe LookSwitch.sh)
 hypr/looks/.current
+# Caché de Python
+__pycache__/
