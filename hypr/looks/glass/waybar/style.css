@@ -5,7 +5,7 @@
 @import '../../.config/waybar/wallust/colors-waybar.css';
 
 @define-color accent @color12;
-@define-color pill alpha(@background, 0.38);
+@define-color pill alpha(@background, 0.58);
 @define-color edge alpha(white, 0.16);
 @define-color shine alpha(white, 0.1);
 
@@ -186,4 +186,9 @@ tooltip label {
 
 .app-more {
 	font-size: 13px;
+}
+
+/* fijada pero cerrada (pinned.conf): tenue, el click la abre */
+.app.closed {
+	opacity: 0.45;
 }

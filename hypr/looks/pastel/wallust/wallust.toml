@@ -32,6 +32,9 @@ palette = "softdark16"
 #  100        Colors are exact opposite
 threshold = 11
 
+# legibilidad: wallust ajusta colores contra el fondo (ContrastFix.py remata)
+check_contrast = true
+
 [templates]
 cava.template = 'colors-cava'
 cava.target = '~/.config/cava/config'

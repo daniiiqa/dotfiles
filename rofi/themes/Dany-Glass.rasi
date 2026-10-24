@@ -21,7 +21,7 @@ configuration {
 * {
     accent:                     @color12;
     fg:                         @foreground;
-    glass:                      rgba(12, 12, 18, 0.45);
+    glass:                      rgba(12, 12, 18, 0.62);
     frost:                      rgba(255, 255, 255, 0.14);
     tint:                       rgba(255, 255, 255, 0.07);
     background-color:           transparent;

@@ -105,6 +105,9 @@ wait_for_templates() {
 # -s is used in this repo to keep things quiet and avoid extra prompts
 start_ts=$(date +%s)
 wallust run -s "$wallpaper_path" || true
+# Custom (dany): sube los colores que quedaron ilegibles contra el fondo y
+# re-renderiza los templates (ver ContrastFix.py)
+"$HOME/.config/hypr/scripts/ContrastFix.py" || true
 wallust_targets=(
   "$HOME/.config/waybar/wallust/colors-waybar.css"
   "$HOME/.config/rofi/wallust/colors-rofi.rasi"

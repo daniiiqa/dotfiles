@@ -8,8 +8,12 @@
                             entre sus ventanas)
   AppStrip.py close SLOT    cierra la ventana más reciente de esa app
 
-Slots: i1..i5 = en línea (con 1-5 apps); more = botón del menú y d1..d8 =
-el cajón que se despliega (con 6+ apps). Un slot vacío escribe texto ""
+Apps fijadas (hypr/conf/pinned.conf): siempre primero, en ese orden; cerradas
+salen con la clase "closed" y el click las lanza.
+
+Slots: i1..i8 = en línea; more = botón del menú y d1..d8 = el cajón. Con 1-5
+apps abiertas todo va en línea; con 6+ las fijadas se quedan en línea y el
+resto se va al cajón (las fijadas cerradas no cuentan para el límite). Un slot vacío escribe texto ""
 y waybar lo oculta. Una app = una class; las ventanas en workspaces
 especiales (dropterm, scratchpad) no cuentan.
 """
@@ -21,9 +25,11 @@ import subprocess
 import sys
 import time
 
+PINNED = os.path.expanduser("~/.config/hypr/conf/pinned.conf")
 RUN = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "appstrip")
 SIG = 9
-INLINE_MAX = 5
+INLINE_MAX = 5      # apps abiertas en línea; con más se colapsan
+INLINE_SLOTS = 8    # fijadas + abiertas caben aquí
 DRAWER_SLOTS = 8
 
 # (regex sobre la class en minúsculas, glyph, nombre bonito)
@@ -59,6 +65,21 @@ def icon_for(cls):
         if re.search(rx, low):
             return glyph, name
     return DEFAULT[0], cls
+
+
+def pinned():
+    """[(class, comando)] de pinned.conf, en orden."""
+    out = []
+    try:
+        for line in open(PINNED):
+            line = line.split("#", 1)[0].strip()
+            if "|" in line:
+                cls, cmd = (x.strip() for x in line.split("|", 1))
+                if cls and cmd:
+                    out.append((cls, cmd))
+    except OSError:
+        pass
+    return out
 
 
 def hypr(*args):
@@ -100,37 +121,50 @@ def render():
             order.append(cls)
     order[:] = [c for c in order if c in apps]
 
+    pins = [cls for cls, _ in pinned()]
+    shown = pins + [cls for cls in order if cls not in pins]
+
     entries = []
-    for cls in order:
+    for cls in shown:
         glyph, name = icon_for(cls)
-        wins = apps[cls]
+        wins = apps.get(cls, [])
+        pin = ["pinned"] if cls in pins else []
+        if not wins:  # fijada y cerrada
+            entries.append((glyph, cls, f"<b>{esc(name)}</b>\nclick: abrir", ["app", "closed"] + pin))
+            continue
         titles = "\n".join("· " + esc(w["title"][:60]) for w in wins)
         tip = f"<b>{esc(name)}</b>" + (f"  ({len(wins)})" if len(wins) > 1 else "")
         tip += "\n" + titles + "\nclick: enfocar · medio: cerrar"
         klass = ["app"] + (["active"] if cls == active_cls else []) + \
-                (["multi"] if len(wins) > 1 else [])
+                (["multi"] if len(wins) > 1 else []) + pin
         entries.append((glyph, cls, tip, klass))
 
-    collapsed = len(entries) > INLINE_MAX
-    for i in range(INLINE_MAX):
+    collapsed = len(apps) > INLINE_MAX
+    if collapsed:
+        inline = [e for e in entries if "pinned" in e[3]]
+        drawer = [e for e in entries if "pinned" not in e[3]]
+    else:
+        inline, drawer = entries, []
+
+    for i in range(INLINE_SLOTS):
         slot = f"i{i + 1}"
-        if not collapsed and i < len(entries):
-            g, cls, tip, k = entries[i]
+        if i < len(inline):
+            g, cls, tip, k = inline[i]
             write(slot, g, cls, tip, k)
         else:
             write(slot)
 
-    if collapsed:
-        names = "\n".join("· " + esc(icon_for(c)[1]) for c in order)
-        k = ["app-more"] + (["active"] if active_cls in apps else [])
-        write("more", f"{MORE_ICON} {len(entries)}", "",
-              f"<b>{len(entries)} apps abiertas</b>\n{names}\npasa el mouse para verlas", k)
+    if drawer:
+        names = "\n".join("· " + esc(icon_for(e[1])[1]) for e in drawer)
+        k = ["app-more"] + (["active"] if any("active" in e[3] for e in drawer) else [])
+        write("more", f"{MORE_ICON} {len(drawer)}", "",
+              f"<b>{len(drawer)} apps más</b>\n{names}\npasa el mouse para verlas", k)
     else:
         write("more")
     for i in range(DRAWER_SLOTS):
         slot = f"d{i + 1}"
-        if collapsed and i < len(entries):
-            g, cls, tip, k = entries[i]
+        if i < len(drawer):
+            g, cls, tip, k = drawer[i]
             write(slot, g, cls, tip, k)
         else:
             write(slot)
@@ -201,6 +235,11 @@ def windows_of(slot):
 def focus(slot):
     wins, cls = windows_of(slot)
     if not wins:
+        # fijada y cerrada: abrirla
+        cmd = dict(pinned()).get(cls)
+        if cmd:
+            subprocess.Popen(["sh", "-c", cmd], start_new_session=True,
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return
     active = hypr("activewindow", "-j") or {}
     target = wins[0]

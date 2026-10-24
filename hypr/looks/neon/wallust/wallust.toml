@@ -25,7 +25,6 @@ color_space = "labmixed"
 palette = "harddark16"
 
 # Custom (dany): look neon — colores más saturados
-saturation = 45
 
 # Difference between similar colors, used by the colorspace:
 #  1          Not perceptible by human eyes.
@@ -34,6 +33,9 @@ saturation = 45
 #  11 - 49    Colors are more similar than opposite
 #  100        Colors are exact opposite
 threshold = 11
+
+# legibilidad: wallust ajusta colores contra el fondo (ContrastFix.py remata)
+check_contrast = true
 
 [templates]
 cava.template = 'colors-cava'

@@ -175,3 +175,8 @@ tooltip label {
 .app-more {
 	font-size: 13px;
 }
+
+/* fijada pero cerrada (pinned.conf): tenue, el click la abre */
+.app.closed {
+	opacity: 0.45;
+}

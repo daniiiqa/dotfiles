@@ -22,6 +22,9 @@
 		"custom/app-i3",
 		"custom/app-i4",
 		"custom/app-i5",
+		"custom/app-i6",
+		"custom/app-i7",
+		"custom/app-i8",
 		"group/apps"
 	],
 	"modules-center": [
@@ -352,6 +355,36 @@
 		"tooltip": true,
 		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i5",
 		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i5"
+	},
+	"custom/app-i6": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i6\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i6",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i6"
+	},
+	"custom/app-i7": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i7\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i7",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i7"
+	},
+	"custom/app-i8": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i8\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i8",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i8"
 	},
 	"custom/apps-more": {
 		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/more\" 2>/dev/null",

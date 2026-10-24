@@ -47,7 +47,7 @@ no-effects() {
     swww img -o "$focused_monitor" "$wallpaper_current" $SWWW_PARAMS &&
     wait $!
     wallust run "$wallpaper_current" -s &&
-    wait $!
+    "$SCRIPTSDIR/ContrastFix.py"
     # Refresh rofi, waybar, wallust palettes
 	sleep 2
 	"$SCRIPTSDIR/Refresh.sh"
@@ -86,7 +86,7 @@ main() {
 
             sleep 2
   
-            wallust run "$wallpaper_output" -s &
+            { wallust run "$wallpaper_output" -s && "$SCRIPTSDIR/ContrastFix.py"; } &
             sleep 1
             # Refresh rofi, waybar, wallust palettes
             "${SCRIPTSDIR}/Refresh.sh"
