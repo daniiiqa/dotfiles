@@ -1,0 +1,39 @@
+/* Look paper — wlogout: hoja clara con tarjetas de tinta (los iconos de
+   wlogout son blancos, así que las tarjetas van en tinta oscura). */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+window {
+    font-family: "Noto Serif";
+    font-size: 13pt;
+    color: @background;
+    background-color: alpha(@background, 0.96);
+}
+
+button {
+    color: alpha(@background, 0.7);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14%;
+    background-color: @foreground;
+    border: 1px solid @foreground;
+    border-radius: 3px;
+    margin: 10px;
+    outline-style: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+button:focus,
+button:hover {
+    color: @background;
+    background-color: @color12;
+    border-color: @color12;
+}
+
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

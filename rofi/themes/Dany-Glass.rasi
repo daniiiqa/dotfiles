@@ -1,0 +1,155 @@
+/* Dany Glass — launchpad esmerilado: grid de iconos grandes con el nombre
+   debajo, buscador en píldora. El blur lo pone el layerrule de rofi.
+   Los menús de texto (config-*.rasi) ajustan columnas/orientación propios. */
+
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 true;
+    display-drun:               "apps";
+    display-run:                "run";
+    display-filebrowser:        "files";
+    display-window:             "windows";
+    drun-display-format:        "{name}";
+    hover-select:               true;
+    me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} · {c} · {t}";
+}
+
+@theme "~/.config/rofi/wallust/colors-rofi.rasi"
+
+* {
+    accent:                     @color12;
+    fg:                         @foreground;
+    glass:                      rgba(12, 12, 18, 0.45);
+    frost:                      rgba(255, 255, 255, 0.14);
+    tint:                       rgba(255, 255, 255, 0.07);
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+window {
+    width:                      880px;
+    location:                   center;
+    anchor:                     center;
+    border:                     1px;
+    border-color:               @frost;
+    border-radius:              28px;
+    background-color:           @glass;
+    padding:                    24px;
+}
+
+mainbox {
+    orientation:                vertical;
+    spacing:                    18px;
+    children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
+}
+
+inputbar {
+    spacing:                    10px;
+    padding:                    12px 18px;
+    margin:                     0px 200px;
+    border:                     1px;
+    border-color:               @frost;
+    border-radius:              999px;
+    background-color:           @tint;
+    children:                   [ "prompt", "entry" ];
+}
+
+prompt {
+    text-color:                 @accent;
+}
+
+textbox-prompt-colon {
+    enabled:                    false;
+}
+
+entry {
+    placeholder:                "Search";
+    placeholder-color:          rgba(255, 255, 255, 0.4);
+    cursor:                     text;
+}
+
+listview {
+    columns:                    6;
+    lines:                      3;
+    spacing:                    8px;
+    dynamic:                    true;
+    cycle:                      true;
+    scrollbar:                  false;
+    fixed-height:               true;
+}
+
+element {
+    orientation:                vertical;
+    spacing:                    8px;
+    padding:                    14px 6px;
+    border-radius:              18px;
+    cursor:                     pointer;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+element normal.active,
+element alternate.active {
+    text-color:                 @accent;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color:           @tint;
+    border:                     1px;
+    border-color:               @accent;
+    text-color:                 @fg;
+}
+
+element-icon {
+    size:                       56px;
+    cursor:                     inherit;
+}
+
+element-text {
+    text-color:                 inherit;
+    horizontal-align:           0.5;
+    vertical-align:             0.5;
+    cursor:                     inherit;
+}
+
+mode-switcher {
+    spacing:                    6px;
+    margin:                     0px 260px;
+}
+
+button {
+    padding:                    8px;
+    border-radius:              999px;
+    text-color:                 rgba(255, 255, 255, 0.5);
+    cursor:                     pointer;
+}
+
+button selected {
+    background-color:           @tint;
+    text-color:                 @accent;
+}
+
+message {
+    padding:                    10px 14px;
+    border-radius:              12px;
+    background-color:           @tint;
+}
+
+textbox {
+    text-color:                 @fg;
+    vertical-align:             0.5;
+}
+
+error-message {
+    padding:                    12px;
+    border-radius:              12px;
+    background-color:           @glass;
+}

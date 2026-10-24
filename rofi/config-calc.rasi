@@ -1,25 +1,5 @@
-/* ---- 💫 https://github.com/JaKooLit 💫 ---- */
-/* Main Config Calculator */
-/* Submitted by: https://github.com/JosephArmas */
+/* Calculadora (RofiCalc.sh): solo entrada + resultado en el mensaje */
+@import "~/.config/rofi/menu.rasi"
 
-@import "~/.config/rofi/config.rasi" 
-
-/* ---- Mainbox ---- */
-mainbox {
-  children: [ "entry", "message" ];
-  height: inherit;
-}
-
-/* ---- Window ---- */
-window {
-  width: 30%;
-  height: inherit;
-}
-
-/* ---- Entry ---- */
-entry {
-  expand: true;
-  placeholder: " 🧮 Calculate";
-}
-
-listview {enable: false;}
+mainbox  { children: [ "inputbar", "message" ]; }
+entry    { placeholder: "2 + 2, 20% of 80, 5 usd to mxn…"; }

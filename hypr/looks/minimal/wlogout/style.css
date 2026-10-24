@@ -1,0 +1,43 @@
+/* Custom (dany): wlogout minimal — fondo oscuro plano, botones como tiles
+   discretos que se marcan con el acento (color12) al pasar el cursor. */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+window {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 12pt;
+    color: @foreground;
+    background-color: alpha(@background, 0.92);
+}
+
+button {
+    color: alpha(@foreground, 0.6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14%;
+    background-color: alpha(@foreground, 0.04);
+    border: 1px solid alpha(@foreground, 0.08);
+    border-radius: 6px;
+    margin: 6px;
+    outline-style: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+button:focus,
+button:hover {
+    color: @foreground;
+    background-size: 14%;
+    background-color: alpha(@color12, 0.12);
+    border-color: @color12;
+}
+
+/* iconos de línea monocromos del paquete wlogout (los PNG a color de antes
+   siguen en ./icons por si se quieren de vuelta) */
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

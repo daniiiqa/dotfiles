@@ -1,0 +1,40 @@
+/* Look retro — wlogout: pantalla de terminal, tiles con borde punteado,
+   hover en video inverso. */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+window {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 12pt;
+    color: @color12;
+    background-color: alpha(@background, 0.96);
+}
+
+button {
+    color: @color12;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12%;
+    background-color: transparent;
+    border: 1px dashed alpha(@color12, 0.5);
+    border-radius: 0;
+    margin: 6px;
+    outline-style: none;
+    box-shadow: none;
+    text-shadow: 0 0 4px alpha(@color12, 0.5);
+}
+
+button:focus,
+button:hover {
+    color: @background;
+    background-color: @color12;
+    border-style: solid;
+    text-shadow: none;
+}
+
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

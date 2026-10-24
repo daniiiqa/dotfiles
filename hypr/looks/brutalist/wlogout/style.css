@@ -1,0 +1,41 @@
+/* Look brutalist — wlogout: tiles rectos, líneas de 2px, hover en acento. */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+window {
+    font-family: "JetBrainsMono Nerd Font";
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 13pt;
+    color: @foreground;
+    background-color: @background;
+}
+
+button {
+    color: @foreground;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14%;
+    background-color: @background;
+    border: 2px solid alpha(@foreground, 0.25);
+    border-radius: 0;
+    margin: 8px;
+    outline-style: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+button:focus,
+button:hover {
+    color: @foreground;
+    background-color: alpha(@color12, 0.15);
+    border-color: @color12;
+    box-shadow: 4px 4px 0 black;
+}
+
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

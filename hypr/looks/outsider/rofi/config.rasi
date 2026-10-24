@@ -1,0 +1,7 @@
+/* rofi — config global. Fuentes en 0-shared-fonts.rasi, look en
+   themes/Dany-Outsider.rasi (paleta outsider fija). Los config-*.rasi de cada
+   menú importan este archivo y solo ajustan lo suyo. */
+
+@import "~/.config/rofi/0-shared-fonts.rasi"
+
+@theme "~/.config/rofi/themes/Dany-Outsider.rasi"

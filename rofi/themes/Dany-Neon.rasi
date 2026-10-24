@@ -1,0 +1,154 @@
+/* Dany Neon — marco de acento, banda de búsqueda en acento con subrayado
+   del segundo tono, selección con barra lateral.
+   (rofi no acepta variables dentro de linear-gradient, por eso sin degradado) Colores vía wallust (harddark16 + saturación). */
+
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 true;
+    display-drun:               "apps";
+    display-run:                "run";
+    display-filebrowser:        "files";
+    display-window:             "windows";
+    drun-display-format:        "{name}";
+    hover-select:               true;
+    me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} · {c} · {t}";
+}
+
+@theme "~/.config/rofi/wallust/colors-rofi.rasi"
+
+* {
+    neon:                       @color12;
+    neon2:                      @color13;
+    neon3:                      @color14;
+    bg:                         @normal-background;
+    fg:                         @foreground;
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+window {
+    width:                      620px;
+    location:                   center;
+    anchor:                     center;
+    border:                     2px;
+    border-color:               @neon;
+    border-radius:              4px;
+    background-color:           @bg;
+    padding:                    0px;
+}
+
+mainbox {
+    orientation:                vertical;
+    spacing:                    0px;
+    children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
+}
+
+inputbar {
+    spacing:                    10px;
+    padding:                    14px 16px;
+    background-color:           @neon;
+    border:                     0px 0px 3px 0px;
+    border-color:               @neon2;
+    children:                   [ "prompt", "entry" ];
+}
+
+prompt,
+entry {
+    text-color:                 @bg;
+}
+
+textbox-prompt-colon {
+    enabled:                    false;
+}
+
+entry {
+    placeholder:                "jack in…";
+    placeholder-color:          @color0;
+    cursor:                     text;
+}
+
+listview {
+    columns:                    1;
+    lines:                      8;
+    spacing:                    4px;
+    padding:                    10px;
+    dynamic:                    true;
+    cycle:                      true;
+    scrollbar:                  false;
+    fixed-height:               true;
+}
+
+element {
+    spacing:                    12px;
+    padding:                    8px 12px;
+    border:                     0px 0px 0px 2px;
+    border-color:               transparent;
+    border-radius:              2px;
+    cursor:                     pointer;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+element normal.active,
+element alternate.active {
+    text-color:                 @neon3;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color:           @color0;
+    border-color:               @neon2;
+    text-color:                 @fg;
+}
+
+element-icon {
+    size:                       24px;
+    cursor:                     inherit;
+}
+
+element-text {
+    text-color:                 inherit;
+    vertical-align:             0.5;
+    cursor:                     inherit;
+}
+
+mode-switcher {
+    spacing:                    0px;
+    border:                     1px 0px 0px 0px;
+    border-color:               @color0;
+}
+
+button {
+    padding:                    8px;
+    text-color:                 @color8;
+    cursor:                     pointer;
+}
+
+button selected {
+    text-color:                 @neon2;
+    border:                     0px 0px 2px 0px;
+    border-color:               @neon2;
+}
+
+message {
+    padding:                    10px 16px;
+    border:                     0px 0px 1px 0px;
+    border-color:               @color0;
+}
+
+textbox {
+    text-color:                 @fg;
+    vertical-align:             0.5;
+}
+
+error-message {
+    padding:                    12px;
+    background-color:           @bg;
+}

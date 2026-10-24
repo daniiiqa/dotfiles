@@ -1,0 +1,47 @@
+/* Base de los menús -dmenu (ajustes, looks, atajos, portapapeles, emoji,
+   calculadora, búsqueda, efectos). Solo layout: los colores y el estilo los
+   pone el theme del look activo (config.rasi → themes/Dany-*.rasi), así cada
+   menú se ve como el lanzador de ese look. Cada script pasa su prompt con -p.
+   Los config-*.rasi importan esto y solo cambian lo suyo (ancho, líneas). */
+
+@import "~/.config/rofi/config.rasi"
+
+configuration {
+    show-icons:         false;
+}
+
+window {
+    width:              520px;
+    height:             inherit;
+}
+
+mainbox {
+    children:           [ "inputbar", "message", "listview" ];
+}
+
+/* el lanzador de glass es un launchpad (barra-píldora angosta, tiles
+   altos); para una lista se normaliza */
+inputbar {
+    margin:             0;
+}
+
+listview {
+    columns:            1;
+    lines:              9;
+    dynamic:            true;
+    fixed-height:       false;
+    scrollbar:          false;
+    flow:               horizontal;
+}
+
+element {
+    orientation:        horizontal;
+    children:           [ "element-text" ];
+    spacing:            0;
+    padding:            8px 14px;
+}
+
+element-text {
+    horizontal-align:   0.0;
+    vertical-align:     0.5;
+}

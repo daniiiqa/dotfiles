@@ -1,0 +1,159 @@
+/* Look retro — línea de estado de terminal: todo en el color de fósforo
+   (color12) con un leve resplandor, regla punteada abajo, activo en video
+   inverso. Colores de wallust. */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+@define-color phosphor @color12;
+@define-color dim alpha(@color12, 0.45);
+@define-color faint alpha(@color12, 0.2);
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: 500;
+	font-size: 12px;
+	min-height: 0;
+	border-radius: 0;
+	box-shadow: none;
+	text-shadow: 0 0 4px alpha(@color12, 0.55);
+}
+
+window#waybar {
+	background: @background;
+	color: @phosphor;
+	border-bottom: 1px dashed @dim;
+}
+
+tooltip {
+	background: @background;
+	border: 1px solid @phosphor;
+	border-radius: 0;
+}
+
+tooltip label {
+	color: @phosphor;
+	padding: 2px 4px;
+}
+
+#workspaces button {
+	color: @dim;
+	background: transparent;
+	padding: 0 2px;
+}
+
+#workspaces button.empty {
+	color: @faint;
+}
+
+#workspaces button.active {
+	color: @background;
+	background: @phosphor;
+	text-shadow: none;
+}
+
+#workspaces button.urgent {
+	color: @background;
+	background: alpha(@phosphor, 0.6);
+}
+
+#workspaces button:hover {
+	color: @phosphor;
+	background: @faint;
+}
+
+#mpris,
+#clock,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#pulseaudio,
+#network,
+#bluetooth,
+#idle_inhibitor,
+#custom-swaync,
+.app,
+.app-more,
+#custom-power {
+	color: @phosphor;
+	background: transparent;
+	padding: 0 6px;
+}
+
+#mpris {
+	color: @dim;
+	margin-left: 8px;
+}
+
+#temperature,
+#cpu,
+#memory,
+#disk,
+#pulseaudio.muted,
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off {
+	color: @dim;
+}
+
+#temperature.critical,
+
+#custom-power:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover,
+#custom-swaync:hover,
+#clock:hover {
+	color: @background;
+	background: @phosphor;
+	text-shadow: none;
+}
+
+@keyframes blink {
+	to { color: @background; }
+}
+
+#battery.critical:not(.charging) {
+	animation: blink 1s steps(2) infinite;
+}
+
+#backlight-slider slider,
+#pulseaudio-slider slider {
+	min-width: 0;
+	min-height: 0;
+	opacity: 0;
+	background-image: none;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+	min-width: 80px;
+	min-height: 4px;
+	background: @faint;
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+	min-height: 4px;
+	background: @phosphor;
+}
+
+/* apps abiertas (AppStrip.py): iconos de la fuente, todos en el color del
+   tema; la enfocada se marca con una línea. .app-more es el botón del cajón
+   (aparece con 6+ apps). */
+.app,
+.app-more {
+	color: @phosphor;
+}
+
+.app {
+	border-bottom: 2px solid transparent;
+}
+
+.app.active {
+	border-bottom-color: @phosphor;
+}
+
+.app-more {
+	font-size: 13px;
+}

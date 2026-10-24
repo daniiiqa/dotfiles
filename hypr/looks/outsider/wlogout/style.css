@@ -1,0 +1,58 @@
+/* Look outsider — wlogout: paleta lo-fi fija (negros cálidos, crema, rosa
+   deslavado, rojo REC). Esquinas casi rectas. */
+
+/* paleta outsider con los mismos nombres que usa wallust */
+@define-color background #15120e;
+@define-color foreground #e8dcc3;
+@define-color color0 #1f1b16;
+@define-color color8 #4d453a;
+@define-color color7 #f3ead6;
+@define-color color11 #e3b161;
+@define-color color12 #d99a8b;
+@define-color color13 #87aaa1;
+@define-color color14 #87aaa1;
+@define-color tape_red #d4523b;
+@define-color tape_orange #e3b161;
+@define-color tape_yellow #e3b161;
+@define-color tape_green #87aaa1;
+@define-color tape_purple #d99a8b;
+@define-color tape_blue #87aaa1;
+
+window {
+    font-family: "FantasqueSansM Nerd Font";
+    font-size: 12pt;
+    color: @foreground;
+    background-color: alpha(@background, 0.92);
+}
+
+button {
+    color: alpha(@foreground, 0.6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14%;
+    background-color: alpha(@foreground, 0.04);
+    border: 1px solid alpha(@foreground, 0.08);
+    border-radius: 3px;
+    margin: 6px;
+    outline-style: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+button:focus,
+button:hover {
+    color: @foreground;
+    background-size: 14%;
+    background-color: alpha(@color12, 0.12);
+    border-color: @color12;
+}
+
+/* iconos de línea monocromos del paquete wlogout (los PNG a color de antes
+   siguen en ./icons por si se quieren de vuelta) */
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

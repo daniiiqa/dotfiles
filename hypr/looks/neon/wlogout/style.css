@@ -1,0 +1,42 @@
+/* Look neon — wlogout: tiles oscuros con borde fino; al pasar el cursor
+   se encienden con halo y borde degradado. */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+window {
+    font-family: "JetBrainsMono Nerd Font";
+    font-weight: 700;
+    font-size: 12pt;
+    color: @foreground;
+    background-color: alpha(@background, 0.9);
+}
+
+button {
+    color: alpha(@foreground, 0.6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14%;
+    background-color: alpha(@background, 0.6);
+    border: 1px solid alpha(@color12, 0.35);
+    border-radius: 4px;
+    margin: 8px;
+    outline-style: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+
+button:focus,
+button:hover {
+    color: @color12;
+    border-color: @color12;
+    box-shadow: 0 0 18px alpha(@color12, 0.7), inset 0 0 12px alpha(@color13, 0.25);
+    text-shadow: 0 0 8px @color12;
+}
+
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

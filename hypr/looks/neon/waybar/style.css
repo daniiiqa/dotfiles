@@ -1,0 +1,206 @@
+/* Look neon — dos islas oscuras con los extremos interiores cortados en
+   diagonal (degradados con corte duro), texto con halo, workspace activo
+   brillando. Colores de wallust (harddark16 + saturación). */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+@define-color neon @color12;
+@define-color neon2 @color13;
+@define-color neon3 @color14;
+@define-color slab alpha(@background, 0.96);
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: 700;
+	font-size: 13px;
+	min-height: 0;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	text-shadow: 0 0 6px alpha(@color12, 0.7);
+}
+
+window#waybar {
+	background: transparent;
+	color: @foreground;
+}
+
+/* islas: el corte en diagonal sale de un degradado con paradas duras.
+   Geometría para barra de 32px: la diagonal va de 22px adentro (arriba) a la
+   esquina (abajo) — ángulo 235.5deg, parada a 18.1px. El trazo neón va sobre
+   la diagonal y la línea de abajo termina justo donde la diagonal toca fondo.
+   Si cambia "height" en el config, hay que recalcular. */
+.modules-left {
+	background-image:
+		linear-gradient(to top, @neon 2px, transparent 2px),
+		linear-gradient(235.5deg, transparent 18.1px, @neon 18.1px, @neon 19.8px, alpha(@neon, 0.25) 19.8px, @slab 23px);
+	padding: 0 28px 0 6px;
+}
+
+.modules-right {
+	background-image:
+		linear-gradient(to top, @neon2 2px, transparent 2px),
+		linear-gradient(124.5deg, transparent 18.1px, @neon2 18.1px, @neon2 19.8px, alpha(@neon2, 0.25) 19.8px, @slab 23px);
+	padding: 0 6px 0 28px;
+}
+
+.modules-center {
+	background: transparent;
+}
+
+tooltip {
+	background: @background;
+	border: 1px solid @neon;
+	border-radius: 2px;
+}
+
+tooltip label {
+	color: @foreground;
+	padding: 4px 6px;
+	text-shadow: none;
+}
+
+#workspaces button {
+	color: alpha(@foreground, 0.5);
+	background: transparent;
+	padding: 0 8px;
+	text-shadow: none;
+	transition: all 150ms ease;
+}
+
+#workspaces button.empty {
+	color: alpha(@foreground, 0.2);
+}
+
+#workspaces button.active {
+	color: @background;
+	background: @neon;
+	box-shadow: 0 0 12px @neon;
+}
+
+#workspaces button.urgent {
+	color: @background;
+	background: @neon2;
+	box-shadow: 0 0 12px @neon2;
+}
+
+#workspaces button:hover {
+	color: @neon;
+	text-shadow: 0 0 6px @neon;
+}
+
+#mpris,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#pulseaudio,
+#network,
+#bluetooth,
+#idle_inhibitor,
+#custom-swaync,
+.app,
+.app-more,
+#custom-power {
+	color: @foreground;
+	background: transparent;
+	padding: 0 8px;
+}
+
+/* la hora flota sola en medio, con halo doble */
+#clock {
+	color: @foreground;
+	font-size: 15px;
+	font-weight: 800;
+	letter-spacing: 2px;
+	padding: 0 14px;
+	text-shadow: 0 0 6px @neon, 0 0 16px alpha(@neon2, 0.8);
+}
+
+#mpris {
+	color: @neon2;
+	font-style: italic;
+	text-shadow: 0 0 6px alpha(@neon2, 0.7);
+}
+
+#pulseaudio,
+#network,
+#bluetooth { color: @foreground; text-shadow: 0 0 6px @neon; }
+
+#temperature,
+#cpu,
+#memory,
+#disk {
+	color: alpha(@foreground, 0.7);
+	text-shadow: none;
+}
+
+#pulseaudio.muted,
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off {
+	color: alpha(@foreground, 0.3);
+	text-shadow: none;
+}
+
+
+#temperature.critical {
+	color: @neon2;
+}
+
+#custom-power {
+	color: @neon2;
+	text-shadow: 0 0 8px @neon2;
+}
+
+#custom-power:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover,
+#custom-swaync:hover {
+	color: @neon;
+	text-shadow: 0 0 10px @neon;
+}
+
+#backlight-slider slider,
+#pulseaudio-slider slider {
+	min-width: 0;
+	min-height: 0;
+	opacity: 0;
+	background-image: none;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+	min-width: 80px;
+	min-height: 4px;
+	background: alpha(@foreground, 0.15);
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+	min-height: 4px;
+	background-image: linear-gradient(to right, @neon, @neon2);
+	box-shadow: 0 0 8px @neon;
+}
+
+/* apps abiertas (AppStrip.py): iconos de la fuente, todos en el color del
+   tema; la enfocada se marca con una línea. .app-more es el botón del cajón
+   (aparece con 6+ apps). */
+.app,
+.app-more {
+	color: @neon;
+	text-shadow: 0 0 8px @neon;
+}
+
+.app {
+	border-bottom: 2px solid transparent;
+}
+
+.app.active {
+	border-bottom-color: @neon;
+}
+
+.app-more {
+	font-size: 13px;
+}

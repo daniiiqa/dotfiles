@@ -1,0 +1,203 @@
+/* Dany Minimal — barra flotante delgada, sin cajas por módulo.
+   Texto en foreground, iconos secundarios atenuados, color12 como único acento.
+   Layout: config */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+@define-color accent @color12;
+@define-color muted alpha(@foreground, 0.45);
+@define-color faint alpha(@foreground, 0.18);
+@define-color critical #e06c75;
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: 500;
+	font-size: 13px;
+	min-height: 0;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	text-shadow: none;
+}
+
+window#waybar {
+	background: alpha(@background, 0.88);
+	border: 1px solid @faint;
+	border-radius: 6px;
+	color: @foreground;
+}
+
+window#waybar.hidden {
+	opacity: 0.4;
+}
+
+tooltip {
+	background: @background;
+	border: 1px solid @faint;
+	border-radius: 6px;
+}
+
+tooltip label {
+	color: @foreground;
+	padding: 2px 4px;
+}
+
+/* ---- workspaces ---- */
+#workspaces {
+	margin-left: 6px;
+}
+
+#workspaces button {
+	color: @muted;
+	padding: 0 8px;
+	margin: 4px 1px;
+	background: transparent;
+	border-radius: 4px;
+	transition: all 120ms ease;
+}
+
+#workspaces button.empty {
+	color: @faint;
+}
+
+#workspaces button.active {
+	color: @background;
+	background: @accent;
+}
+
+#workspaces button.urgent {
+	color: @critical;
+}
+
+#workspaces button:hover {
+	color: @foreground;
+	background: @faint;
+}
+
+#workspaces button.active:hover {
+	color: @background;
+	background: @accent;
+}
+
+/* ---- módulos ---- */
+#mpris,
+#clock,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#pulseaudio,
+#network,
+#bluetooth,
+#idle_inhibitor,
+#custom-swaync,
+#custom-dot_update,
+.app,
+.app-more,
+#custom-power {
+	color: @foreground;
+	padding: 0 8px;
+	background: transparent;
+}
+
+#clock {
+	font-weight: 700;
+	letter-spacing: 1px;
+}
+
+#mpris {
+	color: @muted;
+	margin-left: 4px;
+}
+
+#temperature,
+#cpu,
+#memory,
+#disk {
+	color: @muted;
+}
+
+#pulseaudio.muted,
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off {
+	color: @faint;
+}
+
+
+#temperature.critical {
+	color: @critical;
+}
+
+.app,
+.app-more {
+	font-size: 15px;
+	padding: 0 5px;
+}
+
+
+#custom-power {
+	color: @accent;
+	margin-right: 4px;
+}
+
+#custom-power:hover,
+#custom-swaync:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover {
+	color: @accent;
+}
+
+/* sliders de los drawers */
+#backlight-slider slider,
+#pulseaudio-slider slider {
+	min-width: 0;
+	min-height: 0;
+	opacity: 0;
+	background-image: none;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+	min-width: 80px;
+	min-height: 4px;
+	border-radius: 2px;
+	background: @faint;
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+	min-height: 4px;
+	border-radius: 2px;
+	background: @accent;
+}
+
+@keyframes blink {
+	to { color: @background; }
+}
+
+#battery.critical:not(.charging) {
+	color: @critical;
+	animation: blink 1.5s steps(12) infinite alternate;
+}
+
+/* apps abiertas (AppStrip.py): iconos de la fuente, todos en el color del
+   tema; la enfocada se marca con una línea. .app-more es el botón del cajón
+   (aparece con 6+ apps). */
+.app,
+.app-more {
+	color: @accent;
+}
+
+.app {
+	border-bottom: 2px solid transparent;
+}
+
+.app.active {
+	border-bottom-color: @accent;
+}
+
+.app-more {
+	font-size: 13px;
+}

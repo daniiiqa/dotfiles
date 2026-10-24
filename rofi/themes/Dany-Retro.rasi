@@ -1,0 +1,133 @@
+/* Dany Retro — terminal de fósforo: sin iconos, prompt "$", cursor que
+   parpadea, selección en video inverso. Todo en color12 de wallust. */
+
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 false;
+    display-drun:               "$ run";
+    display-run:                "$ exec";
+    display-filebrowser:        "$ ls";
+    display-window:             "$ ps";
+    drun-display-format:        "{name}";
+    hover-select:               true;
+    me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} {c} {t}";
+}
+
+@theme "~/.config/rofi/wallust/colors-rofi.rasi"
+
+* {
+    phosphor:                   @color12;
+    bg:                         @normal-background;
+    background-color:           transparent;
+    text-color:                 @phosphor;
+    font:                       "JetBrainsMono Nerd Font 12";
+}
+
+window {
+    width:                      640px;
+    location:                   center;
+    anchor:                     center;
+    border:                     1px;
+    border-color:               @phosphor;
+    border-radius:              0px;
+    background-color:           @bg;
+    padding:                    10px;
+}
+
+mainbox {
+    orientation:                vertical;
+    spacing:                    8px;
+    children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
+}
+
+inputbar {
+    spacing:                    8px;
+    padding:                    4px 2px;
+    border:                     0px 0px 1px 0px;
+    border-color:               @color8;
+    children:                   [ "prompt", "entry" ];
+}
+
+textbox-prompt-colon {
+    enabled:                    false;
+}
+
+entry {
+    placeholder:                "_";
+    placeholder-color:          @color8;
+    cursor:                     text;
+    blink:                      true;
+}
+
+listview {
+    columns:                    1;
+    lines:                      10;
+    spacing:                    0px;
+    dynamic:                    true;
+    cycle:                      true;
+    scrollbar:                  false;
+    fixed-height:               true;
+}
+
+element {
+    padding:                    3px 6px;
+    cursor:                     pointer;
+}
+
+element normal.normal,
+element alternate.normal,
+element normal.active,
+element alternate.active {
+    background-color:           transparent;
+    text-color:                 @phosphor;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color:           @phosphor;
+    text-color:                 @bg;
+}
+
+element-icon {
+    size:                       0px;
+}
+
+element-text {
+    text-color:                 inherit;
+    vertical-align:             0.5;
+    cursor:                     inherit;
+}
+
+mode-switcher {
+    spacing:                    0px;
+    border:                     1px 0px 0px 0px;
+    border-color:               @color8;
+}
+
+button {
+    padding:                    4px;
+    text-color:                 @color8;
+    cursor:                     pointer;
+}
+
+button selected {
+    text-color:                 @phosphor;
+}
+
+message {
+    padding:                    4px 2px;
+    border:                     0px 0px 1px 0px;
+    border-color:               @color8;
+}
+
+textbox {
+    text-color:                 @phosphor;
+}
+
+error-message {
+    padding:                    10px;
+    background-color:           @bg;
+}

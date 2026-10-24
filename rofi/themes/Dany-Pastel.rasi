@@ -1,0 +1,145 @@
+/* Dany Pastel — redondo y suave: entrada en píldora, grid de 2 columnas,
+   selección en tono pastel. Colores vía wallust (softdark16). */
+
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 true;
+    display-drun:               "apps";
+    display-run:                "run";
+    display-filebrowser:        "files";
+    display-window:             "windows";
+    drun-display-format:        "{name}";
+    hover-select:               true;
+    me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} · {c} · {t}";
+}
+
+@theme "~/.config/rofi/wallust/colors-rofi.rasi"
+
+* {
+    accent:                     @color12;
+    accent2:                    @color13;
+    bg:                         @normal-background;
+    fg:                         @foreground;
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+window {
+    width:                      640px;
+    location:                   center;
+    anchor:                     center;
+    border:                     2px;
+    border-color:               @accent;
+    border-radius:              20px;
+    background-color:           @bg;
+    padding:                    16px;
+}
+
+mainbox {
+    orientation:                vertical;
+    spacing:                    14px;
+    children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
+}
+
+inputbar {
+    spacing:                    10px;
+    padding:                    10px 16px;
+    border-radius:              999px;
+    background-color:           @color0;
+    children:                   [ "prompt", "entry" ];
+}
+
+prompt {
+    text-color:                 @accent;
+}
+
+textbox-prompt-colon {
+    enabled:                    false;
+}
+
+entry {
+    placeholder:                "¿qué abrimos?";
+    placeholder-color:          @color8;
+    cursor:                     text;
+}
+
+listview {
+    columns:                    2;
+    lines:                      6;
+    spacing:                    6px;
+    dynamic:                    true;
+    cycle:                      true;
+    scrollbar:                  false;
+    fixed-height:               true;
+}
+
+element {
+    spacing:                    12px;
+    padding:                    10px 14px;
+    border-radius:              14px;
+    cursor:                     pointer;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+element normal.active,
+element alternate.active {
+    text-color:                 @accent2;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color:           @accent;
+    text-color:                 @bg;
+}
+
+element-icon {
+    size:                       28px;
+    cursor:                     inherit;
+}
+
+element-text {
+    text-color:                 inherit;
+    vertical-align:             0.5;
+    cursor:                     inherit;
+}
+
+mode-switcher {
+    spacing:                    8px;
+}
+
+button {
+    padding:                    8px;
+    border-radius:              999px;
+    text-color:                 @color8;
+    cursor:                     pointer;
+}
+
+button selected {
+    background-color:           @color0;
+    text-color:                 @accent;
+}
+
+message {
+    padding:                    10px 16px;
+    border-radius:              14px;
+    background-color:           @color0;
+}
+
+textbox {
+    text-color:                 @fg;
+    vertical-align:             0.5;
+}
+
+error-message {
+    padding:                    14px;
+    border-radius:              14px;
+    background-color:           @bg;
+}

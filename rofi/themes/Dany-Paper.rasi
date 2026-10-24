@@ -1,0 +1,138 @@
+/* Dany Paper — hoja de papel: fondo claro, línea de tinta de 1px, prompt
+   en serif, selección en tinta invertida. Colores vía wallust (light16). */
+
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 true;
+    display-drun:               "Abrir";
+    display-run:                "Ejecutar";
+    display-filebrowser:        "Archivos";
+    display-window:             "Ventanas";
+    drun-display-format:        "{name}";
+    hover-select:               true;
+    me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} · {c} · {t}";
+}
+
+@theme "~/.config/rofi/wallust/colors-rofi.rasi"
+
+* {
+    ink:                        @foreground;
+    paper:                      @normal-background;
+    background-color:           transparent;
+    text-color:                 @ink;
+}
+
+window {
+    width:                      560px;
+    location:                   center;
+    anchor:                     center;
+    border:                     1px;
+    border-color:               @ink;
+    border-radius:              3px;
+    background-color:           @paper;
+    padding:                    18px;
+}
+
+mainbox {
+    orientation:                vertical;
+    spacing:                    12px;
+    children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
+}
+
+inputbar {
+    spacing:                    10px;
+    padding:                    0px 0px 8px 0px;
+    border:                     0px 0px 1px 0px;
+    border-color:               @ink;
+    children:                   [ "prompt", "entry" ];
+}
+
+prompt {
+    font:                       "Noto Serif Display Italic 15";
+}
+
+textbox-prompt-colon {
+    enabled:                    false;
+}
+
+entry {
+    placeholder:                "…";
+    placeholder-color:          @color8;
+    cursor:                     text;
+    vertical-align:             0.5;
+}
+
+listview {
+    columns:                    1;
+    lines:                      8;
+    spacing:                    2px;
+    dynamic:                    true;
+    cycle:                      true;
+    scrollbar:                  false;
+    fixed-height:               true;
+}
+
+element {
+    spacing:                    12px;
+    padding:                    7px 10px;
+    border-radius:              2px;
+    cursor:                     pointer;
+}
+
+element normal.normal,
+element alternate.normal,
+element normal.active,
+element alternate.active {
+    background-color:           transparent;
+    text-color:                 @ink;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color:           @ink;
+    text-color:                 @paper;
+}
+
+element-icon {
+    size:                       22px;
+    cursor:                     inherit;
+}
+
+element-text {
+    text-color:                 inherit;
+    vertical-align:             0.5;
+    cursor:                     inherit;
+}
+
+mode-switcher {
+    spacing:                    0px;
+}
+
+button {
+    padding:                    6px;
+    text-color:                 @color8;
+    cursor:                     pointer;
+}
+
+button selected {
+    text-color:                 @ink;
+    border:                     0px 0px 1px 0px;
+    border-color:               @ink;
+}
+
+message {
+    padding:                    8px 0px;
+}
+
+textbox {
+    text-color:                 @ink;
+    vertical-align:             0.5;
+}
+
+error-message {
+    padding:                    12px;
+    background-color:           @paper;
+}

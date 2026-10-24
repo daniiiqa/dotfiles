@@ -1,0 +1,189 @@
+/* Look nord — barra flotante redondeada sobre nord0, cada módulo con un
+   color de la paleta (frost para el sistema, aurora para estados).
+   Paleta Nord fija: no sigue al wallpaper. */
+
+@define-color nord0 #2E3440;
+@define-color nord1 #3B4252;
+@define-color nord2 #434C5E;
+@define-color nord3 #4C566A;
+@define-color nord4 #D8DEE9;
+@define-color nord6 #ECEFF4;
+@define-color nord7 #8FBCBB;
+@define-color nord8 #88C0D0;
+@define-color nord9 #81A1C1;
+@define-color nord10 #5E81AC;
+@define-color nord11 #BF616A;
+@define-color nord12 #D08770;
+@define-color nord13 #EBCB8B;
+@define-color nord14 #A3BE8C;
+@define-color nord15 #B48EAD;
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: 600;
+	font-size: 13px;
+	min-height: 0;
+	border: none;
+	box-shadow: none;
+	text-shadow: none;
+}
+
+window#waybar {
+	background: alpha(@nord0, 0.94);
+	border: 1px solid @nord2;
+	border-radius: 10px;
+	color: @nord4;
+}
+
+tooltip {
+	background: @nord0;
+	border: 1px solid @nord3;
+	border-radius: 8px;
+}
+
+tooltip label {
+	color: @nord4;
+	padding: 4px 6px;
+}
+
+#workspaces {
+	margin: 4px 6px;
+	background: @nord1;
+	border-radius: 7px;
+}
+
+#workspaces button {
+	color: @nord4;
+	background: transparent;
+	padding: 0 9px;
+	border-radius: 7px;
+	transition: all 200ms ease;
+}
+
+#workspaces button.empty {
+	color: @nord3;
+}
+
+#workspaces button.active {
+	color: @nord0;
+	background: @nord8;
+}
+
+#workspaces button.urgent {
+	color: @nord0;
+	background: @nord11;
+}
+
+#workspaces button:hover {
+	background: @nord2;
+}
+
+#workspaces button.active:hover {
+	background: @nord8;
+}
+
+#mpris,
+#clock,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#pulseaudio,
+#network,
+#bluetooth,
+#idle_inhibitor,
+#custom-swaync,
+.app,
+.app-more,
+#custom-power {
+	background: transparent;
+	padding: 0 9px;
+	border-radius: 7px;
+	margin: 4px 0;
+}
+
+#clock {
+	color: @nord6;
+	background: @nord1;
+	font-weight: 700;
+	padding: 0 14px;
+}
+
+#mpris { color: @nord15; font-style: italic; margin-left: 4px; }
+#temperature { color: @nord13; }
+#cpu { color: @nord9; }
+#memory { color: @nord15; }
+#disk { color: @nord7; }
+#pulseaudio { color: @nord8; }
+#network { color: @nord14; }
+#bluetooth { color: @nord10; }
+#custom-swaync { color: @nord4; }
+.app,
+.app-more { color: @nord9; font-size: 15px; padding: 0 6px; }
+#custom-power { color: @nord11; margin-right: 4px; }
+
+#pulseaudio.muted,
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off {
+	color: @nord3;
+}
+
+#idle_inhibitor { color: @nord4; }
+
+#temperature.critical {
+	color: @nord0;
+	background: @nord11;
+}
+
+#custom-power:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover,
+#custom-swaync:hover {
+	background: @nord1;
+}
+
+#backlight-slider slider,
+#pulseaudio-slider slider {
+	min-width: 0;
+	min-height: 0;
+	opacity: 0;
+	background-image: none;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+	min-width: 80px;
+	min-height: 5px;
+	border-radius: 3px;
+	background: @nord2;
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+	min-height: 5px;
+	border-radius: 3px;
+	background: @nord8;
+}
+
+/* apps abiertas (AppStrip.py): iconos de la fuente, todos en el color del
+   tema; la enfocada se marca con una línea. .app-more es el botón del cajón
+   (aparece con 6+ apps). */
+.app,
+.app-more {
+	color: @nord8;
+}
+
+.app {
+	border-bottom: 2px solid transparent;
+	border-radius: 0;
+}
+
+.app.active {
+	border-bottom-color: @nord8;
+}
+
+.app-more {
+	font-size: 13px;
+}

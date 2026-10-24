@@ -1,0 +1,57 @@
+/* Look nord — wlogout: tiles Nord con hover en frost (paleta fija). */
+
+/* paleta Nord fija con los mismos nombres que usa wallust */
+@define-color background #2E3440;
+@define-color foreground #D8DEE9;
+@define-color color0 #3B4252;
+@define-color color8 #4C566A;
+@define-color color7 #E5E9F0;
+@define-color color11 #EBCB8B;
+@define-color color12 #88C0D0;
+@define-color color13 #81A1C1;
+@define-color color14 #8FBCBB;
+@define-color nord_red #BF616A;
+@define-color nord_orange #D08770;
+@define-color nord_yellow #EBCB8B;
+@define-color nord_green #A3BE8C;
+@define-color nord_purple #B48EAD;
+@define-color nord_blue #5E81AC;
+
+window {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 12pt;
+    color: @foreground;
+    background-color: alpha(@background, 0.92);
+}
+
+button {
+    color: alpha(@foreground, 0.6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14%;
+    background-color: alpha(@foreground, 0.04);
+    border: 1px solid alpha(@foreground, 0.08);
+    border-radius: 6px;
+    margin: 6px;
+    outline-style: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+button:focus,
+button:hover {
+    color: @foreground;
+    background-size: 14%;
+    background-color: alpha(@color12, 0.12);
+    border-color: @color12;
+}
+
+/* iconos de línea monocromos del paquete wlogout (los PNG a color de antes
+   siguen en ./icons por si se quieren de vuelta) */
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

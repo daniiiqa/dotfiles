@@ -1,0 +1,168 @@
+/* Look paper — cabecera de periódico: papel liso, tinta oscura, una línea
+   fina abajo, reloj en serif. Escala de grises; el acento solo para urgente.
+   Colores de wallust (light16). */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+@define-color ink @foreground;
+@define-color paper @background;
+@define-color pencil alpha(@foreground, 0.5);
+@define-color rule alpha(@foreground, 0.2);
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: 500;
+	font-size: 12px;
+	min-height: 0;
+	border-radius: 0;
+	box-shadow: none;
+	text-shadow: none;
+}
+
+window#waybar {
+	background: @paper;
+	color: @ink;
+	border-bottom: 1px solid @rule;
+}
+
+tooltip {
+	background: @paper;
+	border: 1px solid @ink;
+	border-radius: 2px;
+}
+
+tooltip label {
+	color: @ink;
+	padding: 4px 6px;
+}
+
+#workspaces {
+	margin-left: 10px;
+}
+
+#workspaces button {
+	font-family: "Noto Serif";
+	font-size: 13px;
+	color: @pencil;
+	background: transparent;
+	padding: 0 7px;
+	border-bottom: 1px solid transparent;
+}
+
+#workspaces button.empty {
+	color: alpha(@foreground, 0.25);
+}
+
+#workspaces button.active {
+	color: @ink;
+	font-weight: 700;
+	border-bottom: 2px solid @ink;
+}
+
+#workspaces button.urgent {
+	color: @color12;
+}
+
+#workspaces button:hover {
+	color: @ink;
+	background: alpha(@foreground, 0.06);
+}
+
+#mpris,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#pulseaudio,
+#network,
+#bluetooth,
+#idle_inhibitor,
+#custom-swaync,
+.app,
+.app-more,
+#custom-power {
+	color: @ink;
+	background: transparent;
+	padding: 0 8px;
+}
+
+#clock {
+	font-family: "Noto Serif Display";
+	font-style: italic;
+	font-weight: 600;
+	font-size: 16px;
+	color: @ink;
+	padding: 0 14px;
+}
+
+#mpris {
+	font-family: "Noto Serif";
+	font-style: italic;
+	color: @pencil;
+	margin-left: 8px;
+}
+
+#temperature,
+#cpu,
+#memory,
+#disk,
+#pulseaudio.muted,
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off {
+	color: @pencil;
+}
+
+
+#temperature.critical {
+	color: @color12;
+}
+
+#custom-power:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover,
+#custom-swaync:hover {
+	background: alpha(@foreground, 0.08);
+}
+
+#backlight-slider slider,
+#pulseaudio-slider slider {
+	min-width: 0;
+	min-height: 0;
+	opacity: 0;
+	background-image: none;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+	min-width: 80px;
+	min-height: 2px;
+	background: @rule;
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+	min-height: 2px;
+	background: @ink;
+}
+
+/* apps abiertas (AppStrip.py): iconos de la fuente, todos en el color del
+   tema; la enfocada se marca con una línea. .app-more es el botón del cajón
+   (aparece con 6+ apps). */
+.app,
+.app-more {
+	color: @ink;
+}
+
+.app {
+	border-bottom: 2px solid transparent;
+}
+
+.app.active {
+	border-bottom-color: @ink;
+}
+
+.app-more {
+	font-size: 13px;
+}

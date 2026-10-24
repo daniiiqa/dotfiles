@@ -1,0 +1,177 @@
+/* Look pastel — tres islas redondeadas flotando sobre el fondo,
+   workspaces como puntitos, acentos suaves. Colores de wallust (softdark16). */
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
+
+@define-color accent @color12;
+@define-color accent2 @color13;
+@define-color soft alpha(@foreground, 0.55);
+@define-color island alpha(@background, 0.82);
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: 600;
+	font-size: 13px;
+	min-height: 0;
+	border: none;
+	box-shadow: none;
+	text-shadow: none;
+}
+
+window#waybar {
+	background: transparent;
+	color: @foreground;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+	background: @island;
+	border: 1px solid alpha(@accent, 0.4);
+	border-radius: 16px;
+	padding: 0 8px;
+}
+
+tooltip {
+	background: @background;
+	border: 1px solid alpha(@accent, 0.35);
+	border-radius: 12px;
+}
+
+tooltip label {
+	color: @foreground;
+	padding: 4px 6px;
+}
+
+#workspaces button {
+	color: alpha(@foreground, 0.55);
+	background: transparent;
+	padding: 0 5px;
+	border-radius: 12px;
+	transition: all 300ms ease;
+}
+
+#workspaces button.empty {
+	color: alpha(@foreground, 0.25);
+}
+
+#workspaces button.active {
+	color: @foreground;
+	padding: 0 12px;
+	background: alpha(@accent, 0.35);
+}
+
+#workspaces button.urgent {
+	color: #f2a7b5;
+}
+
+#workspaces button:hover {
+	color: @accent2;
+	background: alpha(@accent, 0.12);
+}
+
+#mpris,
+#clock,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#pulseaudio,
+#network,
+#bluetooth,
+#idle_inhibitor,
+#custom-swaync,
+.app,
+.app-more,
+#custom-power {
+	color: @foreground;
+	background: transparent;
+	padding: 0 7px;
+	border-radius: 12px;
+}
+
+#clock {
+	color: @foreground;
+	font-weight: 700;
+	padding: 0 12px;
+}
+
+#mpris,
+#temperature,
+#cpu,
+#memory,
+#disk {
+	color: @soft;
+}
+
+#pulseaudio { color: @accent2; }
+#network,
+#bluetooth { color: @accent; }
+
+#pulseaudio.muted,
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off {
+	color: alpha(@foreground, 0.25);
+}
+
+
+#temperature.critical {
+	color: #f2a7b5;
+}
+
+#custom-power {
+	color: #f2a7b5;
+}
+
+#custom-power:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover,
+#custom-swaync:hover {
+	background: alpha(@accent, 0.15);
+}
+
+#backlight-slider slider,
+#pulseaudio-slider slider {
+	min-width: 0;
+	min-height: 0;
+	opacity: 0;
+	background-image: none;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+	min-width: 80px;
+	min-height: 6px;
+	border-radius: 3px;
+	background: alpha(@foreground, 0.15);
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+	min-height: 6px;
+	border-radius: 3px;
+	background: @accent;
+}
+
+/* apps abiertas (AppStrip.py): iconos de la fuente, todos en el color del
+   tema; la enfocada se marca con una línea. .app-more es el botón del cajón
+   (aparece con 6+ apps). */
+.app,
+.app-more {
+	color: @accent;
+}
+
+.app {
+	border-bottom: 2px solid transparent;
+	border-radius: 0;
+}
+
+.app.active {
+	border-bottom-color: @accent;
+}
+
+.app-more {
+	font-size: 13px;
+}
