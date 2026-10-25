@@ -37,7 +37,7 @@ REPO_PKGS=(
   pipewire wireplumber pipewire-pulse pamixer pavucontrol playerctl
   # wallpapers de video y colores
   imagemagick ffmpeg mpv
-  # ytm (YouTube Music en la terminal): audio por mpv, mpris para waybar
+  # rola (YouTube Music en la terminal): audio por mpv, mpris para waybar
   yt-dlp mpv-mpris rustup
   # utilidades que usan los scripts
   libnotify libqalculate bc curl python xdg-user-dirs xdg-utils git
@@ -58,8 +58,8 @@ SDDM_THEME_REPO="https://github.com/JaKooLit/simple-sddm-2.git"
 SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 
 # carpetas del repo que van a ~/.config (las mismas del whitelist de .gitignore)
-CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout yazi ytm Kvantum qt5ct qt6ct swappy)
-YTM_REPO="https://github.com/daniiiqa/ytm.git"
+CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout yazi rola Kvantum qt5ct qt6ct swappy)
+ROLA_REPO="https://github.com/daniiiqa/rola.git"
 
 # ── Opciones ─────────────────────────────────────────────────────────────────
 DRY=0 SDDM=auto AUR=1 YES=()
@@ -190,10 +190,10 @@ EOF
   xdg-mime default yazi-kitty.desktop inode/directory
 fi
 
-say "ytm (YouTube Music en la terminal) → ~/.local/bin/ytm"
+say "rola (YouTube Music en la terminal) → ~/.local/bin/rola"
 if ! rustup show active-toolchain >/dev/null 2>&1; then run rustup default stable; fi
-run cargo install --git "$YTM_REPO" --root "$HOME/.local" --locked
-case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "~/.local/bin no está en el PATH: agrégalo para correr ytm" ;; esac
+run cargo install --git "$ROLA_REPO" --root "$HOME/.local" --locked
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "~/.local/bin no está en el PATH: agrégalo para correr rola" ;; esac
 
 say "Carpetas de usuario y de wallpapers"
 run xdg-user-dirs-update

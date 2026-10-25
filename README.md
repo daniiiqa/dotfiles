@@ -7,7 +7,7 @@ salen del wallpaper (incluidos los de video) vía wallust.
 
 Solo las carpetas del rice (whitelist en `.gitignore`): `hypr`, `waybar`, `rofi`,
 `swaync`, `wallust`, `kitty`, `cava`, `btop`, `fastfetch`, `wlogout`, `yazi`,
-`ytm`, `Kvantum`, `qt5ct`, `qt6ct`, `swappy`. Todo lo demás de `~/.config` se ignora.
+`rola`, `Kvantum`, `qt5ct`, `qt6ct`, `swappy`. Todo lo demás de `~/.config` se ignora.
 
 ## Estructura
 
@@ -94,10 +94,10 @@ Se puede correr varias veces sin romper nada.
 - **Atajos**: `SUPER+H` cheat sheet, `SUPER+Shift+K` buscador (lee directo de
   `conf/keybinds.conf`), `SUPER+Shift+E` ajustes rápidos.
 - `Tak0-*.sh` — cambio de layout de teclado por ventana / autodispatch.
-- **Música: [ytm](https://github.com/daniiiqa/ytm)** — YouTube Music en la
+- **Música: [rola](https://github.com/daniiiqa/rola)** (`SUPER+M`) — YouTube Music en la
   terminal (mpv + mpv-mpris, así sale en el módulo mpris de waybar).
-  `install.sh` lo compila a `~/.local/bin/ytm`; `ytm --login` conecta la cuenta.
-  Ajustes en `ytm/config.json`; cada look trae su `ytm/look.json` (bordes,
+  `install.sh` lo compila a `~/.local/bin/rola`; `rola --login` conecta la cuenta.
+  Ajustes en `rola/config.json`; cada look trae su `rola/look.json` (bordes,
   mayúsculas, barra, color) y los colores salen del theme de kitty, así que
   sigue al look y al wallpaper solo.
 

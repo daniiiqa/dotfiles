@@ -35,7 +35,7 @@ DRAWER_SLOTS = 8
 
 # (regex sobre la class en minúsculas, glyph, nombre bonito)
 ICONS = [
-    (r"^ytm$", "\U000f05c3", "YouTube Music"),
+    (r"^rola$", "\U000f05c3", "rola"),
     (r"^kitty", "", "Terminal"),
     (r"^(zen|zen-browser)$", "", "Zen"),
     (r"firefox", "", "Firefox"),
