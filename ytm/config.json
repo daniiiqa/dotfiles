@@ -1,0 +1,17 @@
+{
+  "lang": "en",
+  "theme": "kitty",
+  "transparent": false,
+  "borders": "auto",
+  "bar": "line",
+  "icons": false,
+  "side_width": 20,
+  "lyrics_width": 45,
+  "footer": false,
+  "quality": "best",
+  "vol_step": 5,
+  "seek": 5,
+  "notify_secs": 4,
+  "restore": true,
+  "wallust": "/home/dany/.config/kitty/kitty-themes/01-Wallust.conf"
+}

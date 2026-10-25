@@ -1,0 +1,8 @@
+{
+  "borders": "double",
+  "bar": "knob",
+  "case": "normal",
+  "select": "inverse",
+  "tint": "color",
+  "transparent": true
+}
