@@ -10,6 +10,9 @@
 #                solo si no hay ningún display manager activo)
 #   --sddm       instalar/configurar SDDM aunque ya haya otro
 #   --no-aur     saltar los paquetes de AUR
+#   --looks=L    qué looks instalar sin preguntar: all, none (solo classic) o
+#                una lista como retro,nord. Sin esto pregunta; con -y o sin
+#                terminal instala todos
 #   -y           sin confirmaciones de pacman/yay
 #
 # Se puede correr más de una vez: los paquetes van con --needed y solo se
@@ -44,8 +47,29 @@ REPO_PKGS=(
   # ajustes gráficos, red y bluetooth
   nwg-displays nwg-look qt5ct qt6ct kvantum papirus-icon-theme
   networkmanager nm-connection-editor bluez bluez-utils blueman
-  # fuentes (Mono para iconos alineados, Adwaita Mono para el visualizador)
-  ttf-jetbrains-mono-nerd ttf-fantasque-nerd adwaita-fonts noto-fonts noto-fonts-emoji
+  # fuentes base (JetBrainsMono Mono para iconos alineados, Adwaita Mono para
+  # el visualizador, Noto Serif para paper); las de cada look van en LOOK_FONT
+  ttf-jetbrains-mono-nerd adwaita-fonts noto-fonts noto-fonts-emoji
+)
+# fuente de cada look (classic usa JetBrainsMono, que va siempre). Solo se
+# instalan las de los looks elegidos.
+declare -A LOOK_FONT=(
+  [brutalist]=ttf-space-mono-nerd [classic]=""            [glass]=otf-geist-mono-nerd
+  [minimal]=otf-geist-mono-nerd   [neon]=otf-monaspace-nerd [nord]=ttf-iosevka-nerd
+  [outsider]=ttf-fantasque-nerd   [paper]=ttf-ibmplex-mono-nerd
+  [pastel]=ttf-victor-mono-nerd   [retro]=ttf-terminus-nerd
+)
+declare -A LOOK_DESC=(
+  [brutalist]="bloques sólidos, cero esquinas, MAYÚSCULAS"
+  [classic]="el original: iconos, blur, JetBrainsMono"
+  [glass]="vidrio esmerilado, barra abajo, redondeado"
+  [minimal]="limpio y discreto, iconos finos"
+  [neon]="colores encendidos, iconos rellenos"
+  [nord]="paleta Nord fija, barra flotante"
+  [outsider]="lo-fi de cassette, minúsculas, grano de película"
+  [paper]="papel y tinta, toques de serif"
+  [pastel]="suave y redondito, iconos tiernos"
+  [retro]="terminal de fósforo, todo en texto"
 )
 AUR_PKGS=(
   swww       # wallpapers de imagen/gif
@@ -58,19 +82,20 @@ SDDM_THEME_REPO="https://github.com/JaKooLit/simple-sddm-2.git"
 SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 
 # carpetas del repo que van a ~/.config (las mismas del whitelist de .gitignore)
-CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout yazi rola Kvantum qt5ct qt6ct swappy)
+CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout yazi rola sddm Kvantum qt5ct qt6ct swappy)
 ROLA_REPO="https://github.com/daniiiqa/rola.git"
 
 # ── Opciones ─────────────────────────────────────────────────────────────────
-DRY=0 SDDM=auto AUR=1 YES=()
+DRY=0 SDDM=auto AUR=1 YES=() LOOKS_ARG=""
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY=1 ;;
+    --looks=*) LOOKS_ARG=${arg#--looks=} ;;
     --sddm) SDDM=yes ;;
     --no-sddm) SDDM=no ;;
     --no-aur) AUR=0 ;;
     -y|--yes) YES=(--noconfirm) ;;
-    -h|--help) sed -n '2,19p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,20p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "opción desconocida: $arg (usa --help)"; exit 2 ;;
   esac
 done
@@ -104,9 +129,67 @@ if [ "$SDDM" = auto ]; then
   else SDDM=yes; fi
 fi
 
+# ── Looks: cuáles instalar y con cuál empezar ────────────────────────────────
+in_list() { local x; for x in "${@:2}"; do [ "$x" = "$1" ] && return 0; done; return 1; }
+
+mapfile -t ALL_LOOKS < <(find "$REPO_DIR/hypr/looks" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
+LOOKS=() INITIAL=""
+if [ -n "$LOOKS_ARG" ]; then
+  case "$LOOKS_ARG" in
+    all) LOOKS=("${ALL_LOOKS[@]}") ;;
+    none) LOOKS=(classic) ;;
+    *) IFS=, read -ra LOOKS <<< "$LOOKS_ARG" ;;
+  esac
+elif [ -t 0 ] && ((${#YES[@]} == 0)); then
+  say "Looks: cada uno cambia barra, fuentes, colores, iconos y login (SUPER+T)"
+  i=1
+  for l in "${ALL_LOOKS[@]}"; do
+    printf '   %2d) %-10s %s\n' "$i" "$l" "${LOOK_DESC[$l]:-}"
+    i=$((i + 1))
+  done
+  while ((${#LOOKS[@]} == 0)); do
+    read -r -p "   ¿Cuáles? [Enter = todos · números separados por espacio · 0 = ninguno, solo classic] " ans
+    if [ -z "$ans" ]; then LOOKS=("${ALL_LOOKS[@]}")
+    elif [ "$ans" = 0 ]; then LOOKS=(classic)
+    else
+      for n in $ans; do
+        if [[ "$n" =~ ^[0-9]+$ ]] && ((n >= 1 && n <= ${#ALL_LOOKS[@]})); then
+          in_list "${ALL_LOOKS[n - 1]}" "${LOOKS[@]}" || LOOKS+=("${ALL_LOOKS[n - 1]}")
+        else
+          warn "no entendí \"$n\""; LOOKS=(); break
+        fi
+      done
+    fi
+  done
+  if ((${#LOOKS[@]} > 1)); then
+    def=${LOOKS[0]}
+    in_list minimal "${LOOKS[@]}" && def=minimal
+    while [ -z "$INITIAL" ]; do
+      read -r -p "   ¿Con cuál empezar? (${LOOKS[*]}) [Enter = $def] " ans
+      ans=${ans:-$def}
+      if in_list "$ans" "${LOOKS[@]}"; then INITIAL=$ans; else warn "\"$ans\" no está en la lista"; fi
+    done
+  fi
+else
+  LOOKS=("${ALL_LOOKS[@]}")
+fi
+for l in "${LOOKS[@]}"; do
+  in_list "$l" "${ALL_LOOKS[@]}" || { echo "look desconocido: $l (hay: ${ALL_LOOKS[*]})"; exit 2; }
+done
+if [ -z "$INITIAL" ]; then
+  INITIAL=${LOOKS[0]}
+  in_list minimal "${LOOKS[@]}" && INITIAL=minimal
+fi
+LOOK_PKGS=()
+for l in "${LOOKS[@]}"; do
+  p=${LOOK_FONT[$l]:-}
+  [ -n "$p" ] && ! in_list "$p" "${LOOK_PKGS[@]}" && LOOK_PKGS+=("$p")
+done
+say "Looks: ${LOOKS[*]} (empieza en $INITIAL)"
+
 # ── 1. Paquetes de los repos ─────────────────────────────────────────────────
-say "Paquetes de los repos oficiales (${#REPO_PKGS[@]})"
-run sudo pacman -Syu --needed "${YES[@]}" "${REPO_PKGS[@]}"
+say "Paquetes de los repos oficiales (${#REPO_PKGS[@]} + ${#LOOK_PKGS[@]} fuentes de looks)"
+run sudo pacman -Syu --needed "${YES[@]}" "${REPO_PKGS[@]}" "${LOOK_PKGS[@]}"
 [ "$SDDM" = yes ] && run sudo pacman -S --needed "${YES[@]}" "${SDDM_PKGS[@]}"
 
 # ── 2. AUR ───────────────────────────────────────────────────────────────────
@@ -165,10 +248,29 @@ run chmod +x "$CFG"/hypr/scripts/*.sh "$CFG"/hypr/scripts/*.py
 link="$CFG/rofi/.current_wallpaper"
 if [ -L "$link" ] && [ ! -e "$link" ]; then run rm "$link"; fi
 
-say "Look inicial"
-if [ ! -f "$CFG/hypr/looks/.current" ]; then
-  if ((DRY)); then echo "   [dry-run] echo minimal > $CFG/hypr/looks/.current"
-  else echo minimal > "$CFG/hypr/looks/.current"; fi
+looks_dir="$CFG/hypr/looks"
+if ((NEW_MACHINE)); then
+  # SUPER+T lista las carpetas de looks: quitar las que no se eligieron
+  for l in "${ALL_LOOKS[@]}"; do
+    in_list "$l" "${LOOKS[@]}" || run rm -rf "${looks_dir:?}/$l"
+  done
+elif ((${#LOOKS[@]} < ${#ALL_LOOKS[@]})); then
+  warn "El repo vive en ~/.config: no se borran looks (serían archivos del repo)"
+fi
+
+# Los archivos vivos del repo son del último look con el que se hizo commit,
+# no necesariamente el elegido: aplicar el look encima (como LookSwitch.sh) para
+# que lo vivo y .current coincidan. Si ya hay look activo aquí, se respeta.
+if ((NEW_MACHINE)) || [ ! -f "$looks_dir/.current" ]; then
+  say "Look inicial: $INITIAL"
+  if ((DRY)); then echo "   [dry-run] copiar $looks_dir/$INITIAL/* sobre $CFG y .current = $INITIAL"
+  else
+    (cd "$looks_dir/$INITIAL" && find . -type f -printf '%P\n') | while read -r f; do
+      mkdir -p "$(dirname "$CFG/$f")"
+      cp "$looks_dir/$INITIAL/$f" "$CFG/$f"
+    done
+    echo "$INITIAL" > "$looks_dir/.current"
+  fi
 fi
 
 say "yazi como explorador de carpetas por defecto"
