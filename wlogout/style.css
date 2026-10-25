@@ -1,13 +1,14 @@
-/* Custom (dany): wlogout minimal — fondo oscuro plano, botones como tiles
-   discretos que se marcan con el acento (color12) al pasar el cursor. */
+/* Look neon — wlogout: tiles oscuros con borde fino; al pasar el cursor
+   se encienden con halo y borde degradado. */
 
 @import '../../.config/waybar/wallust/colors-waybar.css';
 
 window {
     font-family: "JetBrainsMono Nerd Font";
+    font-weight: 700;
     font-size: 12pt;
     color: @foreground;
-    background-color: alpha(@background, 0.92);
+    background-color: alpha(@background, 0.9);
 }
 
 button {
@@ -15,26 +16,24 @@ button {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 14%;
-    background-color: alpha(@foreground, 0.04);
-    border: 1px solid alpha(@foreground, 0.08);
-    border-radius: 6px;
-    margin: 6px;
+    background-color: alpha(@background, 0.6);
+    border: 1px solid alpha(@color12, 0.35);
+    border-radius: 4px;
+    margin: 8px;
     outline-style: none;
     box-shadow: none;
     text-shadow: none;
-    transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease;
+    transition: box-shadow 150ms ease, border-color 150ms ease;
 }
 
 button:focus,
 button:hover {
-    color: @foreground;
-    background-size: 14%;
-    background-color: alpha(@color12, 0.12);
+    color: @color12;
     border-color: @color12;
+    box-shadow: 0 0 18px alpha(@color12, 0.7), inset 0 0 12px alpha(@color13, 0.25);
+    text-shadow: 0 0 8px @color12;
 }
 
-/* iconos de línea monocromos del paquete wlogout (los PNG a color de antes
-   siguen en ./icons por si se quieren de vuelta) */
 #lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
 #logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
 #suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }

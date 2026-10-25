@@ -1,18 +1,17 @@
-// Waybar — barra flotante delgada (estilo en style.css, colores de wallust).
-// Apps abiertas: AppStrip.py (fijadas siempre visibles; 1-5 abiertas en línea, 6+ al cajón).
+// Waybar — look neon: islas con los extremos en diagonal (cortes por degradado) y texto con halo.
 {
 	"layer": "top",
 	"reload_style_on_change": true,
 	"exclusive": true,
 	"passthrough": false,
 	"position": "top",
-	"height": 31,
+	"height": 32,
 	"spacing": 0,
 	"fixed-center": true,
 	"ipc": true,
-	"margin-top": 8,
-	"margin-left": 8,
-	"margin-right": 8,
+	"margin-top": 6,
+	"margin-left": 10,
+	"margin-right": 10,
 	"margin-bottom": 0,
 	"modules-left": [
 		"hyprland/workspaces#minimal",
@@ -42,13 +41,25 @@
 	],
 	"hyprland/workspaces#minimal": {
 		"all-outputs": true,
-		"format": "{name}",
+		"format": "{icon}",
 		"show-special": false,
 		"on-click": "activate",
 		"on-scroll-up": "hyprctl dispatch workspace e+1",
 		"on-scroll-down": "hyprctl dispatch workspace e-1",
 		"persistent-workspaces": {
 			"*": 5
+		},
+		"format-icons": {
+			"1": "壱",
+			"2": "弐",
+			"3": "参",
+			"4": "四",
+			"5": "伍",
+			"6": "六",
+			"7": "七",
+			"8": "八",
+			"9": "九",
+			"10": "十"
 		}
 	},
 	"mpris": {
@@ -77,7 +88,7 @@
 	"clock#minimal": {
 		"interval": 30,
 		"format": "{:%H:%M}",
-		"format-alt": "{:L%a %d %b  %H:%M}",
+		"format-alt": "{:%a %d %b  %H:%M}",
 		"tooltip-format": "<tt><small>{calendar}</small></tt>",
 		"calendar": {
 			"mode": "month",
