@@ -1,0 +1,9 @@
+{
+  "borders": "rounded",
+  "bar": "dots",
+  "labels": "icons",
+  "case": "lower",
+  "select": "fill",
+  "tint": "color",
+  "transparent": true
+}

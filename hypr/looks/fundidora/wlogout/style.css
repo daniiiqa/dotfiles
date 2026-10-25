@@ -1,0 +1,57 @@
+/* Look fundidora — el Cerro de la Silla al anochecer: negro tibio, grises cálidos y tierra. */
+
+/* paleta fundidora con los mismos nombres que usa wallust */
+@define-color background #0a0605;
+@define-color foreground #aaadad;
+@define-color color0 #15100d;
+@define-color color8 #4a3d31;
+@define-color color7 #d8d4cc;
+@define-color color11 #a8805a;
+@define-color color12 #8f7156;
+@define-color color13 #727b7b;
+@define-color color14 #727b7b;
+@define-color tape_red #a0583a;
+@define-color tape_orange #8f7156;
+@define-color tape_yellow #a8805a;
+@define-color tape_green #7f7463;
+@define-color tape_purple #867261;
+@define-color tape_blue #727b7b;
+
+window {
+    font-family: "Martian Mono Nerd Font";
+    font-size: 12pt;
+    color: @foreground;
+    background-color: alpha(@background, 0.92);
+}
+
+button {
+    color: alpha(@foreground, 0.6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14%;
+    background-color: alpha(@foreground, 0.04);
+    border: 1px solid alpha(@foreground, 0.08);
+    border-radius: 2px;
+    margin: 6px;
+    outline-style: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+button:focus,
+button:hover {
+    color: @foreground;
+    background-size: 14%;
+    background-color: alpha(@color12, 0.12);
+    border-color: @color12;
+}
+
+/* iconos de línea monocromos del paquete wlogout (los PNG a color de antes
+   siguen en ./icons por si se quieren de vuelta) */
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

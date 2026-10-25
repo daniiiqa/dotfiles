@@ -1,0 +1,252 @@
+/* Look talavera — loza de Puebla: cada módulo es un azulejo redondo de esmalte
+   crema con trazo cobalto; el workspace activo es la flor pintada. Toques de
+   ocre y verde. Paleta fija (clara). */
+
+@define-color bg0 #f6f1e4;
+@define-color bg1 #ece4d0;
+@define-color bg2 #d9ccb0;
+@define-color bg3 #1f3f8f;
+@define-color dim #6b7391;
+@define-color fg #1b2340;
+@define-color hi #0e1530;
+@define-color acc #1f3f8f;
+@define-color acc2 #e3a51b;
+@define-color warn #b5532a;
+@define-color ok #3f8a5a;
+@define-color alt #2f5bb8;
+@define-color cool #2f5bb8;
+
+* {
+	font-family: "MonaspiceXe Nerd Font";
+	font-weight: 500;
+	font-size: 13px;
+	min-height: 0;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	text-shadow: none;
+}
+
+window#waybar {
+	background: alpha(@bg0, 0.9);
+	border: 2px solid @acc;
+	border-radius: 18px;
+	color: @fg;
+}
+
+tooltip {
+	background: @bg0;
+	border: 2px solid @acc;
+	border-radius: 12px;
+}
+
+tooltip label {
+	color: @fg;
+	padding: 4px 6px;
+}
+
+#workspaces {
+	margin: 3px 6px;
+	padding: 0 4px;
+	background: @bg1;
+	border: 1px solid alpha(@acc, 0.35);
+	border-radius: 14px;
+}
+
+#workspaces button {
+	color: alpha(@acc, 0.6);
+	background: transparent;
+	padding: 0 5px;
+	border-radius: 12px;
+	font-family: "JetBrainsMono Nerd Font Mono";
+	font-size: 16px;
+	transition: all 250ms ease;
+}
+
+#workspaces button.empty {
+	color: @bg2;
+}
+
+#workspaces button.active {
+	color: @acc2;
+	background: @acc;
+}
+
+#workspaces button.urgent {
+	color: @bg0;
+	background: @warn;
+}
+
+#workspaces button:hover {
+	color: @acc;
+	background: @bg2;
+}
+
+/* azulejos: píldoras de esmalte con trazo cobalto */
+#clock,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#pulseaudio,
+#network,
+#bluetooth,
+#custom-recorder,
+#idle_inhibitor,
+#custom-swaync,
+.app,
+.app-more,
+#custom-power {
+	color: @fg;
+	background: @bg1;
+	border: 1px solid alpha(@acc, 0.35);
+	border-radius: 14px;
+	margin: 3px 2px;
+	padding: 0 10px;
+}
+
+#clock {
+	color: @acc;
+	font-weight: 700;
+	font-size: 14px;
+	background: @bg0;
+	border: 2px solid @acc;
+	padding: 0 16px;
+}
+
+#temperature,
+#cpu,
+#memory,
+#disk { color: @dim; }
+
+#temperature.critical { color: @bg0; background: @warn; }
+
+#pulseaudio, #network, #bluetooth { color: @acc; }
+#idle_inhibitor { color: @ok; }
+
+#custom-power {
+	color: @bg0;
+	background: @acc;
+	border-color: @acc;
+	margin-right: 4px;
+}
+
+#pulseaudio.muted,
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off {
+	color: @bg2;
+}
+
+#custom-power:hover,
+#pulseaudio:hover,
+#network:hover,
+#bluetooth:hover,
+#custom-swaync:hover,
+.app:hover,
+.app-more:hover {
+	border-color: @acc;
+	background: @bg0;
+}
+
+#backlight-slider slider,
+#pulseaudio-slider slider {
+	min-width: 0;
+	min-height: 0;
+	opacity: 0;
+	background-image: none;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+	min-width: 80px;
+	min-height: 3px;
+	background: @bg2;
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+	min-height: 3px;
+	background: @acc;
+}
+
+/* apps abiertas (AppStrip.py): iconos de la fuente en el color del look; la
+   enfocada se marca. .app-more es el botón del cajón (6+ apps). */
+.app,
+.app-more {
+	color: @acc;
+	padding: 0 6px;
+}
+
+.app.active {
+	color: @acc2;
+	border-color: @acc;
+}
+
+.app-more {
+	font-size: 13px;
+}
+
+/* fijada pero cerrada (pinned.conf): tenue, el click la abre */
+.app.closed {
+	opacity: 0.45;
+}
+
+/* visualizador (Visualizer.py): el estilo de barras sale de visualizer.json;
+   también son los controles de música (en pausa quedan planas) */
+#custom-visualizer {
+	color: @acc;
+	padding: 0 6px;
+	letter-spacing: 0;
+}
+
+/* iconos alineados: la variante Mono de la Nerd Font mete cada icono en una
+   celda del mismo tamaño y centrada */
+.app,
+.app-more,
+#network,
+#bluetooth,
+#idle_inhibitor,
+#custom-power {
+	font-family: "JetBrainsMono Nerd Font Mono";
+	font-size: 17px;
+}
+
+/* braille en Adwaita Mono: solo dibuja los puntos encendidos */
+#custom-visualizer {
+	font-family: "Adwaita Mono";
+	font-size: 14px;
+}
+
+#custom-visualizer.paused {
+	opacity: 0.45;
+}
+
+/* grabador (Recorder.sh): toma la caja de los demás módulos; etiquetas en
+   recorder.json. Grabando = azulejo terracota. */
+#custom-recorder {
+	color: @acc;
+}
+
+#custom-recorder.recording,
+#custom-recorder.paused {
+	color: @warn;
+}
+
+#custom-recorder.recording {
+	animation: rec-pulse 1.6s ease-in-out infinite;
+}
+
+#custom-recorder.paused {
+	opacity: 0.6;
+}
+
+@keyframes rec-pulse {
+	50% { opacity: 0.55; }
+}
+
+#custom-recorder.recording {
+	background: @warn;
+	color: @bg0;
+	border-color: @warn;
+}

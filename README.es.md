@@ -2,7 +2,7 @@
 
 **Un rice de Hyprland hecho de looks.** La discada es el platillo norteño donde
 un montón de carnes se cocinan juntas en el disco y salen en un solo plato,
-limpio y delicioso. Aquí las carnes son diez looks — cada uno cambia la barra,
+limpio y delicioso. Aquí las carnes son catorce looks — cada uno cambia la barra,
 fuentes, iconos, colores, menús, pantalla de bloqueo y login — servidos en un
 solo rice. Los colores salen del wallpaper (también de los de video) con wallust.
 
@@ -55,6 +55,11 @@ Se puede correr varias veces sin romper nada.
 
 `brutalist` · `classic` · `glass` · `minimal` · `neon` · `nord` · `outsider` ·
 `paper` · `pastel` · `retro`
+
+Hechos en México: `fundidora` (acero regio, naranja de alto horno, el Cerro de
+la Silla) · `ofrenda` (Día de Muertos: cempasúchil, papel picado, luz de vela)
+· `loteria` (las cartas: cada módulo es una carta) · `talavera` (loza de
+Puebla: esmalte crema, trazo cobalto)
 
 Cada look vive en `hypr/looks/<nombre>/` como espejo de `~/.config` con solo
 los archivos que cambia: decoraciones y animaciones de Hyprland, hyprlock,

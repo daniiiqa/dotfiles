@@ -2,7 +2,7 @@
 
 **A Hyprland rice made of looks.** A *discada* is the norteño dish where a bunch
 of meats cook together on one disco and come out as one clean, delicious plate.
-Here the meats are ten looks — each one changes the bar, fonts, icons, colors,
+Here the meats are fourteen looks — each one changes the bar, fonts, icons, colors,
 menus, lock screen and login — served on one rice. Colors come from your
 wallpaper (video wallpapers too) through wallust.
 
@@ -55,6 +55,11 @@ Safe to run more than once.
 
 `brutalist` · `classic` · `glass` · `minimal` · `neon` · `nord` · `outsider` ·
 `paper` · `pastel` · `retro`
+
+Hecho en México: `fundidora` (Monterrey steel, blast-furnace orange, the Cerro
+de la Silla) · `ofrenda` (Day of the Dead: marigolds, papel picado, candlelight)
+· `loteria` (the card game: every module is a card) · `talavera` (Puebla
+pottery: cream glaze, cobalt linework)
 
 Each look lives in `hypr/looks/<name>/` as a mirror of `~/.config` with only
 the files it changes: Hyprland decorations and animations, hyprlock, waybar

@@ -62,6 +62,8 @@ declare -A LOOK_FONT=(
   [minimal]=otf-geist-mono-nerd   [neon]=otf-monaspace-nerd [nord]=ttf-iosevka-nerd
   [outsider]=ttf-fantasque-nerd   [paper]=ttf-ibmplex-mono-nerd
   [pastel]=ttf-victor-mono-nerd   [retro]=ttf-terminus-nerd
+  [fundidora]=ttf-martian-mono-nerd [ofrenda]=otf-monaspace-nerd
+  [loteria]=otf-codenewroman-nerd  [talavera]=otf-monaspace-nerd
 )
 declare -A LOOK_DESC_ES=(
   [brutalist]="bloques sólidos, cero esquinas, MAYÚSCULAS"
@@ -74,6 +76,10 @@ declare -A LOOK_DESC_ES=(
   [paper]="papel y tinta, toques de serif"
   [pastel]="suave y redondito, iconos tiernos"
   [retro]="terminal de fósforo, todo en texto"
+  [fundidora]="acero regio: carbón, alto horno, el Cerro de la Silla"
+  [ofrenda]="Día de Muertos: cempasúchil, papel picado, luz de vela"
+  [loteria]="las cartas: papel viejo, contornos negros, colores de imprenta"
+  [talavera]="loza de Puebla: esmalte crema y trazo cobalto"
 )
 declare -A LOOK_DESC_EN=(
   [brutalist]="solid blocks, zero corners, UPPERCASE"
@@ -86,6 +92,10 @@ declare -A LOOK_DESC_EN=(
   [paper]="paper and ink, serif touches"
   [pastel]="soft and round, cute icons"
   [retro]="phosphor terminal, all text"
+  [fundidora]="Monterrey steel: charcoal, blast furnace, Cerro de la Silla"
+  [ofrenda]="Day of the Dead: marigolds, papel picado, candlelight"
+  [loteria]="the card game: old paper, black outlines, print colors"
+  [talavera]="Puebla pottery: cream glaze and cobalt linework"
 )
 AUR_PKGS=(
   swww       # wallpapers de imagen/gif

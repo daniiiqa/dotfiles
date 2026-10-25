@@ -1,0 +1,170 @@
+/* Dany Fundidora — el menú es una placa de la acería: franja naranja arriba, todo en
+   MAYÚSCULA estampada, la entrada elegida al rojo vivo. Paleta fija. */
+
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 true;
+    display-drun:               "HORNO";
+    display-run:                "EJECUTAR";
+    display-filebrowser:        "ALMACÉN";
+    display-window:             "NAVES";
+    drun-display-format:        "{name}";
+    hover-select:               true;
+    me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} · {c} · {t}";
+}
+
+* {
+    bg0:                        #0a0605;
+    bg1:                        #15100d;
+    bg2:                        #282119;
+    bg3:                        #4a3d31;
+    dim:                        #6f6b66;
+    fg:                         #aaadad;
+    hi:                         #d8d4cc;
+    acc:                        #8f7156;
+    acc2:                       #a8805a;
+    warn:                       #a0583a;
+    ok:                         #7f7463;
+    alt:                        #867261;
+    cool:                       #727b7b;
+    font:                       "Martian Mono Nerd Font 13";
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+window {
+    width:                      560px;
+    location:                   center;
+    anchor:                     center;
+    border:                     2px;
+    border-color:               @acc;
+    border-radius:              2px;
+    background-color:           @bg0;
+    padding:                    0;
+}
+
+mainbox {
+    orientation:                vertical;
+    spacing:                    0;
+    children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
+
+}
+
+inputbar {
+    spacing:                    12px;
+    padding:                    14px 18px;
+    border:                     0 0 2px 0;
+    border-color:               @acc;
+    background-color:           @bg1;
+    children:                   [ "prompt", "textbox-prompt-colon", "entry" ];
+}
+
+prompt {
+    text-color:                 @acc;
+    
+}
+
+textbox-prompt-colon {
+    enabled:                    true;
+    expand:                     false;
+    str:                        "›";
+    text-color:                 @bg3;
+}
+
+entry {
+    placeholder:                "BUSCAR…";
+    placeholder-color:          @dim;
+    cursor:                     text;
+    text-color:                 @hi;
+}
+
+listview {
+    columns:                    1;
+    lines:                      8;
+    spacing:                    0;
+    padding:                    8px 0;
+    dynamic:                    true;
+    cycle:                      true;
+    scrollbar:                  false;
+    fixed-height:               true;
+}
+
+element {
+    spacing:                    12px;
+    padding:                    8px 18px;
+    border:                     0;
+    border-color:               transparent;
+    border-radius:              0px;
+    cursor:                     pointer;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+element normal.active,
+element alternate.active {
+    text-color:                 @acc2;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    text-color:                 @warn;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color:           @acc;
+    border:                     0;
+    border-color:               @acc;
+    text-color:                 @bg0;
+}
+
+element-icon {
+    size:                       24px;
+    cursor:                     inherit;
+}
+
+element-text {
+    text-color:                 inherit;
+    vertical-align:             0.5;
+    cursor:                     inherit;
+}
+
+mode-switcher {
+    spacing:                    0;
+    border:                     2px 0 0 0;
+    border-color:               @bg2;
+}
+
+button {
+    padding:                    9px;
+    text-color:                 @dim;
+    cursor:                     pointer;
+}
+
+button selected {
+    background-color:           @bg1;
+    text-color:                 @acc;
+}
+
+message {
+    padding:                    10px 18px;
+    border:                     0 0 1px 0;
+    border-color:               @bg2;
+}
+
+textbox {
+    text-color:                 @dim;
+    vertical-align:             0.5;
+}
+
+error-message {
+    padding:                    14px;
+    background-color:           @bg0;
+}

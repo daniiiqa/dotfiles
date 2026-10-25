@@ -1,0 +1,57 @@
+/* Look loteria — las cartas: papel de carta envejecido, contornos negros gruesos, */
+
+/* paleta loteria con los mismos nombres que usa wallust */
+@define-color background #efe3c4;
+@define-color foreground #1a1612;
+@define-color color0 #e5d6b0;
+@define-color color8 #1a1612;
+@define-color color7 #0d0b09;
+@define-color color11 #1d4e9e;
+@define-color color12 #c8102e;
+@define-color color13 #1d4e9e;
+@define-color color14 #1d4e9e;
+@define-color tape_red #c8102e;
+@define-color tape_orange #c8102e;
+@define-color tape_yellow #1d4e9e;
+@define-color tape_green #2d7d46;
+@define-color tape_purple #f2b705;
+@define-color tape_blue #1d4e9e;
+
+window {
+    font-family: "CodeNewRoman Nerd Font";
+    font-size: 12pt;
+    color: @foreground;
+    background-color: alpha(@background, 0.92);
+}
+
+button {
+    color: alpha(@foreground, 0.6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14%;
+    background-color: alpha(@foreground, 0.04);
+    border: 1px solid alpha(@foreground, 0.08);
+    border-radius: 6px;
+    margin: 6px;
+    outline-style: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+button:focus,
+button:hover {
+    color: @foreground;
+    background-size: 14%;
+    background-color: alpha(@color12, 0.12);
+    border-color: @color12;
+}
+
+/* iconos de línea monocromos del paquete wlogout (los PNG a color de antes
+   siguen en ./icons por si se quieren de vuelta) */
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }

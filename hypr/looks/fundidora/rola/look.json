@@ -1,0 +1,9 @@
+{
+  "borders": "thick",
+  "bar": "blocks",
+  "labels": "short",
+  "case": "upper",
+  "select": "inverse",
+  "tint": "color",
+  "transparent": false
+}

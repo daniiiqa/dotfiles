@@ -1,0 +1,491 @@
+// Look fundidora — barra de lámina de acero con bordes de óxido: etiquetas
+// estampadas en MAYÚSCULA; tres workspaces fijos (I II III) por los tres altos
+// hornos de Fundidora, más aparecen al usarlos; el reloj con el Cerro de la Silla.
+{
+	"layer": "top",
+	"reload_style_on_change": true,
+	"exclusive": true,
+	"passthrough": false,
+	"position": "top",
+	"height": 34,
+	"spacing": 0,
+	"fixed-center": true,
+	"ipc": true,
+	"margin-top": 8,
+	"margin-left": 12,
+	"margin-right": 12,
+	"margin-bottom": 0,
+	"modules-left": [
+		"hyprland/workspaces#minimal",
+		"custom/visualizer",
+		"custom/app-i1",
+		"custom/app-i2",
+		"custom/app-i3",
+		"custom/app-i4",
+		"custom/app-i5",
+		"custom/app-i6",
+		"custom/app-i7",
+		"custom/app-i8",
+		"group/apps"
+	],
+	"modules-center": [
+		"clock#minimal"
+	],
+	"modules-right": [
+		"custom/recorder",
+		"group/mobo_drawer",
+		"group/audio",
+		"network",
+		"bluetooth",
+		"idle_inhibitor",
+		"group/notify",
+		"custom/power"
+	],
+	"hyprland/workspaces#minimal": {
+		"all-outputs": true,
+		"format": "{icon}",
+		"show-special": false,
+		"on-click": "activate",
+		"on-scroll-up": "hyprctl dispatch workspace e+1",
+		"on-scroll-down": "hyprctl dispatch workspace e-1",
+		"persistent-workspaces": {
+			"*": 3
+		},
+		"format-icons": {
+			"1": "I",
+			"2": "II",
+			"3": "III",
+			"4": "IV",
+			"5": "V",
+			"6": "VI",
+			"7": "VII",
+			"8": "VIII",
+			"9": "IX",
+			"10": "X",
+			"default": "·"
+		}
+	},
+	"clock#minimal": {
+		"interval": 30,
+		"format": "<span foreground=\"#a8805a\">󰋵</span>  {:%H:%M}",
+		"format-alt": "<span foreground=\"#a8805a\">{:%a %d %b %Y}</span>",
+		"tooltip-format": "<tt><small>{calendar}</small></tt>",
+		"calendar": {
+			"mode": "month",
+			"weeks-pos": "",
+			"on-scroll": 1,
+			"format": {
+				"today": "<b><u>{}</u></b>"
+			}
+		},
+		"actions": {
+			"on-scroll-up": "shift_up",
+			"on-scroll-down": "shift_down"
+		}
+	},
+	"group/mobo_drawer": {
+		"orientation": "inherit",
+		"drawer": {
+			"transition-duration": 500,
+			"children-class": "cpu",
+			"transition-left-to-right": true
+		},
+		"modules": [
+			"temperature",
+			"cpu",
+			"memory",
+			"disk"
+		]
+	},
+	"temperature": {
+		"interval": 10,
+		"tooltip": true,
+		"hwmon-path": [
+			"/sys/class/hwmon/hwmon1/temp1_input",
+			"/sys/class/thermal/thermal_zone0/temp"
+		],
+		"critical-threshold": 82,
+		"format-critical": "<span foreground=\"#6f6b66\" size=\"small\">horno</span> {temperatureC}°!",
+		"format": "<span foreground=\"#6f6b66\" size=\"small\">horno</span> {temperatureC}°",
+		"format-icons": [
+			"󰈸"
+		],
+		"on-click-right": "$HOME/.config/hypr/scripts/WaybarScripts.sh --nvtop"
+	},
+	"cpu": {
+		"format": "<span foreground=\"#6f6b66\" size=\"small\">cpu</span> {usage}%",
+		"interval": 1,
+		"min-length": 5,
+		"format-alt-click": "click",
+		"format-alt": "<span foreground=\"#6f6b66\" size=\"small\">cpu</span> {icon0}{icon1}{icon2}{icon3}",
+		"format-icons": [
+			"▁",
+			"▂",
+			"▃",
+			"▄",
+			"▅",
+			"▆",
+			"▇",
+			"█"
+		],
+		"on-click-right": "gnome-system-monitor"
+	},
+	"memory": {
+		"interval": 10,
+		"format": "<span foreground=\"#6f6b66\" size=\"small\">mem</span> {used:0.1f}g",
+		"format-alt": "<span foreground=\"#6f6b66\" size=\"small\">mem</span> {percentage}%",
+		"format-alt-click": "click",
+		"tooltip": true,
+		"tooltip-format": "{used:0.1f}GB/{total:0.1f}G",
+		"on-click-right": "$HOME/.config/hypr/scripts/WaybarScripts.sh --btop"
+	},
+	"disk": {
+		"interval": 30,
+		"path": "/",
+		"format": "<span foreground=\"#6f6b66\" size=\"small\">dsk</span> {percentage_used}%",
+		"tooltip-format": "{used} used out of {total} on {path} ({percentage_used}%)"
+	},
+	"group/audio": {
+		"orientation": "inherit",
+		"drawer": {
+			"transition-duration": 500,
+			"children-class": "pulseaudio",
+			"transition-left-to-right": true
+		},
+		"modules": [
+			"pulseaudio",
+			"pulseaudio#microphone"
+		]
+	},
+	"pulseaudio": {
+		"format": "<span foreground=\"#6f6b66\" size=\"small\">vol</span> {volume}",
+		"format-bluetooth": "<span foreground=\"#6f6b66\" size=\"small\">vol·bt</span> {volume}",
+		"format-muted": "<span foreground=\"#6f6b66\" size=\"small\">vol</span> —",
+		"format-icons": {
+			"headphone": "",
+			"hands-free": "",
+			"headset": "",
+			"phone": "",
+			"portable": "",
+			"car": "",
+			"default": [
+				"",
+				"",
+				"󰕾",
+				""
+			],
+			"ignored-sinks": [
+				"Easy Effects Sink"
+			]
+		},
+		"scroll-step": 5.0,
+		"on-click": "$HOME/.config/hypr/scripts/Volume.sh --toggle",
+		"on-click-right": "pavucontrol -t 3",
+		"on-scroll-up": "$HOME/.config/hypr/scripts/Volume.sh --inc",
+		"on-scroll-down": "$HOME/.config/hypr/scripts/Volume.sh --dec",
+		"tooltip-format": "{icon} {desc} | {volume}%",
+		"smooth-scrolling-threshold": 1
+	},
+	"pulseaudio#microphone": {
+		"format": "{format_source}",
+		"format-source": "<span foreground=\"#6f6b66\" size=\"small\">mic</span> {volume}",
+		"format-source-muted": "<span foreground=\"#6f6b66\" size=\"small\">mic</span> —",
+		"on-click": "$HOME/.config/hypr/scripts/Volume.sh --toggle-mic",
+		"on-click-right": "pavucontrol -t 4",
+		"on-scroll-up": "$HOME/.config/hypr/scripts/Volume.sh --mic-inc",
+		"on-scroll-down": "$HOME/.config/hypr/scripts/Volume.sh --mic-dec",
+		"tooltip-format": "{source_desc} | {source_volume}%",
+		"scroll-step": 5
+	},
+	"network": {
+		"format": "net",
+		"format-wifi": "<span foreground=\"#6f6b66\" size=\"small\">wifi</span> {signalStrength}",
+		"format-ethernet": "lan",
+		"format-disconnected": "<span foreground=\"#6f6b66\" size=\"small\">sin red</span>",
+		"tooltip-format": "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}",
+		"format-linked": "󰈁 {ifname} (No IP)",
+		"tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
+		"tooltip-format-ethernet": "{ifname} 󰌘",
+		"tooltip-format-disconnected": "󰌙 Disconnected",
+		"format-icons": [
+			"󰤯",
+			"󰤟",
+			"󰤢",
+			"󰤥",
+			"󰤨"
+		],
+		"on-click": "nm-connection-editor",
+		"on-click-right": "$HOME/.config/hypr/scripts/WaybarScripts.sh --nmtui"
+	},
+	"bluetooth": {
+		"format": "bt",
+		"format-disabled": "<span foreground=\"#6f6b66\" size=\"small\">bt</span>",
+		"format-connected": "bt {num_connections}",
+		"tooltip-format": " {device_alias}",
+		"tooltip-format-connected": "{device_enumerate}",
+		"tooltip-format-enumerate-connected": " {device_alias} 󰂄{device_battery_percentage}%",
+		"tooltip": true,
+		"on-click": "blueman-manager",
+		"format-off": "<span foreground=\"#6f6b66\" size=\"small\">bt</span>"
+	},
+	"idle_inhibitor": {
+		"tooltip": true,
+		"tooltip-format-activated": "Stay awake: on\nScreen won't dim, lock or sleep",
+		"tooltip-format-deactivated": "Stay awake: off\nClick to keep the screen on",
+		"format": "{icon}",
+		"format-icons": {
+			"activated": "turno",
+			"deactivated": "<span foreground=\"#6f6b66\" size=\"small\">desc</span>"
+		}
+	},
+	"group/notify": {
+		"orientation": "inherit",
+		"drawer": {
+			"transition-duration": 500,
+			"children-class": "custom/swaync",
+			"transition-left-to-right": false
+		},
+		"modules": [
+			"custom/swaync"
+		]
+	},
+	"custom/swaync": {
+		"tooltip": true,
+		"tooltip-format": "Left Click: Launch Notification Center\nRight Click: Do not Disturb",
+		"format": "{} {icon} ",
+		"format-icons": {
+			"notification": "<span foreground='red'><sup></sup></span>",
+			"none": "",
+			"dnd-notification": "<span foreground='red'><sup></sup></span>",
+			"dnd-none": "",
+			"inhibited-notification": "<span foreground='red'><sup></sup></span>",
+			"inhibited-none": "",
+			"dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+			"dnd-inhibited-none": ""
+		},
+		"return-type": "json",
+		"exec-if": "which swaync-client",
+		"exec": "swaync-client -swb",
+		"on-click": "sleep 0.1 && swaync-client -t -sw",
+		"on-click-right": "swaync-client -d -sw",
+		"escape": true
+	},
+	"custom/power": {
+		"format": "󰐥",
+		"on-click": "$HOME/.config/hypr/scripts/Wlogout.sh",
+		"on-click-right": "$HOME/.config/hypr/scripts/ChangeBlur.sh",
+		"tooltip": true,
+		"tooltip-format": "Left Click: Logout Menu\nRight Click: Change Blur"
+	},
+	"custom/app-i1": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i1\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i1",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i1"
+	},
+	"custom/app-i2": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i2\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i2",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i2"
+	},
+	"custom/app-i3": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i3\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i3",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i3"
+	},
+	"custom/app-i4": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i4\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i4",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i4"
+	},
+	"custom/app-i5": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i5\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i5",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i5"
+	},
+	"custom/app-i6": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i6\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i6",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i6"
+	},
+	"custom/app-i7": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i7\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i7",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i7"
+	},
+	"custom/app-i8": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/i8\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus i8",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close i8"
+	},
+	"custom/apps-more": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/more\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true
+	},
+	"custom/app-d1": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/d1\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus d1",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close d1"
+	},
+	"custom/app-d2": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/d2\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus d2",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close d2"
+	},
+	"custom/app-d3": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/d3\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus d3",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close d3"
+	},
+	"custom/app-d4": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/d4\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus d4",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close d4"
+	},
+	"custom/app-d5": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/d5\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus d5",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close d5"
+	},
+	"custom/app-d6": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/d6\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus d6",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close d6"
+	},
+	"custom/app-d7": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/d7\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus d7",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close d7"
+	},
+	"custom/app-d8": {
+		"exec": "cat \"$XDG_RUNTIME_DIR/appstrip/d8\" 2>/dev/null",
+		"return-type": "json",
+		"interval": "once",
+		"signal": 9,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/AppStrip.py focus d8",
+		"on-click-middle": "$HOME/.config/hypr/scripts/AppStrip.py close d8"
+	},
+	"group/apps": {
+		"orientation": "inherit",
+		"drawer": {
+			"transition-duration": 250,
+			"children-class": "app-drawer",
+			"transition-left-to-right": true
+		},
+		"modules": [
+			"custom/apps-more",
+			"custom/app-d1",
+			"custom/app-d2",
+			"custom/app-d3",
+			"custom/app-d4",
+			"custom/app-d5",
+			"custom/app-d6",
+			"custom/app-d7",
+			"custom/app-d8"
+		]
+	},
+	"custom/recorder": {
+		"exec": "$HOME/.config/hypr/scripts/Recorder.sh status",
+		"return-type": "json",
+		"interval": 1,
+		"signal": 10,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/Recorder.sh click",
+		"on-click-middle": "$HOME/.config/hypr/scripts/Recorder.sh pause",
+		"on-click-right": "$HOME/.config/hypr/scripts/Recorder.sh menu"
+	},
+	"custom/visualizer": {
+		"exec": "$HOME/.config/hypr/scripts/Visualizer.py",
+		"return-type": "json",
+		"format": "{}",
+		"tooltip": true,
+		"escape": false,
+		"on-click": "playerctl previous",
+		"on-click-middle": "playerctl play-pause",
+		"on-click-right": "playerctl next",
+		"on-scroll-up": "$HOME/.config/hypr/scripts/Volume.sh --inc",
+		"on-scroll-down": "$HOME/.config/hypr/scripts/Volume.sh --dec",
+		"smooth-scrolling-threshold": 1
+	}
+}
