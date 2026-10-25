@@ -79,6 +79,7 @@ tooltip label {
 #pulseaudio,
 #network,
 #bluetooth,
+#custom-recorder,
 #idle_inhibitor,
 #custom-swaync,
 .app,
@@ -220,11 +221,11 @@ tooltip label {
 	opacity: 0.45;
 }
 
-/* grabador (Recorder.sh): rojo y pulsando mientras graba, color del tema con
-   solo el replay encendido; oculto si no hay nada */
+/* grabador (Recorder.sh): toma la caja de los demás módulos; etiquetas en
+   recorder.json. Rojo y pulsando mientras graba, color del tema con solo el
+   replay; oculto si no hay nada */
 #custom-recorder {
 	color: @accent;
-	padding: 0 6px;
 }
 
 #custom-recorder.recording,
@@ -241,5 +242,10 @@ tooltip label {
 }
 
 @keyframes rec-pulse {
-	50% { opacity: 0.5; }
+	50% { opacity: 0.55; }
+}
+
+#custom-recorder.recording {
+	background: alpha(#f2a7b5, 0.18);
+	border-radius: 10px;
 }

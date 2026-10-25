@@ -1,70 +1,233 @@
 #!/usr/bin/env bash
-# Menú rápido de ajustes (SUPER+Shift+E): editar la config y abrir las
-# herramientas del sistema.
+# discada — el centro de ajustes del rice (SUPER+Shift+E): look, shader,
+# idioma, visualizador, grabador, game mode y blur; más los submenús para
+# editar la config y abrir las herramientas del sistema. Cada cambio vuelve a
+# abrir el menú en la misma fila, así se pueden tocar varias cosas seguidas.
 
 hypr="$HOME/.config/hypr"
+scripts="$hypr/scripts"
 rofi_theme="$HOME/.config/rofi/config-edit.rasi"
 iDIR="$HOME/.config/swaync/images"
+discada="$hypr/discada.conf"
+recconf="$hypr/recorder.conf"
+vis="$HOME/.config/waybar/visualizer.json"
 
 # $term y $edit salen de conf/defaults.conf
 eval "$(sed -nE 's/^\$(term|edit)\s*=\s*(.*)$/\1="\2"/p' "$hypr/conf/defaults.conf")"
 term=${term:-kitty}
 edit=${EDITOR:-${edit:-nano}}
 
+. "$scripts/lang.sh"
+
+I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
+I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
+I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'
+
 need() {
   command -v "$1" &>/dev/null && return 0
-  notify-send -i "$iDIR/error.png" "Falta $1" "Instálalo primero"
+  notify-send -i "$iDIR/error.png" "$(L "Falta $1" "$1 is missing")" "$(L "Instálalo primero" "Install it first")"
   return 1
 }
 
-menu() {
-  cat <<MENU
---- EDITAR ---
-Apps por defecto
-Atajos
-Arranque
-Ajustes generales
-Look (decoraciones)
-Animaciones
-Reglas de ventanas
-Variables de entorno
-Idle (hypridle)
-Lock (hyprlock)
---- HERRAMIENTAS ---
-Cambiar look
-Monitores (nwg-displays)
-GTK (nwg-look)
-Qt6 (qt6ct)
-Qt5 (qt5ct)
-Kvantum
-Buscar atajos
-Game mode
-MENU
+# KEY=valor en un archivo tipo bash, respetando el comentario de la línea
+set_conf() {
+  local file=$1 key=$2 val=$3 tmp
+  tmp=$(mktemp)
+  awk -v k="$key" -v v="$val" '
+    index($0, k "=") == 1 {
+      c = ""
+      if (match($0, /[ \t]+#.*/)) c = substr($0, RSTART)
+      $0 = k "=" v c; found = 1
+    }
+    { print }
+    END { if (!found) print k "=" v }' "$file" > "$tmp" && cat "$tmp" > "$file"
+  rm -f "$tmp"
+}
+get_conf() { sed -nE "s/^$2=\"?([^\"# ]*)\"?.*/\1/p" "$1" 2>/dev/null | head -n1; }
+
+# siguiente valor de una lista (vuelve al principio)
+cycle() {
+  local cur=$1; shift
+  local i
+  for ((i = 1; i <= $#; i++)); do
+    [ "${!i}" = "$cur" ] && { local n=$(( i % $# + 1 )); echo "${!n}"; return; }
+  done
+  echo "$1"
 }
 
+onoff() { [ "$1" = yes ] && L "sí" "yes" || L "no" "no"; }
+
+# rofi con la fila elegida guardada en $row; imprime el índice
+pick() {
+  local prompt=$1 mesg=$2; shift 2
+  printf '%s\n' "$@" | rofi -dmenu -i -format i -no-custom -p "$prompt" \
+    -config "$rofi_theme" -selected-row "${row:-0}" ${mesg:+-mesg "$mesg"}
+}
+
+# ── idioma ───────────────────────────────────────────────────────────────────
+set_language() {
+  set_conf "$discada" LANGUAGE "$1"
+  DISCADA_LANG=$1
+  # rola tiene su propio idioma: que siga al rice
+  local rola="$HOME/.config/rola/config.json" tmp
+  if [ -f "$rola" ] && command -v jq >/dev/null; then
+    tmp=$(mktemp) && jq --arg l "$1" '.lang = $l' "$rola" > "$tmp" && cat "$tmp" > "$rola"
+    rm -f "$tmp"
+  fi
+  # AppStrip lo relee en cada render (el reload lo dispara); el visualizador
+  # se reinicia solo al ver el cambio
+  hyprctl reload >/dev/null
+  pkill -RTMIN+10 -x waybar
+  notify-send -e -u low -i "$iDIR/bell.png" "discada" "$(L "Idioma: español" "Language: English")"
+}
+
+# ── visualizador ─────────────────────────────────────────────────────────────
+vis_menu() {
+  local names=() json=()
+  add() { names+=("$1"); json+=("$2"); }
+  add "braille · 12"                 '{"style": "braille", "bars": 12}'
+  add "braille · 16"                 '{"style": "braille", "bars": 16}'
+  add "braille · 20"                 '{"style": "braille", "bars": 20}'
+  add "peaks · 16"                   '{"style": "peaks", "bars": 16}'
+  add "peaks · 20"                   '{"style": "peaks", "bars": 20}'
+  add "$(L bloques blocks) · 8   ▁▃▅█" '{"style": "chars", "bars": 8, "chars": "▁▂▃▄▅▆▇█"}'
+  add "$(L bloques blocks) · 12  ▁▃▅█" '{"style": "chars", "bars": 12, "chars": "▁▂▃▄▅▆▇█"}'
+  add "ascii · 10  .:-=+*#"           '{"style": "chars", "bars": 10, "chars": ".:-=+*#"}'
+  add "$(L lápiz pencil) · 12  _.-~^"  '{"style": "chars", "bars": 12, "chars": "_.-~^"}'
+  local i
+  i=$(row=0 pick "$(L visualizador visualizer)" \
+      "$(L "se guarda en el look actual" "saved into the current look")" "${names[@]}") || return
+  printf '%s\n' "${json[$i]}" > "$vis"
+}
+
+vis_now() {
+  local style bars chars
+  { read -r style; read -r bars; read -r chars; } < <(jq -r '.style // "braille", .bars // 16, .chars // ""' "$vis" 2>/dev/null)
+  case "$style" in
+    chars) [[ $chars == ▁* ]] && echo "$(L bloques blocks) · $bars" || echo "$chars · $bars" ;;
+    "") echo braille ;;
+    *) echo "$style · $bars" ;;
+  esac
+}
+
+# ── grabador ─────────────────────────────────────────────────────────────────
+audio_name() {
+  case "$1" in
+    "default_output|default_input") L "sistema + mic" "system + mic" ;;
+    default_output) L sistema system ;;
+    default_input) L mic mic ;;
+    "") L ninguno none ;;
+    *) echo "$1" ;;
+  esac
+}
+
+rec_menu() {
+  local row=0
+  while true; do
+    local fps q audio rs rlen dnd i
+    fps=$(get_conf "$recconf" FPS); q=$(get_conf "$recconf" QUALITY)
+    audio=$(sed -nE 's/^AUDIO="?([^"#]*)"?.*/\1/p' "$recconf" | head -n1 | sed 's/ *$//')
+    rs=$(get_conf "$recconf" REPLAY_ON_STARTUP); rlen=$(get_conf "$recconf" REPLAY_SECONDS)
+    dnd=$(get_conf "$recconf" RECORD_DND)
+    i=$(pick "$(L grabador recorder)" \
+        "$(L "el replay toma los cambios al volver a encenderlo" "replay picks up changes when turned on again")" \
+        "fps: ${fps:-60}" \
+        "$(L calidad quality): ${q:-very_high}" \
+        "audio: $(audio_name "$audio")" \
+        "$(L "no molestar al grabar" "do not disturb while recording"): $(onoff "${dnd:-yes}")" \
+        "$(L "replay al iniciar sesión" "replay at login"): $(onoff "${rs:-no}")" \
+        "$(L "duración del replay" "replay length"): ${rlen:-60}s" \
+        "$(L "abrir carpeta de videos" "open videos folder")" \
+        "‹ $(L volver back)") || return
+    row=$i
+    case "$i" in
+      0) set_conf "$recconf" FPS "$(cycle "${fps:-60}" 30 60 120 144)" ;;
+      1) set_conf "$recconf" QUALITY "$(cycle "${q:-very_high}" medium high very_high ultra)" ;;
+      2) set_conf "$recconf" AUDIO "\"$(cycle "$audio" "default_output|default_input" default_output default_input "")\"" ;;
+      3) set_conf "$recconf" RECORD_DND "$(cycle "${dnd:-yes}" yes no)" ;;
+      4) set_conf "$recconf" REPLAY_ON_STARTUP "$(cycle "${rs:-no}" yes no)" ;;
+      5) set_conf "$recconf" REPLAY_SECONDS "$(cycle "${rlen:-60}" 30 60 120 300)" ;;
+      6) . "$recconf" 2>/dev/null; xdg-open "${DIR:-$HOME/Videos}" & return ;;
+      *) return ;;
+    esac
+  done
+}
+
+# ── editar / herramientas ────────────────────────────────────────────────────
+edit_menu() {
+  local names=() files=()
+  add() { names+=("$1"); files+=("$2"); }
+  add "discada ($(L "idioma" "language"))"            "$discada"
+  add "$(L "Grabador" "Recorder")"                    "$recconf"
+  add "$(L "Apps por defecto" "Default apps")"        "$hypr/conf/defaults.conf"
+  add "$(L "Atajos" "Keybinds")"                      "$hypr/conf/keybinds.conf"
+  add "$(L "Arranque" "Startup")"                     "$hypr/conf/startup.conf"
+  add "$(L "Ajustes generales" "General settings")"  "$hypr/conf/settings.conf"
+  add "$(L "Decoraciones (del look)" "Decorations (look)")" "$hypr/conf/decorations.conf"
+  add "$(L "Animaciones (del look)" "Animations (look)")"   "$hypr/conf/animations.conf"
+  add "$(L "Reglas de ventanas" "Window rules")"      "$hypr/conf/windowrules.conf"
+  add "$(L "Apps fijadas" "Pinned apps")"             "$hypr/conf/pinned.conf"
+  add "$(L "Variables de entorno" "Environment")"     "$hypr/conf/env.conf"
+  add "Idle (hypridle)"                               "$hypr/hypridle.conf"
+  add "Lock (hyprlock)"                               "$hypr/hyprlock.conf"
+  local i
+  i=$(row=0 pick "$(L editar edit)" "" "${names[@]}" "‹ $(L volver back)") || return
+  [ -n "${files[$i]}" ] && $term -e $edit "${files[$i]}" &
+}
+
+tools_menu() {
+  local i
+  i=$(row=0 pick "$(L herramientas tools)" "" \
+      "$(L "Monitores" "Monitors") (nwg-displays)" "GTK (nwg-look)" "Qt6 (qt6ct)" "Qt5 (qt5ct)" \
+      "Kvantum" "$(L "Buscar atajos" "Search shortcuts")" "‹ $(L volver back)") || return
+  case "$i" in
+    0) need nwg-displays && nwg-displays & ;;
+    1) need nwg-look && nwg-look & ;;
+    2) need qt6ct && qt6ct & ;;
+    3) need qt5ct && qt5ct & ;;
+    4) need kvantummanager && kvantummanager & ;;
+    5) "$scripts/KeyBinds.sh" & ;;
+  esac
+}
+
+# ── menú principal ───────────────────────────────────────────────────────────
 pidof rofi >/dev/null && pkill rofi
 
-choice=$(menu | rofi -i -dmenu -p settings -config "$rofi_theme")
+row=0
+while true; do
+  look=$(cat "$hypr/looks/.current" 2>/dev/null)
+  deco="$hypr/conf/decorations.conf"
+  shader=""
+  if grep -qE '^\s*screen_shader\s*=' "$deco"; then shader=yes
+  elif grep -qE '^\s*#\s*screen_shader\s*=' "$deco"; then shader=no; fi
+  game=$([ "$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}')" = 0 ] && echo yes || echo no)
+  blur=$([ "$(hyprctl -j getoption decoration:blur:passes | jq .int)" = 2 ] && L normal normal || L ligero light)
 
-case "$choice" in
-  "Apps por defecto")      file="$hypr/conf/defaults.conf" ;;
-  "Atajos")                file="$hypr/conf/keybinds.conf" ;;
-  "Arranque")              file="$hypr/conf/startup.conf" ;;
-  "Ajustes generales")     file="$hypr/conf/settings.conf" ;;
-  "Look (decoraciones)")   file="$hypr/conf/decorations.conf" ;;
-  "Animaciones")           file="$hypr/conf/animations.conf" ;;
-  "Reglas de ventanas")    file="$hypr/conf/windowrules.conf" ;;
-  "Variables de entorno")  file="$hypr/conf/env.conf" ;;
-  "Idle (hypridle)")       file="$hypr/hypridle.conf" ;;
-  "Lock (hyprlock)")       file="$hypr/hyprlock.conf" ;;
-  "Monitores (nwg-displays)") need nwg-displays && nwg-displays ;;
-  "GTK (nwg-look)")        need nwg-look && nwg-look ;;
-  "Qt6 (qt6ct)")           need qt6ct && qt6ct ;;
-  "Qt5 (qt5ct)")           need qt5ct && qt5ct ;;
-  "Kvantum")               need kvantummanager && kvantummanager ;;
-  "Cambiar look")          "$hypr/scripts/LookSwitch.sh" ;;
-  "Buscar atajos")         "$hypr/scripts/KeyBinds.sh" ;;
-  "Game mode")             "$hypr/scripts/GameMode.sh" ;;
-esac
+  names=() acts=()
+  add() { names+=("$1"); acts+=("$2"); }
+  add "$I_LOOK  look: ${look:-?}"                                   look
+  [ -n "$shader" ] && add "$I_SHADER  shader: $([ $shader = yes ] && echo on || echo off)" shader
+  add "$I_LANG  $(L idioma language): $(L español English)"         lang
+  add "$I_VIS  $(L visualizador visualizer): $(vis_now)"           vis
+  add "$I_REC  $(L grabador recorder) ›"                           rec
+  add "$I_GAME  game mode: $(onoff "$game")"                        game
+  add "$I_BLUR  blur: $blur"                                        blur
+  add "$I_EDIT  $(L "editar config" "edit config") ›"               edit
+  add "$I_TOOLS  $(L herramientas tools) ›"                          tools
+  add "$I_KEYS  $(L atajos shortcuts) (SUPER+H)"                    keys
 
-[ -n "$file" ] && $term -e $edit "$file"
+  i=$(pick discada "$(L "el rice de los looks · Esc para salir" "the rice of looks · Esc to close")" "${names[@]}") || exit 0
+  row=$i
+  case "${acts[$i]}" in
+    look)   exec "$scripts/LookSwitch.sh" ;;
+    shader) "$scripts/LookSwitch.sh" shader ;;
+    lang)   set_language "$([ "$DISCADA_LANG" = es ] && echo en || echo es)" ;;
+    vis)    vis_menu ;;
+    rec)    rec_menu ;;
+    game)   "$scripts/GameMode.sh"; sleep 0.3 ;;
+    blur)   "$scripts/ChangeBlur.sh" ;;
+    edit)   edit_menu; exit 0 ;;
+    tools)  tools_menu; exit 0 ;;
+    keys)   exec "$scripts/KeyHints.sh" ;;
+  esac
+done

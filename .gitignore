@@ -4,6 +4,7 @@
 # ── Carpetas del rice ──
 !/.gitignore
 !/README.md
+!/README.es.md
 !/install.sh
 !/btop/
 !/cava/

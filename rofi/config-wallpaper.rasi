@@ -5,6 +5,7 @@
 /* ---- Configuration ---- */ 
 configuration {
   modi: "drun";
+  show-icons: true;   /* algunos looks (retro) los apagan en su theme */
 }
 
 window {

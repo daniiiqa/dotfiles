@@ -44,6 +44,8 @@ for v in 3.0 4.0; do
 done
 
 touch "$marker"
-notify-send -a dotfiles "Bienvenido" \
-  "SUPER+H atajos · SUPER+W wallpaper · SUPER+T cambiar look" 2>/dev/null
+. "$HOME/.config/hypr/scripts/lang.sh"
+notify-send -a discada "$(L "Bienvenido a discada" "Welcome to discada")" \
+  "$(L "SUPER+H atajos · SUPER+Shift+E ajustes · SUPER+T cambiar look" \
+       "SUPER+H shortcuts · SUPER+Shift+E settings · SUPER+T switch look")" 2>/dev/null
 exit 0

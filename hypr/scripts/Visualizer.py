@@ -34,6 +34,20 @@ CONF = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "waybar-visualize
 LOOK = os.path.expanduser("~/.config/waybar/visualizer.json")
 
 
+def lang():
+    """Idioma de discada (hypr/discada.conf → LANGUAGE=es|en); por defecto inglés."""
+    try:
+        for line in open(os.path.expanduser("~/.config/hypr/discada.conf")):
+            if line.startswith("LANGUAGE="):
+                return "es" if line.split("=", 1)[1].split()[0] == "es" else "en"
+    except (OSError, IndexError):
+        pass
+    return "en"
+
+
+ES = lang() == "es"
+
+
 def load_look():
     try:
         look = json.load(open(LOOK))
@@ -157,12 +171,16 @@ def players():
 
 
 def watch_look():
-    """Al cambiar de look, reiniciar con el estilo nuevo."""
+    """Al cambiar de look o de idioma, reiniciar."""
     def mtime():
-        try:
-            return os.path.getmtime(LOOK)
-        except OSError:
-            return None
+        # el estilo del look y el idioma (tooltip)
+        out = []
+        for f in (LOOK, os.path.expanduser("~/.config/hypr/discada.conf")):
+            try:
+                out.append(os.path.getmtime(f))
+            except OSError:
+                out.append(None)
+        return out
     start = mtime()
     while True:
         time.sleep(1)
@@ -191,7 +209,8 @@ def main():
         if rows:
             icon = "\uf04b" if playing else "\uf04c"
             tooltip = (f"{icon} {rows[0][1]}".replace("&", "&amp;").replace("<", "&lt;")
-                       + "\nclick: anterior · medio: pausa · derecho: siguiente")
+                       + ("\nclick: anterior · medio: pausa · derecho: siguiente" if ES
+                          else "\nclick: previous · middle: pause · right: next"))
         else:
             tooltip = ""
         with lock:

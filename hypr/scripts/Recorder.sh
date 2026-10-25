@@ -25,6 +25,7 @@ DIR="$HOME/Videos"; FPS=60; QUALITY=very_high; CODEC=auto; CURSOR=yes
 AUDIO="default_output|default_input"
 RECORD_DND=yes; REPLAY_SECONDS=60; REPLAY_AUDIO="default_output"; REPLAY_BITRATE=40000; REPLAY_ON_STARTUP=no
 [ -f "$cfg/hypr/recorder.conf" ] && . "$cfg/hypr/recorder.conf"
+. "$cfg/hypr/scripts/lang.sh"
 mkdir -p "$DIR"
 
 I_REC=$'\U000f044b'; I_PAUSE=$'\U000f03e5'; I_REPLAY=$'\U000f0459'
@@ -40,7 +41,7 @@ dnd_on() {
   swaync-client -dn >/dev/null 2>&1 && touch "$run/rec.dnd"
 }
 dnd_restore() { [ -f "$run/rec.dnd" ] && rm -f "$run/rec.dnd" && swaync-client -df >/dev/null 2>&1; }
-note() { notify-send -e -a Grabador -u low -i "${3:-media-record}" "$1" "$2"; }
+note() { notify-send -e -a "$(L Grabador Recorder)" -u low -i "${3:-media-record}" "$1" "$2"; }
 
 monitor() { hyprctl monitors -j | jq -r '.[] | select(.focused) | .name'; }
 
@@ -59,7 +60,7 @@ launch() {
     bar
     # 0 = guardado; 130/2 = Ctrl+C; lo demás es un error de verdad
     if [ $rc -ne 0 ] && [ $rc -ne 130 ] && [ $rc -ne 2 ]; then
-      note "No se pudo grabar" "$(grep -v '^$' "$run/$kind.log" | tail -n 2)" dialog-error
+      note "$(L "No se pudo grabar" "Recording failed")" "$(grep -v '^$' "$run/$kind.log" | tail -n 2)" dialog-error
     fi
   ) >/dev/null 2>&1 &
   disown
@@ -74,7 +75,7 @@ record() {
       target=(-w region -region "$g") ;;
     window)
       local g; g=$(hyprctl activewindow -j | jq -r 'if .size then "\(.size[0])x\(.size[1])+\(.at[0])+\(.at[1])" else empty end')
-      [ -z "$g" ] && { note "Grabador" "No hay ventana activa"; return 1; }
+      [ -z "$g" ] && { note "$(L Grabador Recorder)" "$(L "No hay ventana activa" "No active window")"; return 1; }
       target=(-w region -region "$g") ;;
     *)
       target=(-w "$(monitor)") ;;
@@ -116,7 +117,7 @@ replay() {
 }
 
 save() {
-  alive replay || { note "Replay apagado" "Enciéndelo con ALT+SHIFT+F10"; return 1; }
+  alive replay || { note "$(L "Replay apagado" "Replay is off")" "$(L "Enciéndelo con ALT+SHIFT+F10" "Turn it on with ALT+SHIFT+F10")"; return 1; }
   local pid; pid=$(cat "$run/replay.pid")
   case "$1" in
     10) kill -RTMIN+1 "$pid" ;; 30) kill -RTMIN+2 "$pid" ;; 60) kill -RTMIN+3 "$pid" ;;
@@ -126,11 +127,12 @@ save() {
 }
 
 saved() {
-  local file=$1 type=$2 thumb="$run/thumb-$$.png" title="Grabación guardada"
-  [ "$type" = replay ] && title="Replay guardado"
+  local file=$1 type=$2 thumb="$run/thumb-$$.png" title=$(L "Grabación guardada" "Recording saved")
+  [ "$type" = replay ] && title=$(L "Replay guardado" "Replay saved")
   [ "$type" = regular ] && dnd_restore   # para que este aviso sí se vea
   ffmpegthumbnailer -i "$file" -o "$thumb" -s 256 >/dev/null 2>&1 || thumb=video-x-generic
-  ( act=$(notify-send -e -a Grabador -i "$thumb" -A open=Abrir -A folder=Carpeta \
+  ( act=$(notify-send -e -a "$(L Grabador Recorder)" -i "$thumb" \
+            -A open="$(L Abrir Open)" -A folder="$(L Carpeta Folder)" \
             "$title" "$(basename "$file")")
     case "$act" in
       open) xdg-open "$file" ;;
@@ -143,21 +145,29 @@ mmss() { printf '%02d:%02d' $(( $1 / 60 )) $(( $1 % 60 )); }
 
 status() {
   local text="" class=() tip=()
+  # cada look pone sus etiquetas en waybar/recorder.json (iconos o texto)
+  local b_rec=$I_REC b_pause=$I_PAUSE b_replay=$I_REPLAY
+  if [ -f "$cfg/waybar/recorder.json" ]; then
+    { read -r b_rec; read -r b_pause; read -r b_replay; } < <(jq -r \
+      --arg r "$I_REC" --arg p "$I_PAUSE" --arg y "$I_REPLAY" \
+      '.rec // $r, .paused // $p, .replay // $y' "$cfg/waybar/recorder.json" 2>/dev/null)
+  fi
   if alive rec; then
     local now; now=$(date +%s)
     local t=$(( now - $(cat "$run/rec.start") - $(cat "$run/rec.pausedtotal" 2>/dev/null || echo 0) ))
     if [ -f "$run/rec.paused" ]; then
       t=$(( t - (now - $(cat "$run/rec.paused")) ))
-      text="$I_PAUSE $(mmss $t)"; class+=(paused); tip+=("Grabación en pausa")
+      text="$b_pause $(mmss $t)"; class+=(paused); tip+=("$(L "Grabación en pausa" "Recording paused")")
     else
-      text="$I_REC $(mmss $t)"; class+=(recording); tip+=("Grabando")
+      text="$b_rec $(mmss $t)"; class+=(recording); tip+=("$(L Grabando Recording)")
     fi
-    tip+=("click: detener · medio: pausa · derecho: menú")
+    tip+=("$(L "click: detener · medio: pausa · derecho: menú" "click: stop · middle: pause · right: menu")")
   fi
   if alive replay; then
-    text="${text:+$text  }$I_REPLAY"; class+=(replay)
-    [ ${#tip[@]} -eq 0 ] && tip+=("Replay: últimos ${REPLAY_SECONDS}s" "click: guardar · derecho: menú") \
-                         || tip+=("Replay encendido")
+    text="${text:+$text  }$b_replay"; class+=(replay)
+    [ ${#tip[@]} -eq 0 ] && tip+=("$(L "Replay: últimos" "Replay: last") ${REPLAY_SECONDS}s" \
+                                 "$(L "click: guardar · derecho: menú" "click: save · right: menu")") \
+                         || tip+=("$(L "Replay encendido" "Replay on")")
   fi
   jq -cn --arg t "$text" --arg tip "$(printf '%s\n' "${tip[@]}" | sed '/^$/d')" \
     --arg c "${class[*]}" '{text: $t, tooltip: $tip, class: ($c | split(" "))}'
@@ -168,33 +178,38 @@ click() { if alive rec; then stop; elif alive replay; then save; fi; }
 
 menu() {
   pidof rofi >/dev/null && pkill rofi
-  local opts=()
+  local opts=() acts=()
+  add() { opts+=("$1"); acts+=("$2"); }
   if alive rec; then
-    opts+=("$I_STOP  detener grabación")
-    [ -f "$run/rec.paused" ] && opts+=("$I_PAUSE  reanudar") || opts+=("$I_PAUSE  pausar")
+    add "$I_STOP  $(L "detener grabación" "stop recording")" stop
+    if [ -f "$run/rec.paused" ]; then add "$I_PAUSE  $(L reanudar resume)" pause
+    else add "$I_PAUSE  $(L pausar pause)" pause; fi
   else
-    opts+=("$I_SCREEN  grabar pantalla" "$I_REGION  grabar región" "$I_WINDOW  grabar ventana")
+    add "$I_SCREEN  $(L "grabar pantalla" "record screen")" screen
+    add "$I_REGION  $(L "grabar región" "record region")" region
+    add "$I_WINDOW  $(L "grabar ventana" "record window")" window
   fi
   if alive replay; then
-    opts+=("$I_SAVE  guardar replay (${REPLAY_SECONDS}s)" "$I_SAVE  guardar últimos 10s"
-           "$I_SAVE  guardar últimos 30s" "$I_REPLAY  apagar replay")
+    add "$I_SAVE  $(L "guardar replay" "save replay") (${REPLAY_SECONDS}s)" save
+    add "$I_SAVE  $(L "guardar últimos 10s" "save last 10s")" save10
+    add "$I_SAVE  $(L "guardar últimos 30s" "save last 30s")" save30
+    add "$I_REPLAY  $(L "apagar replay" "turn replay off")" replay-off
   else
-    opts+=("$I_REPLAY  encender replay")
+    add "$I_REPLAY  $(L "encender replay" "turn replay on")" replay-on
   fi
-  local pick
-  pick=$(printf '%s\n' "${opts[@]}" | rofi -dmenu -i -p grabar -config "$cfg/rofi/config-edit.rasi" \
-    -mesg "videos en ${DIR/#$HOME/\~}") || return 0
-  case "$pick" in
-    *"detener grabación") stop ;;
-    *pausar|*reanudar) pause ;;
-    *"grabar pantalla") sleep 0.2; record screen ;;
-    *"grabar región") record region ;;
-    *"grabar ventana") sleep 0.2; record window ;;
-    *"guardar replay"*) save ;;
-    *"últimos 10s") save 10 ;;
-    *"últimos 30s") save 30 ;;
-    *"apagar replay") replay off ;;
-    *"encender replay") replay on ;;
+  local i
+  i=$(printf '%s\n' "${opts[@]}" | rofi -dmenu -i -format i -p "$(L grabar record)" \
+    -config "$cfg/rofi/config-edit.rasi" -mesg "$(L "videos en" "videos in") ${DIR/#$HOME/\~}") || return 0
+  case "${acts[$i]}" in
+    stop) stop ;;
+    pause) pause ;;
+    screen|window) sleep 0.2; record "${acts[$i]}" ;;
+    region) record region ;;
+    save) save ;;
+    save10) save 10 ;;
+    save30) save 30 ;;
+    replay-off) replay off ;;
+    replay-on) replay on ;;
   esac
 }
 

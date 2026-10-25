@@ -1,0 +1,7 @@
+/* Cheat sheet (KeyHints.sh): ancho para tecla + acción; los títulos de
+   sección salen como filas "active", así toman el color de acento del look */
+@import "~/.config/rofi/menu.rasi"
+
+window   { width: 760px; }
+listview { lines: 16; }
+element  { padding: 6px 14px; }

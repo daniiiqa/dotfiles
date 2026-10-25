@@ -12,6 +12,7 @@ cfg="$HOME/.config"
 looks="$cfg/hypr/looks"
 state="$looks/.current"
 current=$(cat "$state" 2>/dev/null)
+. "$cfg/hypr/scripts/lang.sh"
 
 # screen_shader del look actual (outsider trae grano). Se apaga comentando la
 # línea en el decorations.conf vivo, así sobrevive a los reload y al cambiar
@@ -30,7 +31,7 @@ else
   pidof rofi >/dev/null && pkill rofi
   target=$( { [ -n "$shader_entry" ] && echo "$shader_entry"
     find "$looks" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort; } |
-    rofi -dmenu -i -p look -config "$cfg/rofi/config-edit.rasi" -mesg "current: ${current:-?}")
+    rofi -dmenu -i -p look -config "$cfg/rofi/config-edit.rasi" -mesg "$(L actual current): ${current:-?}")
 fi
 
 [ -z "$target" ] && exit 0
@@ -38,12 +39,12 @@ case "$target" in
   shader|"shader: off"|"shader: on")
     if grep -qE '^\s*screen_shader\s*=' "$deco"; then
       sed -i -E 's/^(\s*)screen_shader(\s*)=/\1# screen_shader\2=/' "$deco"
-      msg="shader off"
+      msg=$(L "shader apagado" "shader off")
     elif grep -qE '^\s*#\s*screen_shader\s*=' "$deco"; then
       sed -i -E 's/^(\s*)#\s*screen_shader(\s*)=/\1screen_shader\2=/' "$deco"
-      msg="shader on"
+      msg=$(L "shader encendido" "shader on")
     else
-      msg="este look no tiene shader"
+      msg=$(L "este look no tiene shader" "this look has no shader")
     fi
     hyprctl reload >/dev/null
     notify-send -e -u low -i "$cfg/swaync/images/bell.png" "Look" "$msg"
@@ -51,7 +52,7 @@ case "$target" in
     ;;
 esac
 if [ ! -d "$looks/$target" ]; then
-  notify-send -i "$cfg/swaync/images/error.png" "Look" "No existe: $target"
+  notify-send -i "$cfg/swaync/images/error.png" "Look" "$(L "No existe" "Not found"): $target"
   exit 1
 fi
 [ "$target" = "$current" ] && exit 0

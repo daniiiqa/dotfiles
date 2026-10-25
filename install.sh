@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Instalador del rice (Arch Linux + Hyprland). En una máquina nueva basta con:
+# Instalador de discada, el rice de los looks (Arch Linux + Hyprland).
+# discada installer (Arch Linux + Hyprland) — run with --help for English.
+# En una máquina nueva basta con:
 #
 #   curl -fsSL https://raw.githubusercontent.com/daniiiqa/dotfiles/main/install.sh | bash
 #
@@ -13,6 +15,8 @@
 #   --looks=L    qué looks instalar sin preguntar: all, none (solo classic) o
 #                una lista como retro,nord. Sin esto pregunta; con -y o sin
 #                terminal instala todos
+#   --lang=L     idioma de los menús y avisos: en o es (sin esto pregunta;
+#                con -y o sin terminal, en)
 #   -y           sin confirmaciones de pacman/yay
 #
 # Se puede correr más de una vez: los paquetes van con --needed y solo se
@@ -59,7 +63,7 @@ declare -A LOOK_FONT=(
   [outsider]=ttf-fantasque-nerd   [paper]=ttf-ibmplex-mono-nerd
   [pastel]=ttf-victor-mono-nerd   [retro]=ttf-terminus-nerd
 )
-declare -A LOOK_DESC=(
+declare -A LOOK_DESC_ES=(
   [brutalist]="bloques sólidos, cero esquinas, MAYÚSCULAS"
   [classic]="el original: iconos, blur, JetBrainsMono"
   [glass]="vidrio esmerilado, barra abajo, redondeado"
@@ -70,6 +74,18 @@ declare -A LOOK_DESC=(
   [paper]="papel y tinta, toques de serif"
   [pastel]="suave y redondito, iconos tiernos"
   [retro]="terminal de fósforo, todo en texto"
+)
+declare -A LOOK_DESC_EN=(
+  [brutalist]="solid blocks, zero corners, UPPERCASE"
+  [classic]="the original: icons, blur, JetBrainsMono"
+  [glass]="frosted glass, bottom bar, rounded"
+  [minimal]="clean and quiet, thin icons"
+  [neon]="glowing colors, filled icons"
+  [nord]="fixed Nord palette, floating bar"
+  [outsider]="lo-fi cassette, lowercase, film grain"
+  [paper]="paper and ink, serif touches"
+  [pastel]="soft and round, cute icons"
+  [retro]="phosphor terminal, all text"
 )
 AUR_PKGS=(
   swww       # wallpapers de imagen/gif
@@ -86,37 +102,74 @@ CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout y
 ROLA_REPO="https://github.com/daniiiqa/rola.git"
 
 # ── Opciones ─────────────────────────────────────────────────────────────────
-DRY=0 SDDM=auto AUR=1 YES=() LOOKS_ARG=""
+DRY=0 SDDM=auto AUR=1 YES=() LOOKS_ARG="" UI_LANG=""
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY=1 ;;
     --looks=*) LOOKS_ARG=${arg#--looks=} ;;
+    --lang=es|--lang=en) UI_LANG=${arg#--lang=} ;;
     --sddm) SDDM=yes ;;
     --no-sddm) SDDM=no ;;
     --no-aur) AUR=0 ;;
     -y|--yes) YES=(--noconfirm) ;;
-    -h|--help) sed -n '2,20p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//'; exit 0 ;;
-    *) echo "opción desconocida: $arg (usa --help)"; exit 2 ;;
+    -h|--help)
+      if [[ ${LANG:-} == es* ]]; then sed -n '2,24p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//'
+      else cat <<'HELP'
+discada installer — the rice of looks (Arch Linux + Hyprland).
+
+  curl -fsSL https://raw.githubusercontent.com/daniiiqa/dotfiles/main/install.sh | bash
+  or, from a clone:  ./install.sh
+
+  --dry-run    show what it would do without touching anything
+  --no-sddm    don't install a login screen (by default SDDM is installed only
+               when no display manager is enabled)
+  --sddm       install/configure SDDM even if another one is enabled
+  --no-aur     skip AUR packages
+  --looks=L    which looks to install without asking: all, none (classic only)
+               or a list like retro,nord. Without it, it asks; with -y or no
+               terminal it installs them all
+  --lang=L     language for menus and notifications: en or es (asks without
+               it; with -y or no terminal, en)
+  -y           no pacman/yay confirmations
+
+Safe to run more than once: packages use --needed and only changed files are
+backed up. The first Hyprland login finishes the setup (hypr/scripts/FirstRun.sh).
+HELP
+      fi
+      exit 0 ;;
+    *) echo "unknown option / opción desconocida: $arg (--help)"; exit 2 ;;
   esac
 done
 
+# idioma: L "español" "english"
+L() { if [ "$UI_LANG" = es ]; then printf '%s' "$1"; else printf '%s' "$2"; fi; }
 say()  { printf '\033[1;35m::\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m!!\033[0m %s\n' "$*"; }
 run()  { if ((DRY)); then printf '   [dry-run] %s\n' "$*"; else "$@"; fi; }
 
 # ── Comprobaciones ───────────────────────────────────────────────────────────
-command -v pacman >/dev/null || { echo "Esto es para Arch Linux (no encontré pacman)."; exit 1; }
-[ "$EUID" -ne 0 ] || { echo "Córrelo como tu usuario, no como root (pide sudo cuando lo necesita)."; exit 1; }
+command -v pacman >/dev/null || { echo "discada is for Arch Linux (pacman not found) / es para Arch Linux (no encontré pacman)."; exit 1; }
+[ "$EUID" -ne 0 ] || { echo "Run it as your user, not root / Córrelo como tu usuario, no como root."; exit 1; }
 
 # ── 0. Arranque desde curl: clonar el repo y seguir desde ahí ────────────────
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-.}")" 2>/dev/null && pwd)"
 if [ ! -d "$REPO_DIR/hypr/conf" ]; then
-  say "Descargando los dotfiles en $CLONE_DIR"
+  say "discada → $CLONE_DIR"
   command -v git >/dev/null || sudo pacman -S --needed --noconfirm git
   if [ -d "$CLONE_DIR/.git" ]; then git -C "$CLONE_DIR" pull --ff-only
   else git clone --depth 1 "$REPO_URL" "$CLONE_DIR"; fi
   # stdin era el propio script (curl | bash): devolverle la terminal
   exec bash "$CLONE_DIR/install.sh" "$@" </dev/tty
+fi
+
+# ── Idioma ───────────────────────────────────────────────────────────────────
+if [ -z "$UI_LANG" ]; then
+  UI_LANG=en
+  if [ -t 0 ] && ((${#YES[@]} == 0)); then
+    printf '\033[1;35m::\033[0m discada — language / idioma:  1) English  2) Español\n'
+    read -r -p "   [Enter = English] " ans
+    case "$ans" in 2|es|ES|español|Español|espanol) UI_LANG=es ;; esac
+  fi
 fi
 
 CFG="$HOME/.config"
@@ -141,14 +194,17 @@ if [ -n "$LOOKS_ARG" ]; then
     *) IFS=, read -ra LOOKS <<< "$LOOKS_ARG" ;;
   esac
 elif [ -t 0 ] && ((${#YES[@]} == 0)); then
-  say "Looks: cada uno cambia barra, fuentes, colores, iconos y login (SUPER+T)"
+  say "$(L "Looks: cada uno cambia barra, fuentes, colores, iconos y login (SUPER+T)" \
+          "Looks: each one changes the bar, fonts, colors, icons and login (SUPER+T)")"
   i=1
   for l in "${ALL_LOOKS[@]}"; do
-    printf '   %2d) %-10s %s\n' "$i" "$l" "${LOOK_DESC[$l]:-}"
+    if [ "$UI_LANG" = es ]; then desc=${LOOK_DESC_ES[$l]:-}; else desc=${LOOK_DESC_EN[$l]:-}; fi
+    printf '   %2d) %-10s %s\n' "$i" "$l" "$desc"
     i=$((i + 1))
   done
   while ((${#LOOKS[@]} == 0)); do
-    read -r -p "   ¿Cuáles? [Enter = todos · números separados por espacio · 0 = ninguno, solo classic] " ans
+    read -r -p "   $(L "¿Cuáles? [Enter = todos · números separados por espacio · 0 = ninguno, solo classic]" \
+                     "Which ones? [Enter = all · numbers separated by spaces · 0 = none, classic only]") " ans
     if [ -z "$ans" ]; then LOOKS=("${ALL_LOOKS[@]}")
     elif [ "$ans" = 0 ]; then LOOKS=(classic)
     else
@@ -156,7 +212,7 @@ elif [ -t 0 ] && ((${#YES[@]} == 0)); then
         if [[ "$n" =~ ^[0-9]+$ ]] && ((n >= 1 && n <= ${#ALL_LOOKS[@]})); then
           in_list "${ALL_LOOKS[n - 1]}" "${LOOKS[@]}" || LOOKS+=("${ALL_LOOKS[n - 1]}")
         else
-          warn "no entendí \"$n\""; LOOKS=(); break
+          warn "$(L "no entendí" "didn't get") \"$n\""; LOOKS=(); break
         fi
       done
     fi
@@ -165,16 +221,16 @@ elif [ -t 0 ] && ((${#YES[@]} == 0)); then
     def=${LOOKS[0]}
     in_list minimal "${LOOKS[@]}" && def=minimal
     while [ -z "$INITIAL" ]; do
-      read -r -p "   ¿Con cuál empezar? (${LOOKS[*]}) [Enter = $def] " ans
+      read -r -p "   $(L "¿Con cuál empezar?" "Which one to start with?") (${LOOKS[*]}) [Enter = $def] " ans
       ans=${ans:-$def}
-      if in_list "$ans" "${LOOKS[@]}"; then INITIAL=$ans; else warn "\"$ans\" no está en la lista"; fi
+      if in_list "$ans" "${LOOKS[@]}"; then INITIAL=$ans; else warn "\"$ans\" $(L "no está en la lista" "is not in the list")"; fi
     done
   fi
 else
   LOOKS=("${ALL_LOOKS[@]}")
 fi
 for l in "${LOOKS[@]}"; do
-  in_list "$l" "${ALL_LOOKS[@]}" || { echo "look desconocido: $l (hay: ${ALL_LOOKS[*]})"; exit 2; }
+  in_list "$l" "${ALL_LOOKS[@]}" || { echo "$(L "look desconocido" "unknown look"): $l (${ALL_LOOKS[*]})"; exit 2; }
 done
 if [ -z "$INITIAL" ]; then
   INITIAL=${LOOKS[0]}
@@ -185,10 +241,10 @@ for l in "${LOOKS[@]}"; do
   p=${LOOK_FONT[$l]:-}
   [ -n "$p" ] && ! in_list "$p" "${LOOK_PKGS[@]}" && LOOK_PKGS+=("$p")
 done
-say "Looks: ${LOOKS[*]} (empieza en $INITIAL)"
+say "Looks: ${LOOKS[*]} ($(L "empieza en" "starting with") $INITIAL)"
 
 # ── 1. Paquetes de los repos ─────────────────────────────────────────────────
-say "Paquetes de los repos oficiales (${#REPO_PKGS[@]} + ${#LOOK_PKGS[@]} fuentes de looks)"
+say "$(L "Paquetes de los repos oficiales" "Official repo packages") (${#REPO_PKGS[@]} + ${#LOOK_PKGS[@]} $(L "fuentes de looks" "look fonts"))"
 run sudo pacman -Syu --needed "${YES[@]}" "${REPO_PKGS[@]}" "${LOOK_PKGS[@]}"
 [ "$SDDM" = yes ] && run sudo pacman -S --needed "${YES[@]}" "${SDDM_PKGS[@]}"
 
@@ -197,7 +253,7 @@ if ((AUR)); then
   helper=""
   for h in yay paru; do command -v "$h" >/dev/null && { helper=$h; break; }; done
   if [ -z "$helper" ]; then
-    say "No hay ayudante de AUR: instalando yay-bin"
+    say "$(L "No hay ayudante de AUR: instalando yay-bin" "No AUR helper: installing yay-bin")"
     run sudo pacman -S --needed "${YES[@]}" base-devel git
     tmp=$(mktemp -d)
     run git clone --depth 1 https://aur.archlinux.org/yay-bin.git "$tmp/yay-bin"
@@ -205,15 +261,16 @@ if ((AUR)); then
     else (cd "$tmp/yay-bin" && makepkg -si "${YES[@]}"); fi
     helper=yay
   fi
-  say "Paquetes de AUR con $helper: ${AUR_PKGS[*]}"
+  say "$(L "Paquetes de AUR con" "AUR packages with") $helper: ${AUR_PKGS[*]}"
   run "$helper" -S --needed "${YES[@]}" "${AUR_PKGS[@]}"
 else
-  warn "Saltando AUR: sin swww/mpvpaper/wallust no hay wallpapers ni colores dinámicos"
+  warn "$(L "Saltando AUR: sin swww/mpvpaper/wallust no hay wallpapers ni colores dinámicos" \
+            "Skipping AUR: without swww/mpvpaper/wallust there are no wallpapers or dynamic colors")"
 fi
 
 # ── 3. Dotfiles ──────────────────────────────────────────────────────────────
 if ((NEW_MACHINE)); then
-  say "Copiando dotfiles a $CFG (lo que se pise va a $BACKUP)"
+  say "$(L "Copiando dotfiles a $CFG (lo que se pise va a $BACKUP)" "Copying dotfiles to $CFG (anything overwritten goes to $BACKUP)")"
   for d in "${CONFIG_DIRS[@]}"; do
     [ -d "$REPO_DIR/$d" ] || continue
     # respaldar solo los archivos que existen y son distintos
@@ -227,21 +284,21 @@ if ((NEW_MACHINE)); then
     run mkdir -p "$CFG/$d"
     run cp -a "$REPO_DIR/$d/." "$CFG/$d/"
   done
-  [ -d "$BACKUP" ] && say "Respaldo en $BACKUP"
+  [ -d "$BACKUP" ] && say "$(L "Respaldo en" "Backup in") $BACKUP"
 
   # el monitors.conf del repo es el de la máquina original (DP-1, posición
   # fija): aquí, que Hyprland detecte las pantallas. nwg-displays lo reescribe.
-  say "Pantallas: detección automática"
+  say "$(L "Pantallas: detección automática" "Displays: automatic detection")"
   if ((DRY)); then echo "   [dry-run] monitors.conf → monitor=,preferred,auto,1"
   else
     printf '# Detección automática. Para acomodar pantallas: nwg-displays\nmonitor=,preferred,auto,1\n' > "$CFG/hypr/monitors.conf"
   fi
 else
-  say "El repo ya vive en ~/.config: nada que copiar"
+  say "$(L "El repo ya vive en ~/.config: nada que copiar" "The repo already lives in ~/.config: nothing to copy")"
 fi
 
 # ── 4. Ajustes que no viven en el repo ───────────────────────────────────────
-say "Scripts ejecutables"
+say "$(L "Scripts ejecutables" "Executable scripts")"
 run chmod +x "$CFG"/hypr/scripts/*.sh "$CFG"/hypr/scripts/*.py
 
 # enlace al wallpaper de la otra máquina: roto aquí. FirstRun pone uno nuevo.
@@ -255,14 +312,15 @@ if ((NEW_MACHINE)); then
     in_list "$l" "${LOOKS[@]}" || run rm -rf "${looks_dir:?}/$l"
   done
 elif ((${#LOOKS[@]} < ${#ALL_LOOKS[@]})); then
-  warn "El repo vive en ~/.config: no se borran looks (serían archivos del repo)"
+  warn "$(L "El repo vive en ~/.config: no se borran looks (serían archivos del repo)" \
+            "The repo lives in ~/.config: looks are not deleted (they'd be repo files)")"
 fi
 
 # Los archivos vivos del repo son del último look con el que se hizo commit,
 # no necesariamente el elegido: aplicar el look encima (como LookSwitch.sh) para
 # que lo vivo y .current coincidan. Si ya hay look activo aquí, se respeta.
 if ((NEW_MACHINE)) || [ ! -f "$looks_dir/.current" ]; then
-  say "Look inicial: $INITIAL"
+  say "$(L "Look inicial" "Starting look"): $INITIAL"
   if ((DRY)); then echo "   [dry-run] copiar $looks_dir/$INITIAL/* sobre $CFG y .current = $INITIAL"
   else
     (cd "$looks_dir/$INITIAL" && find . -type f -printf '%P\n') | while read -r f; do
@@ -273,15 +331,26 @@ if ((NEW_MACHINE)) || [ ! -f "$looks_dir/.current" ]; then
   fi
 fi
 
-say "yazi como explorador de carpetas por defecto"
+# idioma de discada (menús, avisos, cheat sheet) y de rola
+if ((NEW_MACHINE)) || [[ " $* " == *" --lang="* ]]; then
+  say "$(L "Idioma: español" "Language: English")"
+  if ((DRY)); then echo "   [dry-run] hypr/discada.conf → LANGUAGE=$UI_LANG"
+  else
+    sed -i -E "s/^LANGUAGE=[a-z]+/LANGUAGE=$UI_LANG/" "$CFG/hypr/discada.conf"
+    rola_cfg="$CFG/rola/config.json"
+    [ -f "$rola_cfg" ] && sed -i -E "s/\"lang\": *\"[a-z]+\"/\"lang\": \"$UI_LANG\"/" "$rola_cfg"
+  fi
+fi
+
+say "$(L "yazi como explorador de carpetas por defecto" "yazi as the default folder browser")"
 desk="$HOME/.local/share/applications/yazi-kitty.desktop"
 if ((DRY)); then echo "   [dry-run] escribir $desk + xdg-mime default"
 else
   mkdir -p "$(dirname "$desk")"
-  cat > "$desk" <<'EOF'
+  cat > "$desk" <<EOF
 [Desktop Entry]
-Name=Archivos (yazi)
-Comment=Explorador de archivos en terminal
+Name=$(L "Archivos (yazi)" "Files (yazi)")
+Comment=$(L "Explorador de archivos en terminal" "Terminal file manager")
 Exec=kitty --class yazi -e yazi %f
 Icon=system-file-manager
 Terminal=false
@@ -292,26 +361,26 @@ EOF
   xdg-mime default yazi-kitty.desktop inode/directory
 fi
 
-say "rola (YouTube Music en la terminal) → ~/.local/bin/rola"
+say "rola ($(L "YouTube Music en la terminal" "YouTube Music in the terminal")) → ~/.local/bin/rola"
 if ! rustup show active-toolchain >/dev/null 2>&1; then run rustup default stable; fi
 run cargo install --git "$ROLA_REPO" --root "$HOME/.local" --locked
-case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "~/.local/bin no está en el PATH: agrégalo para correr rola" ;; esac
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "$(L "~/.local/bin no está en el PATH: agrégalo para correr rola" "~/.local/bin is not in PATH: add it to run rola")" ;; esac
 
-say "Carpetas de usuario y de wallpapers"
+say "$(L "Carpetas de usuario y de wallpapers" "User and wallpaper folders")"
 run xdg-user-dirs-update
 pics="$(xdg-user-dir PICTURES 2>/dev/null || echo "$HOME/Pictures")"
 run mkdir -p "$pics/wallpapers"
 
-say "Servicios"
+say "$(L Servicios Services)"
 run sudo systemctl enable --now NetworkManager.service
-run sudo systemctl enable --now bluetooth.service || warn "bluetooth no arrancó (¿no hay adaptador?)"
+run sudo systemctl enable --now bluetooth.service || warn "$(L "bluetooth no arrancó (¿no hay adaptador?)" "bluetooth didn't start (no adapter?)")"
 
-say "Caché de fuentes"
+say "$(L "Caché de fuentes" "Font cache")"
 run fc-cache -f
 
 # ── 5. Pantalla de login ─────────────────────────────────────────────────────
 if [ "$SDDM" = yes ]; then
-  say "SDDM + tema simple_sddm_2"
+  say "SDDM + $(L tema theme) simple_sddm_2"
   if [ ! -d "$SDDM_THEME_DIR" ]; then
     run sudo git clone --depth 1 "$SDDM_THEME_REPO" "$SDDM_THEME_DIR"
   fi
@@ -324,15 +393,18 @@ if [ "$SDDM" = yes ]; then
   fi
   run sudo systemctl enable sddm.service
 else
-  say "Pantalla de login: se deja la que ya hay"
+  say "$(L "Pantalla de login: se deja la que ya hay" "Login screen: keeping the current one")"
 fi
 
 # ── Listo ────────────────────────────────────────────────────────────────────
 echo
-say "Listo. Al entrar a Hyprland por primera vez se pone un wallpaper, se"
-say "generan los colores y sale un aviso con los atajos (SUPER+H)."
-echo "   Tus wallpapers (imágenes o videos) van en $pics/wallpapers"
+say "$(L "Listo, discada servida. Al entrar a Hyprland por primera vez se pone un" \
+        "Done, discada is served. On the first Hyprland login a wallpaper is set,")"
+say "$(L "wallpaper, se generan los colores y sale un aviso con los atajos." \
+        "colors are generated and a notification shows the shortcuts.")"
+echo "   SUPER+H $(L atajos shortcuts) · SUPER+Shift+E $(L ajustes settings) · SUPER+T looks"
+echo "   $(L "Tus wallpapers (imágenes o videos) van en" "Your wallpapers (images or videos) go in") $pics/wallpapers"
 if ((!DRY)) && [ -t 0 ]; then
-  read -r -p "¿Reiniciar ahora? [s/N] " ans
+  read -r -p "$(L "¿Reiniciar ahora? [s/N]" "Reboot now? [y/N]") " ans
   case "$ans" in s|S|y|Y) sudo systemctl reboot ;; esac
 fi

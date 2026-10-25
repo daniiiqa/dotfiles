@@ -1,87 +1,135 @@
 #!/usr/bin/env bash
-# Cheat sheet (SUPER+H) — lo esencial. La lista completa y siempre al día
-# está en SUPER+Shift+K (sale directo de conf/keybinds.conf).
+# Cheat sheet (SUPER+H) — lo esencial, en rofi con el estilo del look actual.
+# Escribir filtra. La lista completa y siempre al día está en SUPER+Shift+K
+# (sale directo de conf/keybinds.conf). Idioma: hypr/discada.conf.
+#
+# Formato de la lista: "# Sección|Section" o "tecla|acción|action[|key]"
+# (la última columna solo si la tecla también se traduce).
 
 pidof rofi >/dev/null && pkill rofi
 pidof yad >/dev/null && pkill yad
+. "$HOME/.config/hypr/scripts/lang.sh"
 
-GDK_BACKEND=wayland yad \
-  --title="Atajos" \
-  --center \
-  --no-buttons \
-  --list \
-  --column="Tecla" \
-  --column="Acción" \
-  --timeout-indicator=bottom \
-  "Esc"                  "Cerrar esta ventana" \
-  "" "" \
-  "── Apps ──"           "" \
-  "Super Space"          "Lanzador de apps" \
-  "Super Enter"          "Terminal" \
-  "Super Shift Enter"    "Terminal dropdown" \
-  "Super E"              "Archivos (yazi)" \
-  "Super B"              "Navegador" \
-  "Super S"              "Buscar en la web" \
-  "Super Ctrl S"         "Cambiar de ventana" \
-  "Super Alt V"          "Portapapeles" \
-  "Super Alt E"          "Emojis" \
-  "Super Alt C"          "Calculadora" \
-  "Super Shift N"        "Notificaciones" \
-  "Super Shift E"        "Ajustes rápidos" \
-  "Super Shift K"        "Buscar todos los atajos" \
-  "" "" \
-  "── Look ──"           "" \
-  "Super T"              "Cambiar look" \
-  "Super W"              "Elegir wallpaper" \
-  "Super Shift W"        "Efectos de wallpaper" \
-  "Ctrl Alt W"           "Wallpaper aleatorio" \
-  "Super Alt R"          "Recargar barra y menús" \
-  "Super Ctrl Alt B"     "Mostrar/ocultar waybar" \
-  "Super O"              "Opacidad de la ventana" \
-  "Super Alt O"          "Blur normal/ligero" \
-  "Super Shift G"        "Game mode" \
-  "" "" \
-  "── Barra ──"          "" \
-  "Click en app"         "Enfocar (otra vez: siguiente ventana)" \
-  "Click medio en app"   "Cerrar esa ventana" \
-  "App tenue"            "Fijada y cerrada: click la abre" \
-  "Mouse sobre ⊞ N"      "Ver el resto (con 6+ apps)" \
-  "Click en el ojo"      "Stay awake: no bloquear ni suspender" \
-  "Barras de audio"      "Salen solas cuando suena música" \
-  "" "" \
-  "── Ventanas ──"       "" \
-  "Super C"              "Cerrar ventana" \
-  "Super Shift C"        "Matar proceso" \
-  "Super F"              "Flotante" \
-  "Super Shift F"        "Pantalla completa" \
-  "Super Ctrl F"         "Maximizar" \
-  "Super flechas"        "Mover el foco" \
-  "Super Ctrl flechas"   "Mover ventana" \
-  "Super Alt flechas"    "Intercambiar ventana" \
-  "Super Shift flechas"  "Redimensionar" \
-  "Super J / K"          "Siguiente / anterior ventana" \
-  "Super Alt L"          "Dwindle / Master" \
-  "Super Shift I"        "Girar división (dwindle)" \
-  "Super G"              "Agrupar" \
-  "" "" \
-  "── Workspaces ──"     "" \
-  "Super 1-0"            "Ir a workspace" \
-  "Super Shift 1-0"      "Mover ventana a workspace" \
-  "Super Ctrl 1-0"       "Mover sin seguirla" \
-  "Super Tab"            "Workspace siguiente" \
-  "Super U / Shift U"    "Workspace especial / mover ahí" \
-  "Super Alt scroll"     "Zoom" \
-  "" "" \
-  "── Capturas ──"       "" \
-  "Super Print"          "Pantalla" \
-  "Super Shift Print"    "Área" \
-  "Super Shift S"        "Área + editar (swappy)" \
-  "Alt Print"            "Ventana activa" \
-  "Super Ctrl Print"     "Pantalla en 5 s" \
-  "" "" \
-  "── Sistema ──"        "" \
-  "Alt Shift"            "Cambiar distribución de teclado" \
-  "Teclas multimedia"    "Volumen, mute, play/pausa, siguiente" \
-  "Ctrl Alt L"           "Bloquear" \
-  "Ctrl Alt P"           "Menú de apagado" \
-  "Ctrl Alt Del"         "Salir de Hyprland"
+read -r -d '' SHEET <<'EOF'
+# Apps|Apps
+Super Space|Lanzador de apps|App launcher
+Super Enter|Terminal|Terminal
+Super Shift Enter|Terminal dropdown|Dropdown terminal
+Super E|Archivos (yazi)|Files (yazi)
+Super B|Navegador|Browser
+Super M|Música (rola)|Music (rola)
+Super S|Buscar en la web|Web search
+Super Ctrl S|Cambiar de ventana|Window switcher
+Super Alt V|Portapapeles|Clipboard
+Super Alt E|Emojis|Emoji
+Super Alt C|Calculadora|Calculator
+Super Shift N|Notificaciones|Notifications
+Super Shift E|Ajustes de discada|discada settings
+Super Shift K|Buscar todos los atajos|Search all shortcuts
+# Look|Look
+Super T|Cambiar look (arriba: shader on/off)|Switch look (top: shader on/off)
+Super W|Elegir wallpaper|Pick wallpaper
+Super Shift W|Efectos de wallpaper|Wallpaper effects
+Ctrl Alt W|Wallpaper aleatorio|Random wallpaper
+Super Alt R|Recargar barra y menús|Reload bar and menus
+Super Ctrl Alt B|Mostrar/ocultar waybar|Show/hide waybar
+Super O|Opacidad de la ventana|Window opacity
+Super Alt O|Blur normal/ligero|Normal/light blur
+Super Shift G|Game mode|Game mode
+# Barra|Bar
+Click en app|Enfocar (otra vez: siguiente ventana)|Focus (again: next window)|Click an app
+Click medio en app|Cerrar esa ventana|Close that window|Middle-click an app
+App tenue|Fijada y cerrada: click la abre|Pinned and closed: click opens it|Dimmed app
+Mouse sobre ⊞ N|Ver el resto (con 6+ apps)|See the rest (6+ apps)|Hover ⊞ N
+Click en el ojo|Stay awake: no bloquear ni suspender|Stay awake: no lock or sleep|Click the eye
+Barras de audio|Música: click anterior · medio pausa · derecho siguiente|Music: click previous · middle pause · right next|Audio bars
+Rueda en las barras|Volumen (en pausa quedan planas y tenues)|Volume (flat and dim while paused)|Wheel on the bars
+Grabación (con tiempo)|click detiene · medio pausa · derecho menú|click stops · middle pauses · right menu|Recording (timer)
+Replay en la barra|Encendido: click guarda|On: click saves|Replay on the bar
+# Grabar|Record
+Alt Z|Menú de grabación|Recording menu
+Alt F9|Grabar pantalla (otra vez: detener)|Record screen (again: stop)
+Alt Ctrl F9|Grabar una región|Record a region
+Alt Shift F9|Grabar la ventana activa|Record the active window
+Alt F7|Pausar / seguir|Pause / resume
+Alt F10|Guardar replay|Save replay
+Alt Shift F10|Replay on/off (arranca al iniciar sesión)|Replay on/off (starts at login)
+Al grabar|No molestar automático; videos en ~/Videos|Do not disturb on; videos in ~/Videos|While recording
+# Rola (dentro del reproductor)|Rola (inside the player)
+/|Buscar|Search
+Enter|Reproducir / abrir|Play / open
+Espacio|Pausa|Pause|Space
+n  p|Siguiente / anterior|Next / previous
+<  >|−5 s / +5 s|−5 s / +5 s
++  -|Volumen|Volume
+s  r  a|Aleatorio · repetir · autoplay|Shuffle · repeat · autoplay
+z|Mandar a la cola|Add to queue
+R|Radio de la canción|Song radio
+L|Me gusta|Like
+P|Añadir a una playlist|Add to a playlist
+y  c|Letra · portada|Lyrics · cover
+h  l  Tab|Cambiar de panel|Switch panel
+j  k  g  G|Moverse|Move around
+Backspace|Atrás|Back
+o  ?|Ajustes · ayuda|Settings · help
+d  J  K|En la cola: quitar · mover|In the queue: remove · move
+q|Salir (guarda la cola y por dónde ibas)|Quit (keeps the queue and position)
+# Ventanas|Windows
+Super C|Cerrar ventana|Close window
+Super Shift C|Matar proceso|Kill process
+Super F|Flotante|Float
+Super Shift F|Pantalla completa|Fullscreen
+Super Ctrl F|Maximizar|Maximize
+Super flechas|Mover el foco|Move focus|Super arrows
+Super Ctrl flechas|Mover ventana|Move window|Super Ctrl arrows
+Super Alt flechas|Intercambiar ventana|Swap window|Super Alt arrows
+Super Shift flechas|Redimensionar|Resize|Super Shift arrows
+Super J  K|Siguiente / anterior ventana|Next / previous window
+Super Alt L|Dwindle / Master|Dwindle / Master
+Super Shift I|Girar división (dwindle)|Rotate split (dwindle)
+Super G|Agrupar|Group
+# Workspaces|Workspaces
+Super 1-0|Ir a workspace|Go to workspace
+Super Shift 1-0|Mover ventana a workspace|Move window to workspace
+Super Ctrl 1-0|Mover sin seguirla|Move without following
+Super Tab|Workspace siguiente|Next workspace
+Super U  Shift U|Workspace especial / mover ahí|Special workspace / move there
+Super Alt rueda|Zoom|Zoom|Super Alt wheel
+# Capturas|Screenshots
+Super Print|Pantalla|Screen
+Super Shift Print|Área|Area
+Super Shift S|Área + editar (swappy)|Area + edit (swappy)
+Alt Print|Ventana activa|Active window
+Super Ctrl Print|Pantalla en 5 s|Screen in 5 s
+# Sistema|System
+Alt Shift|Cambiar distribución de teclado|Switch keyboard layout
+Teclas multimedia|Volumen, mute, play/pausa, siguiente|Volume, mute, play/pause, next|Media keys
+Ctrl Alt L|Bloquear|Lock
+Ctrl Alt P|Menú de apagado|Power menu
+Ctrl Alt Del|Salir de Hyprland|Exit Hyprland
+EOF
+
+esc() { local s=${1//&/&amp;}; s=${s//</&lt;}; printf '%s' "${s//>/&gt;}"; }
+
+rows=() headers=()
+while IFS='|' read -r key es en key_en; do
+  [ -z "$key" ] && continue
+  if [[ $key == "# "* ]]; then
+    headers+=("${#rows[@]}")
+    rows+=("<b>$(esc "$(L "${key#\# }" "$es")")</b>")
+  else
+    [ "$DISCADA_LANG" = en ] && [ -n "$key_en" ] && key=$key_en
+    act=$(L "$es" "$en")
+    # la tecla en negrita y rellenada a lo ancho (las fuentes de rofi son mono)
+    pad=$(( 21 - ${#key} )); (( pad < 1 )) && pad=1
+    rows+=("  <b>$(esc "$key")</b>$(printf '%*s' $pad '')$(esc "$act")")
+  fi
+done <<<"$SHEET"
+
+look=$(cat "$HOME/.config/hypr/looks/.current" 2>/dev/null)
+printf '%s\n' "${rows[@]}" |
+  rofi -dmenu -i -markup-rows -no-custom -p "$(L atajos shortcuts)" \
+    -a "$(IFS=,; echo "${headers[*]}")" \
+    -config "$HOME/.config/rofi/config-cheatsheet.rasi" \
+    -mesg "discada · $(L "escribe para filtrar · Super Shift K: todos los atajos" "type to filter · Super Shift K: all shortcuts")${look:+ · look: $look}" \
+    >/dev/null

@@ -65,6 +65,31 @@ MORE_ICON = ""
 # "_more": …}. Lo copia LookSwitch; se relee cuando cambia (el reload de
 # Hyprland al cambiar de look dispara configreloaded → render).
 LOOK_ICONS = os.path.expanduser("~/.config/waybar/appicons.json")
+
+
+def lang():
+    """Idioma de discada (hypr/discada.conf → LANGUAGE=es|en); por defecto inglés."""
+    try:
+        for line in open(os.path.expanduser("~/.config/hypr/discada.conf")):
+            if line.startswith("LANGUAGE="):
+                return "es" if line.split("=", 1)[1].split()[0] == "es" else "en"
+    except (OSError, IndexError):
+        pass
+    return "en"
+
+
+# los nombres bonitos son también las claves de appicons.json: se traducen
+# solo al mostrarlos
+EN = {"Juego": "Game", "Archivos": "Files", "Arte": "Art", "Calculadora": "Calculator",
+      "Texto": "Text", "Ajustes": "Settings"}
+
+
+def T(es, en):
+    return es if lang() == "es" else en
+
+
+def display_name(name):
+    return name if lang() == "es" else EN.get(name, name)
 _look = {"mtime": None, "icons": {}}
 
 
@@ -155,11 +180,11 @@ def render():
         wins = apps.get(cls, [])
         pin = ["pinned"] if cls in pins else []
         if not wins:  # fijada y cerrada
-            entries.append((glyph, cls, f"<b>{esc(name)}</b>\nclick: abrir", ["app", "closed"] + pin))
+            entries.append((glyph, cls, f"<b>{esc(display_name(name))}</b>\n" + T("click: abrir", "click: open"), ["app", "closed"] + pin))
             continue
         titles = "\n".join("· " + esc(w["title"][:60]) for w in wins)
-        tip = f"<b>{esc(name)}</b>" + (f"  ({len(wins)})" if len(wins) > 1 else "")
-        tip += "\n" + titles + "\nclick: enfocar · medio: cerrar"
+        tip = f"<b>{esc(display_name(name))}</b>" + (f"  ({len(wins)})" if len(wins) > 1 else "")
+        tip += "\n" + titles + T("\nclick: enfocar · medio: cerrar", "\nclick: focus · middle: close")
         klass = ["app"] + (["active"] if cls == active_cls else []) + \
                 (["multi"] if len(wins) > 1 else []) + pin
         entries.append((glyph, cls, tip, klass))
@@ -180,10 +205,10 @@ def render():
             write(slot)
 
     if drawer:
-        names = "\n".join("· " + esc(icon_for(e[1])[1]) for e in drawer)
+        names = "\n".join("· " + esc(display_name(icon_for(e[1])[1])) for e in drawer)
         k = ["app-more"] + (["active"] if any("active" in e[3] for e in drawer) else [])
         write("more", f"{look_icons().get('_more', MORE_ICON)} {len(drawer)}", "",
-              f"<b>{len(drawer)} apps más</b>\n{names}\npasa el mouse para verlas", k)
+              f"<b>{len(drawer)} " + T("apps más", "more apps") + f"</b>\n{names}\n" + T("pasa el mouse para verlas", "hover to see them"), k)
     else:
         write("more")
     for i in range(DRAWER_SLOTS):
