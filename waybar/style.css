@@ -1,96 +1,87 @@
-/* Look neon — dos islas oscuras con los extremos interiores cortados en
-   diagonal (degradados con corte duro), texto con halo, workspace activo
-   brillando. Colores de wallust (harddark16 + saturación). */
+/* Dany Minimal — barra flotante delgada, sin cajas por módulo.
+   Texto en foreground, iconos secundarios atenuados, color12 como único acento.
+   Layout: config */
 
 @import '../../.config/waybar/wallust/colors-waybar.css';
 
-@define-color neon @color12;
-@define-color neon2 @color13;
-@define-color neon3 @color14;
-@define-color slab alpha(@background, 0.96);
+@define-color accent @color12;
+@define-color muted alpha(@foreground, 0.45);
+@define-color faint alpha(@foreground, 0.18);
+@define-color critical #e06c75;
 
 * {
 	font-family: "JetBrainsMono Nerd Font";
-	font-weight: 700;
+	font-weight: 500;
 	font-size: 13px;
 	min-height: 0;
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
-	text-shadow: 0 0 6px alpha(@color12, 0.7);
+	text-shadow: none;
 }
 
 window#waybar {
-	background: transparent;
+	background: alpha(@background, 0.88);
+	border: 1px solid @faint;
+	border-radius: 6px;
 	color: @foreground;
 }
 
-/* islas: el corte en diagonal sale de un degradado con paradas duras.
-   Geometría para barra de 32px: la diagonal va de 22px adentro (arriba) a la
-   esquina (abajo) — ángulo 235.5deg, parada a 18.1px. El trazo neón va sobre
-   la diagonal y la línea de abajo termina justo donde la diagonal toca fondo.
-   Si cambia "height" en el config, hay que recalcular. */
-.modules-left {
-	background-image:
-		linear-gradient(to top, @neon 2px, transparent 2px),
-		linear-gradient(235.5deg, transparent 18.1px, @neon 18.1px, @neon 19.8px, alpha(@neon, 0.25) 19.8px, @slab 23px);
-	padding: 0 28px 0 6px;
-}
-
-.modules-right {
-	background-image:
-		linear-gradient(to top, @neon2 2px, transparent 2px),
-		linear-gradient(124.5deg, transparent 18.1px, @neon2 18.1px, @neon2 19.8px, alpha(@neon2, 0.25) 19.8px, @slab 23px);
-	padding: 0 6px 0 28px;
-}
-
-/* el reloj flota solo sobre el wallpaper (sin losa) */
-.modules-center {
-	background: transparent;
+window#waybar.hidden {
+	opacity: 0.4;
 }
 
 tooltip {
 	background: @background;
-	border: 1px solid @neon;
-	border-radius: 2px;
+	border: 1px solid @faint;
+	border-radius: 6px;
 }
 
 tooltip label {
 	color: @foreground;
-	padding: 4px 6px;
-	text-shadow: none;
+	padding: 2px 4px;
+}
+
+/* ---- workspaces ---- */
+#workspaces {
+	margin-left: 6px;
 }
 
 #workspaces button {
-	color: alpha(@foreground, 0.5);
-	background: transparent;
+	color: @muted;
 	padding: 0 8px;
-	text-shadow: none;
-	transition: all 150ms ease;
+	margin: 4px 1px;
+	background: transparent;
+	border-radius: 4px;
+	transition: all 120ms ease;
 }
 
 #workspaces button.empty {
-	color: alpha(@foreground, 0.2);
+	color: @faint;
 }
 
 #workspaces button.active {
 	color: @background;
-	background: @neon;
-	box-shadow: 0 0 12px @neon;
+	background: @accent;
 }
 
 #workspaces button.urgent {
-	color: @background;
-	background: @neon2;
-	box-shadow: 0 0 12px @neon2;
+	color: @critical;
 }
 
 #workspaces button:hover {
-	color: @neon;
-	text-shadow: 0 0 6px @neon;
+	color: @foreground;
+	background: @faint;
 }
 
+#workspaces button.active:hover {
+	color: @background;
+	background: @accent;
+}
+
+/* ---- módulos ---- */
 #mpris,
+#clock,
 #cpu,
 #memory,
 #disk,
@@ -100,72 +91,65 @@ tooltip label {
 #bluetooth,
 #idle_inhibitor,
 #custom-swaync,
+#custom-dot_update,
 .app,
 .app-more,
 #custom-power {
 	color: @foreground;
-	background: transparent;
 	padding: 0 8px;
+	background: transparent;
 }
 
-/* la hora flota sola en medio, con halo doble */
 #clock {
-	color: @foreground;
-	font-size: 15px;
-	font-weight: 800;
-	letter-spacing: 2px;
-	padding: 0 14px;
-	/* contorno oscuro pegado al texto para que se lea con fondos claros,
-	   y encima el halo doble */
-	text-shadow: 0 0 2px alpha(@background, 0.95), 0 0 4px alpha(@background, 0.85),
-		0 0 8px @neon, 0 0 18px alpha(@neon2, 0.8);
+	font-weight: 700;
+	letter-spacing: 1px;
 }
 
 #mpris {
-	color: @neon2;
-	font-style: italic;
-	text-shadow: 0 0 6px alpha(@neon2, 0.7);
+	color: @muted;
+	margin-left: 4px;
 }
-
-#pulseaudio,
-#network,
-#bluetooth { color: @foreground; text-shadow: 0 0 6px @neon; }
 
 #temperature,
 #cpu,
 #memory,
 #disk {
-	color: alpha(@foreground, 0.7);
-	text-shadow: none;
+	color: @muted;
 }
 
 #pulseaudio.muted,
 #network.disconnected,
 #bluetooth.disabled,
 #bluetooth.off {
-	color: alpha(@foreground, 0.3);
-	text-shadow: none;
+	color: @faint;
 }
 
 
 #temperature.critical {
-	color: @neon2;
+	color: @critical;
 }
 
+.app,
+.app-more {
+	font-size: 15px;
+	padding: 0 5px;
+}
+
+
 #custom-power {
-	color: @neon2;
-	text-shadow: 0 0 8px @neon2;
+	color: @accent;
+	margin-right: 4px;
 }
 
 #custom-power:hover,
+#custom-swaync:hover,
 #pulseaudio:hover,
 #network:hover,
-#bluetooth:hover,
-#custom-swaync:hover {
-	color: @neon;
-	text-shadow: 0 0 10px @neon;
+#bluetooth:hover {
+	color: @accent;
 }
 
+/* sliders de los drawers */
 #backlight-slider slider,
 #pulseaudio-slider slider {
 	min-width: 0;
@@ -178,14 +162,24 @@ tooltip label {
 #pulseaudio-slider trough {
 	min-width: 80px;
 	min-height: 4px;
-	background: alpha(@foreground, 0.15);
+	border-radius: 2px;
+	background: @faint;
 }
 
 #backlight-slider highlight,
 #pulseaudio-slider highlight {
 	min-height: 4px;
-	background-image: linear-gradient(to right, @neon, @neon2);
-	box-shadow: 0 0 8px @neon;
+	border-radius: 2px;
+	background: @accent;
+}
+
+@keyframes blink {
+	to { color: @background; }
+}
+
+#battery.critical:not(.charging) {
+	color: @critical;
+	animation: blink 1.5s steps(12) infinite alternate;
 }
 
 /* apps abiertas (AppStrip.py): iconos de la fuente, todos en el color del
@@ -193,8 +187,7 @@ tooltip label {
    (aparece con 6+ apps). */
 .app,
 .app-more {
-	color: @neon;
-	text-shadow: 0 0 8px @neon;
+	color: @accent;
 }
 
 .app {
@@ -203,7 +196,7 @@ tooltip label {
 }
 
 .app.active {
-	border-bottom-color: @neon;
+	border-bottom-color: @accent;
 }
 
 .app-more {
@@ -217,15 +210,14 @@ tooltip label {
 
 /* la nota de música (mpris) va en el color del tema, como los iconos de apps */
 #mpris {
-	color: @neon;
+	color: @accent;
 }
 
 /* visualizador (Visualizer.py): barras braille, solo mientras suena música */
 #custom-visualizer {
-	color: @neon;
+	color: @accent;
 	padding: 0 6px;
 	letter-spacing: 0;
-	text-shadow: 0 0 6px @neon;
 }
 
 /* iconos alineados: la variante Mono de la Nerd Font mete cada icono en una
