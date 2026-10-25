@@ -10,7 +10,7 @@
 @define-color dim alpha(@foreground, 0.4);
 
 * {
-	font-family: "JetBrainsMono Nerd Font";
+	font-family: "SpaceMono Nerd Font";
 	font-weight: 700;
 	font-size: 12px;
 	letter-spacing: 1px;

@@ -18,7 +18,7 @@
 @define-color nord_blue #5E81AC;
 
 window {
-    font-family: "JetBrainsMono Nerd Font";
+    font-family: "Iosevka Nerd Font";
     font-size: 12pt;
     color: @foreground;
     background-color: alpha(@background, 0.92);

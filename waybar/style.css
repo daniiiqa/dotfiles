@@ -10,7 +10,7 @@
 @define-color slab alpha(@background, 0.96);
 
 * {
-	font-family: "JetBrainsMono Nerd Font";
+	font-family: "GeistMono Nerd Font";
 	font-weight: 700;
 	font-size: 13px;
 	min-height: 0;

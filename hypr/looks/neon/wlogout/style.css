@@ -4,7 +4,7 @@
 @import '../../.config/waybar/wallust/colors-waybar.css';
 
 window {
-    font-family: "JetBrainsMono Nerd Font";
+    font-family: "MonaspiceKr Nerd Font";
     font-weight: 700;
     font-size: 12pt;
     color: @foreground;
