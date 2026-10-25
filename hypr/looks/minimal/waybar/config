@@ -16,7 +16,6 @@
 	"margin-bottom": 0,
 	"modules-left": [
 		"hyprland/workspaces#minimal",
-		"mpris",
 		"custom/visualizer",
 		"custom/app-i1",
 		"custom/app-i2",
@@ -32,6 +31,7 @@
 		"clock#minimal"
 	],
 	"modules-right": [
+		"custom/recorder",
 		"group/mobo_drawer",
 		"group/audio",
 		"network",
@@ -50,29 +50,6 @@
 		"persistent-workspaces": {
 			"*": 5
 		}
-	},
-	"mpris": {
-		"interval": 10,
-		"format": "{player_icon}",
-		"format-paused": "{status_icon}",
-		"on-click-middle": "playerctl play-pause",
-		"on-click": "playerctl previous",
-		"on-click-right": "playerctl next",
-		"scroll-step": 5.0,
-		"on-scroll-up": "$HOME/.config/hypr/scripts/Volume.sh --inc",
-		"on-scroll-down": "$HOME/.config/hypr/scripts/Volume.sh --dec",
-		"smooth-scrolling-threshold": 1,
-		"tooltip": true,
-		"tooltip-format": "{status_icon} {dynamic}\nclick: anterior · medio: pausa · derecho: siguiente",
-		"player-icons": {
-			"default": ""
-		},
-		"status-icons": {
-			"paused": "",
-			"playing": "",
-			"stopped": ""
-		},
-		"max-length": 30
 	},
 	"clock#minimal": {
 		"interval": 30,
@@ -473,12 +450,28 @@
 			"custom/app-d8"
 		]
 	},
+	"custom/recorder": {
+		"exec": "$HOME/.config/hypr/scripts/Recorder.sh status",
+		"return-type": "json",
+		"interval": 1,
+		"signal": 10,
+		"format": "{}",
+		"tooltip": true,
+		"on-click": "$HOME/.config/hypr/scripts/Recorder.sh click",
+		"on-click-middle": "$HOME/.config/hypr/scripts/Recorder.sh pause",
+		"on-click-right": "$HOME/.config/hypr/scripts/Recorder.sh menu"
+	},
 	"custom/visualizer": {
 		"exec": "$HOME/.config/hypr/scripts/Visualizer.py",
 		"return-type": "json",
 		"format": "{}",
-		"tooltip": false,
-		"escape": true,
-		"on-click": "playerctl play-pause"
+		"tooltip": true,
+		"escape": false,
+		"on-click": "playerctl previous",
+		"on-click-middle": "playerctl play-pause",
+		"on-click-right": "playerctl next",
+		"on-scroll-up": "$HOME/.config/hypr/scripts/Volume.sh --inc",
+		"on-scroll-down": "$HOME/.config/hypr/scripts/Volume.sh --dec",
+		"smooth-scrolling-threshold": 1
 	}
 }

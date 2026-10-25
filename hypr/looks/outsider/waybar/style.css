@@ -214,7 +214,8 @@ tooltip label {
 	color: @rose;
 }
 
-/* visualizador (Visualizer.py): barras braille, solo mientras suena música */
+/* visualizador (Visualizer.py): el estilo de barras sale de visualizer.json;
+   también son los controles de música (en pausa quedan planas) */
 #custom-visualizer {
 	color: @rose;
 	padding: 0 6px;
@@ -235,4 +236,32 @@ tooltip label {
 #custom-visualizer {
 	font-family: "Adwaita Mono";
 	font-size: 14px;
+}
+
+#custom-visualizer.paused {
+	opacity: 0.45;
+}
+
+/* grabador (Recorder.sh): rojo y pulsando mientras graba, color del tema con
+   solo el replay encendido; oculto si no hay nada */
+#custom-recorder {
+	color: @rose;
+	padding: 0 6px;
+}
+
+#custom-recorder.recording,
+#custom-recorder.paused {
+	color: @rec;
+}
+
+#custom-recorder.recording {
+	animation: rec-pulse 1.6s ease-in-out infinite;
+}
+
+#custom-recorder.paused {
+	opacity: 0.6;
+}
+
+@keyframes rec-pulse {
+	50% { opacity: 0.5; }
 }

@@ -34,8 +34,8 @@ REPO_PKGS=(
   # terminal y herramientas de terminal
   kitty fastfetch btop cava
   yazi fd ripgrep zoxide resvg 7zip poppler ffmpegthumbnailer jq fzf
-  # portapapeles y capturas
-  wl-clipboard cliphist grim slurp swappy
+  # portapapeles, capturas y grabación (Recorder.sh)
+  wl-clipboard cliphist grim slurp swappy gpu-screen-recorder
   # audio (visualizador incluido)
   pipewire wireplumber pipewire-pulse pamixer pavucontrol playerctl
   # wallpapers de video y colores
