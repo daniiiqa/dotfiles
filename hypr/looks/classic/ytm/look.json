@@ -1,0 +1,8 @@
+{
+  "borders": "auto",
+  "bar": "line",
+  "case": "normal",
+  "select": "fill",
+  "tint": "color",
+  "transparent": true
+}

@@ -1,0 +1,9 @@
+{
+  "borders": "dashed",
+  "bar": "ascii",
+  "icons": false,
+  "case": "normal",
+  "select": "inverse",
+  "tint": "phosphor",
+  "transparent": false
+}
