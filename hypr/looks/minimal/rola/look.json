@@ -1,6 +1,7 @@
 {
   "borders": "auto",
   "bar": "line",
+  "labels": "short",
   "case": "normal",
   "select": "bar",
   "tint": "color",

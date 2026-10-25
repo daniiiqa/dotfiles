@@ -1,7 +1,7 @@
 {
   "borders": "thick",
   "bar": "blocks",
-  "icons": false,
+  "labels": "words",
   "case": "upper",
   "select": "bar",
   "tint": "color",

@@ -1,6 +1,7 @@
 {
   "borders": "double",
   "bar": "knob",
+  "labels": "icons",
   "case": "normal",
   "select": "inverse",
   "tint": "color",

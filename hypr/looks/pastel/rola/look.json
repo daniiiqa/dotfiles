@@ -1,6 +1,7 @@
 {
   "borders": "auto",
   "bar": "dots",
+  "labels": "icons",
   "case": "lower",
   "select": "fill",
   "tint": "color",

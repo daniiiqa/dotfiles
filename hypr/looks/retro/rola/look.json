@@ -1,7 +1,7 @@
 {
   "borders": "dashed",
   "bar": "ascii",
-  "icons": false,
+  "labels": "short",
   "case": "normal",
   "select": "inverse",
   "tint": "phosphor",
