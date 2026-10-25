@@ -81,6 +81,7 @@ fi
 hyprctl reload >/dev/null
 pkill -SIGUSR2 waybar
 swaync-client -rs >/dev/null 2>&1
+"$cfg/hypr/scripts/SDDMWallpaperSync.sh" >/dev/null 2>&1   # sddm: fuente, forma y paleta del look
 pkill -USR1 -x kitty
 pkill rofi 2>/dev/null
 
