@@ -29,7 +29,7 @@ configuration {
     ok:                         #7f7463;
     alt:                        #867261;
     cool:                       #727b7b;
-    font:                       "Martian Mono Nerd Font 13";
+    font:                       "MartianMono Nerd Font 13";
     background-color:           transparent;
     text-color:                 @fg;
 }

@@ -18,7 +18,7 @@
 @define-color tape_blue #727b7b;
 
 window {
-    font-family: "Martian Mono Nerd Font";
+    font-family: "MartianMono Nerd Font";
     font-size: 12pt;
     color: @foreground;
     background-color: alpha(@background, 0.92);

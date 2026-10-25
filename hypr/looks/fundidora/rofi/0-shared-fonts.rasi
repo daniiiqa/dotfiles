@@ -5,11 +5,11 @@
 
 /*****-- Fonts Size and Font Size -----*****/
 configuration {
-font: "Martian Mono Nerd Font Bold 13";
+font: "MartianMono Nerd Font Bold 13";
 }
 
 
 /*****-- Elements Font Size -----*****/
 element-text {
-font: "Martian Mono Nerd Font Bold 11";
+font: "MartianMono Nerd Font Bold 11";
 }
