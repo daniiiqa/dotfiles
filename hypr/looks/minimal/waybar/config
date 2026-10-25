@@ -65,12 +65,12 @@
 		"tooltip": true,
 		"tooltip-format": "{status_icon} {dynamic}\nclick: anterior · medio: pausa · derecho: siguiente",
 		"player-icons": {
-			"default": ""
+			"default": ""
 		},
 		"status-icons": {
-			"paused": "",
-			"playing": "",
-			"stopped": ""
+			"paused": "",
+			"playing": "",
+			"stopped": ""
 		},
 		"max-length": 30
 	},
@@ -117,16 +117,16 @@
 		"format-critical": "{temperatureC}°C {icon}",
 		"format": "{temperatureC}°C {icon}",
 		"format-icons": [
-			"󰈸"
+			""
 		],
 		"on-click-right": "$HOME/.config/hypr/scripts/WaybarScripts.sh --nvtop"
 	},
 	"cpu": {
-		"format": "{usage}% 󰍛",
+		"format": "{usage}% ",
 		"interval": 1,
 		"min-length": 5,
 		"format-alt-click": "click",
-		"format-alt": "{icon0}{icon1}{icon2}{icon3} {usage:>2}% 󰍛",
+		"format-alt": "{icon0}{icon1}{icon2}{icon3} {usage:>2}% ",
 		"format-icons": [
 			"▁",
 			"▂",
@@ -141,8 +141,8 @@
 	},
 	"memory": {
 		"interval": 10,
-		"format": "{used:0.1f}G 󰾆",
-		"format-alt": "{percentage}% 󰾆",
+		"format": "{used:0.1f}G ",
+		"format-alt": "{percentage}% ",
 		"format-alt-click": "click",
 		"tooltip": true,
 		"tooltip-format": "{used:0.1f}GB/{total:0.1f}G",
@@ -151,7 +151,7 @@
 	"disk": {
 		"interval": 30,
 		"path": "/",
-		"format": "{percentage_used}% 󰋊",
+		"format": "{percentage_used}% ",
 		"tooltip-format": "{used} used out of {total} on {path} ({percentage_used}%)"
 	},
 	"group/audio": {
@@ -169,19 +169,19 @@
 	"pulseaudio": {
 		"format": "{icon} {volume}%",
 		"format-bluetooth": "{icon} 󰂰 {volume}%",
-		"format-muted": "󰖁",
+		"format-muted": "",
 		"format-icons": {
-			"headphone": "",
-			"hands-free": "",
-			"headset": "",
-			"phone": "",
-			"portable": "",
-			"car": "",
+			"headphone": "",
+			"hands-free": "",
+			"headset": "",
+			"phone": "",
+			"portable": "",
+			"car": "",
 			"default": [
-				"",
-				"",
-				"󰕾",
-				""
+				"",
+				"",
+				"",
+				""
 			],
 			"ignored-sinks": [
 				"Easy Effects Sink"
@@ -197,8 +197,8 @@
 	},
 	"pulseaudio#microphone": {
 		"format": "{format_source}",
-		"format-source": " {volume}%",
-		"format-source-muted": "",
+		"format-source": " {volume}%",
+		"format-source-muted": "󰍭",
 		"on-click": "$HOME/.config/hypr/scripts/Volume.sh --toggle-mic",
 		"on-click-right": "pavucontrol -t 4",
 		"on-scroll-up": "$HOME/.config/hypr/scripts/Volume.sh --mic-inc",
@@ -209,13 +209,13 @@
 	"network": {
 		"format": "{ifname}",
 		"format-wifi": "{icon}",
-		"format-ethernet": "󰌘",
-		"format-disconnected": "󰌙",
-		"tooltip-format": "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}",
-		"format-linked": "󰈁 {ifname} (No IP)",
+		"format-ethernet": "",
+		"format-disconnected": "",
+		"tooltip-format": "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}",
+		"format-linked": " {ifname} (No IP)",
 		"tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
-		"tooltip-format-ethernet": "{ifname} 󰌘",
-		"tooltip-format-disconnected": "󰌙 Disconnected",
+		"tooltip-format-ethernet": "{ifname} ",
+		"tooltip-format-disconnected": " Disconnected",
 		"max-length": 30,
 		"format-icons": [
 			"󰤯",
@@ -243,8 +243,8 @@
 		"tooltip-format-deactivated": "Stay awake: off\nClick to keep the screen on",
 		"format": "{icon}",
 		"format-icons": {
-			"activated": "",
-			"deactivated": ""
+			"activated": "",
+			"deactivated": ""
 		}
 	},
 	"group/notify": {
@@ -263,14 +263,14 @@
 		"tooltip-format": "Left Click: Launch Notification Center\nRight Click: Do not Disturb",
 		"format": "{} {icon}",
 		"format-icons": {
-			"notification": "<span foreground='red'><sup></sup></span>",
-			"none": "",
-			"dnd-notification": "<span foreground='red'><sup></sup></span>",
-			"dnd-none": "",
-			"inhibited-notification": "<span foreground='red'><sup></sup></span>",
-			"inhibited-none": "",
-			"dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
-			"dnd-inhibited-none": ""
+			"notification": "<span foreground='red'><sup></sup></span>",
+			"none": "",
+			"dnd-notification": "<span foreground='red'><sup></sup></span>",
+			"dnd-none": "",
+			"inhibited-notification": "<span foreground='red'><sup></sup></span>",
+			"inhibited-none": "",
+			"dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+			"dnd-inhibited-none": ""
 		},
 		"return-type": "json",
 		"exec-if": "which swaync-client",
@@ -280,7 +280,7 @@
 		"escape": true
 	},
 	"custom/power": {
-		"format": "⏻",
+		"format": "",
 		"on-click": "$HOME/.config/hypr/scripts/Wlogout.sh",
 		"on-click-right": "$HOME/.config/hypr/scripts/ChangeBlur.sh",
 		"tooltip": true,

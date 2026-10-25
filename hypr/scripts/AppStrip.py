@@ -61,12 +61,34 @@ DEFAULT = ("", None)
 MORE_ICON = ""
 
 
+# cada look puede cambiar iconos: {"nombre bonito": glyph, "_default": …,
+# "_more": …}. Lo copia LookSwitch; se relee cuando cambia (el reload de
+# Hyprland al cambiar de look dispara configreloaded → render).
+LOOK_ICONS = os.path.expanduser("~/.config/waybar/appicons.json")
+_look = {"mtime": None, "icons": {}}
+
+
+def look_icons():
+    try:
+        mtime = os.path.getmtime(LOOK_ICONS)
+    except OSError:
+        return {}
+    if mtime != _look["mtime"]:
+        try:
+            _look["icons"] = json.load(open(LOOK_ICONS))
+        except (OSError, ValueError):
+            _look["icons"] = {}
+        _look["mtime"] = mtime
+    return _look["icons"]
+
+
 def icon_for(cls):
     low = cls.lower()
+    over = look_icons()
     for rx, glyph, name in ICONS:
         if re.search(rx, low):
-            return glyph, name
-    return DEFAULT[0], cls
+            return over.get(name, glyph), name
+    return over.get("_default", DEFAULT[0]), cls
 
 
 def pinned():
@@ -160,7 +182,7 @@ def render():
     if drawer:
         names = "\n".join("· " + esc(icon_for(e[1])[1]) for e in drawer)
         k = ["app-more"] + (["active"] if any("active" in e[3] for e in drawer) else [])
-        write("more", f"{MORE_ICON} {len(drawer)}", "",
+        write("more", f"{look_icons().get('_more', MORE_ICON)} {len(drawer)}", "",
               f"<b>{len(drawer)} apps más</b>\n{names}\npasa el mouse para verlas", k)
     else:
         write("more")
