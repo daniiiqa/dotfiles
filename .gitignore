@@ -35,3 +35,5 @@ hypr/looks/.current
 __pycache__/
 # Enlace al wallpaper actual (estado de cada máquina)
 rofi/.current_wallpaper
+# Salida Lua de nwg-displays (no se usa; Hyprland lee monitors.conf)
+hypr/monitors.lua
