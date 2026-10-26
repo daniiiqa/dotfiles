@@ -21,7 +21,7 @@ edit=${EDITOR:-${edit:-nano}}
 
 I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
 I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
-I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'
+I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'
 
 need() {
   command -v "$1" &>/dev/null && return 0
@@ -208,6 +208,9 @@ while true; do
   add "$I_LOOK  look: ${look:-?}"                                   look
   [ -n "$shader" ] && add "$I_SHADER  shader: $([ $shader = yes ] && echo on || echo off)" shader
   add "$I_LANG  $(L idioma language): $(L español English)"         lang
+  font=$(sed -nE 's/^FONT_SIZE=\s*([+-]?[0-9]+).*/\1/p' "$discada" | head -n1)
+  case "${font:-0}" in 0) font_txt=normal ;; -*) font_txt=$font ;; *) font_txt=+$font ;; esac
+  add "$I_FONT  $(L "tamaño de letra" "font size"): $font_txt"     font
   add "$I_VIS  $(L visualizador visualizer): $(vis_now)"           vis
   add "$I_REC  $(L grabador recorder) ›"                           rec
   add "$I_GAME  game mode: $(onoff "$game")"                        game
@@ -221,6 +224,7 @@ while true; do
   case "${acts[$i]}" in
     look)   exec "$scripts/LookSwitch.sh" ;;
     shader) "$scripts/LookSwitch.sh" shader ;;
+    font)   "$scripts/FontSize.py" set "$(cycle "${font:-0}" 0 1 2 3 4 -2 -1)" ;;
     lang)   set_language "$([ "$DISCADA_LANG" = es ] && echo en || echo es)" ;;
     vis)    vis_menu ;;
     rec)    rec_menu ;;

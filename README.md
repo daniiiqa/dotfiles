@@ -44,7 +44,7 @@ Safe to run more than once.
 | keys | |
 |---|---|
 | `SUPER+H` | cheat sheet (themed, type to filter) |
-| `SUPER+Shift+E` | **discada settings**: look, shader, language, visualizer, recorder, game mode, blur, edit config, tools |
+| `SUPER+Shift+E` | **discada settings**: look, shader, language, font size, visualizer, recorder, game mode, blur, edit config, tools |
 | `SUPER+T` | switch look (top entry: the look's shader on/off) |
 | `SUPER+W` | wallpaper |
 | `SUPER+M` | music (rola) |

@@ -5,3 +5,6 @@
 @import "~/.config/rofi/0-shared-fonts.rasi"
 
 @theme "~/.config/rofi/themes/Dany-Talavera.rasi"
+
+/* tamaño de letra de discada (FontSize.py); va después del theme */
+@import "~/.config/rofi/discada-font.rasi"

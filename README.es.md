@@ -44,7 +44,7 @@ Se puede correr varias veces sin romper nada.
 | teclas | |
 |---|---|
 | `SUPER+H` | cheat sheet (con el estilo del look, escribe para filtrar) |
-| `SUPER+Shift+E` | **ajustes de discada**: look, shader, idioma, visualizador, grabador, game mode, blur, editar config, herramientas |
+| `SUPER+Shift+E` | **ajustes de discada**: look, shader, idioma, tamaño de letra, visualizador, grabador, game mode, blur, editar config, herramientas |
 | `SUPER+T` | cambiar de look (arriba: shader del look on/off) |
 | `SUPER+W` | wallpaper |
 | `SUPER+M` | música (rola) |

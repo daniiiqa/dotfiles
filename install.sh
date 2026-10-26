@@ -338,6 +338,8 @@ if ((NEW_MACHINE)) || [ ! -f "$looks_dir/.current" ]; then
       cp "$looks_dir/$INITIAL/$f" "$CFG/$f"
     done
     echo "$INITIAL" > "$looks_dir/.current"
+    # rofi importa este archivo (tamaño de letra, FontSize.py); vacío al empezar
+    [ -f "$CFG/rofi/discada-font.rasi" ] || printf '/* FontSize.py */\n' > "$CFG/rofi/discada-font.rasi"
   fi
 fi
 

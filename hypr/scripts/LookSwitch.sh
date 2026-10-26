@@ -57,6 +57,10 @@ if [ ! -d "$looks/$target" ]; then
 fi
 [ "$target" = "$current" ] && exit 0
 
+# 0) quitar el tamaño de letra de discada (FontSize.py) para guardar el look
+#    con sus tamaños originales; se vuelve a aplicar después de copiar
+"$cfg/hypr/scripts/FontSize.py" unapply
+
 # 1) guardar lo vivo en el look actual
 if [ -n "$current" ] && [ -d "$looks/$current" ]; then
   (cd "$looks/$current" && find . -type f -printf '%P\n') | while read -r f; do
@@ -71,6 +75,7 @@ wallust_before=$(md5sum < "$cfg/wallust/wallust.toml" 2>/dev/null)
   cp "$looks/$target/$f" "$cfg/$f"
 done
 echo "$target" > "$state"
+"$cfg/hypr/scripts/FontSize.py" apply --no-reload
 
 # 3) si cambió la config de wallust (paleta, saturación…), regenerar colores
 wallust_after=$(md5sum < "$cfg/wallust/wallust.toml" 2>/dev/null)

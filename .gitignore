@@ -40,3 +40,6 @@ __pycache__/
 rofi/.current_wallpaper
 # Salida Lua de nwg-displays (no se usa; Hyprland lee monitors.conf)
 hypr/monitors.lua
+# Tamaño de letra aplicado (lo escribe FontSize.py)
+hypr/looks/.fontsize
+rofi/discada-font.rasi
