@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # discada — el centro de ajustes del rice (SUPER+Shift+E): look, shader,
-# idioma, visualizador, grabador, game mode y blur; más los submenús para
+# idioma, visualizador, grabador, notificaciones, game mode y blur; más los submenús para
 # editar la config y abrir las herramientas del sistema. Cada cambio vuelve a
 # abrir el menú en la misma fila, así se pueden tocar varias cosas seguidas.
 
@@ -22,6 +22,8 @@ edit=${EDITOR:-${edit:-nano}}
 I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
 I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
 I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'; I_UPDATE=$'\U000f06b0'
+I_NOTIF=$'\U000f009a'
+arre="$HOME/.local/bin/arre"
 
 need() {
   command -v "$1" &>/dev/null && return 0
@@ -153,6 +155,51 @@ rec_menu() {
   done
 }
 
+# ── notificaciones (arre) ────────────────────────────────────────────────────
+POSITIONS=(top-left top-center top-right bottom-left bottom-center bottom-right)
+pos_name() {
+  case "$1" in
+    top-left) L "arriba a la izquierda" "top left" ;;
+    top-center) L "arriba al centro" "top center" ;;
+    top-right) L "arriba a la derecha" "top right" ;;
+    bottom-left) L "abajo a la izquierda" "bottom left" ;;
+    bottom-center) L "abajo al centro" "bottom center" ;;
+    bottom-right) L "abajo a la derecha" "bottom right" ;;
+    *) echo "?" ;;
+  esac
+}
+
+# un aviso de muestra, de paso (no se queda en el historial)
+notif_sample() {
+  notify-send -e -t 4000 -a discada -i "$iDIR/bell.png" \
+    "$(L "Así se ven las notificaciones" "This is how notifications look")" "$(pos_name "$("$arre" position)")"
+}
+
+notif_menu() {
+  [ -x "$arre" ] || { notify-send -i "$iDIR/error.png" "$(L "Falta arre" "arre is missing")" \
+    "cargo install --git https://github.com/daniiiqa/arre --root ~/.local"; return; }
+  local row=0
+  while true; do
+    local pos dnd i j k names=()
+    pos=$("$arre" position); dnd=$("$arre" dnd 2>/dev/null)
+    i=$(pick "$(L notificaciones notifications)" "$(L "los cambios se ven al momento" "changes show right away")" \
+        "$(L posición position): $(pos_name "$pos") ›" \
+        "$(L "no molestar" "do not disturb"): $([ "$dnd" = on ] && L sí yes || L no no)" \
+        "$(L "probar" "try it")" \
+        "‹ $(L volver back)") || return
+    row=$i
+    case "$i" in
+      0) for j in "${POSITIONS[@]}"; do names+=("$(pos_name "$j")"); done
+         j=0; for ((k = 0; k < ${#POSITIONS[@]}; k++)); do [ "${POSITIONS[$k]}" = "$pos" ] && j=$k; done
+         j=$(row=$j pick "$(L posición position)" "" "${names[@]}") || continue
+         "$arre" position "${POSITIONS[$j]}" && notif_sample ;;
+      1) "$arre" dnd toggle >/dev/null ;;
+      2) notif_sample ;;
+      *) return ;;
+    esac
+  done
+}
+
 # ── editar / herramientas ────────────────────────────────────────────────────
 edit_menu() {
   local names=() files=()
@@ -176,20 +223,22 @@ edit_menu() {
 }
 
 tools_menu() {
-  # vato (audio, bluetooth, red, sistema) en la terminal con el look; solo los
+  # vato (audio, bluetooth, red, sistema, notificaciones) en la terminal con el look; solo los
   # monitores siguen en una app gráfica. GTK/Qt ya no hacen falta aquí:
   # AppColors.py les pone los colores del look solo.
   local i
   i=$(row=0 pick "$(L herramientas tools)" "" \
       "Audio (vato)" "Bluetooth (vato)" "$(L "Red" "Network") (vato)" "$(L "Sistema" "System") (vato)" \
+      "$(L "Notificaciones" "Notifications") (vato)" \
       "$(L "Monitores" "Monitors") (nwg-displays)" "$(L "Buscar atajos" "Search shortcuts")" "‹ $(L volver back)") || return
   case "$i" in
     0) "$scripts/Vato.sh" audio & ;;
     1) "$scripts/Vato.sh" bluetooth & ;;
     2) "$scripts/Vato.sh" network & ;;
     3) "$scripts/Vato.sh" system & ;;
-    4) need nwg-displays && nwg-displays & ;;
-    5) "$scripts/KeyBinds.sh" & ;;
+    4) "$scripts/Vato.sh" notifications & ;;
+    5) need nwg-displays && nwg-displays & ;;
+    6) "$scripts/KeyBinds.sh" & ;;
   esac
 }
 
@@ -216,6 +265,7 @@ while true; do
   add "$I_FONT  $(L "tamaño de letra" "font size"): $font_txt"     font
   add "$I_VIS  $(L visualizador visualizer): $(vis_now)"           vis
   add "$I_REC  $(L grabador recorder) ›"                           rec
+  [ -x "$arre" ] && add "$I_NOTIF  $(L notificaciones notifications): $(pos_name "$("$arre" position)") ›" notif
   add "$I_GAME  game mode: $(onoff "$game")"                        game
   add "$I_BLUR  blur: $blur"                                        blur
   add "$I_EDIT  $(L "editar config" "edit config") ›"               edit
@@ -232,6 +282,7 @@ while true; do
     lang)   set_language "$([ "$DISCADA_LANG" = es ] && echo en || echo es)" ;;
     vis)    vis_menu ;;
     rec)    rec_menu ;;
+    notif)  notif_menu ;;
     game)   "$scripts/GameMode.sh"; sleep 0.3 ;;
     blur)   "$scripts/ChangeBlur.sh" ;;
     edit)   edit_menu; exit 0 ;;

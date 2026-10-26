@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Las herramientas del sistema de discada: vato (audio, bluetooth, red y
-# sistema en la terminal, con el look como rola). Una sola ventana: si ya
-# está abierta, se cambia a la pestaña pedida y se enfoca.
+# Las herramientas del sistema de discada: vato (audio, bluetooth, red,
+# sistema y notificaciones en la terminal, con el look como rola). Una sola
+# ventana: si ya está abierta, se cambia a la pestaña pedida y se enfoca.
 #
-#   Vato.sh audio | mic | bluetooth | network | wifi | system
+#   Vato.sh audio | mic | bluetooth | network | wifi | system | notifications
 
 tab=${1:-audio}
 # Hyprland no trae ~/.local/bin en el PATH (ahí lo deja cargo install)

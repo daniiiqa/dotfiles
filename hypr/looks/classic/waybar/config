@@ -85,7 +85,6 @@
 	},
 	"custom/swaync": {
 		"tooltip": true,
-		"tooltip-format": "Left Click: Launch Notification Center\nRight Click: Do not Disturb",
 		"format": "{} {icon}",
 		"format-icons": {
 			"notification": "<span foreground='red'><sup></sup></span>",
@@ -98,10 +97,10 @@
 			"dnd-inhibited-none": ""
 		},
 		"return-type": "json",
-		"exec-if": "which swaync-client",
-		"exec": "swaync-client -swb",
-		"on-click": "sleep 0.1 && swaync-client -t -sw",
-		"on-click-right": "swaync-client -d -sw",
+		"exec-if": "test -x $HOME/.local/bin/arre",
+		"exec": "$HOME/.local/bin/arre waybar",
+		"on-click": "$HOME/.config/hypr/scripts/Vato.sh notifications",
+		"on-click-right": "$HOME/.local/bin/arre dnd toggle",
 		"escape": true
 	},
 	"clock": {

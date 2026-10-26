@@ -37,10 +37,10 @@ bar() { pkill -RTMIN+10 -x waybar; }
 # no molestar mientras graba (si ya estaba puesto, no se toca al terminar)
 dnd_on() {
   [ "$RECORD_DND" = yes ] || return
-  [ "$(swaync-client -D 2>/dev/null)" = false ] || return
-  swaync-client -dn >/dev/null 2>&1 && touch "$run/rec.dnd"
+  [ "$("$HOME/.local/bin/arre" dnd 2>/dev/null)" = off ] || return
+  "$HOME/.local/bin/arre" dnd on >/dev/null 2>&1 && touch "$run/rec.dnd"
 }
-dnd_restore() { [ -f "$run/rec.dnd" ] && rm -f "$run/rec.dnd" && swaync-client -df >/dev/null 2>&1; }
+dnd_restore() { [ -f "$run/rec.dnd" ] && rm -f "$run/rec.dnd" && "$HOME/.local/bin/arre" dnd off >/dev/null 2>&1; }
 note() { notify-send -e -a "$(L Grabador Recorder)" -u low -i "${3:-media-record}" "$1" "$2"; }
 
 monitor() { hyprctl monitors -j | jq -r '.[] | select(.focused) | .name'; }

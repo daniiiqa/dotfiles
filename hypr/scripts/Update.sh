@@ -21,7 +21,6 @@ reload_all() {
   "$scripts/AppColors.py" >/dev/null 2>&1
   hyprctl reload >/dev/null
   pkill -SIGUSR2 waybar
-  swaync-client -rs >/dev/null 2>&1
   pkill -USR1 -x kitty
 }
 

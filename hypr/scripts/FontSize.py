@@ -95,7 +95,6 @@ def rofi_override(total):
 
 def reload():
     subprocess.run(["pkill", "-SIGUSR2", "-x", "waybar"])
-    subprocess.run(["swaync-client", "-rs"], capture_output=True)
     subprocess.run(["pkill", "-USR1", "-x", "kitty"])
 
 

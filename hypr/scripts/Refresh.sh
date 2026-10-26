@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Recarga waybar/swaync/rofi tras un cambio de wallpaper.
+# Recarga waybar/rofi tras un cambio de wallpaper.
 # Uso: Refresh.sh [--full]
 #
 # Reload EN CALIENTE en lugar de matar y relanzar.
 # Lo único que este script necesita lograr tras un cambio de wallpaper es
-# que las barras relean los colores de wallust — waybar (SIGUSR2) y swaync
-# (swaync-client) saben hacerlo sin morir, así que la barra ya no parpadea
+# que las barras relean los colores de wallust — waybar (SIGUSR2) sabe
+# hacerlo sin morir, así que la barra ya no parpadea
 # ni re-instancia sus módulos. El kill queda solo como fallback si el
 # proceso no está corriendo.
 
@@ -19,13 +19,8 @@ else
   waybar &
 fi
 
-# swaync: reload de config y CSS en caliente; lanzarlo si no corre
-if pidof swaync >/dev/null; then
-  swaync-client --reload-config 2>/dev/null
-  swaync-client --reload-css 2>/dev/null
-else
-  swaync >/dev/null 2>&1 &
-fi
+# las notificaciones (arre) toman el look solas, y si no corren las arranca
+# D-Bus con la siguiente que llegue: aquí no hay nada que hacer
 
 # rofi no es daemon: si quedó un menú abierto ciérralo, el próximo
 # lanzamiento lee los colores nuevos solo

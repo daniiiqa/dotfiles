@@ -92,7 +92,6 @@ fi
 # 4) recargar todo
 hyprctl reload >/dev/null
 pkill -SIGUSR2 waybar
-swaync-client -rs >/dev/null 2>&1
 "$cfg/hypr/scripts/SDDMWallpaperSync.sh" >/dev/null 2>&1   # sddm: fuente, forma y paleta del look
 "$cfg/hypr/scripts/AppColors.py" >/dev/null 2>&1          # apps GTK/Qt: colores del look
 pkill -USR1 -x kitty
