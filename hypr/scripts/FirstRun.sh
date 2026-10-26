@@ -30,11 +30,16 @@ swww img "$wall" --transition-type fade --transition-duration 1 >/dev/null 2>&1
 
 # 3) colores desde el wallpaper + recargar todo
 "$scripts/WallustSwww.sh" "$wall"
+
+# 3b) si el look inicial es de paleta fija, su propio wallpaper (el de arriba
+#     queda guardado para cuando cambies a un look que sigue al wallpaper)
+look=$(cat "$HOME/.config/hypr/looks/.current" 2>/dev/null)
+[ -n "$look" ] && "$scripts/LookWallpaper.sh" "$look"
 "$scripts/Refresh.sh" --full
 
-# 4) apps GTK en oscuro y con iconos (rofi los usa en el lanzador)
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null
-gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark' 2>/dev/null
+# 4) apps GTK y Qt con los colores del look (claro u oscuro según el look) e
+#    iconos (rofi los usa en el lanzador)
+"$scripts/AppColors.py"
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark' 2>/dev/null
 for v in 3.0 4.0; do
   f="$HOME/.config/gtk-$v/settings.ini"

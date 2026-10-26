@@ -17,6 +17,10 @@
 #                terminal instala todos
 #   --lang=L     idioma de los menús y avisos: en o es (sin esto pregunta;
 #                con -y o sin terminal, en)
+#   --update     actualizar una instalación: conserva idioma, looks, look
+#                actual y tus ajustes (discada.conf, recorder.conf, monitores,
+#                apps fijadas…); solo instala paquetes que falten. Lo usa
+#                "actualizar discada" del menú (hypr/scripts/Update.sh)
 #   -y           sin confirmaciones de pacman/yay
 #
 # Se puede correr más de una vez: los paquetes van con --needed y solo se
@@ -49,7 +53,7 @@ REPO_PKGS=(
   # utilidades que usan los scripts
   libnotify libqalculate bc curl python xdg-user-dirs xdg-utils git
   # ajustes gráficos, red y bluetooth
-  nwg-displays nwg-look qt5ct qt6ct kvantum papirus-icon-theme
+  nwg-displays nwg-look qt5ct qt6ct kvantum papirus-icon-theme adw-gtk-theme
   networkmanager nm-connection-editor bluez bluez-utils blueman
   # fuentes base (JetBrainsMono Mono para iconos alineados, Adwaita Mono para
   # el visualizador, Noto Serif para paper); las de cada look van en LOOK_FONT
@@ -110,14 +114,18 @@ SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 # carpetas del repo que van a ~/.config (las mismas del whitelist de .gitignore)
 CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout yazi rola sddm Kvantum qt5ct qt6ct swappy)
 ROLA_REPO="https://github.com/daniiiqa/rola.git"
+# tus ajustes: --update no los pisa
+KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.conf hypr/workspaces.conf
+                hypr/conf/pinned.conf hypr/conf/defaults.conf hypr/conf/livewallpaper.conf)
 
 # ── Opciones ─────────────────────────────────────────────────────────────────
-DRY=0 SDDM=auto AUR=1 YES=() LOOKS_ARG="" UI_LANG=""
+DRY=0 SDDM=auto AUR=1 YES=() LOOKS_ARG="" UI_LANG="" UPDATE=0
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY=1 ;;
     --looks=*) LOOKS_ARG=${arg#--looks=} ;;
     --lang=es|--lang=en) UI_LANG=${arg#--lang=} ;;
+    --update) UPDATE=1 ;;
     --sddm) SDDM=yes ;;
     --no-sddm) SDDM=no ;;
     --no-aur) AUR=0 ;;
@@ -140,6 +148,10 @@ discada installer — the rice of looks (Arch Linux + Hyprland).
                terminal it installs them all
   --lang=L     language for menus and notifications: en or es (asks without
                it; with -y or no terminal, en)
+  --update     update an existing install: keeps language, looks, current look
+               and your settings (discada.conf, recorder.conf, monitors, pinned
+               apps…); only installs missing packages. Used by "update discada"
+               in the settings menu (hypr/scripts/Update.sh)
   -y           no pacman/yay confirmations
 
 Safe to run more than once: packages use --needed and only changed files are
@@ -173,6 +185,11 @@ if [ ! -d "$REPO_DIR/hypr/conf" ]; then
 fi
 
 # ── Idioma ───────────────────────────────────────────────────────────────────
+# al actualizar: el que ya tienes
+if ((UPDATE)) && [ -z "$UI_LANG" ]; then
+  UI_LANG=$(sed -nE 's/^LANGUAGE=([a-z]+).*/\1/p' "$HOME/.config/hypr/discada.conf" 2>/dev/null)
+  [ "$UI_LANG" = es ] || UI_LANG=en
+fi
 if [ -z "$UI_LANG" ]; then
   UI_LANG=en
   if [ -t 0 ] && ((${#YES[@]} == 0)); then
@@ -187,6 +204,7 @@ BACKUP="$HOME/.config-backup-$(date +%Y%m%d-%H%M%S)"
 NEW_MACHINE=0
 [ "$REPO_DIR" != "$CFG" ] && NEW_MACHINE=1
 
+((UPDATE)) && SDDM=no   # actualizar no toca la pantalla de login
 if [ "$SDDM" = auto ]; then
   if systemctl is-enabled display-manager.service >/dev/null 2>&1; then SDDM=no
   else SDDM=yes; fi
@@ -197,7 +215,13 @@ in_list() { local x; for x in "${@:2}"; do [ "$x" = "$1" ] && return 0; done; re
 
 mapfile -t ALL_LOOKS < <(find "$REPO_DIR/hypr/looks" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
 LOOKS=() INITIAL=""
-if [ -n "$LOOKS_ARG" ]; then
+if ((UPDATE)) && [ -z "$LOOKS_ARG" ]; then
+  # los looks que ya tienes (y que sigan existiendo) y el que está puesto
+  for l in "${ALL_LOOKS[@]}"; do [ -d "$CFG/hypr/looks/$l" ] && LOOKS+=("$l"); done
+  ((${#LOOKS[@]})) || LOOKS=("${ALL_LOOKS[@]}")
+  cur=$(cat "$CFG/hypr/looks/.current" 2>/dev/null)
+  in_list "$cur" "${LOOKS[@]}" && INITIAL=$cur
+elif [ -n "$LOOKS_ARG" ]; then
   case "$LOOKS_ARG" in
     all) LOOKS=("${ALL_LOOKS[@]}") ;;
     none) LOOKS=(classic) ;;
@@ -255,7 +279,14 @@ say "Looks: ${LOOKS[*]} ($(L "empieza en" "starting with") $INITIAL)"
 
 # ── 1. Paquetes de los repos ─────────────────────────────────────────────────
 say "$(L "Paquetes de los repos oficiales" "Official repo packages") (${#REPO_PKGS[@]} + ${#LOOK_PKGS[@]} $(L "fuentes de looks" "look fonts"))"
-run sudo pacman -Syu --needed "${YES[@]}" "${REPO_PKGS[@]}" "${LOOK_PKGS[@]}"
+if ((UPDATE)); then
+  # solo lo que falte (paquetes nuevos de discada o de un look)
+  mapfile -t missing < <(pacman -T "${REPO_PKGS[@]}" "${LOOK_PKGS[@]}" 2>/dev/null)
+  if ((${#missing[@]})); then run sudo pacman -Syu --needed "${YES[@]}" "${missing[@]}"
+  else echo "   $(L "nada nuevo que instalar" "nothing new to install")"; fi
+else
+  run sudo pacman -Syu --needed "${YES[@]}" "${REPO_PKGS[@]}" "${LOOK_PKGS[@]}"
+fi
 [ "$SDDM" = yes ] && run sudo pacman -S --needed "${YES[@]}" "${SDDM_PKGS[@]}"
 
 # ── 2. AUR ───────────────────────────────────────────────────────────────────
@@ -272,7 +303,12 @@ if ((AUR)); then
     helper=yay
   fi
   say "$(L "Paquetes de AUR con" "AUR packages with") $helper: ${AUR_PKGS[*]}"
-  run "$helper" -S --needed "${YES[@]}" "${AUR_PKGS[@]}"
+  if ((UPDATE)); then
+    mapfile -t missing < <(pacman -T "${AUR_PKGS[@]}" 2>/dev/null)
+    ((${#missing[@]})) && run "$helper" -S --needed "${YES[@]}" "${missing[@]}"
+  else
+    run "$helper" -S --needed "${YES[@]}" "${AUR_PKGS[@]}"
+  fi
 else
   warn "$(L "Saltando AUR: sin swww/mpvpaper/wallust no hay wallpapers ni colores dinámicos" \
             "Skipping AUR: without swww/mpvpaper/wallust there are no wallpapers or dynamic colors")"
@@ -281,27 +317,56 @@ fi
 # ── 3. Dotfiles ──────────────────────────────────────────────────────────────
 if ((NEW_MACHINE)); then
   say "$(L "Copiando dotfiles a $CFG (lo que se pise va a $BACKUP)" "Copying dotfiles to $CFG (anything overwritten goes to $BACKUP)")"
+  keep=""
+  if ((UPDATE)) && ! ((DRY)); then
+    keep=$(mktemp -d)
+    for f in "${KEEP_ON_UPDATE[@]}"; do
+      [ -e "$CFG/$f" ] && { mkdir -p "$keep/$(dirname "$f")"; cp -a "$CFG/$f" "$keep/$f"; }
+    done
+  fi
   for d in "${CONFIG_DIRS[@]}"; do
     [ -d "$REPO_DIR/$d" ] || continue
     # respaldar solo los archivos que existen y son distintos
     while IFS= read -r -d '' f; do
       rel=${f#"$REPO_DIR/"}
+      # al actualizar, tus ajustes se quedan como están
+      if ((UPDATE)) && [ -e "$CFG/$rel" ] && in_list "$rel" "${KEEP_ON_UPDATE[@]}"; then
+        continue
+      fi
       if [ -e "$CFG/$rel" ] && ! cmp -s "$f" "$CFG/$rel"; then
         run mkdir -p "$BACKUP/$(dirname "$rel")"
         run cp -a "$CFG/$rel" "$BACKUP/$rel"
       fi
     done < <(find "$REPO_DIR/$d" -type f -print0)
     run mkdir -p "$CFG/$d"
-    run cp -a "$REPO_DIR/$d/." "$CFG/$d/"
+    # --remove-destination: hay archivos de solo lectura (plugins de yazi)
+    run cp -a --remove-destination "$REPO_DIR/$d/." "$CFG/$d/"
   done
+  if [ -n "$keep" ]; then
+    cp -a "$keep/." "$CFG/" && rm -rf "$keep"
+  fi
   [ -d "$BACKUP" ] && say "$(L "Respaldo en" "Backup in") $BACKUP"
+
+  # semillas de lo que no se trackea porque cambia solo (colores de wallust,
+  # ajustes de rola): solo si faltan
+  seed="$REPO_DIR/hypr/seed"
+  while IFS= read -r -d '' f; do
+    rel=${f#"$seed/"}
+    [ "$rel" = README.md ] && continue
+    if [ ! -e "$CFG/$rel" ]; then
+      run mkdir -p "$CFG/$(dirname "$rel")"
+      run cp "$f" "$CFG/$rel"
+    fi
+  done < <(find "$seed" -type f -print0)
 
   # el monitors.conf del repo es el de la máquina original (DP-1, posición
   # fija): aquí, que Hyprland detecte las pantallas. nwg-displays lo reescribe.
-  say "$(L "Pantallas: detección automática" "Displays: automatic detection")"
-  if ((DRY)); then echo "   [dry-run] monitors.conf → monitor=,preferred,auto,1"
-  else
-    printf '# Detección automática. Para acomodar pantallas: nwg-displays\nmonitor=,preferred,auto,1\n' > "$CFG/hypr/monitors.conf"
+  if ! ((UPDATE)); then
+    say "$(L "Pantallas: detección automática" "Displays: automatic detection")"
+    if ((DRY)); then echo "   [dry-run] monitors.conf → monitor=,preferred,auto,1"
+    else
+      printf '# Detección automática. Para acomodar pantallas: nwg-displays\nmonitor=,preferred,auto,1\n' > "$CFG/hypr/monitors.conf"
+    fi
   fi
 else
   say "$(L "El repo ya vive en ~/.config: nada que copiar" "The repo already lives in ~/.config: nothing to copy")"
@@ -338,6 +403,7 @@ if ((NEW_MACHINE)) || [ ! -f "$looks_dir/.current" ]; then
       cp "$looks_dir/$INITIAL/$f" "$CFG/$f"
     done
     echo "$INITIAL" > "$looks_dir/.current"
+    echo 0 > "$looks_dir/.fontsize"   # lo vivo está en el tamaño del look; FontSize.py lo vuelve a aplicar
     # rofi importa este archivo (tamaño de letra, FontSize.py); vacío al empezar
     [ -f "$CFG/rofi/discada-font.rasi" ] || printf '/* FontSize.py */\n' > "$CFG/rofi/discada-font.rasi"
   fi
@@ -410,13 +476,17 @@ fi
 
 # ── Listo ────────────────────────────────────────────────────────────────────
 echo
+if ((UPDATE)); then
+  say "$(L "discada actualizada." "discada updated.")"
+  exit 0
+fi
 say "$(L "Listo, discada servida. Al entrar a Hyprland por primera vez se pone un" \
         "Done, discada is served. On the first Hyprland login a wallpaper is set,")"
 say "$(L "wallpaper, se generan los colores y sale un aviso con los atajos." \
         "colors are generated and a notification shows the shortcuts.")"
 echo "   SUPER+H $(L atajos shortcuts) · SUPER+Shift+E $(L ajustes settings) · SUPER+T looks"
 echo "   $(L "Tus wallpapers (imágenes o videos) van en" "Your wallpapers (images or videos) go in") $pics/wallpapers"
-if ((!DRY)) && [ -t 0 ]; then
+if ((!DRY)) && ((!UPDATE)) && [ -t 0 ]; then
   read -r -p "$(L "¿Reiniciar ahora? [s/N]" "Reboot now? [y/N]") " ans
   case "$ans" in s|S|y|Y) sudo systemctl reboot ;; esac
 fi

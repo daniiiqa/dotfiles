@@ -43,3 +43,38 @@ hypr/monitors.lua
 # Tamaño de letra aplicado (lo escribe FontSize.py)
 hypr/looks/.fontsize
 rofi/discada-font.rasi
+
+# ── Archivos vivos que cambian solos (no se trackean) ──
+# Copias del look activo: salen de hypr/looks/<look>/ (LookSwitch.sh / install.sh)
+/waybar/config
+/waybar/style.css
+/waybar/appicons.json
+/waybar/visualizer.json
+/waybar/recorder.json
+/fastfetch/config.jsonc
+/hypr/conf/animations.conf
+/hypr/conf/decorations.conf
+/hypr/hyprlock.conf
+/kitty/kitty.conf
+/rofi/0-shared-fonts.rasi
+/rofi/config.rasi
+/rola/look.json
+/sddm/look.conf
+/swaync/style.css
+/wallust/wallust.toml
+/wlogout/style.css
+# Generados por wallust con cada wallpaper y ajustes que rola reescribe;
+# install.sh pone las semillas de hypr/seed/ si faltan
+/waybar/wallust/colors-waybar.css
+/rofi/wallust/colors-rofi.rasi
+/hypr/wallust/wallust-hyprland.conf
+/kitty/kitty-themes/01-Wallust.conf
+/cava/config
+/rola/config.json
+# Paleta Qt del look (la escribe AppColors.py)
+/qt5ct/colors/discada.conf
+/qt6ct/colors/discada.conf
+/hypr/conf/livewallpaper.conf
+# Tus ajustes de discada y del grabador (semillas en hypr/seed/)
+/hypr/discada.conf
+/hypr/recorder.conf

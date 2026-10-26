@@ -227,6 +227,10 @@ main() {
   # Persistir el wallpaper (livewallpaper.conf) según su tipo
   modify_startup_config "$selected_file"
 
+  # Custom (dany): elegiste wallpaper — si estabas en un look de paleta fija,
+  # este es el que se queda (LookWallpaper.sh ya no devuelve el anterior)
+  rm -rf "${XDG_STATE_HOME:-$HOME/.local/state}/discada/wallpaper"
+
   # **CHECK FIRST** if it's a video or an image **before calling any function**
   if [[ "$selected_file" =~ \.(mp4|mkv|mov|webm|MP4|MKV|MOV|WEBM)$ ]]; then
     apply_video_wallpaper "$selected_file"

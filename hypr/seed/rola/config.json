@@ -12,6 +12,5 @@
   "vol_step": 5,
   "seek": 5,
   "notify_secs": 4,
-  "restore": true,
-  "wallust": "/home/dany/.config/kitty/kitty-themes/01-Wallust.conf"
+  "restore": true
 }

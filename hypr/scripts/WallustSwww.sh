@@ -124,3 +124,5 @@ pkill -USR1 -x kitty 2>/dev/null || true
 
 # Custom (dany): fondo + colores de SDDM en sync con el wallpaper
 "$HOME/.config/hypr/scripts/SDDMWallpaperSync.sh" >/dev/null 2>&1 || true
+# Custom (dany): apps GTK y Qt con los colores del look (AppColors.py)
+"$HOME/.config/hypr/scripts/AppColors.py" >/dev/null 2>&1 || true

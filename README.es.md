@@ -44,7 +44,7 @@ Se puede correr varias veces sin romper nada.
 | teclas | |
 |---|---|
 | `SUPER+H` | cheat sheet (con el estilo del look, escribe para filtrar) |
-| `SUPER+Shift+E` | **ajustes de discada**: look, shader, idioma, tamaño de letra, visualizador, grabador, game mode, blur, editar config, herramientas |
+| `SUPER+Shift+E` | **ajustes de discada**: look, shader, idioma, tamaño de letra, visualizador, grabador, game mode, blur, editar config, herramientas, actualizar |
 | `SUPER+T` | cambiar de look (arriba: shader del look on/off) |
 | `SUPER+W` | wallpaper |
 | `SUPER+M` | música (rola) |
@@ -84,6 +84,16 @@ que edites a mano) y copia el nuevo encima.
   el look, con su set de iconos. Con 6+ apps se van a un cajón. Click enfoca (o
   cicla ventanas), click medio cierra. Las fijadas (`hypr/conf/pinned.conf`)
   siempre se ven; cerradas salen tenues y el click las abre.
+- **Wallpaper por look**: los seis looks de paleta fija (fundidora, ofrenda,
+  lotería, talavera, nord, outsider) traen su wallpaper (`hypr/wallpapers/`).
+  Los tuyos (videos incluidos) se guardan y vuelven al cambiar a un look que
+  sigue al wallpaper; si eliges otro estando en un look fijo, ese se queda.
+- **Apps GTK y Qt con los colores del look**: `AppColors.py` lleva los colores
+  del look (los de wallust o la paleta fija) a GTK 3 (adw-gtk3), GTK
+  4/libadwaita y Qt (Fusion + paleta de qt5ct/qt6ct), en claro u oscuro.
+- **Actualizar discada** desde el menú de ajustes: en una máquina instalada
+  baja la versión nueva y corre `install.sh --update` (conserva idioma, looks,
+  look actual y ajustes; solo instala lo que falte).
 - **Login (SDDM)**: sigue al look (fuente, forma, paleta) y a los colores del
   wallpaper, sin sudo (`SDDMWallpaperSync.sh`).
 - **Wallpapers por monitor**: swww para imágenes/gifs, un mpvpaper por monitor
@@ -106,8 +116,9 @@ hypr/
   hyprland.conf          solo hace `source` de conf/*
   conf/                  defaults, env, startup, settings, decorations,
                          animations, windowrules, keybinds, pinned, livewallpaper
-  discada.conf           idioma
-  recorder.conf          ajustes del grabador
+  discada.conf           idioma, tamaño de letra (no se trackea; sale de hypr/seed/)
+  recorder.conf          ajustes del grabador (no se trackea; sale de hypr/seed/)
+  wallpapers/            wallpapers de los looks de paleta fija
   looks/<look>/          lo que cambia cada look
   scripts/               todos los scripts
   shaders/               screen shaders de los looks (outsider: grano)
@@ -117,9 +128,10 @@ wallust/wallust.toml + templates/
 
 ## Notas
 
-- Los colores generados por wallust (`waybar/wallust/`, `rofi/wallust/`, …) sí
-  se trackean para que un clone fresco arranque con un tema funcional; cambian
-  con cada wallpaper, así que salen en los diffs.
+- Lo que cambia solo no se trackea: las copias vivas del look activo (salen
+  de `hypr/looks/<look>/`), los colores que wallust genera con cada wallpaper
+  y los ajustes de rola. `install.sh` pone copias de arranque de `hypr/seed/`
+  si faltan.
 - `hypr/wallpaper_effects/` y `hypr/looks/.current` están ignorados.
 
 ## Créditos

@@ -77,9 +77,15 @@ done
 echo "$target" > "$state"
 "$cfg/hypr/scripts/FontSize.py" apply --no-reload
 
+# 2b) looks de paleta fija: su wallpaper (hypr/wallpapers/<look>.jpg); al
+#     volver a uno que sigue al wallpaper, el tuyo de vuelta. 10 = ya regeneró
+#     los colores de wallust
+"$cfg/hypr/scripts/LookWallpaper.sh" "$target"
+walls_rc=$?
+
 # 3) si cambió la config de wallust (paleta, saturación…), regenerar colores
 wallust_after=$(md5sum < "$cfg/wallust/wallust.toml" 2>/dev/null)
-if [ "$wallust_before" != "$wallust_after" ]; then
+if [ "$walls_rc" != 10 ] && [ "$wallust_before" != "$wallust_after" ]; then
   "$cfg/hypr/scripts/WallustSwww.sh" "$(readlink -f "$cfg/rofi/.current_wallpaper")" >/dev/null 2>&1
 fi
 
@@ -88,6 +94,7 @@ hyprctl reload >/dev/null
 pkill -SIGUSR2 waybar
 swaync-client -rs >/dev/null 2>&1
 "$cfg/hypr/scripts/SDDMWallpaperSync.sh" >/dev/null 2>&1   # sddm: fuente, forma y paleta del look
+"$cfg/hypr/scripts/AppColors.py" >/dev/null 2>&1          # apps GTK/Qt: colores del look
 pkill -USR1 -x kitty
 pkill rofi 2>/dev/null
 

@@ -45,5 +45,8 @@ swww img -o "$focused_monitor" "$RANDOMPICS" $SWWW_PARAMS
 # de swww y en randoms seguidos generaba el theme del wallpaper ANTERIOR
 # (carrera: el caché aún no se escribía cuando wallust leía)
 "$SCRIPTSDIR/WallustSwww.sh" "$RANDOMPICS"
+# Custom (dany): elegiste wallpaper — si estabas en un look de paleta fija,
+# este es el que se queda (LookWallpaper.sh ya no devuelve el anterior)
+rm -rf "${XDG_STATE_HOME:-$HOME/.local/state}/discada/wallpaper"
 sleep 2
 "$SCRIPTSDIR/Refresh.sh"

@@ -21,7 +21,7 @@ edit=${EDITOR:-${edit:-nano}}
 
 I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
 I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
-I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'
+I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'; I_UPDATE=$'\U000f06b0'
 
 need() {
   command -v "$1" &>/dev/null && return 0
@@ -218,6 +218,7 @@ while true; do
   add "$I_EDIT  $(L "editar config" "edit config") ›"               edit
   add "$I_TOOLS  $(L herramientas tools) ›"                          tools
   add "$I_KEYS  $(L atajos shortcuts) (SUPER+H)"                    keys
+  add "$I_UPDATE  $(L "actualizar discada" "update discada")"           update
 
   i=$(pick discada "$(L "el rice de los looks · Esc para salir" "the rice of looks · Esc to close")" "${names[@]}") || exit 0
   row=$i
@@ -233,5 +234,6 @@ while true; do
     edit)   edit_menu; exit 0 ;;
     tools)  tools_menu; exit 0 ;;
     keys)   exec "$scripts/KeyHints.sh" ;;
+    update) exec $term --class discada-update -e bash -c "'$scripts/Update.sh'; echo; read -rp '$(L "Enter para cerrar" "Press Enter to close")'" ;;
   esac
 done
