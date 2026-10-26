@@ -125,7 +125,12 @@ def gtk_css(p):
         "insensitive_bg_color": bg, "insensitive_fg_color": mix(fg, bg, 0.5), "borders": surf(0.14),
     }
     head = "/* discada (AppColors.py): colores del look para GTK 3/4. Se regenera solo. */\n"
-    return head + "".join(f"@define-color {k} {v};\n" for k, v in names.items())
+    css = head + "".join(f"@define-color {k} {v};\n" for k, v in names.items())
+    # GTK 4.16+ y libadwaita 1.6+ leen variables CSS (--accent-bg-color…);
+    # GTK 3 no entiende :root, por eso solo va en gtk-4.0
+    root = "".join(f"  --{k.replace('_', '-')}: {v};\n" for k, v in names.items()
+                   if not k.startswith(("theme_", "insensitive_")) and k != "borders")
+    return css, css + ":root {\n" + root + "}\n"
 
 
 def ensure_import(gtkdir):
@@ -182,8 +187,8 @@ def main():
     p = palette()
     if not p:
         return
-    css = gtk_css(p)
-    for v in ("gtk-3.0", "gtk-4.0"):
+    css3, css4 = gtk_css(p)
+    for v, css in (("gtk-3.0", css3), ("gtk-4.0", css4)):
         d = os.path.join(CFG, v)
         ensure_import(d)
         open(os.path.join(d, "discada.css"), "w").write(css)
