@@ -36,6 +36,8 @@ DRAWER_SLOTS = 8
 # (regex sobre la class en minúsculas, glyph, nombre bonito)
 ICONS = [
     (r"^rola$", "\U000f05c3", "rola"),
+    # vato (Vato.sh): audio, bluetooth, red y sistema; antes que kitty
+    (r"^vato$", "\U000f0493", "vato"),
     (r"^kitty", "", "Terminal"),
     (r"^(zen|zen-browser)$", "", "Zen"),
     (r"firefox", "", "Firefox"),

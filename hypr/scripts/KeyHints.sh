@@ -18,6 +18,7 @@ Super Shift Enter|Terminal dropdown|Dropdown terminal
 Super E|Archivos (yazi)|Files (yazi)
 Super B|Navegador|Browser
 Super M|Música (rola)|Music (rola)
+vato|Audio, bluetooth, red y sistema (en la terminal)|Audio, bluetooth, network and system (terminal)
 Super S|Buscar en la web|Web search
 Super Ctrl S|Cambiar de ventana|Window switcher
 Super Alt V|Portapapeles|Clipboard
@@ -101,6 +102,13 @@ Super Shift Print|Área|Area
 Super Shift S|Área + editar (swappy)|Area + edit (swappy)
 Alt Print|Ventana activa|Active window
 Super Ctrl Print|Pantalla en 5 s|Screen in 5 s
+# vato (dentro de la app)|vato (inside the app)
+1-4  tab|Audio · bluetooth · red · sistema|Audio · bluetooth · network · system
+h  l|Volumen (audio)|Volume (audio)
+enter|Predeterminada · conectar · emparejar|Make default · connect · pair
+m|Mudo (audio)|Mute (audio)
+s  p|Buscar · encender bluetooth|Scan · power bluetooth
+c  m  x|Ordenar cpu/mem · cerrar proceso|Sort cpu/mem · kill process
 # Sistema|System
 Alt Shift|Cambiar distribución de teclado|Switch keyboard layout
 Teclas multimedia|Volumen, mute, play/pausa, siguiente|Volume, mute, play/pause, next|Media keys

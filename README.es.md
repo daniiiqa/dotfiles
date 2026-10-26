@@ -33,7 +33,7 @@ Qué hace `install.sh` (también corre desde un clone: `./install.sh`;
 - yazi como explorador por defecto, NetworkManager y bluetooth activos
 - SDDM con el tema simple_sddm_2 si no hay otro display manager
   (`--no-sddm` / `--sddm` para forzar)
-- compila [rola](https://github.com/daniiiqa/rola) en `~/.local/bin`
+- compila [rola](https://github.com/daniiiqa/rola) y [vato](https://github.com/daniiiqa/vato) en `~/.local/bin`
 - en el primer login, `hypr/scripts/FirstRun.sh` termina el resto (wallpaper
   generado si no hay ninguno, colores, tema oscuro e iconos para GTK)
 
@@ -105,6 +105,10 @@ que edites a mano) y copia el nuevo encima.
 - **Archivos: yazi** en kitty (`SUPER+E`, y para "abrir carpeta" desde apps).
 - **`FitGuard.py`**: las apps con tamaño mínimo (Discord) flotan centradas
   cuando su tile queda chico.
+- **Herramientas del sistema: [vato](https://github.com/daniiiqa/vato)** —
+  audio, bluetooth, red y sistema en una sola app de terminal, con el look como
+  rola. Los módulos de la barra la abren en su pestaña (`Vato.sh`); también
+  `vato` desde cualquier terminal.
 - **Música: [rola](https://github.com/daniiiqa/rola)** — YouTube Music en la
   terminal. `rola --login` conecta tu cuenta. Cada look trae su
   `rola/look.json`.

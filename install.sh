@@ -45,7 +45,7 @@ REPO_PKGS=(
   # portapapeles, capturas y grabación (Recorder.sh)
   wl-clipboard cliphist grim slurp swappy gpu-screen-recorder
   # audio (visualizador incluido)
-  pipewire wireplumber pipewire-pulse pamixer pavucontrol playerctl
+  pipewire wireplumber pipewire-pulse pamixer playerctl
   # wallpapers de video y colores
   imagemagick ffmpeg mpv
   # rola (YouTube Music en la terminal): audio por mpv, mpris para waybar
@@ -53,8 +53,8 @@ REPO_PKGS=(
   # utilidades que usan los scripts
   libnotify libqalculate bc curl python xdg-user-dirs xdg-utils git
   # ajustes gráficos, red y bluetooth
-  nwg-displays nwg-look qt5ct qt6ct kvantum papirus-icon-theme adw-gtk-theme
-  networkmanager nm-connection-editor bluez bluez-utils blueman
+  nwg-displays qt5ct qt6ct papirus-icon-theme adw-gtk-theme
+  networkmanager bluez bluez-utils
   # fuentes base (JetBrainsMono Mono para iconos alineados, Adwaita Mono para
   # el visualizador, Noto Serif para paper); las de cada look van en LOOK_FONT
   ttf-jetbrains-mono-nerd adwaita-fonts noto-fonts noto-fonts-emoji
@@ -114,6 +114,7 @@ SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 # carpetas del repo que van a ~/.config (las mismas del whitelist de .gitignore)
 CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout yazi rola sddm Kvantum qt5ct qt6ct swappy)
 ROLA_REPO="https://github.com/daniiiqa/rola.git"
+VATO_REPO="https://github.com/daniiiqa/vato.git"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.conf hypr/workspaces.conf
                 hypr/conf/pinned.conf hypr/conf/defaults.conf hypr/conf/livewallpaper.conf)
@@ -442,6 +443,8 @@ fi
 say "rola ($(L "YouTube Music en la terminal" "YouTube Music in the terminal")) → ~/.local/bin/rola"
 if ! rustup show active-toolchain >/dev/null 2>&1; then run rustup default stable; fi
 run cargo install --git "$ROLA_REPO" --root "$HOME/.local" --locked
+say "vato ($(L "audio, bluetooth, red y sistema en la terminal" "audio, bluetooth, network and system in the terminal")) → ~/.local/bin/vato"
+run cargo install --git "$VATO_REPO" --root "$HOME/.local" --locked
 case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "$(L "~/.local/bin no está en el PATH: agrégalo para correr rola" "~/.local/bin is not in PATH: add it to run rola")" ;; esac
 
 say "$(L "Carpetas de usuario y de wallpapers" "User and wallpaper folders")"

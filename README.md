@@ -33,7 +33,7 @@ shows everything without touching anything; `--help` lists the options):
 - yazi as the default file browser, NetworkManager and bluetooth enabled
 - SDDM with the simple_sddm_2 theme when there is no other display manager
   (`--no-sddm` / `--sddm` to force)
-- builds [rola](https://github.com/daniiiqa/rola) into `~/.local/bin`
+- builds [rola](https://github.com/daniiiqa/rola) and [vato](https://github.com/daniiiqa/vato) into `~/.local/bin`
 - on first login, `hypr/scripts/FirstRun.sh` does the rest (a generated
   wallpaper if there is none, colors, dark GTK theme and icons)
 
@@ -106,6 +106,9 @@ the new one on top.
 - **Files: yazi** in kitty (`SUPER+E`, and for "open folder" from apps).
 - **`FitGuard.py`**: apps with a minimum size (Discord) float centered when
   their tile is too small.
+- **System tools: [vato](https://github.com/daniiiqa/vato)** — audio, bluetooth,
+  network and system in one terminal app, styled by each look like rola. The bar
+  modules open it on the right tab (`Vato.sh`); `vato` from any terminal too.
 - **Music: [rola](https://github.com/daniiiqa/rola)** — YouTube Music in the
   terminal. `rola --login` connects your account. Each look brings its own
   `rola/look.json`.

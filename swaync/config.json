@@ -84,7 +84,7 @@
               },
               {
                   "label": "󰂯",
-                  "command": "blueman-manager"
+                  "command": "bash -c $HOME/.config/hypr/scripts/Vato.sh bluetooth"
               }
           ]
       }

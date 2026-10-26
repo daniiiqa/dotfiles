@@ -176,16 +176,19 @@ edit_menu() {
 }
 
 tools_menu() {
+  # vato (audio, bluetooth, red, sistema) en la terminal con el look; solo los
+  # monitores siguen en una app gráfica. GTK/Qt ya no hacen falta aquí:
+  # AppColors.py les pone los colores del look solo.
   local i
   i=$(row=0 pick "$(L herramientas tools)" "" \
-      "$(L "Monitores" "Monitors") (nwg-displays)" "GTK (nwg-look)" "Qt6 (qt6ct)" "Qt5 (qt5ct)" \
-      "Kvantum" "$(L "Buscar atajos" "Search shortcuts")" "‹ $(L volver back)") || return
+      "Audio (vato)" "Bluetooth (vato)" "$(L "Red" "Network") (vato)" "$(L "Sistema" "System") (vato)" \
+      "$(L "Monitores" "Monitors") (nwg-displays)" "$(L "Buscar atajos" "Search shortcuts")" "‹ $(L volver back)") || return
   case "$i" in
-    0) need nwg-displays && nwg-displays & ;;
-    1) need nwg-look && nwg-look & ;;
-    2) need qt6ct && qt6ct & ;;
-    3) need qt5ct && qt5ct & ;;
-    4) need kvantummanager && kvantummanager & ;;
+    0) "$scripts/Vato.sh" audio & ;;
+    1) "$scripts/Vato.sh" bluetooth & ;;
+    2) "$scripts/Vato.sh" network & ;;
+    3) "$scripts/Vato.sh" system & ;;
+    4) need nwg-displays && nwg-displays & ;;
     5) "$scripts/KeyBinds.sh" & ;;
   esac
 }
