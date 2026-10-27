@@ -38,7 +38,7 @@ REPO_PKGS=(
   hyprland hypridle hyprlock hyprpolkitagent
   xdg-desktop-portal-hyprland xdg-desktop-portal-gtk qt5-wayland qt6-wayland
   # barra, menús, notificaciones
-  waybar rofi swaync yad
+  waybar rofi yad
   # terminal y herramientas de terminal
   kitty fastfetch btop cava
   yazi fd ripgrep zoxide resvg 7zip poppler ffmpegthumbnailer jq fzf
@@ -46,8 +46,8 @@ REPO_PKGS=(
   wl-clipboard cliphist grim slurp swappy gpu-screen-recorder
   # audio (visualizador incluido)
   pipewire wireplumber pipewire-pulse pamixer playerctl
-  # wallpapers de video y colores
-  imagemagick ffmpeg mpv
+  # wallpapers (imagen/gif con awww, antes swww) y colores
+  awww imagemagick ffmpeg mpv
   # rola (YouTube Music en la terminal): audio por mpv, mpris para waybar
   yt-dlp mpv-mpris rustup
   # utilidades que usan los scripts
@@ -102,7 +102,6 @@ declare -A LOOK_DESC_EN=(
   [talavera]="Puebla pottery: cream glaze and cobalt linework"
 )
 AUR_PKGS=(
-  swww       # wallpapers de imagen/gif
   mpvpaper   # wallpapers de video
   wallust    # colores desde el wallpaper
   wlogout    # menú de apagado
@@ -115,6 +114,7 @@ SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout yazi rola sddm Kvantum qt5ct qt6ct swappy)
 ROLA_REPO="https://github.com/daniiiqa/rola.git"
 VATO_REPO="https://github.com/daniiiqa/vato.git"
+ARRE_REPO="https://github.com/daniiiqa/arre.git"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.conf hypr/workspaces.conf
                 hypr/conf/pinned.conf hypr/conf/defaults.conf hypr/conf/livewallpaper.conf)
@@ -207,8 +207,11 @@ NEW_MACHINE=0
 
 ((UPDATE)) && SDDM=no   # actualizar no toca la pantalla de login
 if [ "$SDDM" = auto ]; then
-  if systemctl is-enabled display-manager.service >/dev/null 2>&1; then SDDM=no
-  else SDDM=yes; fi
+  # si ya hay SDDM (CachyOS lo trae) se le pone el tema de discada; otro
+  # display manager se respeta
+  dm=$(readlink -f /etc/systemd/system/display-manager.service 2>/dev/null || true)
+  if [[ "$dm" == */sddm.service ]] || ! systemctl is-enabled display-manager.service >/dev/null 2>&1; then SDDM=yes
+  else SDDM=no; fi
 fi
 
 # ── Looks: cuáles instalar y con cuál empezar ────────────────────────────────
@@ -311,13 +314,22 @@ if ((AUR)); then
     run "$helper" -S --needed "${YES[@]}" "${AUR_PKGS[@]}"
   fi
 else
-  warn "$(L "Saltando AUR: sin swww/mpvpaper/wallust no hay wallpapers ni colores dinámicos" \
-            "Skipping AUR: without swww/mpvpaper/wallust there are no wallpapers or dynamic colors")"
+  warn "$(L "Saltando AUR: sin mpvpaper/wallust no hay wallpapers de video ni colores dinámicos" \
+            "Skipping AUR: without mpvpaper/wallust there are no video wallpapers or dynamic colors")"
 fi
 
 # ── 3. Dotfiles ──────────────────────────────────────────────────────────────
 if ((NEW_MACHINE)); then
   say "$(L "Copiando dotfiles a $CFG (lo que se pise va a $BACKUP)" "Copying dotfiles to $CFG (anything overwritten goes to $BACKUP)")"
+  # Hyprland lee hyprland.lua antes que hyprland.conf: con la config Lua de
+  # la distro (CachyOS, que arranca noctalia desde ahí) discada nunca cargaría
+  if [ -f "$CFG/hypr/hyprland.lua" ]; then
+    say "$(L "Apartando la config Lua de Hyprland (hyprland.lua y config/) a $BACKUP/hypr" \
+            "Moving the Hyprland Lua config (hyprland.lua and config/) to $BACKUP/hypr")"
+    run mkdir -p "$BACKUP/hypr"
+    run mv "$CFG/hypr/hyprland.lua" "$BACKUP/hypr/"
+    [ -d "$CFG/hypr/config" ] && run mv "$CFG/hypr/config" "$BACKUP/hypr/"
+  fi
   keep=""
   if ((UPDATE)) && ! ((DRY)); then
     keep=$(mktemp -d)
@@ -445,7 +457,19 @@ if ! rustup show active-toolchain >/dev/null 2>&1; then run rustup default stabl
 run cargo install --git "$ROLA_REPO" --root "$HOME/.local" --locked
 say "vato ($(L "audio, bluetooth, red y sistema en la terminal" "audio, bluetooth, network and system in the terminal")) → ~/.local/bin/vato"
 run cargo install --git "$VATO_REPO" --root "$HOME/.local" --locked
-case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "$(L "~/.local/bin no está en el PATH: agrégalo para correr rola" "~/.local/bin is not in PATH: add it to run rola")" ;; esac
+say "arre ($(L "las notificaciones con el look de discada" "notifications with the discada look")) → ~/.local/bin/arre"
+run cargo install --git "$ARRE_REPO" --root "$HOME/.local" --locked
+# D-Bus lo arranca cuando llega la primera notificación (las de tu usuario
+# ganan a las de /usr/share: si hay otro daemon instalado, gana arre)
+dbus_dir="$HOME/.local/share/dbus-1/services"
+if ((DRY)); then echo "   [dry-run] $dbus_dir/org.freedesktop.Notifications.service + org.discada.Arre.service"
+else
+  mkdir -p "$dbus_dir"
+  for name in org.freedesktop.Notifications org.discada.Arre; do
+    printf '[D-BUS Service]\nName=%s\nExec=%s\n' "$name" "$HOME/.local/bin/arre" > "$dbus_dir/$name.service"
+  done
+fi
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "$(L "~/.local/bin no está en el PATH: agrégalo para correr rola, vato y arre" "~/.local/bin is not in PATH: add it to run rola, vato and arre")" ;; esac
 
 say "$(L "Carpetas de usuario y de wallpapers" "User and wallpaper folders")"
 run xdg-user-dirs-update
@@ -471,6 +495,12 @@ if [ "$SDDM" = yes ]; then
   else
     sudo mkdir -p /etc/sddm.conf.d
     printf '[Theme]\nCurrent=simple_sddm_2\n' | sudo tee /etc/sddm.conf.d/theme.conf >/dev/null
+    # otro tema puesto en /etc/sddm.conf (se lee al último) o en un archivo
+    # que va después ganaría: se comenta (queda .discada-bak)
+    for f in /etc/sddm.conf /etc/sddm.conf.d/*.conf; do
+      [ -f "$f" ] && [ "$f" != /etc/sddm.conf.d/theme.conf ] || continue
+      grep -q '^Current=' "$f" && sudo sed -i.discada-bak 's/^Current=/#Current=/' "$f"
+    done
   fi
   run sudo systemctl enable sddm.service
 else

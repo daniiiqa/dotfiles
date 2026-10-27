@@ -12,7 +12,7 @@ wallpaper_current="$HOME/.config/hypr/wallpaper_effects/.wallpaper_current"
 iDIR="$HOME/.config/swaync/images"
 iDIRi="$HOME/.config/swaync/icons"
 
-# swww transition config
+# awww transition config
 FPS=60
 TYPE="any"
 DURATION=2
@@ -44,7 +44,7 @@ adjusted_icon_size=$(echo "$icon_size" | awk '{if ($1 < 15) $1 = 20; if ($1 > 25
 rofi_override="element-icon{size:${adjusted_icon_size}%;}"
 
 # Custom (dany): wallpapers independientes por monitor.
-# swww-daemon queda SIEMPRE vivo (imágenes/gifs); mpvpaper corre una instancia
+# awww-daemon queda SIEMPRE vivo (imágenes/gifs); mpvpaper corre una instancia
 # por monitor solo donde hay video. Matar mpvpaper únicamente en un output
 # (las instancias legacy con '*' cubrían todo, también cuentan).
 kill_mpvpaper_on() {
@@ -113,7 +113,7 @@ menu() {
 
 # Custom (dany): la persistencia de videos vive en LiveWallpaper.conf (una
 # línea exec-once por monitor), regenerado aquí — nada de seds sobre
-# startup.conf. swww-daemon arranca siempre desde startup.conf.
+# startup.conf. awww-daemon arranca siempre desde startup.conf.
 modify_startup_config() {
   local selected_file="$1"
   local live_conf="$HOME/.config/hypr/conf/livewallpaper.conf"
@@ -126,8 +126,8 @@ modify_startup_config() {
   mv "$live_conf.tmp" "$live_conf"
 
   if [[ "$selected_file" =~ \.(mp4|mkv|mov|webm)$ ]]; then
-    # sleep 1: mpvpaper debe mapear su superficie DESPUÉS de swww, o la imagen
-    # cacheada de swww quedaría encima del video en este monitor
+    # sleep 1: mpvpaper debe mapear su superficie DESPUÉS de awww, o la imagen
+    # cacheada de awww quedaría encima del video en este monitor
     selected_file="${selected_file/#$HOME/\$HOME}" # Replace /home/user with $HOME
     echo "exec-once = sleep 1 && mpvpaper $focused_monitor -o \"load-scripts=no no-audio --loop hwdec=auto\" \"$selected_file\"" >> "$live_conf"
     echo "Configured live wallpaper (video) for $focused_monitor."
@@ -142,12 +142,12 @@ apply_image_wallpaper() {
 
   kill_wallpaper_for_image
 
-  if ! pgrep -x "swww-daemon" >/dev/null; then
-    echo "Starting swww-daemon..."
-    swww-daemon --format xrgb &
+  if ! pgrep -x "awww-daemon" >/dev/null; then
+    echo "Starting awww-daemon..."
+    awww-daemon --format xrgb &
   fi
 
-  swww img -o "$focused_monitor" "$image_path" $SWWW_PARAMS
+  awww img -o "$focused_monitor" "$image_path" $SWWW_PARAMS
 
   # Run additional scripts (pass the image path to avoid cache race conditions)
   "$SCRIPTSDIR/WallustSwww.sh" "$image_path"
@@ -167,10 +167,10 @@ apply_video_wallpaper() {
   fi
   kill_wallpaper_for_video
 
-  # Custom (dany): swww debe estar vivo ANTES de lanzar mpvpaper — sirve los
+  # Custom (dany): awww debe estar vivo ANTES de lanzar mpvpaper — sirve los
   # demás monitores, y su superficie tiene que quedar debajo del video.
-  if ! pgrep -x "swww-daemon" >/dev/null; then
-    swww-daemon --format xrgb &
+  if ! pgrep -x "awww-daemon" >/dev/null; then
+    awww-daemon --format xrgb &
     sleep 1
   fi
 

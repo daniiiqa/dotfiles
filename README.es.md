@@ -64,7 +64,7 @@ Puebla: esmalte crema, trazo cobalto)
 Cada look vive en `hypr/looks/<nombre>/` como espejo de `~/.config` con solo
 los archivos que cambia: decoraciones y animaciones de Hyprland, hyprlock,
 waybar (config, estilo, iconos de apps, estilo del visualizador, etiquetas del
-grabador), rofi, swaync, wlogout, kitty, fastfetch, rola, SDDM y la paleta de
+grabador), rofi, arre, wlogout, kitty, fastfetch, rola, SDDM y la paleta de
 wallust. `LookSwitch.sh` guarda lo vivo en el look actual (así no se pierde lo
 que edites a mano) y copia el nuevo encima.
 
@@ -99,7 +99,7 @@ que edites a mano) y copia el nuevo encima.
 - **Wallpapers por monitor**: swww para imágenes/gifs, un mpvpaper por monitor
   solo donde hay video. Game mode los pausa y los revive al salir.
 - **Colores desde wallpapers de video**: el fotograma de en medio pasa por
-  wallust, así waybar, rofi, kitty, swaync, hyprlock y SDDM combinan.
+  wallust, así waybar, rofi, kitty, arre, hyprlock y SDDM combinan.
 - **Legible con cualquier wallpaper**: wallust con `check_contrast` y luego
   `ContrastFix.py` sube cualquier color de texto a 4.5:1 (WCAG AA).
 - **Archivos: yazi** en kitty (`SUPER+E`, y para "abrir carpeta" desde apps).

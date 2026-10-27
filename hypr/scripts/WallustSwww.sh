@@ -6,29 +6,13 @@ set -euo pipefail
 
 # Inputs and paths
 passed_path="${1:-}"
-cache_dir="$HOME/.cache/swww/"
 rofi_link="$HOME/.config/rofi/.current_wallpaper"
 wallpaper_current="$HOME/.config/hypr/wallpaper_effects/.wallpaper_current"
-read_cached_wallpaper() {
-  local cache_file="$1"
-  if [[ -f "$cache_file" ]]; then
-    awk 'NF && $0 !~ /^filter/ {print; exit}' "$cache_file"
-  fi
-}
-
+# Custom (dany): swww ahora es awww y su caché ya no es una ruta por monitor:
+# se pregunta al daemon (": DP-1: 1920x1080, ... image: /ruta")
 read_wallpaper_from_query() {
   local monitor="$1"
-  swww query | awk -v mon="$monitor" '
-    /^Monitor/ {
-      cur=$2
-      gsub(":", "", cur)
-    }
-    /image:/ && cur==mon {
-      sub(/^.*image: /,"")
-      print
-      exit
-    }
-  '
+  awww query 2>/dev/null | sed -nE "s/^: $monitor: .*image: (.*)\$/\1/p" | head -n1
 }
 
 # Helper: get focused monitor name (prefer JSON)
@@ -45,26 +29,13 @@ wallpaper_path=""
 if [[ -n "$passed_path" && -f "$passed_path" ]]; then
   wallpaper_path="$passed_path"
 else
-  # Try to read from swww cache for the focused monitor, with a short retry loop
   current_monitor="$(get_focused_monitor)"
-  cache_file="$cache_dir$current_monitor"
-
-  # Wait briefly for swww to write its cache after an image change
-  for i in {1..10}; do
-    if [[ -f "$cache_file" ]]; then
-      break
-    fi
+  # recién cambiado, el daemon tarda un poco en reportar la imagen nueva
+  for _ in {1..10}; do
+    wallpaper_path="$(read_wallpaper_from_query "$current_monitor")"
+    [[ -n "$wallpaper_path" ]] && break
     sleep 0.1
   done
-
-  if [[ -f "$cache_file" ]]; then
-    # The first non-filter line is the original wallpaper path
-    wallpaper_path="$(read_cached_wallpaper "$cache_file")"
-  fi
-
-  if [[ -z "$wallpaper_path" ]]; then
-    wallpaper_path="$(read_wallpaper_from_query "$current_monitor")"
-  fi
 fi
 
 if [[ -z "${wallpaper_path:-}" || ! -f "$wallpaper_path" ]]; then

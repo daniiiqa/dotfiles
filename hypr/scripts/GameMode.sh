@@ -20,18 +20,18 @@ if [ "$HYPRGAMEMODE" = 1 ] ; then
 	# Custom (dany): sintaxis windowrule actualizada (la vieja tronaba con
 	# "invalid field" en Hyprland >= 0.53; hyprctl reload al salir la limpia)
 	hyprctl keyword windowrule "match:class .*, opacity 1 override"
-	# Custom (dany): el video también descansa en game mode, no solo swww
-	swww kill
+	# Custom (dany): el video también descansa en game mode, no solo awww
+	awww kill
 	pkill mpvpaper 2>/dev/null
     notify-send -e -u low -i "$notif" " Gamemode:" " enabled"
     sleep 0.1
     exit
 else
-	# Custom (dany): NADA de `swww img` global aquí — pintaba .current_wallpaper
+	# Custom (dany): NADA de `awww img` global aquí — pintaba .current_wallpaper
 	# en TODOS los monitores y aplastaba las imágenes independientes. El daemon
 	# restaura solo su caché por monitor, y los videos reviven desde
 	# LiveWallpaper.conf (una línea por monitor, la fuente de verdad).
-	swww-daemon --format xrgb &
+	awww-daemon --format xrgb &
 	live_conf="$HOME/.config/hypr/conf/livewallpaper.conf"
 	if [ -f "$live_conf" ]; then
 		grep '^exec-once = ' "$live_conf" | sed 's/^exec-once = //' | while read -r cmd; do

@@ -24,9 +24,9 @@ if [ -z "$wall" ]; then
     -compose plus -composite "$wall" 2>/dev/null
 fi
 
-# 2) mostrarlo (esperar a que swww-daemon esté arriba)
-for _ in $(seq 1 50); do swww query >/dev/null 2>&1 && break; sleep 0.1; done
-swww img "$wall" --transition-type fade --transition-duration 1 >/dev/null 2>&1
+# 2) mostrarlo (esperar a que awww-daemon esté arriba)
+for _ in $(seq 1 50); do awww query >/dev/null 2>&1 && break; sleep 0.1; done
+awww img "$wall" --transition-type fade --transition-duration 1 >/dev/null 2>&1
 
 # 3) colores desde el wallpaper + recargar todo
 "$scripts/WallustSwww.sh" "$wall"

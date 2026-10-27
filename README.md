@@ -63,7 +63,7 @@ pottery: cream glaze, cobalt linework)
 
 Each look lives in `hypr/looks/<name>/` as a mirror of `~/.config` with only
 the files it changes: Hyprland decorations and animations, hyprlock, waybar
-(config, style, app icons, visualizer style, recorder labels), rofi, swaync,
+(config, style, app icons, visualizer style, recorder labels), rofi, arre,
 wlogout, kitty, fastfetch, rola, SDDM and the wallust palette. `LookSwitch.sh`
 saves the live files into the current look (so hand edits are kept) and copies
 the new one on top.
@@ -100,7 +100,7 @@ the new one on top.
 - **Per-monitor wallpapers**: swww for images/gifs, one mpvpaper per monitor
   only where there's a video. Game mode pauses them and revives them on exit.
 - **Colors from video wallpapers**: the middle frame goes through wallust, so
-  waybar, rofi, kitty, swaync, hyprlock and SDDM match.
+  waybar, rofi, kitty, arre, hyprlock and SDDM match.
 - **Readable on any wallpaper**: wallust with `check_contrast`, then
   `ContrastFix.py` lifts any text color to 4.5:1 (WCAG AA).
 - **Files: yazi** in kitty (`SUPER+E`, and for "open folder" from apps).

@@ -19,8 +19,8 @@ SWWW_PARAMS="--transition-fps $FPS --transition-type $TYPE --transition-duration
 
 # Custom (dany): daemon con if de verdad — el `query || daemon && img` original
 # tenía la precedencia rota (el img quedaba encadenado al arranque del daemon)
-if ! pgrep -x swww-daemon >/dev/null; then
-  swww-daemon --format xrgb &
+if ! pgrep -x awww-daemon >/dev/null; then
+  awww-daemon --format xrgb &
   sleep 1
 fi
 
@@ -39,10 +39,10 @@ if [ -f "$live_conf" ]; then
   mv "$live_conf.tmp" "$live_conf"
 fi
 
-swww img -o "$focused_monitor" "$RANDOMPICS" $SWWW_PARAMS
+awww img -o "$focused_monitor" "$RANDOMPICS" $SWWW_PARAMS
 
 # Custom (dany): pasar la ruta exacta — sin argumento, WallustSwww lee el caché
-# de swww y en randoms seguidos generaba el theme del wallpaper ANTERIOR
+# de awww y en randoms seguidos generaba el theme del wallpaper ANTERIOR
 # (carrera: el caché aún no se escribía cuando wallust leía)
 "$SCRIPTSDIR/WallustSwww.sh" "$RANDOMPICS"
 # Custom (dany): elegiste wallpaper — si estabas en un look de paleta fija,

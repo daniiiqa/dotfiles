@@ -28,15 +28,15 @@ if [ -n "$img" ]; then
   # 1) guardar lo tuyo (solo al salir de un look que sigue al wallpaper)
   if [ ! -d "$saved" ]; then
     mkdir -p "$saved"
-    swww query > "$saved/swww" 2>/dev/null
+    awww query > "$saved/swww" 2>/dev/null
     [ -f "$live" ] && cp "$live" "$saved/livewallpaper.conf"
     readlink -f "$cfg/rofi/.current_wallpaper" > "$saved/current" 2>/dev/null
   fi
   # 2) sin videos: el wallpaper del look en todos los monitores
   pkill -x mpvpaper 2>/dev/null
   [ -f "$live" ] && grep '^#' "$live" > "$live.tmp" && mv "$live.tmp" "$live"
-  pgrep -x swww-daemon >/dev/null || { swww-daemon --format xrgb & sleep 1; }
-  swww img "$img" "${params[@]}"
+  pgrep -x awww-daemon >/dev/null || { awww-daemon --format xrgb & sleep 1; }
+  awww img "$img" "${params[@]}"
   "$scripts/WallustSwww.sh" "$img" >/dev/null 2>&1
   exit 10
 fi
@@ -44,7 +44,7 @@ fi
 # look que sigue al wallpaper: devolver lo guardado, si hay
 [ -d "$saved" ] || exit 0
 while IFS=$'\t' read -r mon path; do
-  [ -n "$mon" ] && [ -f "$path" ] && swww img -o "$mon" "$path" "${params[@]}"
+  [ -n "$mon" ] && [ -f "$path" ] && awww img -o "$mon" "$path" "${params[@]}"
 done < <(sed -nE 's/^: ([^:]+): .*image: (.*)$/\1\t\2/p' "$saved/swww")
 if [ -f "$saved/livewallpaper.conf" ]; then
   cp "$saved/livewallpaper.conf" "$live"
