@@ -27,7 +27,7 @@ arre="$HOME/.local/bin/arre"
 
 need() {
   command -v "$1" &>/dev/null && return 0
-  notify-send -i "$iDIR/error.png" "$(L "Falta $1" "$1 is missing")" "$(L "Instálalo primero" "Install it first")"
+  notify-send -i "dialog-error-symbolic" "$(L "Falta $1" "$1 is missing")" "$(L "Instálalo primero" "Install it first")"
   return 1
 }
 
@@ -80,7 +80,7 @@ set_language() {
   # se reinicia solo al ver el cambio
   hyprctl reload >/dev/null
   pkill -RTMIN+10 -x waybar
-  notify-send -e -u low -i "$iDIR/bell.png" "discada" "$(L "Idioma: español" "Language: English")"
+  notify-send -e -u low -i "preferences-system-notifications-symbolic" "discada" "$(L "Idioma: español" "Language: English")"
 }
 
 # ── visualizador ─────────────────────────────────────────────────────────────
@@ -171,12 +171,12 @@ pos_name() {
 
 # un aviso de muestra, de paso (no se queda en el historial)
 notif_sample() {
-  notify-send -e -t 4000 -a discada -i "$iDIR/bell.png" \
+  notify-send -e -t 4000 -a discada -i "preferences-system-notifications-symbolic" \
     "$(L "Así se ven las notificaciones" "This is how notifications look")" "$(pos_name "$("$arre" position)")"
 }
 
 notif_menu() {
-  [ -x "$arre" ] || { notify-send -i "$iDIR/error.png" "$(L "Falta arre" "arre is missing")" \
+  [ -x "$arre" ] || { notify-send -i "dialog-error-symbolic" "$(L "Falta arre" "arre is missing")" \
     "cargo install --git https://github.com/daniiiqa/arre --root ~/.local"; return; }
   local row=0
   while true; do

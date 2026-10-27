@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Playerctl
 
-music_icon="$HOME/.config/swaync/icons/music.png"
+music_icon="audio-x-generic-symbolic"
 
 # Play the next track
 play_next() {

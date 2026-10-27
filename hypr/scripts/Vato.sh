@@ -11,7 +11,7 @@ PATH="$HOME/.local/bin:$PATH"
 . "$HOME/.config/hypr/scripts/lang.sh"
 
 if ! command -v vato >/dev/null; then
-  notify-send -i "$HOME/.config/swaync/images/error.png" "$(L "Falta vato" "vato is missing")" \
+  notify-send -i "dialog-error-symbolic" "$(L "Falta vato" "vato is missing")" \
     "$(L "Instálalo con: cargo install --git https://github.com/daniiiqa/vato --root ~/.local" \
          "Install it with: cargo install --git https://github.com/daniiiqa/vato --root ~/.local")"
   exit 1

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # This is for changing kb_layouts. Set kb_layouts in "$HOME/.config/hypr/conf/settings.conf"
 
-notif_icon="$HOME/.config/swaync/images/bell.png"
+notif_icon="preferences-system-notifications-symbolic"
 SCRIPTSDIR="$HOME/.config/hypr/scripts"
 
 # Refined ignore list with patterns or specific device names

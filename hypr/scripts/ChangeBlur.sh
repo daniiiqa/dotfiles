@@ -8,9 +8,9 @@ STATE=$(hyprctl -j getoption decoration:blur:passes | jq ".int")
 if [ "${STATE}" == "2" ]; then
 	hyprctl keyword decoration:blur:size 2
 	hyprctl keyword decoration:blur:passes 1
- 	notify-send -e -u low -i "$notif/note.png" " Less Blur"
+ 	notify-send -e -u low -i "audio-x-generic-symbolic" " Less Blur"
 else
 	hyprctl keyword decoration:blur:size 5
 	hyprctl keyword decoration:blur:passes 2
-  	notify-send -e -u low -i "$notif/bell.png" " Normal Blur"
+  	notify-send -e -u low -i "preferences-system-notifications-symbolic" " Normal Blur"
 fi

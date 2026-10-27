@@ -7,7 +7,6 @@
 #   Brightness.sh --idle-dim | --idle-restore     lo llama hypridle
 
 sDIR="$HOME/.config/hypr/scripts"
-iDIR="$HOME/.config/swaync/images"
 . "$sDIR/lang.sh"
 
 has_backlight() { compgen -G "/sys/class/backlight/*" >/dev/null; }
@@ -18,13 +17,13 @@ get_pct() { brightnessctl -m -c backlight 2>/dev/null | cut -d, -f4 | tr -d '%';
 notify_user() {
   local level; level=$(get_pct)
   notify-send -e -h int:value:"$level" -h string:x-canonical-private-synchronous:brightness_notif \
-    -h boolean:SWAYNC_BYPASS_DND:true -u low -a discada -i "$iDIR/bell.png" \
-    "$(L "Brillo" "Brightness")" "${level}%"
+    -h boolean:SWAYNC_BYPASS_DND:true -u low -a discada -i display-brightness-symbolic \
+    "$(L "Brillo" "Brightness")"
 }
 
 need() {
   command -v brightnessctl >/dev/null && return 0
-  notify-send -i "$iDIR/error.png" "$(L "Falta brightnessctl" "brightnessctl is missing")" "sudo pacman -S brightnessctl"
+  notify-send -i "dialog-error-symbolic" "$(L "Falta brightnessctl" "brightnessctl is missing")" "sudo pacman -S brightnessctl"
   exit 1
 }
 
@@ -42,7 +41,7 @@ kbd() {
   brightnessctl -q -d "$dev" set "$1"
   local pct; pct=$(brightnessctl -m -d "$dev" | cut -d, -f4 | tr -d '%')
   notify-send -e -h int:value:"$pct" -h string:x-canonical-private-synchronous:kbd_notif \
-    -u low -a discada -i "$iDIR/bell.png" "$(L "Luz del teclado" "Keyboard light")" "${pct}%"
+    -u low -a discada -i "keyboard-brightness-symbolic" "$(L "Luz del teclado" "Keyboard light")"
 }
 
 case "$1" in

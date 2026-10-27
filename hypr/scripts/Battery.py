@@ -28,7 +28,7 @@ PS = "/sys/class/power_supply"
 RUN = os.path.join(os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "discada")
 STATE = os.path.join(RUN, "saver.json")
 DISCADA = os.path.expanduser("~/.config/hypr/discada.conf")
-ICON = os.path.expanduser("~/.config/swaync/images/bell.png")
+ICON = "battery-caution-symbolic"
 WARN_AT = (20, 10, 5)
 SIGNAL = 11   # pkill -RTMIN+11 waybar
 

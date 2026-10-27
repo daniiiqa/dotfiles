@@ -14,7 +14,7 @@
 
 MAP_FILE="$HOME/.cache/kb_layout_per_window"
 CFG_FILE="$HOME/.config/hypr/conf/settings.conf"
-ICON="$HOME/.config/swaync/images/bell.png"
+ICON="preferences-system-notifications-symbolic"
 SCRIPT_NAME="$(basename "$0")"
 
 # Ensure map file exists

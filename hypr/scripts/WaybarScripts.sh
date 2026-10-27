@@ -25,7 +25,7 @@ fi
 # Execute accordingly based on the passed argument
 launch_files() {
     if [[ -z "$files" ]]; then
-        notify-send -u low -i "$HOME/.config/swaync/images/error.png" "Waybar: files" "Set \$files in hypr/conf/defaults.conf or install a default file manager."
+        notify-send -u low -i "dialog-error-symbolic" "Waybar: files" "Set \$files in hypr/conf/defaults.conf or install a default file manager."
         return 1
     fi
     eval "$files &"

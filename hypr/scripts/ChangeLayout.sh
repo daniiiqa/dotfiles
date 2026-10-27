@@ -3,7 +3,7 @@
 # J/K ciclan ventanas en dwindle y el stack en master; togglesplit vive en
 # SUPER+Shift+I — no se toca SUPER+O (es el toggle de opacidad).
 
-notif="$HOME/.config/swaync/images/bell.png"
+notif="preferences-system-notifications-symbolic"
 layout=$(hyprctl -j getoption general:layout | jq -r '.str')
 
 if [ "$layout" = "master" ]; then

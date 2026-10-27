@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Game Mode. Turning off all animations
 
-notif="$HOME/.config/swaync/images/bell.png"
+notif="preferences-system-notifications-symbolic"
 SCRIPTSDIR="$HOME/.config/hypr/scripts"
 
 

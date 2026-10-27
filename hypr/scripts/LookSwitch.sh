@@ -47,12 +47,12 @@ case "$target" in
       msg=$(L "este look no tiene shader" "this look has no shader")
     fi
     hyprctl reload >/dev/null
-    notify-send -e -u low -i "$cfg/swaync/images/bell.png" "Look" "$msg"
+    notify-send -e -u low -i "preferences-desktop-appearance-symbolic" "Look" "$msg"
     exit 0
     ;;
 esac
 if [ ! -d "$looks/$target" ]; then
-  notify-send -i "$cfg/swaync/images/error.png" "Look" "$(L "No existe" "Not found"): $target"
+  notify-send -i "dialog-error-symbolic" "Look" "$(L "No existe" "Not found"): $target"
   exit 1
 fi
 [ "$target" = "$current" ] && exit 0
@@ -97,4 +97,4 @@ pkill -SIGUSR2 waybar
 pkill -USR1 -x kitty
 pkill rofi 2>/dev/null
 
-notify-send -e -u low -i "$cfg/swaync/images/bell.png" "Look" "$target"
+notify-send -e -u low -i "preferences-desktop-appearance-symbolic" "Look" "$target"
