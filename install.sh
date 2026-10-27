@@ -205,7 +205,7 @@ BACKUP="$HOME/.config-backup-$(date +%Y%m%d-%H%M%S)"
 NEW_MACHINE=0
 [ "$REPO_DIR" != "$CFG" ] && NEW_MACHINE=1
 
-((UPDATE)) && SDDM=no   # actualizar no toca la pantalla de login
+[ "$SDDM" = auto ] && ((UPDATE)) && SDDM=no   # actualizar no toca la pantalla de login (salvo --sddm)
 if [ "$SDDM" = auto ]; then
   # si ya hay SDDM (CachyOS lo trae) se le pone el tema de discada; otro
   # display manager se respeta
