@@ -41,7 +41,8 @@ REPO_PKGS=(
   waybar rofi yad
   # terminal y herramientas de terminal
   kitty fastfetch btop cava
-  yazi fd ripgrep zoxide resvg 7zip poppler ffmpegthumbnailer jq fzf
+  # taco (archivos) usa fd, fzf, zoxide y las miniaturas; nvim con LazyVim
+  fd ripgrep zoxide resvg 7zip poppler ffmpegthumbnailer jq fzf udisks2 neovim
   # portapapeles, capturas y grabación (Recorder.sh)
   wl-clipboard cliphist grim slurp swappy gpu-screen-recorder
   # audio (visualizador incluido)
@@ -107,14 +108,25 @@ AUR_PKGS=(
   wlogout    # menú de apagado
 )
 SDDM_PKGS=(sddm qt6-svg qt6-declarative qt6-5compat)
+# laptops (hay batería del equipo, no la de un mouse): brillo y perfiles de
+# energía. power-profiles-daemon choca con tlp: si ya está tlp, se respeta
+LAPTOP=0
+for b in /sys/class/power_supply/*; do
+  [ "$(cat "$b/type" 2>/dev/null)" = Battery ] && [ "$(cat "$b/scope" 2>/dev/null)" != Device ] && LAPTOP=1
+done
+LAPTOP_PKGS=(brightnessctl)
+pacman -Q tlp &>/dev/null || LAPTOP_PKGS+=(power-profiles-daemon)
+((LAPTOP)) && REPO_PKGS+=("${LAPTOP_PKGS[@]}")
 SDDM_THEME_REPO="https://github.com/JaKooLit/simple-sddm-2.git"
 SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 
 # carpetas del repo que van a ~/.config (las mismas del whitelist de .gitignore)
-CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout yazi rola sddm Kvantum qt5ct qt6ct swappy)
+CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout rola sddm Kvantum qt5ct qt6ct swappy)
 ROLA_REPO="https://github.com/daniiiqa/rola.git"
 VATO_REPO="https://github.com/daniiiqa/vato.git"
 ARRE_REPO="https://github.com/daniiiqa/arre.git"
+TACO_REPO="https://github.com/daniiiqa/taco.git"
+LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.conf hypr/workspaces.conf
                 hypr/conf/pinned.conf hypr/conf/defaults.conf hypr/conf/livewallpaper.conf)
@@ -352,7 +364,7 @@ if ((NEW_MACHINE)); then
       fi
     done < <(find "$REPO_DIR/$d" -type f -print0)
     run mkdir -p "$CFG/$d"
-    # --remove-destination: hay archivos de solo lectura (plugins de yazi)
+    # --remove-destination: por si hay archivos de solo lectura
     run cp -a --remove-destination "$REPO_DIR/$d/." "$CFG/$d/"
   done
   if [ -n "$keep" ]; then
@@ -433,23 +445,23 @@ if ((NEW_MACHINE)) || [[ " $* " == *" --lang="* ]]; then
   fi
 fi
 
-say "$(L "yazi como explorador de carpetas por defecto" "yazi as the default folder browser")"
-desk="$HOME/.local/share/applications/yazi-kitty.desktop"
+say "$(L "taco como explorador de carpetas por defecto" "taco as the default folder browser")"
+desk="$HOME/.local/share/applications/taco.desktop"
 if ((DRY)); then echo "   [dry-run] escribir $desk + xdg-mime default"
 else
   mkdir -p "$(dirname "$desk")"
   cat > "$desk" <<EOF
 [Desktop Entry]
-Name=$(L "Archivos (yazi)" "Files (yazi)")
+Name=$(L "Archivos (taco)" "Files (taco)")
 Comment=$(L "Explorador de archivos en terminal" "Terminal file manager")
-Exec=kitty --class yazi -e yazi %f
+Exec=kitty --class taco -e taco %f
 Icon=system-file-manager
 Terminal=false
 Type=Application
 Categories=System;FileTools;FileManager;
 MimeType=inode/directory;
 EOF
-  xdg-mime default yazi-kitty.desktop inode/directory
+  xdg-mime default taco.desktop inode/directory
 fi
 
 say "rola ($(L "YouTube Music en la terminal" "YouTube Music in the terminal")) → ~/.local/bin/rola"
@@ -459,6 +471,26 @@ say "vato ($(L "audio, bluetooth, red y sistema en la terminal" "audio, bluetoot
 run cargo install --git "$VATO_REPO" --root "$HOME/.local" --locked
 say "arre ($(L "las notificaciones con el look de discada" "notifications with the discada look")) → ~/.local/bin/arre"
 run cargo install --git "$ARRE_REPO" --root "$HOME/.local" --locked
+say "taco ($(L "los archivos con el look de discada" "files with the discada look")) → ~/.local/bin/taco"
+run cargo install --git "$TACO_REPO" --root "$HOME/.local" --locked
+
+# nvim: si no hay config, el starter de LazyVim; luego el colorscheme de
+# discada (sigue al look; vive en hypr/nvim/). Del resto de tu config no se
+# toca nada.
+say "nvim (LazyVim) $(L "con el look de discada" "with the discada look")"
+nvim_dir="$CFG/nvim"
+if [ ! -e "$nvim_dir/init.lua" ] && [ ! -e "$nvim_dir/init.vim" ]; then
+  run git clone --depth 1 "$LAZYVIM_STARTER" "$nvim_dir" && run rm -rf "$nvim_dir/.git"
+fi
+nvim_files=(colors/discada.lua lua/discada.lua)
+# el spec que lo pone como colorscheme solo tiene sentido con LazyVim
+if ((DRY)) || [ -e "$nvim_dir/lazyvim.json" ] || grep -qs LazyVim "$nvim_dir/lua/config/lazy.lua"; then
+  nvim_files+=(lua/plugins/discada.lua)
+fi
+for f in "${nvim_files[@]}"; do
+  run mkdir -p "$nvim_dir/$(dirname "$f")"
+  run cp "$REPO_DIR/hypr/nvim/$f" "$nvim_dir/$f"
+done
 # D-Bus lo arranca cuando llega la primera notificación (las de tu usuario
 # ganan a las de /usr/share: si hay otro daemon instalado, gana arre)
 dbus_dir="$HOME/.local/share/dbus-1/services"
@@ -469,7 +501,7 @@ else
     printf '[D-BUS Service]\nName=%s\nExec=%s\n' "$name" "$HOME/.local/bin/arre" > "$dbus_dir/$name.service"
   done
 fi
-case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "$(L "~/.local/bin no está en el PATH: agrégalo para correr rola, vato y arre" "~/.local/bin is not in PATH: add it to run rola, vato and arre")" ;; esac
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "$(L "~/.local/bin no está en el PATH: agrégalo para correr rola, vato, arre y taco" "~/.local/bin is not in PATH: add it to run rola, vato, arre and taco")" ;; esac
 
 say "$(L "Carpetas de usuario y de wallpapers" "User and wallpaper folders")"
 run xdg-user-dirs-update
@@ -479,6 +511,9 @@ run mkdir -p "$pics/wallpapers"
 say "$(L Servicios Services)"
 run sudo systemctl enable --now NetworkManager.service
 run sudo systemctl enable --now bluetooth.service || warn "$(L "bluetooth no arrancó (¿no hay adaptador?)" "bluetooth didn't start (no adapter?)")"
+if ((LAPTOP)) && in_list power-profiles-daemon "${LAPTOP_PKGS[@]}"; then
+  run sudo systemctl enable --now power-profiles-daemon.service
+fi
 
 say "$(L "Caché de fuentes" "Font cache")"
 run fc-cache -f

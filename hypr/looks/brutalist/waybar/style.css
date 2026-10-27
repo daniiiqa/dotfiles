@@ -76,7 +76,7 @@ tooltip label {
 #temperature,
 #pulseaudio,
 #network,
-#bluetooth,
+#bluetooth, #custom-backlight, #custom-battery,
 #custom-recorder,
 #idle_inhibitor,
 #custom-swaync,
@@ -137,7 +137,7 @@ tooltip label {
 
 #pulseaudio:hover,
 #network:hover,
-#bluetooth:hover,
+#bluetooth:hover, #custom-backlight:hover, #custom-battery:hover,
 #custom-swaync:hover,
 .app:hover,
 .app-more:hover {
@@ -253,3 +253,8 @@ tooltip label {
 	background: #ff4d4d;
 	color: @background;
 }
+
+/* batería (laptops): baja, crítica y ahorro */
+#custom-battery.low { color: #e06c75; }
+#custom-battery.critical { color: #e06c75; font-weight: bold; }
+#custom-battery.saver { opacity: 0.8; }

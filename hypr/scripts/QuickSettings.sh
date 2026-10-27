@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # discada — el centro de ajustes del rice (SUPER+Shift+E): look, shader,
-# idioma, visualizador, grabador, notificaciones, game mode y blur; más los submenús para
+# idioma, visualizador, grabador, notificaciones, batería, game mode y blur; más los submenús para
 # editar la config y abrir las herramientas del sistema. Cada cambio vuelve a
 # abrir el menú en la misma fila, así se pueden tocar varias cosas seguidas.
 
@@ -22,7 +22,7 @@ edit=${EDITOR:-${edit:-nano}}
 I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
 I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
 I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'; I_UPDATE=$'\U000f06b0'
-I_NOTIF=$'\U000f009a'
+I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'
 arre="$HOME/.local/bin/arre"
 
 need() {
@@ -200,6 +200,40 @@ notif_menu() {
   done
 }
 
+# ── batería (laptops) ────────────────────────────────────────────────────────
+bat="$scripts/Battery.py"
+prof_name() {
+  case "$1" in
+    power-saver) L ahorro "power saver" ;;
+    balanced) L balanceado balanced ;;
+    performance) L rendimiento performance ;;
+    *) echo "?" ;;
+  esac
+}
+
+bat_menu() {
+  local row=0
+  while true; do
+    local prof saver at i
+    prof=$(powerprofilesctl get 2>/dev/null)
+    saver=$([ -f "$XDG_RUNTIME_DIR/discada/saver.json" ] && echo yes || echo no)
+    at=$(get_conf "$discada" BATTERY_SAVER_AT)
+    i=$(pick "$(L batería battery)" \
+        "$(L "ahorro: perfil power-saver, sin blur, sombras ni shader y el video en pausa" "saver: power-saver profile, no blur, shadows or shader, video paused")" \
+        "$(L "ahorro de batería" "battery saver"): $(onoff "$saver")" \
+        "$(L "perfil de energía" "power profile"): $(prof_name "$prof")" \
+        "$(L "ahorro solo al" "saver by itself at"): $([ "${at:-20}" = 0 ] && L nunca never || echo "${at:-20}%")" \
+        "‹ $(L volver back)") || return
+    row=$i
+    case "$i" in
+      0) "$bat" saver ;;
+      1) "$bat" profile ;;
+      2) set_conf "$discada" BATTERY_SAVER_AT "$(cycle "${at:-20}" 20 30 15 10 0)" ;;
+      *) return ;;
+    esac
+  done
+}
+
 # ── editar / herramientas ────────────────────────────────────────────────────
 edit_menu() {
   local names=() files=()
@@ -267,6 +301,9 @@ while true; do
   add "$I_REC  $(L grabador recorder) ›"                           rec
   [ -x "$arre" ] && add "$I_NOTIF  $(L notificaciones notifications): $(pos_name "$("$arre" position)") ›" notif
   add "$I_GAME  game mode: $(onoff "$game")"                        game
+  if "$bat" has; then
+    add "$I_BAT  $(L batería battery): $("$bat" status | jq -r '"\(.percentage)%"') ›" battery
+  fi
   add "$I_BLUR  blur: $blur"                                        blur
   add "$I_EDIT  $(L "editar config" "edit config") ›"               edit
   add "$I_TOOLS  $(L herramientas tools) ›"                          tools
@@ -283,6 +320,7 @@ while true; do
     vis)    vis_menu ;;
     rec)    rec_menu ;;
     notif)  notif_menu ;;
+    battery) bat_menu ;;
     game)   "$scripts/GameMode.sh"; sleep 0.3 ;;
     blur)   "$scripts/ChangeBlur.sh" ;;
     edit)   edit_menu; exit 0 ;;

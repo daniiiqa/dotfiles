@@ -90,7 +90,7 @@ tooltip label {
 #temperature,
 #pulseaudio,
 #network,
-#bluetooth,
+#bluetooth, #custom-backlight, #custom-battery,
 #custom-recorder,
 #idle_inhibitor,
 #custom-swaync,
@@ -117,7 +117,7 @@ tooltip label {
 #disk { color: @nord7; }
 #pulseaudio { color: @nord8; }
 #network { color: @nord14; }
-#bluetooth { color: @nord10; }
+#bluetooth, #custom-backlight, #custom-battery { color: @nord10; }
 #custom-swaync { color: @nord4; }
 .app,
 .app-more { color: @nord9; font-size: 15px; padding: 0 6px; }
@@ -140,7 +140,7 @@ tooltip label {
 #custom-power:hover,
 #pulseaudio:hover,
 #network:hover,
-#bluetooth:hover,
+#bluetooth:hover, #custom-backlight:hover, #custom-battery:hover,
 #custom-swaync:hover {
 	background: @nord1;
 }
@@ -215,7 +215,7 @@ tooltip label {
 .app-more,
 #mpris,
 #network,
-#bluetooth,
+#bluetooth, #custom-backlight, #custom-battery,
 #idle_inhibitor,
 #custom-power {
 	font-family: "JetBrainsMono Nerd Font Mono";
@@ -260,3 +260,8 @@ tooltip label {
 #custom-recorder.replay {
 	color: @nord8;
 }
+
+/* batería (laptops): baja, crítica y ahorro */
+#custom-battery.low { color: @nord11; }
+#custom-battery.critical { color: @nord11; font-weight: bold; }
+#custom-battery.saver { opacity: 0.8; }

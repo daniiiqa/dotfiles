@@ -15,7 +15,7 @@ read -r -d '' SHEET <<'EOF'
 Super Space|Lanzador de apps|App launcher
 Super Enter|Terminal|Terminal
 Super Shift Enter|Terminal dropdown|Dropdown terminal
-Super E|Archivos (yazi)|Files (yazi)
+Super E|Archivos (taco)|Files (taco)
 Super B|Navegador|Browser
 Super M|Música (rola)|Music (rola)
 vato|Audio, bluetooth, red y sistema (en la terminal)|Audio, bluetooth, network and system (terminal)
@@ -47,6 +47,8 @@ Barras de audio|Música: click anterior · medio pausa · derecho siguiente|Musi
 Rueda en las barras|Volumen (en pausa quedan planas y tenues)|Volume (flat and dim while paused)|Wheel on the bars
 Grabación (con tiempo)|click detiene · medio pausa · derecho menú|click stops · middle pauses · right menu|Recording (timer)
 Replay en la barra|Encendido: click guarda|On: click saves|Replay on the bar
+Batería (laptop)|click perfil de energía · derecho ahorro|click power profile · right saver|Battery (laptop)
+Brillo (laptop)|Rueda sube/baja · teclas de brillo (Alt: de 1 en 1)|Wheel up/down · brightness keys (Alt: by 1)|Brightness (laptop)
 # Grabar|Record
 Alt Z|Menú de grabación|Recording menu
 Alt F9|Grabar pantalla (otra vez: detener)|Record screen (again: stop)
@@ -56,6 +58,17 @@ Alt F7|Pausar / seguir|Pause / resume
 Alt F10|Guardar replay|Save replay
 Alt Shift F10|Replay on/off (arranca al iniciar sesión)|Replay on/off (starts at login)
 Al grabar|No molestar automático; videos en ~/Videos|Do not disturb on; videos in ~/Videos|While recording
+# Taco (dentro del explorador)|Taco (inside the file manager)
+h  j  k  l|Moverse · subir · entrar|Move · up · enter
+Enter  o  e|Abrir · abrir con · editar|Open · open with · edit
+Espacio|Marcar|Mark|Space
+y  x  p|Copiar · cortar · pegar|Copy · cut · paste
+d  D|Papelera · borrar para siempre|Trash · delete forever
+r  a|Renombrar · nuevo (con / es carpeta)|Rename · new (ending in / makes a folder)
+/  z  f|Filtrar · zoxide · buscar con fzf|Filter · zoxide · find with fzf
+g  M|Ir a (h d p c t u…) · memorias USB|Go to (h d p c t u…) · USB drives
+.  s|Ocultos · orden|Hidden · sort
+?|Todas las teclas|Every key
 # Rola (dentro del reproductor)|Rola (inside the player)
 /|Buscar|Search
 Enter|Reproducir / abrir|Play / open

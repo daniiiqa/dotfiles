@@ -30,10 +30,13 @@ shows everything without touching anything; `--help` lists the options):
   the looks you picked
 - copies the rice folders into `~/.config`, backing up anything it overwrites
   in `~/.config-backup-<date>/`; displays are left on auto-detect
-- yazi as the default file browser, NetworkManager and bluetooth enabled
+- taco as the default file browser, NetworkManager and bluetooth enabled
+- on a laptop, brightnessctl and power-profiles-daemon (unless you use tlp)
+- nvim: the LazyVim starter if you have no config; plus discada's colorscheme
+  from `hypr/nvim/` (the rest of your config is left alone)
 - SDDM with the simple_sddm_2 theme when there is no other display manager
   (`--no-sddm` / `--sddm` to force)
-- builds [rola](https://github.com/daniiiqa/rola) and [vato](https://github.com/daniiiqa/vato) into `~/.local/bin`
+- builds [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre) and [taco](https://github.com/daniiiqa/taco) into `~/.local/bin`
 - on first login, `hypr/scripts/FirstRun.sh` does the rest (a generated
   wallpaper if there is none, colors, dark GTK theme and icons)
 
@@ -44,7 +47,7 @@ Safe to run more than once.
 | keys | |
 |---|---|
 | `SUPER+H` | cheat sheet (themed, type to filter) |
-| `SUPER+Shift+E` | **discada settings**: look, shader, language, font size, visualizer, recorder, game mode, blur, edit config, tools, update |
+| `SUPER+Shift+E` | **discada settings**: look, shader, language, font size, visualizer, recorder, battery (laptops), game mode, blur, edit config, tools, update |
 | `SUPER+T` | switch look (top entry: the look's shader on/off) |
 | `SUPER+W` | wallpaper |
 | `SUPER+M` | music (rola) |
@@ -103,7 +106,24 @@ the new one on top.
   waybar, rofi, kitty, arre, hyprlock and SDDM match.
 - **Readable on any wallpaper**: wallust with `check_contrast`, then
   `ContrastFix.py` lifts any text color to 4.5:1 (WCAG AA).
-- **Files: yazi** in kitty (`SUPER+E`, and for "open folder" from apps).
+- **Files: [taco](https://github.com/daniiiqa/taco)** — discada's file manager
+  in kitty (`SUPER+E`, and for "open folder" from apps), styled by the look like
+  vato: three columns, image/video/PDF previews, copy and move in the
+  background, trash, USB drives (`M`), zoxide (`z`) and fzf (`f`). `?` lists the
+  keys.
+- **Editor: nvim with LazyVim** following the look: the `discada` colorscheme
+  (`hypr/nvim/`) takes the colors from the look's kitty theme and
+  the style from `look.json` (floating window borders, how the selection is
+  marked, phosphor or ink, transparency) and reloads itself when the look or
+  the wallpaper changes.
+- **Laptops**: battery on the bar (click changes the power profile, right click
+  toggles the saver), brightness on the bar (wheel) and on the brightness keys,
+  keyboard light, warnings at 20/10/5 %, and a page in the settings menu.
+  **Battery saver** (`Battery.py`) sets the power-saver profile, drops blur,
+  shadows and shader, and pauses video wallpapers; it turns on by itself at
+  `BATTERY_SAVER_AT` (20 %) and off when you plug in. When idle the screen dims
+  after 2.5 min and, on battery only, it suspends after 15. None of this shows
+  up on a desktop.
 - **`FitGuard.py`**: apps with a minimum size (Discord) float centered when
   their tile is too small.
 - **System tools: [vato](https://github.com/daniiiqa/vato)** — audio, bluetooth,

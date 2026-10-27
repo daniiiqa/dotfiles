@@ -30,10 +30,13 @@ Qué hace `install.sh` (también corre desde un clone: `./install.sh`;
   looks que elegiste
 - copia las carpetas del rice a `~/.config`, respaldando lo que pise en
   `~/.config-backup-<fecha>/`; las pantallas quedan en detección automática
-- yazi como explorador por defecto, NetworkManager y bluetooth activos
+- taco como explorador por defecto, NetworkManager y bluetooth activos
+- en una laptop, brightnessctl y power-profiles-daemon (si no usas tlp)
+- nvim: si no tienes config, el starter de LazyVim; y el colorscheme de
+  discada de `hypr/nvim/` (lo demás de tu config no se toca)
 - SDDM con el tema simple_sddm_2 si no hay otro display manager
   (`--no-sddm` / `--sddm` para forzar)
-- compila [rola](https://github.com/daniiiqa/rola) y [vato](https://github.com/daniiiqa/vato) en `~/.local/bin`
+- compila [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre) y [taco](https://github.com/daniiiqa/taco) en `~/.local/bin`
 - en el primer login, `hypr/scripts/FirstRun.sh` termina el resto (wallpaper
   generado si no hay ninguno, colores, tema oscuro e iconos para GTK)
 
@@ -44,7 +47,7 @@ Se puede correr varias veces sin romper nada.
 | teclas | |
 |---|---|
 | `SUPER+H` | cheat sheet (con el estilo del look, escribe para filtrar) |
-| `SUPER+Shift+E` | **ajustes de discada**: look, shader, idioma, tamaño de letra, visualizador, grabador, game mode, blur, editar config, herramientas, actualizar |
+| `SUPER+Shift+E` | **ajustes de discada**: look, shader, idioma, tamaño de letra, visualizador, grabador, batería (laptops), game mode, blur, editar config, herramientas, actualizar |
 | `SUPER+T` | cambiar de look (arriba: shader del look on/off) |
 | `SUPER+W` | wallpaper |
 | `SUPER+M` | música (rola) |
@@ -102,7 +105,24 @@ que edites a mano) y copia el nuevo encima.
   wallust, así waybar, rofi, kitty, arre, hyprlock y SDDM combinan.
 - **Legible con cualquier wallpaper**: wallust con `check_contrast` y luego
   `ContrastFix.py` sube cualquier color de texto a 4.5:1 (WCAG AA).
-- **Archivos: yazi** en kitty (`SUPER+E`, y para "abrir carpeta" desde apps).
+- **Archivos: [taco](https://github.com/daniiiqa/taco)** — el explorador de
+  discada en kitty (`SUPER+E`, y para "abrir carpeta" desde apps), con el look
+  como vato: tres columnas, vista previa de imágenes, video y PDF, copiar y mover
+  en otro hilo, papelera, memorias USB (`M`), zoxide (`z`) y fzf (`f`). `?` enseña
+  las teclas.
+- **Editor: nvim con LazyVim** siguiendo al look: el colorscheme `discada`
+  (`hypr/nvim/`) saca los colores del theme de kitty del look y
+  el estilo de `look.json` (bordes de las ventanas flotantes, cómo se marca lo
+  elegido, fósforo o tinta, transparencia) y se recarga solo al cambiar de look
+  o de wallpaper.
+- **Laptops**: batería en la barra (clic cambia el perfil de energía, clic
+  derecho el ahorro), brillo en la barra (rueda) y con las teclas de brillo, luz
+  del teclado, avisos al 20/10/5 %, y en el menú de ajustes. El **ahorro de
+  batería** (`Battery.py`) pone el perfil power-saver, quita blur, sombras y
+  shader, y pausa el video del wallpaper; se prende solo con
+  `BATTERY_SAVER_AT` (20 %) y se apaga al conectar el cargador. Sin actividad
+  baja el brillo a los 2.5 min y, solo con batería, suspende a los 15. En una de
+  escritorio nada de esto aparece.
 - **`FitGuard.py`**: las apps con tamaño mínimo (Discord) flotan centradas
   cuando su tile queda chico.
 - **Herramientas del sistema: [vato](https://github.com/daniiiqa/vato)** —
