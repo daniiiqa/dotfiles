@@ -502,6 +502,12 @@ if [ "$SDDM" = yes ]; then
       grep -q '^Current=' "$f" && sudo sed -i.discada-bak 's/^Current=/#Current=/' "$f"
     done
   fi
+  # con --sddm sobre otro display manager (CachyOS con noctalia usa greetd):
+  # apagar ese o el alias display-manager.service no deja activar SDDM
+  dm=$(readlink -f /etc/systemd/system/display-manager.service 2>/dev/null || true)
+  if [ -n "$dm" ] && [[ "$dm" != */sddm.service ]]; then
+    run sudo systemctl disable "$(basename "$dm")"
+  fi
   run sudo systemctl enable sddm.service
 else
   say "$(L "Pantalla de login: se deja la que ya hay" "Login screen: keeping the current one")"
