@@ -84,7 +84,7 @@ tooltip label {
 #temperature,
 #pulseaudio,
 #network,
-#bluetooth, #custom-backlight, #custom-battery,
+#bluetooth, #custom-battery,
 #custom-recorder,
 #idle_inhibitor,
 #custom-swaync,
@@ -121,7 +121,7 @@ tooltip label {
 
 #pulseaudio,
 #network,
-#bluetooth, #custom-backlight, #custom-battery { color: @cream; }
+#bluetooth, #custom-battery { color: @cream; }
 
 #idle_inhibitor { color: @dust; }
 #custom-swaync { color: @cream; }
@@ -155,7 +155,7 @@ tooltip label {
 #custom-power:hover,
 #pulseaudio:hover,
 #network:hover,
-#bluetooth:hover, #custom-backlight:hover, #custom-battery:hover,
+#bluetooth:hover, #custom-battery:hover,
 #custom-swaync:hover,
 .app:hover,
 .app-more:hover {

@@ -108,7 +108,7 @@ tooltip {
 	
 #backlight,
 #battery,
-#bluetooth, #custom-backlight, #custom-battery,
+#bluetooth, #custom-battery,
 #clock,
 #cpu,
 #disk,
@@ -270,7 +270,7 @@ tooltip {
 .app-more,
 #mpris,
 #network,
-#bluetooth, #custom-backlight, #custom-battery,
+#bluetooth, #custom-battery,
 #idle_inhibitor,
 #custom-power {
 	font-family: "JetBrainsMono Nerd Font Mono";

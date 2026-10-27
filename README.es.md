@@ -116,8 +116,8 @@ que edites a mano) y copia el nuevo encima.
   elegido, fósforo o tinta, transparencia) y se recarga solo al cambiar de look
   o de wallpaper.
 - **Laptops**: batería en la barra (clic cambia el perfil de energía, clic
-  derecho el ahorro), brillo en la barra (rueda) y con las teclas de brillo, luz
-  del teclado, avisos al 20/10/5 %, y en el menú de ajustes. El **ahorro de
+  derecho el ahorro), brillo y luz del teclado con sus teclas (el nivel sale en
+  el aviso de arre), avisos al 20/10/5 %, y en el menú de ajustes. El **ahorro de
   batería** (`Battery.py`) pone el perfil power-saver, quita blur, sombras y
   shader, y pausa el video del wallpaper; se prende solo con
   `BATTERY_SAVER_AT` (20 %) y se apaga al conectar el cargador. Sin actividad

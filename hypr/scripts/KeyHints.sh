@@ -48,7 +48,6 @@ Rueda en las barras|Volumen (en pausa quedan planas y tenues)|Volume (flat and d
 Grabación (con tiempo)|click detiene · medio pausa · derecho menú|click stops · middle pauses · right menu|Recording (timer)
 Replay en la barra|Encendido: click guarda|On: click saves|Replay on the bar
 Batería (laptop)|click perfil de energía · derecho ahorro|click power profile · right saver|Battery (laptop)
-Brillo (laptop)|Rueda sube/baja · teclas de brillo (Alt: de 1 en 1)|Wheel up/down · brightness keys (Alt: by 1)|Brightness (laptop)
 # Grabar|Record
 Alt Z|Menú de grabación|Recording menu
 Alt F9|Grabar pantalla (otra vez: detener)|Record screen (again: stop)

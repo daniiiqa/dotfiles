@@ -35,7 +35,6 @@
 		"group/audio",
 		"network",
 		"bluetooth",
-		"custom/backlight",
 		"custom/battery",
 		"idle_inhibitor",
 		"group/notify",
@@ -204,25 +203,6 @@
 		],
 		"on-click": "$HOME/.config/hypr/scripts/Vato.sh network",
 		"on-click-right": "$HOME/.config/hypr/scripts/Vato.sh wifi"
-	},
-	"custom/backlight": {
-		"exec": "$HOME/.config/hypr/scripts/Brightness.sh --waybar",
-		"exec-if": "$HOME/.config/hypr/scripts/Brightness.sh --has",
-		"return-type": "json",
-		"interval": 30,
-		"signal": 12,
-		"format": "{icon} {percentage}%",
-		"tooltip": true,
-		"on-scroll-up": "$HOME/.config/hypr/scripts/Brightness.sh --inc",
-		"on-scroll-down": "$HOME/.config/hypr/scripts/Brightness.sh --dec",
-		"on-click": "$HOME/.config/hypr/scripts/Brightness.sh --set 100%",
-		"on-click-right": "$HOME/.config/hypr/scripts/Brightness.sh --set 30%",
-		"smooth-scrolling-threshold": 1,
-		"format-icons": [
-			"󰃞",
-			"󰃟",
-			"󰃠"
-		]
 	},
 	"custom/battery": {
 		"exec": "$HOME/.config/hypr/scripts/Battery.py status",

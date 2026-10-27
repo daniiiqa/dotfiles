@@ -90,7 +90,7 @@ tooltip label {
 #temperature,
 #pulseaudio,
 #network,
-#bluetooth, #custom-backlight, #custom-battery,
+#bluetooth, #custom-battery,
 #custom-recorder,
 #idle_inhibitor,
 #custom-swaync,
@@ -117,7 +117,7 @@ tooltip label {
 #disk { color: @nord7; }
 #pulseaudio { color: @nord8; }
 #network { color: @nord14; }
-#bluetooth, #custom-backlight, #custom-battery { color: @nord10; }
+#bluetooth, #custom-battery { color: @nord10; }
 #custom-swaync { color: @nord4; }
 .app,
 .app-more { color: @nord9; font-size: 15px; padding: 0 6px; }
@@ -140,7 +140,7 @@ tooltip label {
 #custom-power:hover,
 #pulseaudio:hover,
 #network:hover,
-#bluetooth:hover, #custom-backlight:hover, #custom-battery:hover,
+#bluetooth:hover, #custom-battery:hover,
 #custom-swaync:hover {
 	background: @nord1;
 }
@@ -215,7 +215,7 @@ tooltip label {
 .app-more,
 #mpris,
 #network,
-#bluetooth, #custom-backlight, #custom-battery,
+#bluetooth, #custom-battery,
 #idle_inhibitor,
 #custom-power {
 	font-family: "JetBrainsMono Nerd Font Mono";

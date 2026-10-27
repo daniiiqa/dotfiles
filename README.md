@@ -117,8 +117,8 @@ the new one on top.
   marked, phosphor or ink, transparency) and reloads itself when the look or
   the wallpaper changes.
 - **Laptops**: battery on the bar (click changes the power profile, right click
-  toggles the saver), brightness on the bar (wheel) and on the brightness keys,
-  keyboard light, warnings at 20/10/5 %, and a page in the settings menu.
+  toggles the saver), brightness and keyboard light on their keys (the level
+  shows in arre's popup), warnings at 20/10/5 %, and a page in the settings menu.
   **Battery saver** (`Battery.py`) sets the power-saver profile, drops blur,
   shadows and shader, and pauses video wallpapers; it turns on by itself at
   `BATTERY_SAVER_AT` (20 %) and off when you plug in. When idle the screen dims

@@ -90,7 +90,7 @@ tooltip label {
 #temperature,
 #pulseaudio,
 #network,
-#bluetooth, #custom-backlight, #custom-battery,
+#bluetooth, #custom-battery,
 #custom-recorder,
 #idle_inhibitor,
 #custom-swaync,
@@ -121,7 +121,7 @@ tooltip label {
 
 #temperature.critical { color: @bg0; background: @warn; }
 
-#pulseaudio, #network, #bluetooth, #custom-backlight, #custom-battery { color: @acc; }
+#pulseaudio, #network, #bluetooth, #custom-battery { color: @acc; }
 #idle_inhibitor { color: @ok; }
 
 #custom-power {
@@ -141,7 +141,7 @@ tooltip label {
 #custom-power:hover,
 #pulseaudio:hover,
 #network:hover,
-#bluetooth:hover, #custom-backlight:hover, #custom-battery:hover,
+#bluetooth:hover, #custom-battery:hover,
 #custom-swaync:hover,
 .app:hover,
 .app-more:hover {
@@ -205,7 +205,7 @@ tooltip label {
 .app,
 .app-more,
 #network,
-#bluetooth, #custom-backlight, #custom-battery,
+#bluetooth, #custom-battery,
 #idle_inhibitor,
 #custom-power {
 	font-family: "JetBrainsMono Nerd Font Mono";
