@@ -501,7 +501,15 @@ else
     printf '[D-BUS Service]\nName=%s\nExec=%s\n' "$name" "$HOME/.local/bin/arre" > "$dbus_dir/$name.service"
   done
 fi
-case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) warn "$(L "~/.local/bin no está en el PATH: agrégalo para correr rola, vato, arre y taco" "~/.local/bin is not in PATH: add it to run rola, vato, arre and taco")" ;; esac
+# ~/.local/bin en el PATH (rola, vato, arre y taco viven ahí): en el perfil de
+# login, que SDDM lee al entrar a Hyprland. En un Arch nuevo no viene
+path_line='[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || export PATH="$HOME/.local/bin:$PATH"  # discada'
+for prof in "$HOME/.bash_profile" "$HOME/.zprofile"; do
+  [ "$prof" = "$HOME/.zprofile" ] && [ ! -e "$prof" ] && [[ "$SHELL" != */zsh ]] && continue
+  grep -qs '# discada$' "$prof" && continue
+  if ((DRY)); then echo "   [dry-run] ~/.local/bin → PATH en $prof"; else printf '\n%s\n' "$path_line" >> "$prof"; fi
+done
+export PATH="$HOME/.local/bin:$PATH"
 
 say "$(L "Carpetas de usuario y de wallpapers" "User and wallpaper folders")"
 run xdg-user-dirs-update
@@ -539,7 +547,9 @@ if [ "$SDDM" = yes ]; then
   fi
   # con --sddm sobre otro display manager (CachyOS con noctalia usa greetd):
   # apagar ese o el alias display-manager.service no deja activar SDDM
-  dm=$(readlink -f /etc/systemd/system/display-manager.service 2>/dev/null || true)
+  # (solo si existe: readlink -f de una ruta que no existe la regresa igual)
+  dm=""
+  [ -L /etc/systemd/system/display-manager.service ] && dm=$(readlink -f /etc/systemd/system/display-manager.service)
   if [ -n "$dm" ] && [[ "$dm" != */sddm.service ]]; then
     run sudo systemctl disable "$(basename "$dm")"
   fi
