@@ -106,6 +106,7 @@ AUR_PKGS=(
   mpvpaper   # wallpapers de video
   wallust    # colores desde el wallpaper
   wlogout    # menú de apagado
+  zen-browser-bin   # el navegador (SUPER+B)
 )
 SDDM_PKGS=(sddm qt6-svg qt6-declarative qt6-5compat qt6-multimedia qt6-multimedia-ffmpeg)   # el tema usa QtMultimedia (fondos de video)
 # laptops (hay batería del equipo, no la de un mouse): brillo y perfiles de
@@ -462,6 +463,13 @@ Categories=System;FileTools;FileManager;
 MimeType=inode/directory;
 EOF
   xdg-mime default taco.desktop inode/directory
+fi
+
+# Zen como navegador por defecto (enlaces, SUPER+B, "abrir en el navegador")
+if [ -e /usr/share/applications/zen.desktop ] || ((DRY)); then
+  say "$(L "Zen como navegador por defecto" "Zen as the default browser")"
+  run xdg-settings set default-web-browser zen.desktop
+  run xdg-mime default zen.desktop x-scheme-handler/http x-scheme-handler/https text/html application/xhtml+xml
 fi
 
 say "rola ($(L "YouTube Music en la terminal" "YouTube Music in the terminal")) → ~/.local/bin/rola"

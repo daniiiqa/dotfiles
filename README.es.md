@@ -25,12 +25,13 @@ Qué hace `install.sh` (también corre desde un clone: `./install.sh`;
 `--dry-run` muestra todo sin tocar nada; `--help` lista las opciones):
 
 - clona el repo en `~/dotfiles` si se corrió con curl
-- paquetes: repos oficiales con pacman; swww, mpvpaper, wallust y wlogout de
+- paquetes: repos oficiales con pacman; mpvpaper, wallust, wlogout y Zen de
   AUR con yay/paru (si no hay ninguno, instala yay). Solo las fuentes de los
   looks que elegiste
 - copia las carpetas del rice a `~/.config`, respaldando lo que pise en
   `~/.config-backup-<fecha>/`; las pantallas quedan en detección automática
-- taco como explorador por defecto, NetworkManager y bluetooth activos
+- taco como explorador por defecto, Zen como navegador por defecto,
+  NetworkManager y bluetooth activos
 - en una laptop, brightnessctl y power-profiles-daemon (si no usas tlp)
 - nvim: si no tienes config, el starter de LazyVim; y el colorscheme de
   discada de `hypr/nvim/` (lo demás de tu config no se toca)

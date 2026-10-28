@@ -25,12 +25,13 @@ What `install.sh` does (also runs from a clone: `./install.sh`; `--dry-run`
 shows everything without touching anything; `--help` lists the options):
 
 - clones the repo into `~/dotfiles` when run through curl
-- packages: official repos with pacman; swww, mpvpaper, wallust and wlogout
+- packages: official repos with pacman; mpvpaper, wallust, wlogout and Zen
   from the AUR with yay/paru (installs yay if there is none). Only the fonts of
   the looks you picked
 - copies the rice folders into `~/.config`, backing up anything it overwrites
   in `~/.config-backup-<date>/`; displays are left on auto-detect
-- taco as the default file browser, NetworkManager and bluetooth enabled
+- taco as the default file browser, Zen as the default browser, NetworkManager
+  and bluetooth enabled
 - on a laptop, brightnessctl and power-profiles-daemon (unless you use tlp)
 - nvim: the LazyVim starter if you have no config; plus discada's colorscheme
   from `hypr/nvim/` (the rest of your config is left alone)
