@@ -45,8 +45,11 @@ REPO_PKGS=(
   fd ripgrep zoxide resvg 7zip poppler ffmpegthumbnailer jq fzf udisks2 neovim
   # portapapeles, capturas y grabación (Recorder.sh)
   wl-clipboard cliphist grim slurp swappy gpu-screen-recorder
-  # audio (visualizador incluido)
-  pipewire wireplumber pipewire-pulse pamixer playerctl
+  # audio (visualizador incluido). pipewire-jack y pipewire-alsa con nombre:
+  # si no, pacman elige jack2 para cava/mpv/ffmpeg, que no va con PipeWire.
+  # sof-firmware: sin él las laptops Intel (2019+) no tienen tarjeta de sonido
+  pipewire wireplumber pipewire-pulse pipewire-alsa pipewire-jack rtkit sof-firmware
+  pamixer playerctl
   # wallpapers (imagen/gif con awww, antes swww) y colores
   awww imagemagick ffmpeg mpv
   # rola (YouTube Music en la terminal): audio por mpv, mpris para waybar
@@ -118,6 +121,12 @@ done
 LAPTOP_PKGS=(brightnessctl)
 pacman -Q tlp &>/dev/null || LAPTOP_PKGS+=(power-profiles-daemon)
 ((LAPTOP)) && REPO_PKGS+=("${LAPTOP_PKGS[@]}")
+# GPU Intel: el driver de video por hardware (VA-API). Sin él el grabador
+# (gpu-screen-recorder) no encuentra codificador h264/hevc/av1. AMD ya lo trae
+# en mesa y NVIDIA usa NVENC de nvidia-utils
+for v in /sys/class/drm/card*/device/vendor; do
+  [ "$(cat "$v" 2>/dev/null)" = 0x8086 ] && { REPO_PKGS+=(intel-media-driver vulkan-intel); break; }
+done
 SDDM_THEME_REPO="https://github.com/JaKooLit/simple-sddm-2.git"
 SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 
@@ -299,10 +308,11 @@ say "$(L "Paquetes de los repos oficiales" "Official repo packages") (${#REPO_PK
 if ((UPDATE)); then
   # solo lo que falte (paquetes nuevos de discada o de un look)
   mapfile -t missing < <(pacman -T "${REPO_PKGS[@]}" "${LOOK_PKGS[@]}" 2>/dev/null)
-  if ((${#missing[@]})); then run sudo pacman -Syu --needed "${YES[@]}" "${missing[@]}"
+  if ((${#missing[@]})); then run sudo pacman -Syu --needed --ask=4 "${YES[@]}" "${missing[@]}"
   else echo "   $(L "nada nuevo que instalar" "nothing new to install")"; fi
 else
-  run sudo pacman -Syu --needed "${YES[@]}" "${REPO_PKGS[@]}" "${LOOK_PKGS[@]}"
+  # --ask=4: si ya estaba jack2, cambiarlo por pipewire-jack sin abortar
+  run sudo pacman -Syu --needed --ask=4 "${YES[@]}" "${REPO_PKGS[@]}" "${LOOK_PKGS[@]}"
 fi
 [ "$SDDM" = yes ] && run sudo pacman -S --needed "${YES[@]}" "${SDDM_PKGS[@]}"
 
@@ -518,6 +528,14 @@ for prof in "$HOME/.bash_profile" "$HOME/.zprofile"; do
   if ((DRY)); then echo "   [dry-run] ~/.local/bin → PATH en $prof"; else printf '\n%s\n' "$path_line" >> "$prof"; fi
 done
 export PATH="$HOME/.local/bin:$PATH"
+
+# fastfetch al abrir una terminal (con la config del look)
+ff_line='[[ $- == *i* ]] && command -v fastfetch >/dev/null && fastfetch  # discada'
+for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
+  [ "$rc" = "$HOME/.zshrc" ] && [ ! -e "$rc" ] && [[ "$SHELL" != */zsh ]] && continue
+  grep -qs 'fastfetch' "$rc" && continue
+  if ((DRY)); then echo "   [dry-run] fastfetch en $rc"; else printf '\n%s\n' "$ff_line" >> "$rc"; fi
+done
 
 say "$(L "Carpetas de usuario y de wallpapers" "User and wallpaper folders")"
 run xdg-user-dirs-update
