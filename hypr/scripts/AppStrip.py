@@ -45,7 +45,7 @@ ICONS = [
     (r"^steam$", "\U000f04d3", "Steam"),
     (r"^steam_app_|gamescope|lutris|catalyst", "\U000f02b4", "Juego"),
     (r"prismlauncher", "\U000f0373", "Prism Launcher"),
-    (r"^(taco|yazi)$", "", "Archivos"),
+    (r"^taco$", "", "Archivos"),
     (r"spotify", "", "Spotify"),
     (r"godot", "", "Godot"),
     (r"^(mpv|vlc)$", "", "Video"),
