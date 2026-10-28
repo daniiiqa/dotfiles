@@ -24,12 +24,8 @@ reload_all() {
   pkill -USR1 -x kitty
 }
 
-apply_look() {  # copia el look actual sobre lo vivo (como LookSwitch.sh)
-  local cur=$1
-  (cd "$looks/$cur" && find . -type f -printf '%P\n') | while read -r f; do
-    mkdir -p "$(dirname "$cfg/$f")"
-    cp "$looks/$cur/$f" "$cfg/$f"
-  done
+apply_look() {  # el look actual sobre lo vivo, desde su look.toml (como LookSwitch.sh)
+  "$scripts/LookBuild.py" apply "$1"
 }
 
 if git -C "$cfg" rev-parse --is-inside-work-tree >/dev/null 2>&1 && [ -d "$cfg/hypr/looks" ]; then
@@ -38,9 +34,7 @@ if git -C "$cfg" rev-parse --is-inside-work-tree >/dev/null 2>&1 && [ -d "$cfg/h
   # lo vivo al look (como antes de cambiar de look), sin el tamaño de letra
   "$scripts/FontSize.py" unapply
   if [ -n "$cur" ] && [ -d "$looks/$cur" ]; then
-    (cd "$looks/$cur" && find . -type f -printf '%P\n') | while read -r f; do
-      [ -f "$cfg/$f" ] && cp "$cfg/$f" "$looks/$cur/$f"
-    done
+    "$scripts/LookBuild.py" save "$cur"
   fi
   before=$(git -C "$cfg" rev-parse HEAD)
   if ! git -C "$cfg" pull --rebase --autostash; then

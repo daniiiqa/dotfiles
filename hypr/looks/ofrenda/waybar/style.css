@@ -2,22 +2,11 @@
    vela y una tira de papel picado arriba (magenta, naranja, morado y
    turquesa). Letra a mano. Paleta fija. */
 
-@define-color bg0 #120c16;
-@define-color bg1 #1c1322;
-@define-color bg2 #2b1f35;
-@define-color bg3 #4a3758;
-@define-color dim #9a87a6;
-@define-color fg #f1e4d6;
-@define-color hi #fff6ea;
-@define-color acc #ff8c1a;
-@define-color acc2 #e0218a;
-@define-color warn #e5383b;
-@define-color ok #2ec4b6;
-@define-color alt #8e44c4;
-@define-color cool #2ec4b6;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 * {
-	font-family: "MonaspiceRn Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 500;
 	font-size: 14px;
 	min-height: 0;

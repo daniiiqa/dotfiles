@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Cambia el look del rice (SUPER+T). Cada look vive en hypr/looks/<nombre>/
 # como espejo de ~/.config con solo los archivos que le tocan (decoraciones,
-# animaciones, hyprlock, waybar, rofi, swaync, wlogout, kitty, fastfetch y la paleta
-# de wallust).
+# animaciones, hyprlock, waybar, rofi, wlogout, kitty, fastfetch, sddm), más su
+# look.toml: colores, fuente y estilo (LookBuild.py los aplica).
 #
 # Al cambiar, primero guarda los archivos vivos en el look actual — así lo
 # que edites a mano no se pierde — y luego copia el nuevo encima.
@@ -32,7 +32,7 @@ if [ -n "$1" ]; then
 else
   pidof rofi >/dev/null && pkill rofi
   target=$( { [ -n "$shader_entry" ] && echo "$shader_entry"
-    find "$looks" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort; } |
+    "$cfg/hypr/scripts/LookBuild.py" list; } |
     rofi -dmenu -i -p look -config "$cfg/rofi/config-edit.rasi" -mesg "$(L actual current): ${current:-?}")
 fi
 
@@ -66,19 +66,15 @@ fi
 #    con sus tamaños originales; se vuelve a aplicar después de copiar
 "$cfg/hypr/scripts/FontSize.py" unapply
 
-# 1) guardar lo vivo en el look actual
+# 1) guardar lo vivo en el look actual (LookBuild.py: la fuente vuelve a {{font}})
 if [ -n "$current" ] && [ -d "$looks/$current" ]; then
-  (cd "$looks/$current" && find . -type f -printf '%P\n') | while read -r f; do
-    [ -f "$cfg/$f" ] && cp "$cfg/$f" "$looks/$current/$f"
-  done
+  "$cfg/hypr/scripts/LookBuild.py" save "$current"
 fi
 
-# 2) aplicar el nuevo
+# 2) aplicar el nuevo: sus archivos con su fuente, su wallust.toml y el estilo
+#    de rola/vato/taco/arre (todo sale de hypr/looks/<look>/look.toml)
 wallust_before=$(md5sum < "$cfg/wallust/wallust.toml" 2>/dev/null)
-(cd "$looks/$target" && find . -type f -printf '%P\n') | while read -r f; do
-  mkdir -p "$(dirname "$cfg/$f")"
-  cp "$looks/$target/$f" "$cfg/$f"
-done
+"$cfg/hypr/scripts/LookBuild.py" apply "$target"
 echo "$target" > "$state"
 "$cfg/hypr/scripts/FontSize.py" apply --no-reload
 
@@ -93,6 +89,9 @@ wallust_after=$(md5sum < "$cfg/wallust/wallust.toml" 2>/dev/null)
 if [ "$walls_rc" != 10 ] && [ "$wallust_before" != "$wallust_after" ]; then
   "$cfg/hypr/scripts/WallustSwww.sh" "$(readlink -f "$cfg/rofi/.current_wallpaper")" >/dev/null 2>&1
 fi
+
+# 3b) los colores del look: su paleta (o la de wallust) y sus nombres propios
+"$cfg/hypr/scripts/LookBuild.py" colors "$target"
 
 # 4) recargar todo
 hyprctl reload >/dev/null

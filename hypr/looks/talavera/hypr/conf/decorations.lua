@@ -1,13 +1,8 @@
+local c = require("wallust.wallust-hyprland")
 -- Look talavera: azulejo: borde cobalto, esquinas redondas, sombra azulada suave.
 -- Paleta fija (no sigue al wallpaper).
 
-local bg = "rgb(f6f1e4)"
-local line = "rgb(d9ccb0)"
-local ink = "rgb(1f3f8f)"
-local acc = "rgb(1f3f8f)"
-local acc2 = "rgb(e3a51b)"
-local alt = "rgb(2f5bb8)"
-local rust = "rgb(b5562f)"
+-- colores de wallust: c.color0 … c.color15
 
 hl.config({ general = {
     border_size = 2,
@@ -15,8 +10,8 @@ hl.config({ general = {
     gaps_out = 14,
 
     col = {
-        active_border = { colors = { acc, alt }, angle = 45 },
-        inactive_border = line,
+        active_border = { colors = { c.acc, c.alt }, angle = 45 },
+        inactive_border = c.line,
     },
 } })
 
@@ -38,8 +33,8 @@ hl.config({ decoration = {
         render_power = 3,
         offset = "0 6",
         sharp = false,
-        color = "rgba(1f3f8f33)",
-        color_inactive = "rgba(1f3f8f22)",
+        color = c.bg3_a33,
+        color_inactive = c.bg3_a22,
     },
 
     blur = {
@@ -59,14 +54,14 @@ hl.config({ decoration = {
 
 hl.config({ group = {
     col = {
-        border_active = acc,
-        border_inactive = line,
+        border_active = c.acc,
+        border_inactive = c.line,
     },
 
     groupbar = {
         col = {
-            active = acc,
-            inactive = line,
+            active = c.acc,
+            inactive = c.line,
         },
     },
 } })

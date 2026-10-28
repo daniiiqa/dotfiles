@@ -3,7 +3,7 @@
 @import '../../.config/waybar/wallust/colors-waybar.css';
 
 window {
-    font-family: "SpaceMono Nerd Font";
+    font-family: "{{font}}";
     font-weight: 700;
     letter-spacing: 3px;
     font-size: 13pt;

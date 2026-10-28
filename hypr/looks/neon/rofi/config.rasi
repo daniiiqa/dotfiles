@@ -1,10 +1,10 @@
 /* rofi — config global. Fuentes en 0-shared-fonts.rasi, look en
-   themes/Dany-Neon.rasi (colores de wallust). Los config-*.rasi de cada
+   theme.rasi (del look: hypr/looks/<look>/rofi/theme.rasi). Los config-*.rasi de cada
    menú importan este archivo y solo ajustan lo suyo. */
 
 @import "~/.config/rofi/0-shared-fonts.rasi"
 
-@theme "~/.config/rofi/themes/Dany-Neon.rasi"
+@theme "~/.config/rofi/theme.rasi"
 
 /* tamaño de letra de discada (FontSize.py); va después del theme */
 @import "~/.config/rofi/discada-font.rasi"

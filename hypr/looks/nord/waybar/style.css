@@ -2,24 +2,11 @@
    color de la paleta (frost para el sistema, aurora para estados).
    Paleta Nord fija: no sigue al wallpaper. */
 
-@define-color nord0 #2E3440;
-@define-color nord1 #3B4252;
-@define-color nord2 #434C5E;
-@define-color nord3 #4C566A;
-@define-color nord4 #D8DEE9;
-@define-color nord6 #ECEFF4;
-@define-color nord7 #8FBCBB;
-@define-color nord8 #88C0D0;
-@define-color nord9 #81A1C1;
-@define-color nord10 #5E81AC;
-@define-color nord11 #BF616A;
-@define-color nord12 #D08770;
-@define-color nord13 #EBCB8B;
-@define-color nord14 #A3BE8C;
-@define-color nord15 #B48EAD;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 * {
-	font-family: "Iosevka Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 600;
 	font-size: 13px;
 	min-height: 0;

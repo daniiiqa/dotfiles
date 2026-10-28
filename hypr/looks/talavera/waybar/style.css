@@ -2,22 +2,11 @@
    crema con trazo cobalto; el workspace activo es la flor pintada. Toques de
    ocre y verde. Paleta fija (clara). */
 
-@define-color bg0 #f6f1e4;
-@define-color bg1 #ece4d0;
-@define-color bg2 #d9ccb0;
-@define-color bg3 #1f3f8f;
-@define-color dim #6b7391;
-@define-color fg #1b2340;
-@define-color hi #0e1530;
-@define-color acc #1f3f8f;
-@define-color acc2 #e3a51b;
-@define-color warn #b5532a;
-@define-color ok #3f8a5a;
-@define-color alt #2f5bb8;
-@define-color cool #2f5bb8;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 * {
-	font-family: "MonaspiceXe Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 500;
 	font-size: 13px;
 	min-height: 0;

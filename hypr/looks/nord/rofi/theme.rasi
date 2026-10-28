@@ -1,0 +1,146 @@
+/* Dany Nord — paleta Nord fija (no sigue al wallpaper): panel nord0,
+   entrada en nord1, selección en frost. */
+
+@import "~/.config/rofi/wallust/colors-rofi.rasi"
+
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 true;
+    display-drun:               "  apps";
+    display-run:                "  run";
+    display-filebrowser:        "  files";
+    display-window:             "  windows";
+    drun-display-format:        "{name}";
+    hover-select:               true;
+    me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} · {c} · {t}";
+}
+
+* {
+    background-color:           transparent;
+    text-color:                 @nord4;
+}
+
+window {
+    width:                      580px;
+    location:                   center;
+    anchor:                     center;
+    border:                     1px;
+    border-color:               @nord2;
+    border-radius:              10px;
+    background-color:           @nord0;
+    padding:                    14px;
+}
+
+mainbox {
+    orientation:                vertical;
+    spacing:                    12px;
+    children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
+}
+
+inputbar {
+    spacing:                    10px;
+    padding:                    11px 14px;
+    border-radius:              8px;
+    background-color:           @nord1;
+    children:                   [ "prompt", "entry" ];
+}
+
+prompt {
+    text-color:                 @nord8;
+}
+
+textbox-prompt-colon {
+    enabled:                    false;
+}
+
+entry {
+    placeholder:                "Search";
+    placeholder-color:          @nord3;
+    cursor:                     text;
+}
+
+listview {
+    columns:                    1;
+    lines:                      8;
+    spacing:                    3px;
+    dynamic:                    true;
+    cycle:                      true;
+    scrollbar:                  false;
+    fixed-height:               true;
+}
+
+element {
+    spacing:                    12px;
+    padding:                    8px 12px;
+    border-radius:              7px;
+    cursor:                     pointer;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color:           transparent;
+    text-color:                 @nord4;
+}
+
+element normal.active,
+element alternate.active {
+    text-color:                 @nord9;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    text-color:                 @nord11;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color:           @nord8;
+    text-color:                 @nord0;
+}
+
+element-icon {
+    size:                       24px;
+    cursor:                     inherit;
+}
+
+element-text {
+    text-color:                 inherit;
+    vertical-align:             0.5;
+    cursor:                     inherit;
+}
+
+mode-switcher {
+    spacing:                    6px;
+}
+
+button {
+    padding:                    7px;
+    border-radius:              7px;
+    text-color:                 @nord3;
+    cursor:                     pointer;
+}
+
+button selected {
+    background-color:           @nord1;
+    text-color:                 @nord8;
+}
+
+message {
+    padding:                    10px 14px;
+    border-radius:              8px;
+    background-color:           @nord1;
+}
+
+textbox {
+    text-color:                 @nord4;
+    vertical-align:             0.5;
+}
+
+error-message {
+    padding:                    12px;
+    border-radius:              8px;
+    background-color:           @nord0;
+}

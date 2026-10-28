@@ -1,24 +1,11 @@
 /* Look ofrenda — altar de Día de Muertos: noche morada, cempasúchil, papel picado */
 
 /* paleta ofrenda con los mismos nombres que usa wallust */
-@define-color background #120c16;
-@define-color foreground #f1e4d6;
-@define-color color0 #1c1322;
-@define-color color8 #4a3758;
-@define-color color7 #fff6ea;
-@define-color color11 #e0218a;
-@define-color color12 #ff8c1a;
-@define-color color13 #2ec4b6;
-@define-color color14 #2ec4b6;
-@define-color tape_red #e5383b;
-@define-color tape_orange #ff8c1a;
-@define-color tape_yellow #e0218a;
-@define-color tape_green #2ec4b6;
-@define-color tape_purple #8e44c4;
-@define-color tape_blue #2ec4b6;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 window {
-    font-family: "MonaspiceRn Nerd Font";
+    font-family: "{{font}}";
     font-size: 12pt;
     color: @foreground;
     background-color: alpha(@background, 0.92);

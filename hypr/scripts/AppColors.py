@@ -2,8 +2,8 @@
 """Las apps GTK y Qt con los colores del look.
 
 Sale del mismo lugar que rola: el theme de kitty que incluye el look
-(01-Wallust.conf en los looks que siguen al wallpaper; Fundidora.conf,
-Nord.conf… en los de paleta fija). color12 es el acento.
+(01-Wallust.conf: los colores de wallust o la paleta del look.toml, lo
+escribe LookBuild.py). color12 es el acento.
 
   GTK 3 (tema adw-gtk3) y GTK 4/libadwaita: ~/.config/gtk-{3,4}.0/discada.css
       con los colores con nombre de libadwaita; gtk.css lo importa. Además

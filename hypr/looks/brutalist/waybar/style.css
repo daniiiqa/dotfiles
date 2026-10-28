@@ -10,7 +10,7 @@
 @define-color dim alpha(@foreground, 0.4);
 
 * {
-	font-family: "SpaceMono Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 700;
 	font-size: 12px;
 	letter-spacing: 1px;
@@ -59,8 +59,8 @@ tooltip label {
 }
 
 #workspaces button.urgent {
-	color: #ff4d4d;
-	border-bottom: 2px solid #ff4d4d;
+	color: @alert;
+	border-bottom: 2px solid @alert;
 }
 
 #workspaces button:hover {
@@ -121,7 +121,7 @@ tooltip label {
 
 
 #temperature.critical {
-	color: #ff4d4d;
+	color: @alert;
 }
 
 #custom-power {
@@ -233,7 +233,7 @@ tooltip label {
 
 #custom-recorder.recording,
 #custom-recorder.paused {
-	color: #ff4d4d;
+	color: @alert;
 }
 
 #custom-recorder.recording {
@@ -250,11 +250,11 @@ tooltip label {
 
 /* brutalist: grabando = bloque invertido, como OFF */
 #custom-recorder.recording {
-	background: #ff4d4d;
+	background: @alert;
 	color: @background;
 }
 
 /* batería (laptops): baja, crítica y ahorro */
-#custom-battery.low { color: #e06c75; }
-#custom-battery.critical { color: #e06c75; font-weight: bold; }
+#custom-battery.low { color: @critical; }
+#custom-battery.critical { color: @critical; font-weight: bold; }
 #custom-battery.saver { opacity: 0.8; }

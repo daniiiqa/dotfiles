@@ -1,0 +1,82 @@
+# discada — look «fundidora»
+# Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
+# los archivos de cada app (waybar/, rofi/, hypr/…) usan estos nombres.
+# LookBuild.py lo aplica (lo llama LookSwitch.sh).
+
+[about]
+es = "acero regio: carbón, alto horno, el Cerro de la Silla"
+en = "Monterrey steel: charcoal, blast furnace, Cerro de la Silla"
+
+[font]
+family = "MartianMono Nerd Font"   # {{font}} en los archivos del look
+package = "ttf-martian-mono-nerd"   # lo instala install.sh
+
+[colors]
+from = "palette"   # sus propios colores (no los del wallpaper)
+# los de la terminal: kitty, vato, taco, arre, nvim, GTK/Qt…
+background = "#0a0605"
+foreground = "#aaadad"
+cursor = "#8f7156"
+color0 = "#282119"
+color1 = "#a0583a"
+color2 = "#7f7463"
+color3 = "#a8805a"
+color4 = "#777c77"
+color5 = "#867261"
+color6 = "#727b7b"
+color7 = "#aaadad"
+color8 = "#585b5b"
+color9 = "#b86c4a"
+color10 = "#948a78"
+color11 = "#c09670"
+color12 = "#a8805a"
+color13 = "#9c8676"
+color14 = "#879292"
+color15 = "#d8d4cc"
+
+[colors.named]
+# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# el valor es un color o el nombre de otro (color12, background…)
+bg0 = "background"
+bg1 = "#15100d"
+bg2 = "color0"
+bg3 = "#4a3d31"
+dim = "#6f6b66"
+fg = "foreground"
+hi = "color15"
+acc = "#8f7156"
+acc2 = "color3"
+warn = "color1"
+ok = "color2"
+alt = "color5"
+cool = "color6"
+bg = "background"
+line = "color0"
+ink = "#4a3d31"
+rust = "#b5562f"
+
+[style]
+# cómo se ven rola, vato, taco, arre y nvim (ver el README de vato)
+borders = "thick"
+bar = "blocks"
+labels = "short"
+case = "upper"
+select = "inverse"
+tint = "color"
+transparent = false
+
+[wallust]
+palette = "dark16"
+
+[kitty]
+# lo que el tema de kitty del look tiene además de la paleta (selección, pestañas…)
+selection_foreground = "bg0"
+selection_background = "acc"
+url_color = "cool"
+cursor_text_color = "bg0"
+active_border_color = "acc"
+inactive_border_color = "bg2"
+active_tab_foreground = "bg0"
+active_tab_background = "acc"
+inactive_tab_foreground = "dim"
+inactive_tab_background = "bg1"

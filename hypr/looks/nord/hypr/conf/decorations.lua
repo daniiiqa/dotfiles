@@ -1,11 +1,8 @@
+local c = require("wallust.wallust-hyprland")
 -- Look nord: paleta Nord fija (no sigue al wallpaper) — tonos fríos y calmos,
 -- esquinas medias, escarcha ligera. https://www.nordtheme.com/docs/colors-and-palettes
 
-local nord0 = "rgb(2E3440)"
-local nord1 = "rgb(3B4252)"
-local nord3 = "rgb(4C566A)"
-local nord8 = "rgb(88C0D0)"
-local nord9 = "rgb(81A1C1)"
+-- colores de wallust: c.color0 … c.color15
 
 hl.config({ general = {
     border_size = 2,
@@ -13,8 +10,8 @@ hl.config({ general = {
     gaps_out = 6,
 
     col = {
-        active_border = { colors = { nord8, nord9 }, angle = 90 },
-        inactive_border = nord1,
+        active_border = { colors = { c.nord8, c.nord9 }, angle = 90 },
+        inactive_border = c.nord1,
     },
 } })
 
@@ -52,14 +49,14 @@ hl.config({ decoration = {
 
 hl.config({ group = {
     col = {
-        border_active = nord8,
-        border_inactive = nord1,
+        border_active = c.nord8,
+        border_inactive = c.nord1,
     },
 
     groupbar = {
         col = {
-            active = nord8,
-            inactive = nord3,
+            active = c.nord8,
+            inactive = c.nord3,
         },
     },
 } })

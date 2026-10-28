@@ -1,13 +1,8 @@
+local c = require("wallust.wallust-hyprland")
 -- Look fundidora: lámina de acero con bordes de óxido y cobre. Sin blur: plano y pesado.
 -- Paleta fija (no sigue al wallpaper).
 
-local bg = "rgb(0a0605)"
-local line = "rgb(282119)"
-local ink = "rgb(4a3d31)"
-local acc = "rgb(8f7156)"
-local acc2 = "rgb(a8805a)"
-local alt = "rgb(867261)"
-local rust = "rgb(b5562f)"
+-- colores de wallust: c.color0 … c.color15
 
 hl.config({ general = {
     border_size = 2,
@@ -15,8 +10,8 @@ hl.config({ general = {
     gaps_out = 10,
 
     col = {
-        active_border = { colors = { acc2, acc, rust }, angle = 90 },
-        inactive_border = line,
+        active_border = { colors = { c.acc2, c.acc, c.rust }, angle = 90 },
+        inactive_border = c.line,
     },
 } })
 
@@ -59,14 +54,14 @@ hl.config({ decoration = {
 
 hl.config({ group = {
     col = {
-        border_active = acc,
-        border_inactive = line,
+        border_active = c.acc,
+        border_inactive = c.line,
     },
 
     groupbar = {
         col = {
-            active = acc,
-            inactive = line,
+            active = c.acc,
+            inactive = c.line,
         },
     },
 } })

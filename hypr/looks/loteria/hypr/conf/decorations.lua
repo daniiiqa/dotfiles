@@ -1,14 +1,9 @@
+local c = require("wallust.wallust-hyprland")
 -- Look loteria: cartas: contorno negro grueso y sombra dura desplazada, como una
 -- carta impresa sobre la mesa. Sin blur.
 -- Paleta fija (no sigue al wallpaper).
 
-local bg = "rgb(efe3c4)"
-local line = "rgb(cdb88a)"
-local ink = "rgb(1a1612)"
-local acc = "rgb(c8102e)"
-local acc2 = "rgb(1d4e9e)"
-local alt = "rgb(f2b705)"
-local rust = "rgb(b5562f)"
+-- colores de wallust: c.color0 … c.color15
 
 hl.config({ general = {
     border_size = 3,
@@ -16,8 +11,8 @@ hl.config({ general = {
     gaps_out = 14,
 
     col = {
-        active_border = ink,
-        inactive_border = "rgba(1a161266)",
+        active_border = c.ink,
+        inactive_border = c.bg3_a66,
     },
 } })
 
@@ -39,8 +34,8 @@ hl.config({ decoration = {
         render_power = 1,
         offset = "6 6",
         sharp = true,
-        color = "rgba(1a1612ff)",
-        color_inactive = "rgba(1a161266)",
+        color = c.bg3,
+        color_inactive = c.bg3_a66,
     },
 
     blur = {
@@ -60,14 +55,14 @@ hl.config({ decoration = {
 
 hl.config({ group = {
     col = {
-        border_active = acc,
-        border_inactive = line,
+        border_active = c.acc,
+        border_inactive = c.line,
     },
 
     groupbar = {
         col = {
-            active = acc,
-            inactive = line,
+            active = c.acc,
+            inactive = c.line,
         },
     },
 } })

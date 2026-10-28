@@ -1,24 +1,11 @@
 /* Look fundidora — el Cerro de la Silla al anochecer: negro tibio, grises cálidos y tierra. */
 
 /* paleta fundidora con los mismos nombres que usa wallust */
-@define-color background #0a0605;
-@define-color foreground #aaadad;
-@define-color color0 #15100d;
-@define-color color8 #4a3d31;
-@define-color color7 #d8d4cc;
-@define-color color11 #a8805a;
-@define-color color12 #8f7156;
-@define-color color13 #727b7b;
-@define-color color14 #727b7b;
-@define-color tape_red #a0583a;
-@define-color tape_orange #8f7156;
-@define-color tape_yellow #a8805a;
-@define-color tape_green #7f7463;
-@define-color tape_purple #867261;
-@define-color tape_blue #727b7b;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 window {
-    font-family: "MartianMono Nerd Font";
+    font-family: "{{font}}";
     font-size: 12pt;
     color: @foreground;
     background-color: alpha(@background, 0.92);
@@ -43,8 +30,8 @@ button:focus,
 button:hover {
     color: @foreground;
     background-size: 14%;
-    background-color: alpha(@color12, 0.12);
-    border-color: @color12;
+    background-color: alpha(@acc, 0.12);
+    border-color: @acc;
 }
 
 /* iconos de línea monocromos del paquete wlogout (los PNG a color de antes

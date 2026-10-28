@@ -60,6 +60,7 @@ rofi/discada-font.rasi
 /kitty/kitty.conf
 /rofi/0-shared-fonts.rasi
 /rofi/config.rasi
+/rofi/theme.rasi
 /rola/look.json
 /sddm/look.conf
 /swaync/style.css

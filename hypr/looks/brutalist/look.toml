@@ -1,0 +1,34 @@
+# discada — look «brutalist»
+# Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
+# los archivos de cada app (waybar/, rofi/, hypr/…) usan estos nombres.
+# LookBuild.py lo aplica (lo llama LookSwitch.sh).
+
+[about]
+es = "bloques sólidos, cero esquinas, MAYÚSCULAS"
+en = "solid blocks, zero corners, UPPERCASE"
+
+[font]
+family = "SpaceMono Nerd Font"   # {{font}} en los archivos del look
+package = "ttf-space-mono-nerd"   # lo instala install.sh
+
+[colors]
+from = "wallpaper"   # wallust los saca del wallpaper (color0…color15)
+
+[colors.named]
+# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# el valor es un color o el nombre de otro (color12, background…)
+critical = "#e06c75"
+alert = "#ff4d4d"
+
+[style]
+# cómo se ven rola, vato, taco, arre y nvim (ver el README de vato)
+borders = "thick"
+bar = "blocks"
+labels = "words"
+case = "upper"
+select = "bar"
+tint = "color"
+transparent = false
+
+[wallust]
+palette = "harddark16"

@@ -10,7 +10,7 @@
 @define-color rule alpha(@foreground, 0.2);
 
 * {
-	font-family: "BlexMono Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 500;
 	font-size: 12px;
 	min-height: 0;
@@ -41,7 +41,7 @@ tooltip label {
 }
 
 #workspaces button {
-	font-family: "Noto Serif";
+	font-family: "{{font_display}}";
 	font-size: 13px;
 	color: @pencil;
 	background: transparent;
@@ -88,7 +88,7 @@ tooltip label {
 }
 
 #clock {
-	font-family: "Noto Serif Display";
+	font-family: "{{font_display}} Display";
 	font-style: italic;
 	font-weight: 600;
 	font-size: 16px;
@@ -97,7 +97,7 @@ tooltip label {
 }
 
 #mpris {
-	font-family: "Noto Serif";
+	font-family: "{{font_display}}";
 	font-style: italic;
 	color: @pencil;
 	margin-left: 8px;
@@ -221,7 +221,7 @@ tooltip label {
 
 #custom-recorder.recording,
 #custom-recorder.paused {
-	color: #c0392b;
+	color: @rec;
 }
 
 #custom-recorder.recording {
@@ -237,10 +237,10 @@ tooltip label {
 }
 
 #custom-recorder.recording {
-	border-bottom: 2px solid #c0392b;
+	border-bottom: 2px solid @rec;
 }
 
 /* batería (laptops): baja, crítica y ahorro */
-#custom-battery.low { color: #e06c75; }
-#custom-battery.critical { color: #e06c75; font-weight: bold; }
+#custom-battery.low { color: @critical; }
+#custom-battery.critical { color: @critical; font-weight: bold; }
 #custom-battery.saver { opacity: 0.8; }

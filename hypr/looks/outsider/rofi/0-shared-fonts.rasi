@@ -5,11 +5,11 @@
 
 /*****-- Fonts Size and Font Size -----*****/
 configuration {
-font: "FantasqueSansM Nerd Font Bold 13";
+font: "{{font}} Bold 13";
 }
 
 
 /*****-- Elements Font Size -----*****/
 element-text {
-font: "FantasqueSansM Nerd Font Bold 11";
+font: "{{font}} Bold 11";
 }

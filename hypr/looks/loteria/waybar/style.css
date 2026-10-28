@@ -2,22 +2,11 @@
    envejecido con contorno negro grueso y sombra dura, el workspace activo es
    la carta "cantada" en rojo. Paleta fija (clara). */
 
-@define-color bg0 #efe3c4;
-@define-color bg1 #e5d6b0;
-@define-color bg2 #cdb88a;
-@define-color bg3 #1a1612;
-@define-color dim #6b5d48;
-@define-color fg #1a1612;
-@define-color hi #0d0b09;
-@define-color acc #c8102e;
-@define-color acc2 #1d4e9e;
-@define-color warn #c8102e;
-@define-color ok #2d7d46;
-@define-color alt #f2b705;
-@define-color cool #1d4e9e;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 * {
-	font-family: "CodeNewRoman Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 700;
 	font-size: 13px;
 	min-height: 0;
@@ -78,7 +67,7 @@ tooltip label {
 	background: transparent;
 	padding: 0 7px;
 	border-radius: 3px;
-	font-family: "Noto Serif";
+	font-family: "{{font_display}}";
 	font-weight: 900;
 }
 
@@ -104,7 +93,7 @@ tooltip label {
 
 /* el reloj es el título de la carta: serif grande */
 #clock {
-	font-family: "Noto Serif";
+	font-family: "{{font_display}}";
 	font-size: 15px;
 	font-weight: 900;
 	letter-spacing: 1px;
@@ -113,13 +102,13 @@ tooltip label {
 }
 
 /* cada carta con su color de imprenta */
-#temperature { color: #b8860b; }
+#temperature { color: @gold; }
 #temperature.critical { color: @bg0; background: @warn; }
 #cpu, #memory, #disk { color: @dim; }
 #pulseaudio { color: @ok; }
 #network { color: @acc2; }
 #bluetooth, #custom-battery { color: @acc2; }
-#idle_inhibitor { color: #b8860b; }
+#idle_inhibitor { color: @gold; }
 
 #custom-power {
 	color: @bg0;

@@ -1,0 +1,84 @@
+# discada — look «loteria»
+# Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
+# los archivos de cada app (waybar/, rofi/, hypr/…) usan estos nombres.
+# LookBuild.py lo aplica (lo llama LookSwitch.sh).
+
+[about]
+es = "las cartas: papel viejo, contornos negros, colores de imprenta"
+en = "the card game: old paper, black outlines, print colors"
+
+[font]
+family = "CodeNewRoman Nerd Font"   # {{font}} en los archivos del look
+display = "Noto Serif"   # {{font_display}}: títulos
+package = "otf-codenewroman-nerd"   # lo instala install.sh
+
+[colors]
+from = "palette"   # sus propios colores (no los del wallpaper)
+# los de la terminal: kitty, vato, taco, arre, nvim, GTK/Qt…
+background = "#efe3c4"
+foreground = "#1a1612"
+cursor = "#c8102e"
+color0 = "#1a1612"
+color1 = "#c8102e"
+color2 = "#2d7d46"
+color3 = "#a8790a"
+color4 = "#1d4e9e"
+color5 = "#a4306a"
+color6 = "#1f7a7a"
+color7 = "#6b5d48"
+color8 = "#4a4136"
+color9 = "#e0283f"
+color10 = "#3a9a58"
+color11 = "#c48f10"
+color12 = "#e0283f"
+color13 = "#c0457f"
+color14 = "#2a9696"
+color15 = "#2a241d"
+
+[colors.named]
+# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# el valor es un color o el nombre de otro (color12, background…)
+gold = "#b8860b"
+bg0 = "background"
+bg1 = "#e5d6b0"
+bg2 = "#cdb88a"
+bg3 = "foreground"
+dim = "color7"
+fg = "foreground"
+hi = "#0d0b09"
+acc = "color1"
+acc2 = "color4"
+warn = "color1"
+ok = "color2"
+alt = "#f2b705"
+cool = "color4"
+bg = "background"
+line = "#cdb88a"
+ink = "foreground"
+rust = "#b5562f"
+
+[style]
+# cómo se ven rola, vato, taco, arre y nvim (ver el README de vato)
+borders = "double"
+bar = "line"
+labels = "words"
+case = "upper"
+select = "inverse"
+tint = "color"
+transparent = false
+
+[wallust]
+palette = "light16"
+
+[kitty]
+# lo que el tema de kitty del look tiene además de la paleta (selección, pestañas…)
+selection_foreground = "bg0"
+selection_background = "acc"
+url_color = "acc2"
+cursor_text_color = "bg0"
+active_border_color = "acc"
+inactive_border_color = "bg2"
+active_tab_foreground = "bg0"
+active_tab_background = "acc"
+inactive_tab_foreground = "dim"
+inactive_tab_background = "bg1"

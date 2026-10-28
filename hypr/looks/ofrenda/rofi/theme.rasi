@@ -1,0 +1,159 @@
+/* Dany Ofrenda — el menú es una ofrenda: noche morada, prompt en cempasúchil, la entrada
+   elegida iluminada como vela. Paleta fija. */
+
+@import "~/.config/rofi/wallust/colors-rofi.rasi"
+
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 true;
+    display-drun:               "ofrenda";
+    display-run:                "encender";
+    display-filebrowser:        "recuerdos";
+    display-window:             "altares";
+    drun-display-format:        "{name}";
+    hover-select:               true;
+    me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} · {c} · {t}";
+}
+
+* {
+    font:                       "{{font}} 13";
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+window {
+    width:                      560px;
+    location:                   center;
+    anchor:                     center;
+    border:                     1px;
+    border-color:               @bg3;
+    border-radius:              14px;
+    background-color:           @bg0;
+    padding:                    0;
+}
+
+mainbox {
+    orientation:                vertical;
+    spacing:                    0;
+    children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
+
+}
+
+inputbar {
+    spacing:                    12px;
+    padding:                    14px 18px;
+    border:                     0 0 3px 0;
+    border-color:               @acc2;
+    background-color:           @bg1;
+    children:                   [ "prompt", "textbox-prompt-colon", "entry" ];
+}
+
+prompt {
+    text-color:                 @acc;
+    
+}
+
+textbox-prompt-colon {
+    enabled:                    true;
+    expand:                     false;
+    str:                        "✿";
+    text-color:                 @acc2;
+}
+
+entry {
+    placeholder:                "¿a quién buscas?";
+    placeholder-color:          @dim;
+    cursor:                     text;
+    text-color:                 @hi;
+}
+
+listview {
+    columns:                    1;
+    lines:                      8;
+    spacing:                    0;
+    padding:                    8px 0;
+    dynamic:                    true;
+    cycle:                      true;
+    scrollbar:                  false;
+    fixed-height:               true;
+}
+
+element {
+    spacing:                    12px;
+    padding:                    8px 18px 8px 16px;
+    border:                     0 0 0 3px;
+    border-color:               transparent;
+    border-radius:              8px;
+    cursor:                     pointer;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+element normal.active,
+element alternate.active {
+    text-color:                 @ok;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    text-color:                 @warn;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color:           @acc_a29;
+    border:                     0 0 0 3px;
+    border-color:               @acc;
+    text-color:                 @hi;
+}
+
+element-icon {
+    size:                       24px;
+    cursor:                     inherit;
+}
+
+element-text {
+    text-color:                 inherit;
+    vertical-align:             0.5;
+    cursor:                     inherit;
+}
+
+mode-switcher {
+    spacing:                    0;
+    border:                     1px 0 0 0;
+    border-color:               @bg2;
+}
+
+button {
+    padding:                    9px;
+    text-color:                 @dim;
+    cursor:                     pointer;
+}
+
+button selected {
+    background-color:           @bg1;
+    text-color:                 @acc;
+}
+
+message {
+    padding:                    10px 18px;
+    border:                     0 0 1px 0;
+    border-color:               @bg2;
+}
+
+textbox {
+    text-color:                 @dim;
+    vertical-align:             0.5;
+}
+
+error-message {
+    padding:                    14px;
+    background-color:           @bg0;
+}

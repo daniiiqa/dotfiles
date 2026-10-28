@@ -1,12 +1,9 @@
+local c = require("wallust.wallust-hyprland")
 -- Look outsider: outsider house / lo-fi — foto vieja de rollo, cassette y VHS.
 -- Paleta fija (no sigue al wallpaper): negros cálidos, crema, rosa deslavado,
 -- teal de cinta y el rojo del REC. Grano de película con screen_shader.
 
-local ink0 = "rgb(15120e)"
-local ink2 = "rgb(2d2820)"
-local ink3 = "rgb(4d453a)"
-local rose = "rgb(d99a8b)"
-local amber = "rgb(e3b161)"
+-- colores de wallust: c.color0 … c.color15
 
 hl.config({ general = {
     border_size = 1,
@@ -14,8 +11,8 @@ hl.config({ general = {
     gaps_out = 8,
 
     col = {
-        active_border = { colors = { rose, amber }, angle = 45 },
-        inactive_border = ink2,
+        active_border = { colors = { c.rose, c.amber }, angle = 45 },
+        inactive_border = c.ink2,
     },
 } })
 
@@ -60,14 +57,14 @@ hl.config({ decoration = {
 
 hl.config({ group = {
     col = {
-        border_active = rose,
-        border_inactive = ink2,
+        border_active = c.rose,
+        border_inactive = c.ink2,
     },
 
     groupbar = {
         col = {
-            active = rose,
-            inactive = ink3,
+            active = c.rose,
+            inactive = c.ink3,
         },
     },
 } })

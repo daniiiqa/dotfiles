@@ -7,10 +7,9 @@
 @define-color accent @color12;
 @define-color muted alpha(@foreground, 0.45);
 @define-color faint alpha(@foreground, 0.18);
-@define-color critical #e06c75;
 
 * {
-	font-family: "GeistMono Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 500;
 	font-size: 13px;
 	min-height: 0;

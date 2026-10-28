@@ -1,24 +1,11 @@
 /* Look nord — wlogout: tiles Nord con hover en frost (paleta fija). */
 
 /* paleta Nord fija con los mismos nombres que usa wallust */
-@define-color background #2E3440;
-@define-color foreground #D8DEE9;
-@define-color color0 #3B4252;
-@define-color color8 #4C566A;
-@define-color color7 #E5E9F0;
-@define-color color11 #EBCB8B;
-@define-color color12 #88C0D0;
-@define-color color13 #81A1C1;
-@define-color color14 #8FBCBB;
-@define-color nord_red #BF616A;
-@define-color nord_orange #D08770;
-@define-color nord_yellow #EBCB8B;
-@define-color nord_green #A3BE8C;
-@define-color nord_purple #B48EAD;
-@define-color nord_blue #5E81AC;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 window {
-    font-family: "Iosevka Nerd Font";
+    font-family: "{{font}}";
     font-size: 12pt;
     color: @foreground;
     background-color: alpha(@background, 0.92);
@@ -43,8 +30,8 @@ button:focus,
 button:hover {
     color: @foreground;
     background-size: 14%;
-    background-color: alpha(@color12, 0.12);
-    border-color: @color12;
+    background-color: alpha(@nord8, 0.12);
+    border-color: @nord8;
 }
 
 /* iconos de línea monocromos del paquete wlogout (los PNG a color de antes

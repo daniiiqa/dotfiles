@@ -3,22 +3,11 @@
    Adentro sin divisiones: etiqueta chica y apagada, valor brillante; tres
    workspaces por los tres altos hornos. Paleta fija. */
 
-@define-color bg0 #0a0605;
-@define-color bg1 #15100d;
-@define-color bg2 #282119;
-@define-color bg3 #4a3d31;
-@define-color dim #6f6b66;
-@define-color fg #aaadad;
-@define-color hi #d8d4cc;
-@define-color acc #8f7156;
-@define-color acc2 #a8805a;
-@define-color warn #a0583a;
-@define-color ok #7f7463;
-@define-color alt #867261;
-@define-color cool #727b7b;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 * {
-	font-family: "MartianMono Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 600;
 	font-size: 12px;
 	min-height: 0;

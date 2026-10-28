@@ -1,24 +1,11 @@
 /* Look talavera — loza de Puebla: esmalte crema, trazo azul cobalto, toques de */
 
 /* paleta talavera con los mismos nombres que usa wallust */
-@define-color background #f6f1e4;
-@define-color foreground #1b2340;
-@define-color color0 #ece4d0;
-@define-color color8 #1f3f8f;
-@define-color color7 #0e1530;
-@define-color color11 #e3a51b;
-@define-color color12 #1f3f8f;
-@define-color color13 #2f5bb8;
-@define-color color14 #2f5bb8;
-@define-color tape_red #b5532a;
-@define-color tape_orange #1f3f8f;
-@define-color tape_yellow #e3a51b;
-@define-color tape_green #3f8a5a;
-@define-color tape_purple #2f5bb8;
-@define-color tape_blue #2f5bb8;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 window {
-    font-family: "MonaspiceXe Nerd Font";
+    font-family: "{{font}}";
     font-size: 12pt;
     color: @foreground;
     background-color: alpha(@background, 0.92);
@@ -43,8 +30,8 @@ button:focus,
 button:hover {
     color: @foreground;
     background-size: 14%;
-    background-color: alpha(@color12, 0.12);
-    border-color: @color12;
+    background-color: alpha(@bg3, 0.12);
+    border-color: @bg3;
 }
 
 /* iconos de línea monocromos del paquete wlogout (los PNG a color de antes

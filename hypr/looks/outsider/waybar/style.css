@@ -2,20 +2,11 @@
    cassette: tira oscura cálida, todo texto en minúscula, una línea de color
    arriba de cada isla. Paleta fija: no sigue al wallpaper. */
 
-@define-color ink0 #15120e;
-@define-color ink1 #1f1b16;
-@define-color ink2 #2d2820;
-@define-color ink3 #4d453a;
-@define-color dust #8f8574;
-@define-color cream #e8dcc3;
-@define-color paper #f3ead6;
-@define-color rose #d99a8b;
-@define-color teal #87aaa1;
-@define-color amber #e3b161;
-@define-color rec #d4523b;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 * {
-	font-family: "FantasqueSansM Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 500;
 	font-size: 14px;
 	min-height: 0;

@@ -9,7 +9,7 @@
 @define-color island alpha(@background, 0.82);
 
 * {
-	font-family: "VictorMono Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 600;
 	font-size: 13px;
 	min-height: 0;
@@ -62,7 +62,7 @@ tooltip label {
 }
 
 #workspaces button.urgent {
-	color: #f2a7b5;
+	color: @alert;
 }
 
 #workspaces button:hover {
@@ -118,11 +118,11 @@ tooltip label {
 
 
 #temperature.critical {
-	color: #f2a7b5;
+	color: @alert;
 }
 
 #custom-power {
-	color: #f2a7b5;
+	color: @alert;
 }
 
 #custom-power:hover,
@@ -230,7 +230,7 @@ tooltip label {
 
 #custom-recorder.recording,
 #custom-recorder.paused {
-	color: #f2a7b5;
+	color: @alert;
 }
 
 #custom-recorder.recording {
@@ -246,11 +246,11 @@ tooltip label {
 }
 
 #custom-recorder.recording {
-	background: alpha(#f2a7b5, 0.18);
+	background: alpha(@alert, 0.18);
 	border-radius: 10px;
 }
 
 /* batería (laptops): baja, crítica y ahorro */
-#custom-battery.low { color: #e06c75; }
-#custom-battery.critical { color: #e06c75; font-weight: bold; }
+#custom-battery.low { color: @critical; }
+#custom-battery.critical { color: @critical; font-weight: bold; }
 #custom-battery.saver { opacity: 0.8; }

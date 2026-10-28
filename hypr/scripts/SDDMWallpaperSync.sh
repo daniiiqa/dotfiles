@@ -80,6 +80,11 @@ if [ -f "$look_conf" ]; then
     while IFS='=' read -r k v; do
         case "$k" in ''|\#*) continue ;; esac
         v=${v#\"}; v=${v%\"}
+        # "@acc": un color del look (los nombres están en los colores de rofi)
+        if [[ $v == @* ]]; then
+            v=$(extract_color "${v#@}")
+            [ -n "$v" ] || continue
+        fi
         set_key "$k" "$v"
     done < "$look_conf"
 fi

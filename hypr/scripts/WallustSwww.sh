@@ -79,6 +79,9 @@ wallust run -s "$wallpaper_path" || true
 # Custom (dany): sube los colores que quedaron ilegibles contra el fondo y
 # re-renderiza los templates (ver ContrastFix.py)
 "$HOME/.config/hypr/scripts/ContrastFix.py" || true
+# los colores del look: en los de paleta fija su paleta gana sobre la del
+# wallpaper; en todos, sus nombres propios (acc, critical…)
+"$HOME/.config/hypr/scripts/LookBuild.py" colors || true
 wallust_targets=(
   "$HOME/.config/waybar/wallust/colors-waybar.css"
   "$HOME/.config/rofi/wallust/colors-rofi.rasi"

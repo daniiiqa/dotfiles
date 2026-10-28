@@ -65,12 +65,18 @@ la Silla) · `ofrenda` (Día de Muertos: cempasúchil, papel picado, luz de vela
 · `loteria` (las cartas: cada módulo es una carta) · `talavera` (loza de
 Puebla: esmalte crema, trazo cobalto)
 
-Cada look vive en `hypr/looks/<nombre>/` como espejo de `~/.config` con solo
-los archivos que cambia: decoraciones y animaciones de Hyprland, hyprlock,
-waybar (config, estilo, iconos de apps, estilo del visualizador, etiquetas del
-grabador), rofi, arre, wlogout, kitty, fastfetch, rola, SDDM y la paleta de
-wallust. `LookSwitch.sh` guarda lo vivo en el look actual (así no se pierde lo
-que edites a mano) y copia el nuevo encima.
+Cada look vive en `hypr/looks/<nombre>/`: un archivo maestro, **`look.toml`**
+(colores, fuente, el estilo de las apps, la paleta de wallust), más un espejo de
+`~/.config` con solo los archivos que le dan forma: decoraciones y animaciones de
+Hyprland, hyprlock, waybar, rofi, wlogout, kitty, fastfetch y SDDM. Esos archivos
+no llevan colores ni fuentes escritos: usan los nombres del look (`@acc`, `$acc`,
+`{{font}}`), así una paleta o una fuente vive en un solo lugar. Los looks con
+`from = "palette"` traen sus colores; los demás los sacan del wallpaper con
+wallust. `LookBuild.py` aplica el look y escribe los colores de cada app.
+
+**Haz el tuyo:** `hypr/scripts/LookNew.sh nombre base` copia un look; luego editas
+su `look.toml` (y, para cambiar la forma, sus archivos) y lo eliges con `SUPER+T`.
+También aparece en el instalador. La guía está en `hypr/looks/README.md`.
 
 ## Piezas
 

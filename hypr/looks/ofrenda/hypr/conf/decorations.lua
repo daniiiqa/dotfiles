@@ -1,14 +1,9 @@
+local c = require("wallust.wallust-hyprland")
 -- Look ofrenda: luz de vela: el borde va de cempasúchil a magenta y morado, sombra
 -- cálida. Shader: viñeta tibia de vela (GameMode.sh lo apaga).
 -- Paleta fija (no sigue al wallpaper).
 
-local bg = "rgb(120c16)"
-local line = "rgb(2b1f35)"
-local ink = "rgb(4a3758)"
-local acc = "rgb(ff8c1a)"
-local acc2 = "rgb(e0218a)"
-local alt = "rgb(8e44c4)"
-local rust = "rgb(b5562f)"
+-- colores de wallust: c.color0 … c.color15
 
 hl.config({ general = {
     border_size = 2,
@@ -16,8 +11,8 @@ hl.config({ general = {
     gaps_out = 12,
 
     col = {
-        active_border = { colors = { acc, acc2, alt }, angle = 135 },
-        inactive_border = line,
+        active_border = { colors = { c.acc, c.acc2, c.alt }, angle = 135 },
+        inactive_border = c.line,
     },
 } })
 
@@ -42,8 +37,8 @@ hl.config({ decoration = {
         render_power = 3,
         offset = "0 6",
         sharp = false,
-        color = "rgba(ff8c1a33)",
-        color_inactive = "rgba(ff8c1a22)",
+        color = c.acc_a33,
+        color_inactive = c.acc_a22,
     },
 
     blur = {
@@ -63,14 +58,14 @@ hl.config({ decoration = {
 
 hl.config({ group = {
     col = {
-        border_active = acc,
-        border_inactive = line,
+        border_active = c.acc,
+        border_inactive = c.line,
     },
 
     groupbar = {
         col = {
-            active = acc,
-            inactive = line,
+            active = c.acc,
+            inactive = c.line,
         },
     },
 } })

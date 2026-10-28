@@ -60,51 +60,19 @@ REPO_PKGS=(
   nwg-displays qt5ct qt6ct papirus-icon-theme adw-gtk-theme
   networkmanager bluez bluez-utils
   # fuentes base (JetBrainsMono Mono para iconos alineados, Adwaita Mono para
-  # el visualizador, Noto Serif para paper); las de cada look van en LOOK_FONT
+  # el visualizador, Noto Serif para paper); las de cada look: [font] package
+  # en su look.toml
   ttf-jetbrains-mono-nerd adwaita-fonts noto-fonts noto-fonts-emoji
 )
-# fuente de cada look (classic usa JetBrainsMono, que va siempre). Solo se
-# instalan las de los looks elegidos.
-declare -A LOOK_FONT=(
-  [brutalist]=ttf-space-mono-nerd [classic]=""            [glass]=otf-geist-mono-nerd
-  [minimal]=otf-geist-mono-nerd   [neon]=otf-monaspace-nerd [nord]=ttf-iosevka-nerd
-  [outsider]=ttf-fantasque-nerd   [paper]=ttf-ibmplex-mono-nerd
-  [pastel]=ttf-victor-mono-nerd   [retro]=ttf-terminus-nerd
-  [fundidora]=ttf-martian-mono-nerd [ofrenda]=otf-monaspace-nerd
-  [loteria]=otf-codenewroman-nerd  [talavera]=otf-monaspace-nerd
-)
-declare -A LOOK_DESC_ES=(
-  [brutalist]="bloques sólidos, cero esquinas, MAYÚSCULAS"
-  [classic]="el original: iconos, blur, JetBrainsMono"
-  [glass]="vidrio esmerilado, barra abajo, redondeado"
-  [minimal]="limpio y discreto, iconos finos"
-  [neon]="colores encendidos, iconos rellenos"
-  [nord]="paleta Nord fija, barra flotante"
-  [outsider]="lo-fi de cassette, minúsculas, grano de película"
-  [paper]="papel y tinta, toques de serif"
-  [pastel]="suave y redondito, iconos tiernos"
-  [retro]="terminal de fósforo, todo en texto"
-  [fundidora]="acero regio: carbón, alto horno, el Cerro de la Silla"
-  [ofrenda]="Día de Muertos: cempasúchil, papel picado, luz de vela"
-  [loteria]="las cartas: papel viejo, contornos negros, colores de imprenta"
-  [talavera]="loza de Puebla: esmalte crema y trazo cobalto"
-)
-declare -A LOOK_DESC_EN=(
-  [brutalist]="solid blocks, zero corners, UPPERCASE"
-  [classic]="the original: icons, blur, JetBrainsMono"
-  [glass]="frosted glass, bottom bar, rounded"
-  [minimal]="clean and quiet, thin icons"
-  [neon]="glowing colors, filled icons"
-  [nord]="fixed Nord palette, floating bar"
-  [outsider]="lo-fi cassette, lowercase, film grain"
-  [paper]="paper and ink, serif touches"
-  [pastel]="soft and round, cute icons"
-  [retro]="phosphor terminal, all text"
-  [fundidora]="Monterrey steel: charcoal, blast furnace, Cerro de la Silla"
-  [ofrenda]="Day of the Dead: marigolds, papel picado, candlelight"
-  [loteria]="the card game: old paper, black outlines, print colors"
-  [talavera]="Puebla pottery: cream glaze and cobalt linework"
-)
+# Fuente y descripción de cada look: salen de hypr/looks/<look>/look.toml
+# ([about] es/en, [font] package). Un look nuevo aparece aquí solo.
+# (sin Python: en un Arch nuevo todavía puede no estar instalado)
+look_get() {  # look_get LOOK SECCIÓN CLAVE
+  awk -v sec="[$2]" -v key="$3" '
+    /^\[/ { insec = ($0 == sec); next }
+    insec && $1 == key { sub(/^[^=]*=[ \t]*"/, ""); sub(/".*$/, ""); print; exit }
+  ' "$REPO_DIR/hypr/looks/$1/look.toml" 2>/dev/null
+}
 AUR_PKGS=(
   mpvpaper   # wallpapers de video
   wallust    # colores desde el wallpaper
@@ -258,7 +226,7 @@ elif [ -t 0 ] && ((${#YES[@]} == 0)); then
           "Looks: each one changes the bar, fonts, colors, icons and login (SUPER+T)")"
   i=1
   for l in "${ALL_LOOKS[@]}"; do
-    if [ "$UI_LANG" = es ]; then desc=${LOOK_DESC_ES[$l]:-}; else desc=${LOOK_DESC_EN[$l]:-}; fi
+    desc=$(look_get "$l" about "$UI_LANG")
     printf '   %2d) %-10s %s\n' "$i" "$l" "$desc"
     i=$((i + 1))
   done
@@ -298,7 +266,7 @@ if [ -z "$INITIAL" ]; then
 fi
 LOOK_PKGS=()
 for l in "${LOOKS[@]}"; do
-  p=${LOOK_FONT[$l]:-}
+  p=$(look_get "$l" font package)
   [ -n "$p" ] && ! in_list "$p" "${LOOK_PKGS[@]}" && LOOK_PKGS+=("$p")
 done
 say "Looks: ${LOOKS[*]} ($(L "empieza en" "starting with") $INITIAL)"
@@ -431,19 +399,22 @@ fi
 # Los archivos vivos del repo son del último look con el que se hizo commit,
 # no necesariamente el elegido: aplicar el look encima (como LookSwitch.sh) para
 # que lo vivo y .current coincidan. Si ya hay look activo aquí, se respeta.
-if ((NEW_MACHINE)) || [ ! -f "$looks_dir/.current" ]; then
-  say "$(L "Look inicial" "Starting look"): $INITIAL"
-  if ((DRY)); then echo "   [dry-run] copiar $looks_dir/$INITIAL/* sobre $CFG y .current = $INITIAL"
-  else
-    (cd "$looks_dir/$INITIAL" && find . -type f -printf '%P\n') | while read -r f; do
-      mkdir -p "$(dirname "$CFG/$f")"
-      cp "$looks_dir/$INITIAL/$f" "$CFG/$f"
-    done
-    echo "$INITIAL" > "$looks_dir/.current"
-    echo 0 > "$looks_dir/.fontsize"   # lo vivo está en el tamaño del look; FontSize.py lo vuelve a aplicar
-    # rofi importa este archivo (tamaño de letra, FontSize.py); vacío al empezar
-    [ -f "$CFG/rofi/discada-font.rasi" ] || printf '/* FontSize.py */\n' > "$CFG/rofi/discada-font.rasi"
-  fi
+# el look: sus archivos con su fuente, sus colores y su estilo (LookBuild.py,
+# desde su look.toml). Al actualizar también se vuelve a aplicar el que ya
+# tenías: sus archivos pueden traer cambios
+look=$INITIAL
+if ! ((NEW_MACHINE)) && [ -f "$looks_dir/.current" ]; then
+  cur=$(cat "$looks_dir/.current")
+  in_list "$cur" "${LOOKS[@]}" && look=$cur
+fi
+say "$(L "Look" "Look"): $look"
+if ((DRY)); then echo "   [dry-run] LookBuild.py apply $look y .current = $look"
+else
+  python3 "$CFG/hypr/scripts/LookBuild.py" apply "$look"
+  echo "$look" > "$looks_dir/.current"
+  echo 0 > "$looks_dir/.fontsize"   # lo vivo está en el tamaño del look; FontSize.py lo vuelve a aplicar
+  # rofi importa este archivo (tamaño de letra, FontSize.py); vacío al empezar
+  [ -f "$CFG/rofi/discada-font.rasi" ] || printf '/* FontSize.py */\n' > "$CFG/rofi/discada-font.rasi"
 fi
 
 # idioma de discada (menús, avisos, cheat sheet) y de rola

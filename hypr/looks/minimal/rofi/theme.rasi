@@ -1,0 +1,154 @@
+/* Custom (dany): Dany Minimal — lista de una columna, sin imagen de fondo,
+   borde de 1px y color12 como único acento. Colores vía wallust. */
+
+@import "~/.config/rofi/wallust/colors-rofi.rasi"
+
+configuration {
+    modi:                       "drun,run,filebrowser";
+    show-icons:                 true;
+    display-drun:               "apps";
+    display-run:                "run";
+    display-filebrowser:        "files";
+    display-window:             "windows";
+    drun-display-format:        "{name}";
+    hover-select:               true;
+    me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+    window-format:              "{w} · {c} · {t}";
+}
+
+@theme "~/.config/rofi/wallust/colors-rofi.rasi"
+
+* {
+    accent:                     @color12;
+    bg:                         @normal-background;
+    fg:                         @foreground;
+    muted:                      #ffffff59;
+    faint:                      #ffffff1a;
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+window {
+    width:                      560px;
+    location:                   center;
+    anchor:                     center;
+    border:                     1px;
+    border-color:               @faint;
+    border-radius:              6px;
+    background-color:           @bg;
+    padding:                    0px;
+}
+
+mainbox {
+    orientation:                vertical;
+    spacing:                    0px;
+    padding:                    0px;
+    children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
+}
+
+inputbar {
+    spacing:                    10px;
+    padding:                    14px 16px;
+    border:                     0px 0px 1px 0px;
+    border-color:               @faint;
+    children:                   [ "prompt", "entry" ];
+}
+
+prompt {
+    text-color:                 @accent;
+}
+
+textbox-prompt-colon {
+    enabled:                    false;
+}
+
+entry {
+    placeholder:                "Search";
+    placeholder-color:          @muted;
+    cursor:                     text;
+}
+
+listview {
+    columns:                    1;
+    lines:                      8;
+    spacing:                    2px;
+    padding:                    8px;
+    dynamic:                    true;
+    cycle:                      true;
+    scrollbar:                  false;
+    fixed-height:               true;
+    fixed-columns:              true;
+}
+
+element {
+    spacing:                    12px;
+    padding:                    8px 10px;
+    border-radius:              4px;
+    cursor:                     pointer;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color:           transparent;
+    text-color:                 @fg;
+}
+
+element normal.active,
+element alternate.active {
+    text-color:                 @accent;
+}
+
+element normal.urgent,
+element alternate.urgent {
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color:           @accent;
+    text-color:                 @bg;
+}
+
+element-icon {
+    size:                       22px;
+    cursor:                     inherit;
+}
+
+element-text {
+    text-color:                 inherit;
+    vertical-align:             0.5;
+    cursor:                     inherit;
+}
+
+mode-switcher {
+    spacing:                    0px;
+    border:                     1px 0px 0px 0px;
+    border-color:               @faint;
+}
+
+button {
+    padding:                    8px;
+    text-color:                 @muted;
+    cursor:                     pointer;
+}
+
+button selected {
+    text-color:                 @accent;
+}
+
+message {
+    padding:                    8px 16px;
+    border:                     0px 0px 1px 0px;
+    border-color:               @faint;
+}
+
+textbox {
+    text-color:                 @fg;
+    vertical-align:             0.5;
+}
+
+error-message {
+    padding:                    12px;
+    background-color:           @bg;
+}

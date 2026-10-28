@@ -1,0 +1,76 @@
+# discada — look «outsider»
+# Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
+# los archivos de cada app (waybar/, rofi/, hypr/…) usan estos nombres.
+# LookBuild.py lo aplica (lo llama LookSwitch.sh).
+
+[about]
+es = "lo-fi de cassette, minúsculas, grano de película"
+en = "lo-fi cassette, lowercase, film grain"
+
+[font]
+family = "FantasqueSansM Nerd Font"   # {{font}} en los archivos del look
+package = "ttf-fantasque-nerd"   # lo instala install.sh
+
+[colors]
+from = "palette"   # sus propios colores (no los del wallpaper)
+# los de la terminal: kitty, vato, taco, arre, nvim, GTK/Qt…
+background = "#15120e"
+foreground = "#e8dcc3"
+cursor = "#d99a8b"
+color0 = "#2d2820"
+color1 = "#d4523b"
+color2 = "#9aa56f"
+color3 = "#e3b161"
+color4 = "#6f8fa0"
+color5 = "#c58a9c"
+color6 = "#87aaa1"
+color7 = "#e8dcc3"
+color8 = "#4d453a"
+color9 = "#e07a63"
+color10 = "#b3bd88"
+color11 = "#efc988"
+color12 = "#8fb0c0"
+color13 = "#d99a8b"
+color14 = "#a6c4bb"
+color15 = "#f3ead6"
+
+[colors.named]
+# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# el valor es un color o el nombre de otro (color12, background…)
+ink0 = "background"
+ink1 = "#1f1b16"
+ink2 = "color0"
+ink3 = "color8"
+dust = "#8f8574"
+cream = "foreground"
+paper = "color15"
+rose = "color13"
+teal = "color6"
+amber = "color3"
+rec = "color1"
+
+[style]
+# cómo se ven rola, vato, taco, arre y nvim (ver el README de vato)
+borders = "plain"
+bar = "dots"
+labels = "words"
+case = "lower"
+select = "fill"
+tint = "color"
+transparent = true
+
+[wallust]
+palette = "dark16"
+
+[kitty]
+# lo que el tema de kitty del look tiene además de la paleta (selección, pestañas…)
+selection_foreground = "ink0"
+selection_background = "rose"
+url_color = "teal"
+cursor_text_color = "ink0"
+active_border_color = "rose"
+inactive_border_color = "ink2"
+active_tab_foreground = "ink0"
+active_tab_background = "rose"
+inactive_tab_foreground = "dust"
+inactive_tab_background = "ink1"

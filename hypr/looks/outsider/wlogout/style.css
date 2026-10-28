@@ -2,24 +2,11 @@
    deslavado, rojo REC). Esquinas casi rectas. */
 
 /* paleta outsider con los mismos nombres que usa wallust */
-@define-color background #15120e;
-@define-color foreground #e8dcc3;
-@define-color color0 #1f1b16;
-@define-color color8 #4d453a;
-@define-color color7 #f3ead6;
-@define-color color11 #e3b161;
-@define-color color12 #d99a8b;
-@define-color color13 #87aaa1;
-@define-color color14 #87aaa1;
-@define-color tape_red #d4523b;
-@define-color tape_orange #e3b161;
-@define-color tape_yellow #e3b161;
-@define-color tape_green #87aaa1;
-@define-color tape_purple #d99a8b;
-@define-color tape_blue #87aaa1;
+
+@import '../../.config/waybar/wallust/colors-waybar.css';
 
 window {
-    font-family: "FantasqueSansM Nerd Font";
+    font-family: "{{font}}";
     font-size: 12pt;
     color: @foreground;
     background-color: alpha(@background, 0.92);
@@ -44,8 +31,8 @@ button:focus,
 button:hover {
     color: @foreground;
     background-size: 14%;
-    background-color: alpha(@color12, 0.12);
-    border-color: @color12;
+    background-color: alpha(@rose, 0.12);
+    border-color: @rose;
 }
 
 /* iconos de línea monocromos del paquete wlogout (los PNG a color de antes

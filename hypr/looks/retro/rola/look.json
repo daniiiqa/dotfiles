@@ -1,9 +1,0 @@
-{
-  "borders": "dashed",
-  "bar": "ascii",
-  "labels": "short",
-  "case": "normal",
-  "select": "inverse",
-  "tint": "phosphor",
-  "transparent": false
-}

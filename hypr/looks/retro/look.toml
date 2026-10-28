@@ -1,0 +1,34 @@
+# discada — look «retro»
+# Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
+# los archivos de cada app (waybar/, rofi/, hypr/…) usan estos nombres.
+# LookBuild.py lo aplica (lo llama LookSwitch.sh).
+
+[about]
+es = "terminal de fósforo, todo en texto"
+en = "phosphor terminal, all text"
+
+[font]
+family = "Terminess Nerd Font"   # {{font}} en los archivos del look
+package = "ttf-terminus-nerd"   # lo instala install.sh
+
+[colors]
+from = "wallpaper"   # wallust los saca del wallpaper (color0…color15)
+
+[colors.named]
+# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# el valor es un color o el nombre de otro (color12, background…)
+critical = "#e06c75"
+rec = "#ff5555"
+
+[style]
+# cómo se ven rola, vato, taco, arre y nvim (ver el README de vato)
+transparent = false
+borders = "dashed"
+bar = "ascii"
+labels = "short"
+case = "normal"
+select = "inverse"
+tint = "phosphor"
+
+[wallust]
+palette = "dark16"

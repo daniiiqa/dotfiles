@@ -9,7 +9,7 @@
 @define-color faint alpha(@color12, 0.2);
 
 * {
-	font-family: "Terminess Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 500;
 	font-size: 12px;
 	min-height: 0;
@@ -207,7 +207,7 @@ tooltip label {
 
 #custom-recorder.recording,
 #custom-recorder.paused {
-	color: #ff5555;
+	color: @rec;
 }
 
 #custom-recorder.recording {
@@ -223,10 +223,10 @@ tooltip label {
 }
 
 #custom-recorder.recording {
-	text-shadow: 0 0 4px #ff5555;
+	text-shadow: 0 0 4px @rec;
 }
 
 /* batería (laptops): baja, crítica y ahorro */
-#custom-battery.low { color: #e06c75; }
-#custom-battery.critical { color: #e06c75; font-weight: bold; }
+#custom-battery.low { color: @critical; }
+#custom-battery.critical { color: @critical; font-weight: bold; }
 #custom-battery.saver { opacity: 0.8; }

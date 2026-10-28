@@ -1,9 +1,0 @@
-{
-  "borders": "thick",
-  "bar": "blocks",
-  "labels": "words",
-  "case": "upper",
-  "select": "bar",
-  "tint": "color",
-  "transparent": false
-}

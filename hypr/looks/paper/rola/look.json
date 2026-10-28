@@ -1,9 +1,0 @@
-{
-  "borders": "plain",
-  "bar": "line",
-  "labels": "words",
-  "case": "normal",
-  "select": "bar",
-  "tint": "ink",
-  "transparent": false
-}

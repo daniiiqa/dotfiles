@@ -239,6 +239,7 @@ edit_menu() {
   local names=() files=()
   add() { names+=("$1"); files+=("$2"); }
   add "discada ($(L "idioma" "language"))"            "$discada"
+  add "Look: $(cat "$hypr/looks/.current" 2>/dev/null) (look.toml)" "$hypr/looks/$(cat "$hypr/looks/.current" 2>/dev/null)/look.toml"
   add "$(L "Grabador" "Recorder")"                    "$recconf"
   local f="$scripts/Hypr.sh file"   # conf/X.lua o conf/X.conf, el que se usa
   add "$(L "Apps por defecto" "Default apps")"        "$($f defaults)"

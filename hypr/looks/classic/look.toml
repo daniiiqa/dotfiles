@@ -1,0 +1,34 @@
+# discada — look «classic»
+# Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
+# los archivos de cada app (waybar/, rofi/, hypr/…) usan estos nombres.
+# LookBuild.py lo aplica (lo llama LookSwitch.sh).
+
+[about]
+es = "el original: iconos, blur, JetBrainsMono"
+en = "the original: icons, blur, JetBrainsMono"
+
+[font]
+family = "JetBrainsMono Nerd Font"   # {{font}} en los archivos del look
+package = ""   # lo instala install.sh (va siempre)
+
+[colors]
+from = "wallpaper"   # wallust los saca del wallpaper (color0…color15)
+
+[colors.named]
+# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# el valor es un color o el nombre de otro (color12, background…)
+critical = "#ff0000"
+warning = "#f3f809"
+
+[style]
+# cómo se ven rola, vato, taco, arre y nvim (ver el README de vato)
+borders = "auto"
+bar = "line"
+labels = "icons"
+case = "normal"
+select = "fill"
+tint = "color"
+transparent = true
+
+[wallust]
+palette = "dark16"

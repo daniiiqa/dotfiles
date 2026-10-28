@@ -10,7 +10,7 @@
 @define-color slab alpha(@background, 0.96);
 
 * {
-	font-family: "MonaspiceKr Nerd Font";
+	font-family: "{{font}}";
 	font-weight: 700;
 	font-size: 13px;
 	min-height: 0;
@@ -288,6 +288,6 @@ tooltip label {
 }
 
 /* batería (laptops): baja, crítica y ahorro */
-#custom-battery.low { color: #e06c75; }
-#custom-battery.critical { color: #e06c75; font-weight: bold; }
+#custom-battery.low { color: @critical; }
+#custom-battery.critical { color: @critical; font-weight: bold; }
 #custom-battery.saver { opacity: 0.8; }

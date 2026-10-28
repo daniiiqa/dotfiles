@@ -4,7 +4,7 @@
 @import '../../.config/waybar/wallust/colors-waybar.css';
 
 window {
-    font-family: "Terminess Nerd Font";
+    font-family: "{{font}}";
     font-size: 12pt;
     color: @color12;
     background-color: alpha(@background, 0.96);
