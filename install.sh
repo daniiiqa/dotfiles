@@ -107,7 +107,7 @@ AUR_PKGS=(
   wallust    # colores desde el wallpaper
   wlogout    # menú de apagado
 )
-SDDM_PKGS=(sddm qt6-svg qt6-declarative qt6-5compat)
+SDDM_PKGS=(sddm qt6-svg qt6-declarative qt6-5compat qt6-multimedia qt6-multimedia-ffmpeg)   # el tema usa QtMultimedia (fondos de video)
 # laptops (hay batería del equipo, no la de un mouse): brillo y perfiles de
 # energía. power-profiles-daemon choca con tlp: si ya está tlp, se respeta
 LAPTOP=0
