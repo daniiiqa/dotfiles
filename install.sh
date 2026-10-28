@@ -346,7 +346,8 @@ if ((NEW_MACHINE)); then
   say "$(L "Copiando dotfiles a $CFG (lo que se pise va a $BACKUP)" "Copying dotfiles to $CFG (anything overwritten goes to $BACKUP)")"
   # Hyprland lee hyprland.lua antes que hyprland.conf: con la config Lua de
   # la distro (CachyOS, que arranca noctalia desde ahí) discada nunca cargaría
-  if [ -f "$CFG/hypr/hyprland.lua" ]; then
+  # (el de discada empieza con "-- discada": ese se queda)
+  if [ -f "$CFG/hypr/hyprland.lua" ] && ! head -n1 "$CFG/hypr/hyprland.lua" | grep -q '^-- discada'; then
     say "$(L "Apartando la config Lua de Hyprland (hyprland.lua y config/) a $BACKUP/hypr" \
             "Moving the Hyprland Lua config (hyprland.lua and config/) to $BACKUP/hypr")"
     run mkdir -p "$BACKUP/hypr"

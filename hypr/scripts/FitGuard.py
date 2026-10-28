@@ -30,6 +30,10 @@ floated = set()   # direcciones que flotó este daemon
 retried = {}      # dirección → nº de ventanas cuando se re-azulejó (evita ciclos)
 
 
+# dispatch por Hypr.sh: la sintaxis cambia con la config en Lua
+HYPR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Hypr.sh")
+
+
 def hypr(*args):
     out = subprocess.run(["hyprctl", *args], capture_output=True, text=True).stdout
     return json.loads(out) if "-j" in args else out
@@ -42,9 +46,8 @@ def float_centered(c, monitors):
     w, h = min(FLOAT_SIZE[0], aw - 40), min(FLOAT_SIZE[1], ah - 40)
     x, y = mon["x"] + rl + (aw - w) // 2, mon["y"] + rt + (ah - h) // 2
     a = c["address"]
-    hypr("--batch", f"dispatch setfloating address:{a}; "
-                    f"dispatch resizewindowpixel exact {w} {h},address:{a}; "
-                    f"dispatch movewindowpixel exact {x} {y},address:{a}")
+    for args in (["float"], ["resizeto", str(w), str(h)], ["moveto", str(x), str(y)]):
+        subprocess.run([HYPR, *args, f"address:{a}"])
     floated.add(a)
 
 
@@ -73,7 +76,7 @@ def check():
         elif c["floating"] and a in floated and others <= 1 and retried.get(a) != others:
             floated.discard(a)
             retried[a] = others
-            hypr("dispatch", "settiled", f"address:{a}")
+            subprocess.run([HYPR, "tile", f"address:{a}"])
 
 
 def main():

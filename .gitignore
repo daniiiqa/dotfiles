@@ -39,6 +39,7 @@ __pycache__/
 rofi/.current_wallpaper
 # Salida Lua de nwg-displays (no se usa; Hyprland lee monitors.conf)
 hypr/monitors.lua
+hypr/workspaces.lua
 # Tamaño de letra aplicado (lo escribe FontSize.py)
 hypr/looks/.fontsize
 rofi/discada-font.rasi
@@ -53,6 +54,8 @@ rofi/discada-font.rasi
 /fastfetch/config.jsonc
 /hypr/conf/animations.conf
 /hypr/conf/decorations.conf
+/hypr/conf/animations.lua
+/hypr/conf/decorations.lua
 /hypr/hyprlock.conf
 /kitty/kitty.conf
 /rofi/0-shared-fonts.rasi
@@ -67,6 +70,7 @@ rofi/discada-font.rasi
 /waybar/wallust/colors-waybar.css
 /rofi/wallust/colors-rofi.rasi
 /hypr/wallust/wallust-hyprland.conf
+/hypr/wallust/wallust-hyprland.lua
 /kitty/kitty-themes/01-Wallust.conf
 /cava/config
 /rola/config.json

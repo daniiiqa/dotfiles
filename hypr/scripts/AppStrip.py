@@ -134,6 +134,10 @@ def pinned():
     return out
 
 
+# dispatch por Hypr.sh: la sintaxis cambia con la config en Lua
+HYPR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Hypr.sh")
+
+
 def hypr(*args):
     out = subprocess.run(["hyprctl", *args], capture_output=True, text=True).stdout
     return json.loads(out) if "-j" in args else out
@@ -297,13 +301,13 @@ def focus(slot):
     target = wins[0]
     if isinstance(active, dict) and active.get("class") == cls and len(wins) > 1:
         target = wins[-1]  # ya está enfocada: ir a la ventana menos reciente
-    hypr("dispatch", "focuswindow", f"address:{target['address']}")
+    subprocess.run([HYPR, "focus", f"address:{target['address']}"])
 
 
 def close(slot):
     wins, _ = windows_of(slot)
     if wins:
-        hypr("dispatch", "closewindow", f"address:{wins[0]['address']}")
+        subprocess.run([HYPR, "close", f"address:{wins[0]['address']}"])
 
 
 if __name__ == "__main__":

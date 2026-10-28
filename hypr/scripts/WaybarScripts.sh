@@ -1,20 +1,7 @@
 #!/usr/bin/env bash
-# This file used on waybar modules sourcing defaults set in $HOME/.config/hypr/conf/defaults.conf
+# This file used on waybar modules sourcing defaults set in $HOME/.config/hypr/conf/defaults (.lua o .conf)
 
-# Define the path to the config file
-config_file=$HOME/.config/hypr/conf/defaults.conf
-
-# Check if the config file exists
-if [[ ! -f "$config_file" ]]; then
-    echo "Error: Configuration file not found!"
-    exit 1
-fi
-
-# Process the config file in memory, removing the $ and fixing spaces
-config_content=$(sed 's/\$//g' "$config_file" | sed 's/ = /=/')
-
-# Source the modified content directly from the variable
-eval "$config_content"
+eval "$("$HOME/.config/hypr/scripts/Hypr.sh" defaults)"
 
 # Check if $term is set correctly
 if [[ -z "$term" ]]; then
@@ -25,7 +12,7 @@ fi
 # Execute accordingly based on the passed argument
 launch_files() {
     if [[ -z "$files" ]]; then
-        notify-send -u low -i "dialog-error-symbolic" "Waybar: files" "Set \$files in hypr/conf/defaults.conf or install a default file manager."
+        notify-send -u low -i "dialog-error-symbolic" "Waybar: files" "Set files in hypr/conf/defaults or install a default file manager."
         return 1
     fi
     eval "$files &"

@@ -61,8 +61,8 @@
 		"all-outputs": true,
 		"format": "{icon}",
 		"on-click": "activate",
-		"on-scroll-up": "hyprctl dispatch workspace e+1",
-		"on-scroll-down": "hyprctl dispatch workspace e-1",
+		"on-scroll-up": "$HOME/.config/hypr/scripts/Hypr.sh workspace e+1",
+		"on-scroll-down": "$HOME/.config/hypr/scripts/Hypr.sh workspace e-1",
 		"show-special": false,
 		"persistent-workspaces": {
 			"*": 5

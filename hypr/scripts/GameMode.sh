@@ -5,21 +5,16 @@ notif="preferences-system-notifications-symbolic"
 SCRIPTSDIR="$HOME/.config/hypr/scripts"
 
 
-HYPRGAMEMODE=$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}')
+H="$SCRIPTSDIR/Hypr.sh"
+HYPRGAMEMODE=$("$H" get animations:enabled)
 if [ "$HYPRGAMEMODE" = 1 ] ; then
-    hyprctl --batch "\
-        keyword animations:enabled 0;\
-        keyword decoration:shadow:enabled 0;\
-        keyword decoration:blur:enabled 0;\
-        keyword general:gaps_in 0;\
-        keyword general:gaps_out 0;\
-        keyword general:border_size 1;\
-        keyword decoration:rounding 0;\
-        keyword decoration:screen_shader [[EMPTY]]"
+    "$H" set animations:enabled false decoration:shadow:enabled false \
+        decoration:blur:enabled false general:gaps_in 0 general:gaps_out 0 \
+        general:border_size 1 decoration:rounding 0 decoration:screen_shader "[[EMPTY]]"
 	
 	# Custom (dany): sintaxis windowrule actualizada (la vieja tronaba con
 	# "invalid field" en Hyprland >= 0.53; hyprctl reload al salir la limpia)
-	hyprctl keyword windowrule "match:class .*, opacity 1 override"
+	"$H" opaque-all
 	# Custom (dany): el video también descansa en game mode, no solo awww
 	awww kill
 	pkill mpvpaper 2>/dev/null

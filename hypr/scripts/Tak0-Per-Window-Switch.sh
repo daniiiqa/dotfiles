@@ -13,19 +13,20 @@
 # This is for changing kb_layouts. Set kb_layouts in 
 
 MAP_FILE="$HOME/.cache/kb_layout_per_window"
-CFG_FILE="$HOME/.config/hypr/conf/settings.conf"
 ICON="preferences-system-notifications-symbolic"
 SCRIPT_NAME="$(basename "$0")"
 
 # Ensure map file exists
 touch "$MAP_FILE"
 
-# Read layouts from config
-if ! grep -q 'kb_layout' "$CFG_FILE"; then
-  echo "Error: cannot find kb_layout in $CFG_FILE" >&2
+# las distribuciones (input:kb_layout, "us,es") se le preguntan a Hyprland:
+# sirve igual con la config .conf que con la de Lua
+layouts=$("$HOME/.config/hypr/scripts/Hypr.sh" get input:kb_layout)
+if [ -z "$layouts" ]; then
+  echo "Error: kb_layout is not set (hypr/conf/settings)" >&2
   exit 1
 fi
-kb_layouts=($(grep 'kb_layout' "$CFG_FILE" | cut -d '=' -f2 | tr -d '[:space:]' | tr ',' ' '))
+kb_layouts=($(echo "$layouts" | tr -d '[:space:]' | tr ',' ' '))
 count=${#kb_layouts[@]}
 
 # Get current active window ID

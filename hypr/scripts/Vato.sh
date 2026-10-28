@@ -20,7 +20,7 @@ fi
 addr=$(hyprctl clients -j | jq -r '.[] | select(.class == "vato") | .address' | head -n1)
 if [ -n "$addr" ]; then
   echo "$tab" > "${XDG_RUNTIME_DIR:-/tmp}/vato.tab"
-  hyprctl dispatch focuswindow "address:$addr" >/dev/null
+  "$HOME/.config/hypr/scripts/Hypr.sh" focus "address:$addr"
   exit 0
 fi
 

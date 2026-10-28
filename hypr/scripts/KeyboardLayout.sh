@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# This is for changing kb_layouts. Set kb_layouts in "$HOME/.config/hypr/conf/settings.conf"
+# This is for changing kb_layouts. Set kb_layout in hypr/conf/settings (.lua o .conf)
 
 notif_icon="preferences-system-notifications-symbolic"
 SCRIPTSDIR="$HOME/.config/hypr/scripts"

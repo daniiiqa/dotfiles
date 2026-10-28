@@ -1,28 +1,16 @@
 #!/usr/bin/env bash
 # For Searching via web browsers
 
-# Define the path to the config file
-config_file=$HOME/.config/hypr/conf/defaults.conf
 if ! command -v jq >/dev/null 2>&1; then
     notify-send -u low "Rofi Search" "jq is required for URL encoding. Please install jq."
     exit 1
 fi
 
-# Check if the config file exists
-if [[ ! -f "$config_file" ]]; then
-    echo "Error: Configuration file not found!"
-    exit 1
-fi
-
-# Process the config file in memory, removing the $ and fixing spaces
-config_content=$(sed 's/\$//g' "$config_file" | sed 's/ = /=/')
-
-# Source the modified content directly from the variable
-eval "$config_content"
-
-# Check if $term is set correctly
+# el buscador sale de hypr/conf/defaults (.lua o .conf)
+eval "$("$HOME/.config/hypr/scripts/Hypr.sh" defaults)"
+Search_Engine=$search_engine
 if [[ -z "$Search_Engine" ]]; then
-    echo "Error: \$Search_Engine is not set in the configuration file!"
+    echo "Error: search_engine is not set in hypr/conf/defaults"
     exit 1
 fi
 

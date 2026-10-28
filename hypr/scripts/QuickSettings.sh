@@ -12,8 +12,8 @@ discada="$hypr/discada.conf"
 recconf="$hypr/recorder.conf"
 vis="$HOME/.config/waybar/visualizer.json"
 
-# $term y $edit salen de conf/defaults.conf
-eval "$(sed -nE 's/^\$(term|edit)\s*=\s*(.*)$/\1="\2"/p' "$hypr/conf/defaults.conf")"
+# $term y $edit salen de conf/defaults (.lua o .conf, Hypr.sh lo resuelve)
+eval "$("$scripts/Hypr.sh" defaults | grep -E '^(term|edit)=')"
 term=${term:-kitty}
 edit=${EDITOR:-${edit:-nano}}
 
@@ -240,15 +240,16 @@ edit_menu() {
   add() { names+=("$1"); files+=("$2"); }
   add "discada ($(L "idioma" "language"))"            "$discada"
   add "$(L "Grabador" "Recorder")"                    "$recconf"
-  add "$(L "Apps por defecto" "Default apps")"        "$hypr/conf/defaults.conf"
-  add "$(L "Atajos" "Keybinds")"                      "$hypr/conf/keybinds.conf"
-  add "$(L "Arranque" "Startup")"                     "$hypr/conf/startup.conf"
-  add "$(L "Ajustes generales" "General settings")"  "$hypr/conf/settings.conf"
-  add "$(L "Decoraciones (del look)" "Decorations (look)")" "$hypr/conf/decorations.conf"
-  add "$(L "Animaciones (del look)" "Animations (look)")"   "$hypr/conf/animations.conf"
-  add "$(L "Reglas de ventanas" "Window rules")"      "$hypr/conf/windowrules.conf"
+  local f="$scripts/Hypr.sh file"   # conf/X.lua o conf/X.conf, el que se usa
+  add "$(L "Apps por defecto" "Default apps")"        "$($f defaults)"
+  add "$(L "Atajos" "Keybinds")"                      "$($f keybinds)"
+  add "$(L "Arranque" "Startup")"                     "$($f startup)"
+  add "$(L "Ajustes generales" "General settings")"  "$($f settings)"
+  add "$(L "Decoraciones (del look)" "Decorations (look)")" "$($f decorations)"
+  add "$(L "Animaciones (del look)" "Animations (look)")"   "$($f animations)"
+  add "$(L "Reglas de ventanas" "Window rules")"      "$($f windowrules)"
   add "$(L "Apps fijadas" "Pinned apps")"             "$hypr/conf/pinned.conf"
-  add "$(L "Variables de entorno" "Environment")"     "$hypr/conf/env.conf"
+  add "$(L "Variables de entorno" "Environment")"     "$($f env)"
   add "Idle (hypridle)"                               "$hypr/hypridle.conf"
   add "Lock (hyprlock)"                               "$hypr/hyprlock.conf"
   local i
@@ -282,12 +283,12 @@ pidof rofi >/dev/null && pkill rofi
 row=0
 while true; do
   look=$(cat "$hypr/looks/.current" 2>/dev/null)
-  deco="$hypr/conf/decorations.conf"
+  deco=$("$scripts/Hypr.sh" file decorations)
   shader=""
   if grep -qE '^\s*screen_shader\s*=' "$deco"; then shader=yes
-  elif grep -qE '^\s*#\s*screen_shader\s*=' "$deco"; then shader=no; fi
-  game=$([ "$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}')" = 0 ] && echo yes || echo no)
-  blur=$([ "$(hyprctl -j getoption decoration:blur:passes | jq .int)" = 2 ] && L normal normal || L ligero light)
+  elif grep -qE '^\s*(#|--)\s*screen_shader\s*=' "$deco"; then shader=no; fi
+  game=$([ "$("$scripts/Hypr.sh" get animations:enabled)" = 0 ] && echo yes || echo no)
+  blur=$([ "$("$scripts/Hypr.sh" get decoration:blur:passes)" = 2 ] && L normal normal || L ligero light)
 
   names=() acts=()
   add() { names+=("$1"); acts+=("$2"); }

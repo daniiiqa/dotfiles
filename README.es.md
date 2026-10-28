@@ -134,6 +134,16 @@ que edites a mano) y copia el nuevo encima.
   terminal. `rola --login` conecta tu cuenta. Cada look trae su
   `rola/look.json`.
 
+## Hyprland en Lua (lista, todavía apagada)
+
+Hyprland 0.57 quita el formato `.conf`. Toda la config ya existe en Lua junto a
+la de ahora (`hypr/hyprland.lua.new`, `hypr/conf/*.lua`, y el `decorations.lua`
+/ `animations.lua` de cada look) y está probada. Se activa cuando waybar sepa
+cambiar de workspace con clic en modo Lua (la 0.15.0 no sabe). Los scripts, la
+barra y wlogout le hablan a Hyprland por `hypr/scripts/Hypr.sh`, que sirve con
+los dos formatos. Mientras tanto, los cambios a la config van en los `.conf` y
+en los `.lua`.
+
 ## Estructura
 
 ```

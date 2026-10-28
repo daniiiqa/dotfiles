@@ -1,0 +1,38 @@
+-- discada — Hyprland en Lua · https://wiki.hypr.land/Configuring/Start/
+--
+-- TODAVÍA NO SE USA. Hyprland 0.57 quita el formato .conf; esta es la misma
+-- config en Lua, lista y probada. Se activa cuando waybar sepa cambiar de
+-- workspace con clic en modo Lua (0.15.0 no sabe):
+--   mv ~/.config/hypr/hyprland.lua.new ~/.config/hypr/hyprland.lua
+-- y salir y volver a entrar. Para regresar, borrar hyprland.lua.
+-- Mientras tanto los cambios van en los .conf Y en los .lua de conf/.
+-- Revisarla sin activarla:
+--   cp hyprland.lua.new prueba.lua && Hyprland --verify-config -c ~/.config/hypr/prueba.lua; rm prueba.lua
+--
+--   conf/defaults.lua      apps por defecto (term, files, edit…)
+--   conf/env.lua           variables de entorno
+--   conf/startup.lua       lo que arranca con la sesión
+--   conf/settings.lua      input, layouts, gestos, misc
+--   conf/decorations.lua   look: bordes, gaps, sombras, blur (lo pone LookSwitch)
+--   conf/animations.lua    look: animaciones (lo pone LookSwitch)
+--   conf/windowrules.lua   reglas de ventanas y capas
+--   conf/keybinds.lua      atajos
+--   monitors.lua / workspaces.lua   los escribe nwg-displays
+
+require("conf.defaults")
+require("conf.env")
+require("conf.startup")
+require("conf.settings")
+require("conf.decorations")
+require("conf.animations")
+require("conf.windowrules")
+require("conf.keybinds")
+
+-- los de nwg-displays, si ya los escribió
+for _, name in ipairs({ "monitors", "workspaces" }) do
+    local f = io.open(os.getenv("HOME") .. "/.config/hypr/" .. name .. ".lua")
+    if f then
+        f:close()
+        require(name)
+    end
+end

@@ -140,16 +140,16 @@ def profiles_available():
 
 
 # ── ahorro ───────────────────────────────────────────────────────────────────
+HYPR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Hypr.sh")
+
+
+def hypr(*args):
+    """Hypr.sh: igual con la config .conf que con la de Lua."""
+    return subprocess.run([HYPR, *args], capture_output=True, text=True).stdout.strip()
+
+
 def hypr_opt(name):
-    r = subprocess.run(["hyprctl", "-j", "getoption", name], capture_output=True, text=True)
-    try:
-        d = json.loads(r.stdout)
-    except ValueError:
-        return None
-    for k in ("int", "str", "float"):
-        if k in d:
-            return d[k]
-    return None
+    return hypr("get", name) or None
 
 
 def saver_state():
@@ -167,17 +167,16 @@ def save_state(st):
 
 def capture_look(st):
     """Lo que el ahorro apaga, tal como lo dejó el look (para devolverlo)."""
-    st["blur"] = hypr_opt("decoration:blur:enabled")
-    st["shadow"] = hypr_opt("decoration:shadow:enabled")
+    # sí/no como true/false (es lo que acepta la config en Lua)
+    st["blur"] = {"1": "true", "0": "false"}.get(hypr_opt("decoration:blur:enabled"))
+    st["shadow"] = {"1": "true", "0": "false"}.get(hypr_opt("decoration:shadow:enabled"))
     shader = hypr_opt("decoration:screen_shader")
     st["shader"] = "" if shader in (None, "[[EMPTY]]") else shader
 
 
 def apply_saver():
-    subprocess.run(["hyprctl", "--batch",
-                    "keyword decoration:blur:enabled 0;"
-                    "keyword decoration:shadow:enabled 0;"
-                    "keyword decoration:screen_shader [[EMPTY]]"], capture_output=True)
+    hypr("set", "decoration:blur:enabled", "false", "decoration:shadow:enabled", "false",
+         "decoration:screen_shader", "[[EMPTY]]")
     # el video se congela en el cuadro que iba (SIGCONT lo sigue)
     subprocess.run(["pkill", "-STOP", "-x", "mpvpaper"], capture_output=True)
 
@@ -201,15 +200,15 @@ def saver_off():
     if not st:
         return
     os.remove(STATE)
-    batch = []
+    args = []
     if st.get("blur") is not None:
-        batch.append(f"keyword decoration:blur:enabled {st['blur']}")
+        args += ["decoration:blur:enabled", st["blur"]]
     if st.get("shadow") is not None:
-        batch.append(f"keyword decoration:shadow:enabled {st['shadow']}")
+        args += ["decoration:shadow:enabled", st["shadow"]]
     if st.get("shader"):
-        batch.append(f"keyword decoration:screen_shader {st['shader']}")
-    if batch:
-        subprocess.run(["hyprctl", "--batch", ";".join(batch)], capture_output=True)
+        args += ["decoration:screen_shader", st["shader"]]
+    if args:
+        hypr("set", *args)
     subprocess.run(["pkill", "-CONT", "-x", "mpvpaper"], capture_output=True)
     profile_set(st.get("profile") or "balanced")
     refresh_bar()

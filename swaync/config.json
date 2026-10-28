@@ -72,7 +72,7 @@
               },
               {
                   "label": "󰍃",
-                  "command": "hyprctl dispatch exit"
+                  "command": "$HOME/.config/hypr/scripts/Hypr.sh exit"
               },
               {
                   "label": "󰀝",

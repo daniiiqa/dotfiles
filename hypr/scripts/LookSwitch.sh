@@ -17,11 +17,13 @@ current=$(cat "$state" 2>/dev/null)
 # screen_shader del look actual (outsider trae grano). Se apaga comentando la
 # línea en el decorations.conf vivo, así sobrevive a los reload y al cambiar
 # de look se guarda con él. Sin línea de shader no hay opción en el menú.
-deco="$cfg/hypr/conf/decorations.conf"
+# decorations.conf (#) o decorations.lua (--), el que cargue Hyprland; el
+# cambio se hace en los dos para que no se desfasen
+deco=$("$cfg/hypr/scripts/Hypr.sh" file decorations)
 shader_entry=""
 if grep -qE '^\s*screen_shader\s*=' "$deco"; then
   shader_entry="shader: off"
-elif grep -qE '^\s*#\s*screen_shader\s*=' "$deco"; then
+elif grep -qE '^\s*(#|--)\s*screen_shader\s*=' "$deco"; then
   shader_entry="shader: on"
 fi
 
@@ -37,11 +39,14 @@ fi
 [ -z "$target" ] && exit 0
 case "$target" in
   shader|"shader: off"|"shader: on")
+    conf="$cfg/hypr/conf/decorations.conf" lua="$cfg/hypr/conf/decorations.lua"
     if grep -qE '^\s*screen_shader\s*=' "$deco"; then
-      sed -i -E 's/^(\s*)screen_shader(\s*)=/\1# screen_shader\2=/' "$deco"
+      [ -f "$conf" ] && sed -i -E 's/^(\s*)screen_shader(\s*)=/\1# screen_shader\2=/' "$conf"
+      [ -f "$lua" ] && sed -i -E 's/^(\s*)screen_shader(\s*)=/\1-- screen_shader\2=/' "$lua"
       msg=$(L "shader apagado" "shader off")
-    elif grep -qE '^\s*#\s*screen_shader\s*=' "$deco"; then
-      sed -i -E 's/^(\s*)#\s*screen_shader(\s*)=/\1screen_shader\2=/' "$deco"
+    elif grep -qE '^\s*(#|--)\s*screen_shader\s*=' "$deco"; then
+      [ -f "$conf" ] && sed -i -E 's/^(\s*)#\s*screen_shader(\s*)=/\1screen_shader\2=/' "$conf"
+      [ -f "$lua" ] && sed -i -E 's/^(\s*)--\s*screen_shader(\s*)=/\1screen_shader\2=/' "$lua"
       msg=$(L "shader encendido" "shader on")
     else
       msg=$(L "este look no tiene shader" "this look has no shader")
