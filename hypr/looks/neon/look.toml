@@ -50,6 +50,9 @@ right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth",
 [bar.box]
 bg = "transparent"
 
+[bar.pill]
+"text-shadow" = "0px 0px 6px alpha(color12, 0.7)"
+
 [bar.sections.left]
 padding = [6, 28]
 underline = "color12"
@@ -69,6 +72,7 @@ fg = "alpha(foreground, 0.5)"
 "active-fg" = "background"
 "active-bg" = "color12"
 "button-padding" = 12
+"text-shadow" = "none"
 
 [bar.modules.clock]
 format = "{:%H:%M}"
@@ -77,6 +81,7 @@ format = "{:%H:%M}"
 calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
 fg = "foreground"
 padding = 14
+"text-shadow" = "0px 0px 2px alpha(background, 0.95), 0px 0px 4px alpha(background, 0.85), 0px 0px 8px color12, 0px 0px 18px alpha(color13, 0.8)"
 bold = true
 "font-size" = 15
 
@@ -89,6 +94,7 @@ interval = 10
 "critical-threshold" = 82
 fg = "alpha(foreground, 0.7)"
 padding = 8
+"text-shadow" = "none"
 
 [bar.modules.cpu]
 format = "{usage}% 󱐋"
@@ -97,6 +103,7 @@ format = "{usage}% 󱐋"
 interval = 1
 fg = "alpha(foreground, 0.7)"
 padding = 8
+"text-shadow" = "none"
 
 [bar.modules.memory]
 format = "{used:0.1f}G 󰍛"
@@ -106,6 +113,7 @@ tooltip = true
 interval = 10
 fg = "alpha(foreground, 0.7)"
 padding = 8
+"text-shadow" = "none"
 
 [bar.modules.disk]
 format = "{percentage_used}% 󰋊"
@@ -114,6 +122,7 @@ interval = 30
 path = "/"
 fg = "alpha(foreground, 0.7)"
 padding = 8
+"text-shadow" = "none"
 
 [bar.modules.audio]
 format = "{icon} {volume}%"
@@ -123,6 +132,7 @@ format = "{icon} {volume}%"
 "format-icons" = { "headphone" = "󰋋", "hands-free" = "󰋋", "headset" = "󰋎", "phone" = "󰄜", "portable" = "󰄜", "car" = "󰄋", "default" = ["󰕿", "󰖀", "󰕾", "󰕾"] }
 fg = "foreground"
 padding = 8
+"text-shadow" = "0px 0px 6px color12"
 
 [bar.modules.mic]
 format = "󰍬 {volume}%"
@@ -130,6 +140,7 @@ format = "󰍬 {volume}%"
 "tooltip-format" = "{source_desc} | {source_volume}%"
 fg = "foreground"
 padding = 8
+"text-shadow" = "0px 0px 6px color12"
 
 [bar.modules.network]
 format = "{ifname}"
@@ -144,6 +155,7 @@ format = "{ifname}"
 "format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
 fg = "foreground"
 padding = 8
+"text-shadow" = "0px 0px 6px color12"
 "font-size" = 20
 
 [bar.modules.bluetooth]
@@ -156,6 +168,7 @@ format = "󰂯"
 tooltip = true
 fg = "foreground"
 padding = 8
+"text-shadow" = "0px 0px 6px color12"
 "font-size" = 20
 
 [bar.modules.idle]
@@ -180,6 +193,8 @@ paused = "󰏥"
 replay = "󰑙"
 fg = "color12"
 padding = 8
+"recording-text-shadow" = "0px 0px 8px color13"
+"replay-text-shadow" = "0px 0px 6px color12"
 
 [bar.modules.power]
 format = "󰤆"
@@ -187,6 +202,7 @@ tooltip = true
 "tooltip-format" = "Left Click: Logout Menu\nRight Click: Change Blur"
 fg = "color13"
 padding = 8
+"text-shadow" = "0px 0px 8px color13"
 "font-size" = 20
 
 [bar.modules.battery]
@@ -196,17 +212,20 @@ format = "{icon} {percentage}%"
 "critical-color" = "critical"
 fg = "foreground"
 padding = 8
+"text-shadow" = "0px 0px 6px color12"
 "font-size" = 20
 
 [bar.modules.visualizer]
 style = "peaks"
 bars = 20
 padding = 6
+"text-shadow" = "0px 0px 6px color12"
 "font-size" = 14
 color = "color12"
 
 [bar.modules.app]
 padding = 8
+"text-shadow" = "0px 0px 8px color12"
 "font-size" = 20
 color = "color12"
 "active-line" = "bottom"
@@ -215,14 +234,17 @@ color = "color12"
 [bar.modules."app#more"]
 fg = "color12"
 padding = 8
+"text-shadow" = "0px 0px 8px color12"
 "font-size" = 20
 
 [bar.hover]
 fg = "color12"
+"text-shadow" = "0px 0px 10px color12"
 modules = ["power", "audio", "mic", "network", "bluetooth", "battery", "notifications"]
 
 [bar.hover-workspaces]
 fg = "color12"
+"text-shadow" = "0px 0px 6px color12"
 
 [bar.tooltip]
 bg = "background"

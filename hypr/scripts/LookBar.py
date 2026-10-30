@@ -55,6 +55,8 @@ class Css:
         text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
         text = re.sub(r"\{\{\s*\w+\s*\}\}", "FONT", text)   # {{font}} desbalancea las llaves
         self.defs = dict(re.findall(r"@define-color\s+([\w-]+)\s+([^;]+);", text))
+        # sin los @import y @define-color, que si no se pegan al selector que sigue
+        text = re.sub(r"(?m)^\s*@(?:import|define-color)\b[^;]*;", "", text)
         self.rules = []
         for sel, body in re.findall(r"([^{}]*)\{([^}]*)\}", text):
             sels = [" ".join(x.split()) for x in sel.split(",") if x.strip()]
@@ -93,6 +95,23 @@ class Css:
         if v in ("white", "black"):
             return v
         return None
+
+    def shadow(self, v):
+        """`text-shadow` como lo entiende empalme (los colores resueltos), "none"
+        si no tiene, o None si no se entiende."""
+        v = (v or "").strip()
+        if not v:
+            return None
+        if v == "none":
+            return "none"
+        out = []
+        for part in re.split(r",(?![^(]*\))", v):
+            lens = re.findall(r"(-?[\d.]+)(?:px)?(?=\s|$)", part.strip().split("alpha(")[0].split("@")[0].split("#")[0])
+            col = re.search(r"(alpha\([^)]*\)|@[\w-]+|#[0-9a-fA-F]{6}|\bwhite\b|\bblack\b)", part)
+            c = self.color(col.group(1)) if col else None
+            if len(lens) >= 2 and c:
+                out.append(" ".join(f"{num(x)}px" for x in lens[:3]) + " " + c)
+        return ", ".join(out) or None
 
     def border(self, v):
         """`1px solid @acc` → (ancho, color, ¿punteado?)."""
@@ -160,6 +179,9 @@ def style(css, props, bar_font):
     sh = re.match(r"\s*(-?[\d.]+)px\s+(-?[\d.]+)px\s+[\d.]+(?:px)?\s+(.+)", props.get("box-shadow", ""))
     if sh and css.color(sh.group(3)):
         out["shadow"] = [num(sh.group(1)), num(sh.group(2)), css.color(sh.group(3))]
+    ts = css.shadow(props.get("text-shadow"))
+    if ts:
+        out["text-shadow"] = ts
     w = props.get("font-weight", "")
     if w == "bold" or (w.isdigit() and int(w) >= 700):
         out["bold"] = True
@@ -340,6 +362,11 @@ def translate(look):
     bfs = re.match(r"([\d.]+)px", btn.get("font-size", ""))
     if bfs and num(bfs.group(1)) != bar_font:
         wsst["font-size"] = num(bfs.group(1))
+    # el brillo de los botones y el del activo
+    for k, sel in (("text-shadow", "#workspaces button"), ("active-text-shadow", "#workspaces button.active")):
+        ts = css.shadow(css.props(sel).get("text-shadow"))
+        if ts:
+            wsst[k] = ts
     # sin regla .empty, los vacíos llevan el color de los demás botones
     if "fg" in wsst and "empty-fg" not in wsst:
         wsst["empty-fg"] = wsst["fg"]
@@ -387,6 +414,15 @@ def translate(look):
         return {}
     if any(u.startswith("app#") for u in used):
         mods.setdefault("app", {}).update(mark(".app.active"))
+        ts = css.shadow(css.props(".app.active").get("text-shadow"))
+        if ts:
+            mods["app"]["active-text-shadow"] = ts
+    # el grabador según lo que esté haciendo (las clases de Recorder.sh)
+    if "recorder" in used:
+        for cls in ("recording", "paused", "replay"):
+            ts = css.shadow(css.props(f"#custom-recorder.{cls}").get("text-shadow"))
+            if ts:
+                mods.setdefault("recorder", {})[f"{cls}-text-shadow"] = ts
     mods.setdefault("workspaces", {}).update(mark("#workspaces button.active"))
 
     # las secciones (.modules-left…): su caja, rellenos, puntitos y línea
@@ -446,6 +482,10 @@ def translate(look):
            f"spacing = {c.get('spacing', 0)}            # pixeles entre módulos (el spacing de waybar)",
            f"left = {q(left)}", f"center = {q(center)}", f"right = {q(right)}"]
     out += table("bar.box", box)
+    # el brillo de todas las letras (el text-shadow de `*` o de `label`)
+    ts = css.shadow(root.get("text-shadow")) or css.shadow(css.props("label").get("text-shadow"))
+    if ts and ts != "none":
+        out += table("bar.pill", {"text-shadow": ts})
     for k, st in sections.items():
         out += table(f"bar.sections.{k}", st)
     for n, v in mods.items():
@@ -463,16 +503,17 @@ def translate(look):
             continue
         fg = css.color(props.get("color", "transparent"))
         bg = css.color(props.get("background", props.get("background-color", "transparent")))
+        ts = css.shadow(props.get("text-shadow"))
         if any(s.startswith("#workspaces button.active:hover") for s in sels):
             hover_ws.update({k: v for k, v in (("active-fg", fg), ("active-bg", bg)) if v})
         elif any(s.startswith("#workspaces button:hover") for s in sels):
-            hover_ws.update({k: v for k, v in (("fg", fg), ("bg", bg)) if v})
+            hover_ws.update({k: v for k, v in (("fg", fg), ("bg", bg), ("text-shadow", ts)) if v})
         else:
             names = [n for s in sels for m in [re.fullmatch(r"#([\w-]+):hover", s)] if m and m.group(1) in cssname
                      for n in cssname[m.group(1)]]
             # la regla de varios módulos es la general
-            if len(names) > 1 and (fg or bg) and not hover:
-                hover = {k: v for k, v in (("fg", fg), ("bg", bg)) if v}
+            if len(names) > 1 and (fg or bg or ts) and not hover:
+                hover = {k: v for k, v in (("fg", fg), ("bg", bg), ("text-shadow", ts)) if v}
                 hmods = names
     if hover:
         hover["modules"] = hmods

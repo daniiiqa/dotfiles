@@ -51,6 +51,9 @@ right = ["recorder", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6",
 [bar.box]
 bg = "transparent"
 
+[bar.pill]
+"text-shadow" = "0px 1px 3px alpha(black, 0.5)"
+
 [bar.modules.workspaces]
 format = "{name}"
 persistent = 5
@@ -67,6 +70,7 @@ padding = 3
 "button-padding" = 14
 "active-padding" = 26
 "button-radius" = 16
+"active-text-shadow" = "none"
 
 [bar.modules.clock]
 format = "{:%H:%M  ·  %a %d}"

@@ -88,7 +88,7 @@ height = 34
 margin = [8, 12, 0, 12]     # arriba, derecha, abajo, izquierda (pixeles)
 style = "solid"
 radius = 0
-font-size = 13     # pixeles, como en el style.css de waybar
+font-size = 12     # pixeles, como en el style.css de waybar
 pad = 0                # el relleno de cada módulo va en su padding (pixeles)
 gap = 0                # celdas entre módulos
 spacing = 0            # pixeles entre módulos (el spacing de waybar)
@@ -137,6 +137,7 @@ calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
 fg = "hi"
 padding = 4
 bold = true
+"font-size" = 13
 
 [bar.modules.temperature]
 tooltip = true

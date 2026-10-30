@@ -82,7 +82,7 @@ height = 30
 margin = [10, 14, 0, 14]     # arriba, derecha, abajo, izquierda (pixeles)
 style = "solid"
 radius = 0
-font-size = 13     # pixeles, como en el style.css de waybar
+font-size = 14     # pixeles, como en el style.css de waybar
 pad = 0                # el relleno de cada módulo va en su padding (pixeles)
 gap = 0                # celdas entre módulos
 spacing = 0            # pixeles entre módulos (el spacing de waybar)
@@ -238,7 +238,6 @@ style = "chars"
 bars = 10
 chars = ".:-=+*#"
 padding = 6
-"font-size" = 14
 color = "rose"
 
 [bar.modules.app]

@@ -88,7 +88,7 @@ height = 32
 margin = [10, 14, 0, 14]     # arriba, derecha, abajo, izquierda (pixeles)
 style = "solid"
 radius = 0
-font-size = 13     # pixeles, como en el style.css de waybar
+font-size = 14     # pixeles, como en el style.css de waybar
 pad = 0                # el relleno de cada módulo va en su padding (pixeles)
 gap = 0                # celdas entre módulos
 spacing = 2            # pixeles entre módulos (el spacing de waybar)
@@ -115,6 +115,7 @@ fg = "dim"
 "active-fg" = "acc"
 "button-padding" = 10
 "font-size" = 17
+"active-text-shadow" = "0px 0px 8px alpha(acc, 0.8)"
 
 [bar.modules.clock]
 format = "<span foreground=\"#e0218a\">󰚌</span>  {:%H:%M}"
@@ -123,6 +124,7 @@ format = "<span foreground=\"#e0218a\">󰚌</span>  {:%H:%M}"
 calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
 fg = "hi"
 padding = 14
+"text-shadow" = "0px 0px 10px alpha(acc, 0.45)"
 "font-size" = 15
 
 [bar.modules.temperature]
@@ -226,6 +228,7 @@ paused = "󰗢"
 replay = "󰉊"
 fg = "acc"
 padding = 8
+"recording-text-shadow" = "0px 0px 8px acc2"
 
 [bar.modules.power]
 format = " 󰯆 "
@@ -249,13 +252,13 @@ padding = 8
 style = "peaks"
 bars = 20
 padding = 6
-"font-size" = 14
 color = "acc"
 
 [bar.modules.app]
 padding = 6
 "font-size" = 18
 color = "acc"
+"active-text-shadow" = "0px 0px 8px alpha(acc, 0.9)"
 
 [bar.modules."app#more"]
 fg = "acc"
@@ -264,6 +267,7 @@ padding = 6
 
 [bar.hover]
 fg = "acc"
+"text-shadow" = "0px 0px 8px alpha(acc, 0.7)"
 modules = ["power", "audio", "mic", "network", "bluetooth", "battery", "notifications"]
 
 [bar.hover-workspaces]

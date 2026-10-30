@@ -52,6 +52,9 @@ right = ["recorder", "group/mobo_drawer", "text#blank_2", "group/audio", "text#b
 bg = "transparent"
 radius = 1
 
+[bar.pill]
+"text-shadow" = "0px 0px 2px alpha(black, 0.9), 0px 1px 3px alpha(black, 0.7)"
+
 [bar.modules.workspaces]
 format = "{icon}"
 "format-icons" = { "active" = "<span font='12'>󰮯</span>", "empty" = "<span font='8'></span>", "default" = "󰊠" }
@@ -62,6 +65,7 @@ fg = "color13"
 "button-padding" = 8
 "active-padding" = 12
 "button-radius" = 9
+"text-shadow" = "none"
 "empty-fg" = "color13"
 
 [bar.modules.clock]

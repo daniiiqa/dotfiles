@@ -40,7 +40,7 @@ height = 26
 margin = [0, 0, 0, 0]     # arriba, derecha, abajo, izquierda (pixeles)
 style = "solid"
 radius = 0
-font-size = 13     # pixeles, como en el style.css de waybar
+font-size = 12     # pixeles, como en el style.css de waybar
 pad = 0                # el relleno de cada módulo va en su padding (pixeles)
 gap = 0                # celdas entre módulos
 spacing = 0            # pixeles entre módulos (el spacing de waybar)
@@ -55,6 +55,9 @@ border = "alpha(color12, 0.45)"
 "border-sides" = "bottom"
 dashed = true
 
+[bar.pill]
+"text-shadow" = "0px 0px 4px alpha(color12, 0.55)"
+
 [bar.modules.workspaces]
 format = " {name} "
 persistent = 5
@@ -63,6 +66,7 @@ fg = "alpha(color12, 0.45)"
 "active-fg" = "background"
 "active-bg" = "color12"
 "button-padding" = 6
+"active-text-shadow" = "none"
 
 [bar.modules.clock]
 format = "[ {:%H:%M:%S} ]"
@@ -169,6 +173,7 @@ paused = "[||]"
 replay = "[rpl]"
 fg = "color12"
 padding = 6
+"recording-text-shadow" = "0px 0px 4px rec"
 
 [bar.modules.power]
 format = "[x]"
@@ -208,6 +213,7 @@ padding = 6
 [bar.hover]
 fg = "background"
 bg = "color12"
+"text-shadow" = "none"
 modules = ["power", "audio", "mic", "network", "bluetooth", "battery", "notifications", "clock"]
 
 [bar.hover-workspaces]
