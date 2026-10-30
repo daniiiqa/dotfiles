@@ -33,12 +33,68 @@ tint = "color"
 palette = "dark16"
 
 [bar]
-# empalme, la barra de discada: barra flotante delgada de una sola pieza
-position = "top"          # top | bottom
+# empalme, la barra de discada (traducido de waybar/config)
+position = "top"
 height = 31
 margin = [8, 8, 0, 8]     # arriba, derecha, abajo, izquierda (pixeles)
-style = "solid"           # solid: una sola pieza · islands: cada módulo en su isla
+style = "solid"
 radius = 6
+font-size = 13     # pixeles, como en el style.css de waybar
+pad = 1                # celdas a cada lado de un módulo
+gap = 0                # celdas entre módulos
 left = ["workspaces"]
 center = ["clock"]
-right = ["audio", "battery"]
+right = ["temperature", "cpu", "memory", "disk", "audio", "mic", "network", "bluetooth", "battery", "power"]
+
+[bar.modules.clock]
+format = "{:%H:%M}"
+"format-alt" = "{:L%a %d %b  %H:%M}"
+
+[bar.modules.temperature]
+"format-critical" = "{temperatureC}°C {icon}"
+format = "{temperatureC}°C {icon}"
+"format-icons" = [""]
+interval = 10
+"critical-threshold" = 82
+
+[bar.modules.cpu]
+format = "{usage}% "
+"format-alt" = "{icon0}{icon1}{icon2}{icon3} {usage:>2}% "
+"format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+interval = 1
+
+[bar.modules.memory]
+format = "{used:0.1f}G "
+"format-alt" = "{percentage}% "
+interval = 10
+
+[bar.modules.disk]
+format = "{percentage_used}% "
+interval = 30
+path = "/"
+
+[bar.modules.audio]
+format = "{icon} {volume}%"
+"format-muted" = ""
+"format-bluetooth" = "{icon} 󰂰 {volume}%"
+"format-icons" = { "headphone" = "", "hands-free" = "", "headset" = "", "phone" = "", "portable" = "", "car" = "", "default" = ["", "", "", ""] }
+
+[bar.modules.mic]
+format = " {volume}%"
+"format-muted" = "󰍭"
+
+[bar.modules.network]
+format = "{ifname}"
+"format-wifi" = "{icon}"
+"format-ethernet" = ""
+"format-disconnected" = ""
+"format-linked" = " {ifname} (No IP)"
+"format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+
+[bar.modules.bluetooth]
+format = ""
+"format-disabled" = "󰂳"
+"format-connected" = "󰂱 {num_connections}"
+
+[bar.modules.power]
+format = ""

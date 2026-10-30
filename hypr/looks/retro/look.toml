@@ -32,3 +32,70 @@ tint = "phosphor"
 
 [wallust]
 palette = "dark16"
+
+[bar]
+# empalme, la barra de discada (traducido de waybar/config)
+position = "top"
+height = 26
+margin = [0, 0, 0, 0]     # arriba, derecha, abajo, izquierda (pixeles)
+style = "solid"
+radius = 0
+font-size = 12     # pixeles, como en el style.css de waybar
+pad = 1                # celdas a cada lado de un módulo
+gap = 0                # celdas entre módulos
+left = ["workspaces"]
+center = ["clock"]
+right = ["temperature", "cpu", "memory", "disk", "audio", "mic", "network", "bluetooth", "battery", "power"]
+
+[bar.modules.clock]
+format = "[ {:%H:%M:%S} ]"
+"format-alt" = "[ {:%Y-%m-%d %a} ]"
+
+[bar.modules.temperature]
+"format-critical" = "tmp {temperatureC}c!"
+format = "tmp {temperatureC}c"
+"format-icons" = ["󰈸"]
+interval = 10
+"critical-threshold" = 82
+
+[bar.modules.cpu]
+format = "cpu {usage}%"
+"format-alt" = "cpu {icon0}{icon1}{icon2}{icon3}"
+"format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+interval = 1
+
+[bar.modules.memory]
+format = "mem {used:0.1f}g"
+"format-alt" = "mem {percentage}%"
+interval = 10
+
+[bar.modules.disk]
+format = "dsk {percentage_used}%"
+interval = 30
+path = "/"
+
+[bar.modules.audio]
+format = "vol {volume}%"
+"format-muted" = "vol --"
+"format-bluetooth" = "vol(bt) {volume}%"
+"format-icons" = { "headphone" = "", "hands-free" = "", "headset" = "", "phone" = "", "portable" = "", "car" = "", "default" = ["", "", "󰕾", ""] }
+
+[bar.modules.mic]
+format = "mic {volume}%"
+"format-muted" = "mic --"
+
+[bar.modules.network]
+format = "{ifname}"
+"format-wifi" = "net {signalStrength}%"
+"format-ethernet" = "net up"
+"format-disconnected" = "net --"
+"format-linked" = "net ??"
+"format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+
+[bar.modules.bluetooth]
+format = "bt"
+"format-disabled" = "bt --"
+"format-connected" = "bt {num_connections}"
+
+[bar.modules.power]
+format = "[x]"
