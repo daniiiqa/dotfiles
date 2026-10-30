@@ -12,6 +12,9 @@
 #                solo si no hay ningún display manager activo)
 #   --sddm       instalar/configurar SDDM aunque ya haya otro
 #   --no-aur     saltar los paquetes de AUR
+#   --no-recorder  no instalar el grabador (gpu-screen-recorder). Con una
+#                NVIDIA sin su driver propietario (y sin otra GPU) no se
+#                instala; con el driver, el replay no arranca solo
 #   --looks=L    qué looks instalar sin preguntar: all, none (solo classic) o
 #                una lista como retro,nord. Sin esto pregunta; con -y o sin
 #                terminal instala todos
@@ -44,7 +47,8 @@ REPO_PKGS=(
   # taco (archivos) usa fd, fzf, zoxide y las miniaturas; nvim con LazyVim
   fd ripgrep zoxide resvg 7zip poppler ffmpegthumbnailer jq fzf udisks2 neovim
   # portapapeles, capturas y grabación (Recorder.sh)
-  wl-clipboard cliphist grim slurp swappy gpu-screen-recorder
+  # (gpu-screen-recorder va aparte: depende de la GPU, ver abajo)
+  wl-clipboard cliphist grim slurp swappy
   # audio (visualizador incluido). pipewire-jack y pipewire-alsa con nombre:
   # si no, pacman elige jack2 para cava/mpv/ffmpeg, que no va con PipeWire.
   # sof-firmware: sin él las laptops Intel (2019+) no tienen tarjeta de sonido
@@ -95,6 +99,24 @@ pacman -Q tlp &>/dev/null || LAPTOP_PKGS+=(power-profiles-daemon)
 for v in /sys/class/drm/card*/device/vendor; do
   [ "$(cat "$v" 2>/dev/null)" = 0x8086 ] && { REPO_PKGS+=(intel-media-driver vulkan-intel); break; }
 done
+# GPU NVIDIA: gpu-screen-recorder graba con NVENC, que solo viene con el driver
+# propietario (nvidia-utils, también con nvidia-open). Con nouveau no hay
+# codificador: si tampoco hay una GPU Intel o AMD que grabe, no se instala.
+# Con el driver sí, pero el replay no arranca solo al iniciar sesión: tendría
+# la NVIDIA codificando todo el tiempo (en una laptop no la deja dormir) y
+# después de suspender deja de grabar si el driver no guarda la memoria de
+# video (NVreg_PreserveVideoMemoryAllocations y los nvidia-suspend)
+NVIDIA=0 OTHER_GPU=0
+for v in /sys/class/drm/card*/device/vendor; do
+  case "$(cat "$v" 2>/dev/null)" in
+    0x10de) NVIDIA=1 ;;
+    0x8086|0x1002) OTHER_GPU=1 ;;
+  esac
+done
+NVIDIA_DRIVER=0
+{ [ -d /sys/module/nvidia ] || pacman -Q nvidia-utils &>/dev/null; } && NVIDIA_DRIVER=1
+RECORDER=1
+((NVIDIA)) && ! ((OTHER_GPU)) && ! ((NVIDIA_DRIVER)) && RECORDER=0
 SDDM_THEME_REPO="https://github.com/JaKooLit/simple-sddm-2.git"
 SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 
@@ -120,6 +142,7 @@ for arg in "$@"; do
     --sddm) SDDM=yes ;;
     --no-sddm) SDDM=no ;;
     --no-aur) AUR=0 ;;
+    --no-recorder) RECORDER=0 ;;
     -y|--yes) YES=(--noconfirm) ;;
     -h|--help)
       if [[ ${LANG:-} == es* ]]; then sed -n '2,24p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//'
@@ -134,6 +157,9 @@ discada installer — the rice of looks (Arch Linux + Hyprland).
                when no display manager is enabled)
   --sddm       install/configure SDDM even if another one is enabled
   --no-aur     skip AUR packages
+  --no-recorder  don't install the screen recorder (gpu-screen-recorder).
+               With an NVIDIA card and no proprietary driver (and no other
+               GPU) it's skipped; with the driver, replay doesn't autostart
   --looks=L    which looks to install without asking: all, none (classic only)
                or a list like retro,nord. Without it, it asks; with -y or no
                terminal it installs them all
@@ -272,6 +298,18 @@ done
 say "Looks: ${LOOKS[*]} ($(L "empieza en" "starting with") $INITIAL)"
 
 # ── 1. Paquetes de los repos ─────────────────────────────────────────────────
+# el grabador: al actualizar, solo si ya estaba (si lo quitaste, no vuelve)
+if ((UPDATE)) && ! pacman -Q gpu-screen-recorder &>/dev/null; then RECORDER=0; fi
+((RECORDER)) && REPO_PKGS+=(gpu-screen-recorder)
+if ((NVIDIA)) && ! ((UPDATE)); then
+  if ((RECORDER)); then
+    warn "$(L "NVIDIA: el grabador se instala, pero el replay no arranca solo (ALT+Shift+F10 lo prende)" \
+              "NVIDIA: the recorder is installed, but replay won't autostart (ALT+Shift+F10 turns it on)")"
+  elif ! ((NVIDIA_DRIVER)); then
+    warn "$(L "NVIDIA sin driver propietario: sin grabador de pantalla (instala nvidia-utils y corre esto otra vez)" \
+              "NVIDIA without the proprietary driver: no screen recorder (install nvidia-utils and run this again)")"
+  fi
+fi
 say "$(L "Paquetes de los repos oficiales" "Official repo packages") (${#REPO_PKGS[@]} + ${#LOOK_PKGS[@]} $(L "fuentes de looks" "look fonts"))"
 if ((UPDATE)); then
   # solo lo que falte (paquetes nuevos de discada o de un look)
@@ -363,6 +401,12 @@ if ((NEW_MACHINE)); then
       run cp "$f" "$CFG/$rel"
     fi
   done < <(find "$seed" -type f -print0)
+
+  # NVIDIA o sin grabador: que el replay no arranque al iniciar sesión
+  if ! ((UPDATE)) && { ((NVIDIA)) || ! ((RECORDER)); }; then
+    if ((DRY)); then echo "   [dry-run] recorder.conf → REPLAY_ON_STARTUP=no"
+    else sed -i 's/^REPLAY_ON_STARTUP=yes/REPLAY_ON_STARTUP=no /' "$CFG/hypr/recorder.conf"; fi
+  fi
 
   # el monitors.conf del repo es el de la máquina original (DP-1, posición
   # fija): aquí, que Hyprland detecte las pantallas. nwg-displays lo reescribe.

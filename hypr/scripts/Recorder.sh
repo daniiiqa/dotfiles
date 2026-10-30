@@ -43,6 +43,17 @@ dnd_on() {
 dnd_restore() { [ -f "$run/rec.dnd" ] && rm -f "$run/rec.dnd" && "$HOME/.local/bin/arre" dnd off >/dev/null 2>&1; }
 note() { notify-send -e -a "$(L Grabador Recorder)" -u low -i "${3:-media-record}" "$1" "$2"; }
 
+# sin gpu-screen-recorder (no se instaló, como con una NVIDIA sin su driver):
+# el indicador no sale, el replay no arranca y lo demás solo avisa
+if ! command -v gpu-screen-recorder >/dev/null; then
+  case "$1" in
+    status|autostart) exit 0 ;;
+    menu|screen|region|window|replay|save|click)
+      note "$(L "Sin grabador" "No recorder")" "$(L "gpu-screen-recorder no está instalado" "gpu-screen-recorder is not installed")" dialog-error
+      exit 1 ;;
+  esac
+fi
+
 monitor() { hyprctl monitors -j | jq -r '.[] | select(.focused) | .name'; }
 
 # lanza gpu-screen-recorder en segundo plano; al terminar limpia su estado
