@@ -31,3 +31,14 @@ tint = "color"
 
 [wallust]
 palette = "dark16"
+
+[bar]
+# empalme, la barra de discada: barra flotante delgada de una sola pieza
+position = "top"          # top | bottom
+height = 31
+margin = [8, 8, 0, 8]     # arriba, derecha, abajo, izquierda (pixeles)
+style = "solid"           # solid: una sola pieza · islands: cada módulo en su isla
+radius = 6
+left = ["workspaces"]
+center = ["clock"]
+right = ["audio", "battery"]

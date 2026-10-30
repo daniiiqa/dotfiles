@@ -82,3 +82,4 @@ rofi/discada-font.rasi
 # Tus ajustes de discada y del grabador (semillas en hypr/seed/)
 /hypr/discada.conf
 /hypr/recorder.conf
+/empalme/bar.json

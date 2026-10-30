@@ -5,7 +5,8 @@ del look (waybar/, rofi/, hypr/…) no llevan ni colores ni fuentes escritos:
 usan los nombres del look.toml.
 
   LookBuild.py apply LOOK      copiar el look a ~/.config, con {{font}} rellenado,
-                               más su wallust.toml y el look.json de rola
+                               más su wallust.toml, el look.json de rola y la
+                               barra de empalme (su [bar])
   LookBuild.py save LOOK       guardar lo vivo en el look (la fuente vuelve a {{font}})
   LookBuild.py colors [LOOK]   los archivos de colores de cada app: la paleta del
                                look (o la de wallust si sigue al wallpaper) más
@@ -237,6 +238,21 @@ def write_rola_look(lk):
         f.write("\n")
 
 
+def write_bar(lk):
+    """La barra de empalme (el [bar] del look); sin [bar], la de siempre."""
+    import json
+    path = os.path.join(CFG, "empalme/bar.json")
+    bar = lk.get("bar")
+    if not bar:
+        if os.path.exists(path):
+            os.remove(path)
+        return
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w") as f:
+        json.dump(bar, f, indent=2)
+        f.write("\n")
+
+
 def is_text(path):
     try:
         with open(path, "rb") as f:
@@ -262,6 +278,7 @@ def apply(look):
                 b.write(a.read())
     write_wallust_toml(lk)
     write_rola_look(lk)
+    write_bar(lk)
 
 
 def save(look):
