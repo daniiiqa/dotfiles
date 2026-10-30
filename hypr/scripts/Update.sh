@@ -6,7 +6,9 @@
 #   en el look actual, git pull --rebase --autostash y vuelve a aplicar el look.
 # - Si discada se instaló con install.sh (repo en ~/dotfiles): git pull y
 #   install.sh --update (conserva idioma, looks, look actual y tus ajustes;
-#   solo instala paquetes que falten).
+#   solo instala paquetes que falten). Antes de copiar dice qué archivos
+#   cambiaste: los que discada no cambió se quedan como los tienes, y si va a
+#   reemplazar alguno pregunta (tu versión va al respaldo; UpdateCheck.py).
 
 cfg="$HOME/.config"
 scripts="$cfg/hypr/scripts"

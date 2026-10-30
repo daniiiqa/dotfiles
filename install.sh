@@ -297,6 +297,41 @@ for l in "${LOOKS[@]}"; do
 done
 say "Looks: ${LOOKS[*]} ($(L "empieza en" "starting with") $INITIAL)"
 
+# ── Tus cambios: qué toca la actualización ──────────────────────────────────
+# Lo que cambiaste en ~/.config desde la última instalación (REV_FILE, o el
+# commit de antes del git pull): si discada no lo cambió se queda lo tuyo; si
+# los dos lo cambiaron se reemplaza y lo tuyo va al respaldo. Se pregunta
+# antes de tocar nada (hypr/scripts/UpdateCheck.py)
+REV_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/discada/rev"
+KEEP_MINE=() REPLACE_MINE=()
+if ((UPDATE)) && ((NEW_MACHINE)); then
+  base=$(cat "$REV_FILE" 2>/dev/null || true)
+  git -C "$REPO_DIR" cat-file -e "${base:-x}^{commit}" 2>/dev/null ||
+    base=$(git -C "$REPO_DIR" rev-parse -q --verify 'HEAD@{1}' 2>/dev/null || git -C "$REPO_DIR" rev-parse -q --verify ORIG_HEAD 2>/dev/null || true)
+  if [ -n "$base" ] && command -v python3 >/dev/null; then
+    while IFS=$'\t' read -r what rel; do
+      case "$what" in
+        keep) KEEP_MINE+=("$rel") ;;
+        replace) REPLACE_MINE+=("$rel") ;;
+      esac
+    done < <(python3 "$REPO_DIR/hypr/scripts/UpdateCheck.py" "$REPO_DIR" "$base" 2>/dev/null)
+  fi
+  if ((${#KEEP_MINE[@]})); then
+    say "$(L "Archivos que cambiaste y que la actualización no toca (se quedan como los tienes):" \
+            "Files you changed that the update doesn't touch (they stay as you have them):")"
+    printf '   %s\n' "${KEEP_MINE[@]}"
+  fi
+  if ((${#REPLACE_MINE[@]})); then
+    warn "$(L "Archivos que cambiaste y que la actualización reemplaza (tu versión va a $BACKUP):" \
+             "Files you changed that the update replaces (your version goes to $BACKUP):")"
+    printf '   %s\n' "${REPLACE_MINE[@]}"
+    if [ -t 0 ] && ((${#YES[@]} == 0)) && ! ((DRY)); then
+      read -r -p "   $(L "¿Seguir con la actualización? [S/n]" "Continue with the update? [Y/n]") " ans
+      case "$ans" in n|N|no|No) say "$(L "Actualización cancelada: no se tocó nada en ~/.config" "Update cancelled: nothing in ~/.config was touched")"; exit 1 ;; esac
+    fi
+  fi
+fi
+
 # ── 1. Paquetes de los repos ─────────────────────────────────────────────────
 # el grabador: al actualizar, solo si ya estaba (si lo quitaste, no vuelve)
 if ((UPDATE)) && ! pacman -Q gpu-screen-recorder &>/dev/null; then RECORDER=0; fi
@@ -360,6 +395,20 @@ if ((NEW_MACHINE)); then
     run mv "$CFG/hypr/hyprland.lua" "$BACKUP/hypr/"
     [ -d "$CFG/hypr/config" ] && run mv "$CFG/hypr/config" "$BACKUP/hypr/"
   fi
+  for f in "${REPLACE_MINE[@]}"; do
+    [ -e "$CFG/$f" ] || continue
+    run mkdir -p "$BACKUP/$(dirname "$f")"
+    run cp -a "$CFG/$f" "$BACKUP/$f"
+  done
+  mine=""
+  if ((${#KEEP_MINE[@]})) && ! ((DRY)); then
+    # sin el tamaño de letra de discada (Update.sh lo vuelve a aplicar a todo)
+    [ -x "$CFG/hypr/scripts/FontSize.py" ] && python3 "$CFG/hypr/scripts/FontSize.py" unapply
+    mine=$(mktemp -d)
+    for f in "${KEEP_MINE[@]}"; do
+      [ -e "$CFG/$f" ] && { mkdir -p "$mine/$(dirname "$f")"; cp -a "$CFG/$f" "$mine/$f"; }
+    done
+  fi
   keep=""
   if ((UPDATE)) && ! ((DRY)); then
     keep=$(mktemp -d)
@@ -373,7 +422,7 @@ if ((NEW_MACHINE)); then
     while IFS= read -r -d '' f; do
       rel=${f#"$REPO_DIR/"}
       # al actualizar, tus ajustes se quedan como están
-      if ((UPDATE)) && [ -e "$CFG/$rel" ] && in_list "$rel" "${KEEP_ON_UPDATE[@]}"; then
+      if ((UPDATE)) && [ -e "$CFG/$rel" ] && in_list "$rel" "${KEEP_ON_UPDATE[@]}" "${KEEP_MINE[@]}"; then
         continue
       fi
       if [ -e "$CFG/$rel" ] && ! cmp -s "$f" "$CFG/$rel"; then
@@ -459,6 +508,10 @@ else
   echo 0 > "$looks_dir/.fontsize"   # lo vivo está en el tamaño del look; FontSize.py lo vuelve a aplicar
   # rofi importa este archivo (tamaño de letra, FontSize.py); vacío al empezar
   [ -f "$CFG/rofi/discada-font.rasi" ] || printf '/* FontSize.py */\n' > "$CFG/rofi/discada-font.rasi"
+fi
+# lo tuyo que discada no cambió, de vuelta (encima de la copia y del look)
+if [ -n "${mine:-}" ]; then
+  cp -a "$mine/." "$CFG/" && rm -rf "$mine"
 fi
 
 # idioma de discada (menús, avisos, cheat sheet) y de rola
@@ -601,6 +654,11 @@ else
 fi
 
 # ── Listo ────────────────────────────────────────────────────────────────────
+# la versión instalada: la próxima actualización compara tus archivos con ella
+if ((NEW_MACHINE)) && ! ((DRY)); then
+  mkdir -p "$(dirname "$REV_FILE")"
+  git -C "$REPO_DIR" rev-parse HEAD > "$REV_FILE" 2>/dev/null || true
+fi
 echo
 if ((UPDATE)); then
   say "$(L "discada actualizada." "discada updated.")"
