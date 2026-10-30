@@ -30,7 +30,7 @@ STATE = os.path.join(RUN, "saver.json")
 DISCADA = os.path.expanduser("~/.config/hypr/discada.conf")
 ICON = "battery-caution-symbolic"
 WARN_AT = (20, 10, 5)
-SIGNAL = 11   # pkill -RTMIN+11 waybar
+SIGNAL = 11   # pkill -RTMIN+11 waybar (y empalme)
 
 
 def conf(key, default):
@@ -217,7 +217,7 @@ def saver_off():
 
 # ── barra y avisos ───────────────────────────────────────────────────────────
 def refresh_bar():
-    subprocess.run(["pkill", f"-RTMIN+{SIGNAL}", "-x", "waybar"], capture_output=True)
+    subprocess.run(["pkill", f"-RTMIN+{SIGNAL}", "-x", "waybar|empalme"], capture_output=True)
 
 
 def notify(title, body, urgency="low"):

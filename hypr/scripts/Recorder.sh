@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Grabador de pantalla: gpu-screen-recorder sin su interfaz (gsr-ui). Los
-# avisos van por swaync, el menú por rofi y el indicador por waybar
+# avisos van por swaync, el menú por rofi y el indicador por waybar o empalme
 # (custom/recorder), así que todo sigue al look. Ajustes: hypr/recorder.conf.
 #
 # Sin aviso al empezar ni al prender el replay: gsr captura por KMS (directo de
@@ -33,7 +33,7 @@ I_SCREEN=$'\U000f0379'; I_REGION=$'\U000f019e'; I_WINDOW=$'\U000f0614'
 I_STOP=$'\U000f0666'; I_SAVE=$'\U000f0193'
 
 alive() { [ -f "$run/$1.pid" ] && kill -0 "$(cat "$run/$1.pid")" 2>/dev/null; }
-bar() { pkill -RTMIN+10 -x waybar; }
+bar() { pkill -RTMIN+10 -x "waybar|empalme"; }
 # no molestar mientras graba (si ya estaba puesto, no se toca al terminar)
 dnd_on() {
   [ "$RECORD_DND" = yes ] || return

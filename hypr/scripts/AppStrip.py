@@ -3,7 +3,7 @@
 
   AppStrip.py daemon        escucha los eventos de Hyprland (socket2) y escribe
                             un archivo por slot en $XDG_RUNTIME_DIR/appstrip/;
-                            luego avisa a waybar con SIGRTMIN+9
+                            luego avisa a waybar (y a empalme) con SIGRTMIN+9
   AppStrip.py focus SLOT    enfoca la app del slot (si ya está enfocada, cicla
                             entre sus ventanas)
   AppStrip.py close SLOT    cierra la ventana más reciente de esa app
@@ -225,7 +225,7 @@ def render():
         else:
             write(slot)
 
-    subprocess.run(["pkill", f"-RTMIN+{SIG}", "-x", "waybar"])
+    subprocess.run(["pkill", f"-RTMIN+{SIG}", "-x", "waybar|empalme"])
 
 
 def daemon():

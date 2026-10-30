@@ -79,7 +79,7 @@ set_language() {
   # AppStrip lo relee en cada render (el reload lo dispara); el visualizador
   # se reinicia solo al ver el cambio
   hyprctl reload >/dev/null
-  pkill -RTMIN+10 -x waybar
+  pkill -RTMIN+10 -x "waybar|empalme"
   notify-send -e -u low -i "preferences-system-notifications-symbolic" "discada" "$(L "Idioma: español" "Language: English")"
 }
 

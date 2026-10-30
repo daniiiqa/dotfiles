@@ -44,7 +44,7 @@ pad = 1                # celdas a cada lado de un módulo
 gap = 0                # celdas entre módulos
 left = ["workspaces"]
 center = ["clock"]
-right = ["temperature", "cpu", "memory", "disk", "audio", "mic", "network", "bluetooth", "battery", "idle", "notifications", "power"]
+right = ["recorder", "temperature", "cpu", "memory", "disk", "audio", "mic", "network", "bluetooth", "battery", "idle", "notifications", "power"]
 
 [bar.modules.clock]
 format = "{:%H:%M}"
@@ -103,6 +103,11 @@ format = "{icon}"
 [bar.modules.notifications]
 format = "{} {icon}"
 "format-icons" = { "notification" = "<span foreground='red'><sup></sup></span>", "none" = "", "dnd-notification" = "<span foreground='red'><sup></sup></span>", "dnd-none" = "" }
+
+[bar.modules.recorder]
+rec = ""
+paused = ""
+replay = ""
 
 [bar.modules.power]
 format = ""
