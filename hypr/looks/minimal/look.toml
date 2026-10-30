@@ -62,7 +62,7 @@ fg = "alpha(foreground, 0.45)"
 "empty-fg" = "alpha(foreground, 0.18)"
 "active-fg" = "background"
 "active-bg" = "color12"
-"button-pad" = 1
+"button-padding" = 12
 "button-radius" = 4
 
 [bar.modules.clock]

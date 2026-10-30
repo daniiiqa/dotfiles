@@ -111,7 +111,7 @@ margin = [0, 6, 0, 6]
 fg = "dim"
 "empty-fg" = "bg3"
 "active-fg" = "acc"
-"button-pad" = 1
+"button-padding" = 10
 "font-size" = 17
 
 [bar.modules.clock]

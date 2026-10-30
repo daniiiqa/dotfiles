@@ -125,7 +125,7 @@ margin = [0, 6, 0, 0]
 fg = "dim"
 "empty-fg" = "bg3"
 "active-fg" = "acc2"
-"button-pad" = 1
+"button-padding" = 11
 "active-line" = "bottom"
 "active-color" = "acc2"
 

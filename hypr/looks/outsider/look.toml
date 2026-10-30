@@ -105,7 +105,7 @@ margin = [0, 4, 0, 4]
 fg = "dust"
 "empty-fg" = "ink3"
 "active-fg" = "paper"
-"button-pad" = 1
+"button-padding" = 11
 "active-line" = "top"
 "active-color" = "rose"
 

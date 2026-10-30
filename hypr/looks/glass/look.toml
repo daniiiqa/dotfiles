@@ -64,7 +64,8 @@ padding = 3
 "empty-fg" = "alpha(foreground, 0.22)"
 "active-fg" = "background"
 "active-bg" = "color12"
-"button-pad" = 1
+"button-padding" = 14
+"active-padding" = 26
 "button-radius" = 16
 
 [bar.modules.clock]
@@ -282,6 +283,7 @@ padding = 12
 "font-size" = 20
 color = "color12"
 "active-bg" = "alpha(color12, 0.12)"
+"active-border" = "alpha(color12, 0.8)"
 
 [bar.modules."app#more"]
 fg = "color12"

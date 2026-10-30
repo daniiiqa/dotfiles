@@ -305,12 +305,18 @@ def translate(look):
         wsst["active-bg"] = abg
     btn = css.props("#workspaces button")
     # el relleno de cada botón, en celdas (una celda mide ~0.6 de la letra)
-    bp = px_list(btn.get("padding")) or [0, 0, 0, 0]
-    one = re.match(r"(-?[\d.]+)px", btn.get("padding-right", ""))
-    if one:
-        bp[1] = num(one.group(1))
-    if bp[1]:
-        wsst["button-pad"] = round(bp[1] / (0.6 * bar_font))
+    # el relleno de cada botón y el del activo, en pixeles
+    def hpad(p):
+        v = px_list(p.get("padding"))
+        r = re.match(r"(-?[\d.]+)px", p.get("padding-right", ""))
+        return num(r.group(1)) if r else (v[1] if v else None)
+    # GTK le pone ~4px más a cada lado de un botón, además del CSS (medido)
+    GTK = 4
+    bp = hpad(btn)
+    wsst["button-padding"] = (bp or 0) + GTK
+    ap = hpad(css.props("#workspaces button.active"))
+    if ap is not None and ap != bp:
+        wsst["active-padding"] = ap + GTK
     br = re.match(r"([\d.]+)px", btn.get("border-radius", ""))
     if br and num(br.group(1)) > 0:
         wsst["button-radius"] = num(br.group(1))
@@ -324,11 +330,15 @@ def translate(look):
     def mark(sel):
         p = css.props(sel)
         # un fondo propio (loteria): ese, con su color de letras
+        out = {}
         bg = css.color(p.get("background", p.get("background-color", "transparent")))
         if bg and sel.startswith(".app"):
-            out = {"active-bg": bg}
+            out["active-bg"] = bg
             if css.color(p.get("color", "transparent")):
                 out["active-fg"] = css.color(p["color"])
+        if css.color(p.get("border-color", "transparent")):
+            out["active-border"] = css.color(p["border-color"])
+        if out:
             return out
         for side in ("bottom", "top"):
             b = css.border(p.get(f"border-{side}"))

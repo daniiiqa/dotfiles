@@ -117,7 +117,7 @@ fg = "alpha(acc, 0.6)"
 "empty-fg" = "bg2"
 "active-fg" = "acc2"
 "active-bg" = "acc"
-"button-pad" = 1
+"button-padding" = 9
 "button-radius" = 12
 "font-size" = 16
 

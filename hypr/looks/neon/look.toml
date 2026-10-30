@@ -68,7 +68,7 @@ fg = "alpha(foreground, 0.5)"
 "empty-fg" = "alpha(foreground, 0.2)"
 "active-fg" = "background"
 "active-bg" = "color12"
-"button-pad" = 1
+"button-padding" = 12
 
 [bar.modules.clock]
 format = "{:%H:%M}"

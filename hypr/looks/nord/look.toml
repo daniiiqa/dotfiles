@@ -111,7 +111,7 @@ fg = "nord4"
 "empty-fg" = "nord3"
 "active-fg" = "nord0"
 "active-bg" = "nord8"
-"button-pad" = 1
+"button-padding" = 13
 "button-radius" = 7
 
 [bar.modules.clock]

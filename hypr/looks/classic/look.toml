@@ -59,7 +59,8 @@ persistent = 5
 padding = 6
 fg = "color13"
 "active-fg" = "color12"
-"button-pad" = 1
+"button-padding" = 8
+"active-padding" = 12
 "button-radius" = 9
 
 [bar.modules.clock]

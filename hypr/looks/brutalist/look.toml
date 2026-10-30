@@ -62,7 +62,7 @@ margin = [0, 0, 0, 8]
 fg = "alpha(foreground, 0.4)"
 "empty-fg" = "alpha(foreground, 0.18)"
 "active-fg" = "foreground"
-"button-pad" = 1
+"button-padding" = 11
 "active-line" = "bottom"
 "active-color" = "color12"
 

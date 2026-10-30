@@ -116,7 +116,7 @@ shadow = [3, 3, "bg3"]
 "empty-fg" = "bg2"
 "active-fg" = "bg0"
 "active-bg" = "acc"
-"button-pad" = 1
+"button-padding" = 11
 "button-radius" = 3
 
 [bar.modules.clock]
