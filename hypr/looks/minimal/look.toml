@@ -42,7 +42,7 @@ radius = 6
 font-size = 13     # pixeles, como en el style.css de waybar
 pad = 1                # celdas a cada lado de un módulo
 gap = 0                # celdas entre módulos
-left = ["workspaces"]
+left = ["workspaces", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
 center = ["clock"]
 right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
 
@@ -111,6 +111,24 @@ replay = ""
 
 [bar.modules.power]
 format = ""
+
+[bar.modules.app]
+color = "color12"
+"font-size" = 20
+
+[bar.hover]
+fg = "color12"
+modules = ["power", "notifications", "audio", "mic", "network", "bluetooth", "battery"]
+
+[bar.hover-workspaces]
+fg = "foreground"
+bg = "alpha(foreground, 0.18)"
+"active-fg" = "background"
+"active-bg" = "color12"
+
+[bar.groups.apps]
+modules = ["app#more", "app#d1", "app#d2", "app#d3", "app#d4", "app#d5", "app#d6", "app#d7", "app#d8"]
+drawer = { "transition-duration" = 250, "transition-left-to-right" = true }
 
 [bar.groups.mobo_drawer]
 modules = ["temperature", "cpu", "memory", "disk"]
