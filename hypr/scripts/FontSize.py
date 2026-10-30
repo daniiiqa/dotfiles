@@ -2,11 +2,11 @@
 """Tamaño de letra de discada (FONT_SIZE en hypr/discada.conf, de -2 a +4).
 
 Suma ese tanto a las fuentes de los archivos vivos del look: waybar y swaync
-(font-size en px), kitty (font_size) y rofi (rofi/discada-font.rasi, que
-config.rasi importa después del theme). Lo aplicado se guarda en
-hypr/looks/.fontsize; LookSwitch.sh hace `unapply` antes de guardar el look
-(así las carpetas de looks se quedan con sus tamaños originales) y `apply`
-después de copiar el nuevo.
+(font-size en px), empalme (los "font-size" de empalme/bar.json), kitty
+(font_size) y rofi (rofi/discada-font.rasi, que config.rasi importa después
+del theme). Lo aplicado se guarda en hypr/looks/.fontsize; LookSwitch.sh hace
+`unapply` antes de guardar el look (así las carpetas de looks se quedan con sus
+tamaños originales) y `apply` después de copiar el nuevo.
 
   FontSize.py apply [--no-reload]   llevar lo vivo a FONT_SIZE
   FontSize.py unapply               quitar lo aplicado (tamaños del look)
@@ -60,6 +60,7 @@ def shift(d):
         return
     for f in ("waybar/style.css", "swaync/style.css"):
         shift_file(os.path.join(CFG, f), r"(font-size:\s*)(\d+(?:\.\d+)?)(px)", d, 6)
+    shift_file(os.path.join(CFG, "empalme/bar.json"), r'("font-size":\s*)(\d+(?:\.\d+)?)()', d, 6)
     shift_file(os.path.join(CFG, "kitty/kitty.conf"), r"(^font_size\s+)(\d+(?:\.\d+)?)()", d, 6)
 
 
@@ -94,6 +95,7 @@ def rofi_override(total):
 
 
 def reload():
+    # empalme relee bar.json solo
     subprocess.run(["pkill", "-SIGUSR2", "-x", "waybar"])
     subprocess.run(["pkill", "-USR1", "-x", "kitty"])
 
