@@ -205,7 +205,13 @@ def translate(look):
             return "app#" + (m.group(1) or m.group(2))
         n = NAMES.get(n, n)
         base = n.split("#")[0].split("/")[-1]
-        return base if base in KNOWN else None
+        if base in KNOWN:
+            return base
+        # un custom/… sin script (el menú, los separadores): texto fijo
+        v = c.get(n, {})
+        if n.startswith("custom/") and isinstance(v, dict) and "format" in v and "exec" not in v:
+            return "text#" + n[7:].split("#")[-1]
+        return None
 
     groups = {}
 
@@ -282,6 +288,11 @@ def translate(look):
         col = css.color(css.props(f"#custom-battery.{cls}").get("color", "transparent"))
         if col:
             mods["battery"][f"{cls}-color"] = col
+    texts = {}
+    for k, v in c.items():
+        if isinstance(v, dict) and name(k) and name(k).startswith("text#"):
+            texts[name(k)] = "#" + k.split("#")[0].replace("/", "-")
+            mods[name(k)] = {x: v[x] for x in v if x == "format" or x.startswith("tooltip") or x.startswith("on-")}
     if "visualizer" in used:
         vj = os.path.join(d, "waybar/visualizer.json")
         mods["visualizer"] = json.load(open(vj)) if os.path.exists(vj) else {}
@@ -290,7 +301,7 @@ def translate(look):
     root = css.props("*")
     fs = re.match(r"([\d.]+)px", root.get("font-size", ""))
     bar_font = num(fs.group(1)) if fs else 13
-    for n, sels in CSS_OF.items():
+    for n, sels in list(CSS_OF.items()) + [(t, [sel]) for t, sel in texts.items()]:
         if n not in used and not (n == "app" and any(u.startswith("app#") for u in used)):
             continue
         st = style(css, css.props(*sels), bar_font)
@@ -329,8 +340,28 @@ def translate(look):
     bfs = re.match(r"([\d.]+)px", btn.get("font-size", ""))
     if bfs and num(bfs.group(1)) != bar_font:
         wsst["font-size"] = num(bfs.group(1))
+    # sin regla .empty, los vacíos llevan el color de los demás botones
+    if "fg" in wsst and "empty-fg" not in wsst:
+        wsst["empty-fg"] = wsst["fg"]
     if wsst:
         mods.setdefault("workspaces", {}).update(wsst)
+
+    # el color de texto de toda la barra (el de `*` le gana al heredado de
+    # window#waybar): para los que no dicen el suyo, en vez del de kitty
+    base = css.color(css.props("*").get("color", "transparent")) or \
+        css.color(css.props("window#waybar").get("color", "transparent"))
+    if base:
+        for n in used | ({"app"} if any(u.startswith("app#") for u in used) else set()):
+            # las app#… heredan de [bar.modules.app]
+            if n.startswith("group/") or n.startswith("app#"):
+                continue
+            m = mods.setdefault(n, {})
+            k = "color" if n in ("app", "visualizer") else "fg"
+            if k not in m:
+                m[k] = base
+        ws = mods.setdefault("workspaces", {})
+        ws.setdefault("fg", base)
+        ws.setdefault("empty-fg", ws["fg"])
 
     # cómo se marca lo activo: la app enfocada y el workspace activo
     def mark(sel):
@@ -471,7 +502,8 @@ def write(look):
     i = text.find("\n[bar]")
     if i >= 0:
         text = text[:i]
-    open(path, "w").write(text.rstrip() + "\n" + translate(look))
+    bar = translate(look)
+    open(path, "w").write(text.rstrip() + "\n" + bar)
 
 
 def main():

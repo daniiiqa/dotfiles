@@ -44,9 +44,9 @@ font-size = 13     # pixeles, como en el style.css de waybar
 pad = 0                # el relleno de cada módulo va en su padding (pixeles)
 gap = 0                # celdas entre módulos
 spacing = 6            # pixeles entre módulos (el spacing de waybar)
-left = ["workspaces", "visualizer", "group/notify", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
+left = ["text#menu", "text#blank_2", "workspaces", "text#blank_2", "visualizer", "group/notify", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
 center = ["clock", "idle"]
-right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "power"]
+right = ["recorder", "group/mobo_drawer", "text#blank_2", "group/audio", "text#blank_2", "network", "bluetooth", "battery", "text#blank_2", "power"]
 
 [bar.box]
 bg = "transparent"
@@ -62,6 +62,7 @@ fg = "color13"
 "button-padding" = 8
 "active-padding" = 12
 "button-radius" = 9
+"empty-fg" = "color13"
 
 [bar.modules.clock]
 format = " {:%H:%M:%S}"
@@ -69,6 +70,7 @@ format = " {:%H:%M:%S}"
 "tooltip-format" = "<tt><small>{calendar}</small></tt>"
 calendar = { "format" = { "months" = "<span color='#ffead3'><b>{}</b></span>", "days" = "<span color='#ecc6d9'><b>{}</b></span>", "weeks" = "<span color='#99ffdd'><b>W{:%V}</b></span>", "weekdays" = "<span color='#ffcc66'><b>{}</b></span>", "today" = "<span color='#ff6699'><b><u>{}</u></b></span>" } }
 padding = 6
+fg = "color12"
 
 [bar.modules.temperature]
 tooltip = true
@@ -78,6 +80,7 @@ format = "{temperatureC}°C {icon}"
 interval = 10
 "critical-threshold" = 82
 padding = 6
+fg = "color12"
 
 [bar.modules.cpu]
 format = "{usage}% 󰍛"
@@ -85,6 +88,7 @@ format = "{usage}% 󰍛"
 "format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
 interval = 1
 padding = 6
+fg = "color12"
 
 [bar.modules.memory]
 format = "{used:0.1f}G 󰾆"
@@ -93,6 +97,7 @@ tooltip = true
 "tooltip-format" = "{used:0.1f}GB/{total:0.1f}G"
 interval = 10
 padding = 6
+fg = "color12"
 
 [bar.modules.disk]
 format = "{percentage_used}% 󰋊"
@@ -100,6 +105,7 @@ format = "{percentage_used}% 󰋊"
 interval = 30
 path = "/"
 padding = 6
+fg = "color12"
 
 [bar.modules.audio]
 format = "{icon} {volume}%"
@@ -108,12 +114,14 @@ format = "{icon} {volume}%"
 "tooltip-format" = "{icon} {desc} | {volume}%"
 "format-icons" = { "headphone" = "", "hands-free" = "", "headset" = "", "phone" = "", "portable" = "", "car" = "", "default" = ["", "", "󰕾", ""] }
 padding = 6
+fg = "color12"
 
 [bar.modules.mic]
 format = " {volume}%"
 "format-muted" = ""
 "tooltip-format" = "{source_desc} | {source_volume}%"
 padding = 6
+fg = "color12"
 
 [bar.modules.network]
 format = "{ifname}"
@@ -128,6 +136,7 @@ format = "{ifname}"
 "format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
 padding = 6
 "font-size" = 20
+fg = "color12"
 
 [bar.modules.bluetooth]
 format = ""
@@ -139,6 +148,7 @@ format = ""
 tooltip = true
 padding = 6
 "font-size" = 20
+fg = "color12"
 
 [bar.modules.idle]
 tooltip = true
@@ -148,11 +158,13 @@ format = "{icon}"
 "format-icons" = { "activated" = "", "deactivated" = "" }
 padding = 6
 "font-size" = 20
+fg = "color12"
 
 [bar.modules.notifications]
 format = "{} {icon}"
 "format-icons" = { "notification" = "<span foreground='red'><sup></sup></span>", "none" = "", "dnd-notification" = "<span foreground='red'><sup></sup></span>", "dnd-none" = "" }
 padding = 6
+fg = "color12"
 
 [bar.modules.recorder]
 rec = ""
@@ -167,6 +179,7 @@ tooltip = true
 "tooltip-format" = "Left Click: Logout Menu\nRight Click: Change Blur"
 padding = 6
 "font-size" = 20
+fg = "color12"
 
 [bar.modules.battery]
 format = "{icon} {percentage}%"
@@ -175,6 +188,21 @@ format = "{icon} {percentage}%"
 "critical-color" = "critical"
 padding = 6
 "font-size" = 20
+fg = "color12"
+
+[bar.modules."text#menu"]
+format = "  "
+"on-click" = "pkill rofi || rofi -show drun -modi run,drun,filebrowser,window"
+"on-click-middle" = "$HOME/.config/hypr/scripts/WallpaperSelect.sh"
+tooltip = true
+"tooltip-format" = "Left Click: Rofi Menu\nMiddle Click: Wallpaper Menu"
+padding = 6
+fg = "color12"
+
+[bar.modules."text#blank_2"]
+format = "  "
+tooltip = false
+fg = "color12"
 
 [bar.modules.visualizer]
 style = "braille"
