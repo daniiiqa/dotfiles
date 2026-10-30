@@ -216,6 +216,18 @@ def colors(look):
         os.makedirs(os.path.dirname(target), exist_ok=True)
         open(target, "w").write(text)
     write_lua()
+    write_bar_colors(pal)
+
+
+def write_bar_colors(pal):
+    """Los colores del look ya resueltos (los de wallust y los nombres propios
+    como rec o critical) para empalme, que los usa en sus formatos."""
+    import json
+    path = os.path.join(CFG, "empalme/colors.json")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w") as f:
+        json.dump({k: "#" + v for k, v in pal.items()}, f, indent=2)
+        f.write("\n")
 
 
 # ── aplicar / guardar ────────────────────────────────────────────────────────

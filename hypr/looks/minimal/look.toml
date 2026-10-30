@@ -44,7 +44,7 @@ pad = 1                # celdas a cada lado de un módulo
 gap = 0                # celdas entre módulos
 left = ["workspaces"]
 center = ["clock"]
-right = ["recorder", "temperature", "cpu", "memory", "disk", "audio", "mic", "network", "bluetooth", "battery", "idle", "notifications", "power"]
+right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
 
 [bar.modules.clock]
 format = "{:%H:%M}"
@@ -111,3 +111,15 @@ replay = ""
 
 [bar.modules.power]
 format = ""
+
+[bar.groups.mobo_drawer]
+modules = ["temperature", "cpu", "memory", "disk"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.audio]
+modules = ["audio", "mic"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.notify]
+modules = ["notifications"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = false }
