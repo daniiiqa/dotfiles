@@ -102,6 +102,8 @@ border = "bg2"
 "border-width" = 1
 "border-sides" = "all"
 radius = 12
+"top-gradient" = ["acc2", "acc", "alt", "ok", "acc2", "acc", "alt", "ok"]
+"top-width" = 3
 
 [bar.modules.workspaces]
 format = "{icon}"

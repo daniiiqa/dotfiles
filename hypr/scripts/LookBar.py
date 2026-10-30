@@ -428,6 +428,12 @@ def translate(look):
     r = re.match(r"([\d.]+)px", win.get("border-radius", ""))
     if r:
         box["radius"] = num(r.group(1))
+    # border-image: linear-gradient(to right, …) con solo el lado de arriba
+    gi = re.match(r"linear-gradient\(\s*to right\s*,(.*?)\)\s*([\d.]+)\s+0\s+0\s+0\b", win.get("border-image", ""))
+    if gi:
+        cols = [css.color(x) for x in re.split(r",(?![^(]*\))", gi.group(1))]
+        if cols and all(cols):
+            box["top-gradient"], box["top-width"] = cols, num(gi.group(2))
 
     margin = [c.get(f"margin-{s}", 0) for s in ("top", "right", "bottom", "left")]
     out = ["", "[bar]", "# empalme, la barra de discada (LookBar.py: traducido de waybar/)",
