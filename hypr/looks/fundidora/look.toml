@@ -80,3 +80,218 @@ active_tab_foreground = "bg0"
 active_tab_background = "acc"
 inactive_tab_foreground = "dim"
 inactive_tab_background = "bg1"
+
+[bar]
+# empalme, la barra de discada (LookBar.py: traducido de waybar/)
+position = "top"
+height = 34
+margin = [8, 12, 0, 12]     # arriba, derecha, abajo, izquierda (pixeles)
+style = "solid"
+radius = 0
+font-size = 13     # pixeles, como en el style.css de waybar
+pad = 0                # el relleno de cada módulo va en su padding (pixeles)
+gap = 0                # celdas entre módulos
+spacing = 0            # pixeles entre módulos (el spacing de waybar)
+left = ["workspaces", "visualizer", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
+center = ["clock"]
+right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
+
+[bar.box]
+bg = "transparent"
+
+[bar.sections.left]
+bg = "bg1"
+radius = 2
+padding = 16
+dots = "bg3"
+
+[bar.sections.center]
+bg = "bg1"
+radius = 2
+padding = 16
+dots = "bg3"
+
+[bar.sections.right]
+bg = "bg1"
+radius = 2
+padding = 16
+dots = "bg3"
+
+[bar.modules.workspaces]
+format = "{icon}"
+"format-icons" = { "1" = "I", "2" = "II", "3" = "III", "4" = "IV", "5" = "V", "6" = "VI", "7" = "VII", "8" = "VIII", "9" = "IX", "10" = "X", "default" = "·" }
+persistent = 3
+margin = [0, 6, 0, 0]
+fg = "dim"
+"empty-fg" = "bg3"
+"active-fg" = "acc2"
+"button-pad" = 1
+"active-line" = "bottom"
+"active-color" = "acc2"
+
+[bar.modules.clock]
+format = "<span foreground=\"#a8805a\">󰋵</span>  {:%H:%M}"
+"format-alt" = "<span foreground=\"#a8805a\">{:%a %d %b %Y}</span>"
+"tooltip-format" = "<tt><small>{calendar}</small></tt>"
+calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
+fg = "hi"
+padding = 4
+bold = true
+
+[bar.modules.temperature]
+tooltip = true
+"format-critical" = "<span foreground=\"#6f6b66\" size=\"small\">horno</span> {temperatureC}°!"
+format = "<span foreground=\"#6f6b66\" size=\"small\">horno</span> {temperatureC}°"
+"format-icons" = ["󰈸"]
+interval = 10
+"critical-threshold" = 82
+fg = "hi"
+padding = 7
+
+[bar.modules.cpu]
+format = "<span foreground=\"#6f6b66\" size=\"small\">cpu</span> {usage}%"
+"format-alt" = "<span foreground=\"#6f6b66\" size=\"small\">cpu</span> {icon0}{icon1}{icon2}{icon3}"
+"format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+interval = 1
+fg = "hi"
+padding = 7
+
+[bar.modules.memory]
+format = "<span foreground=\"#6f6b66\" size=\"small\">mem</span> {used:0.1f}g"
+"format-alt" = "<span foreground=\"#6f6b66\" size=\"small\">mem</span> {percentage}%"
+tooltip = true
+"tooltip-format" = "{used:0.1f}GB/{total:0.1f}G"
+interval = 10
+fg = "hi"
+padding = 7
+
+[bar.modules.disk]
+format = "<span foreground=\"#6f6b66\" size=\"small\">dsk</span> {percentage_used}%"
+"tooltip-format" = "{used} used out of {total} on {path} ({percentage_used}%)"
+interval = 30
+path = "/"
+fg = "hi"
+padding = 7
+
+[bar.modules.audio]
+format = "<span foreground=\"#6f6b66\" size=\"small\">vol</span> {volume}"
+"format-muted" = "<span foreground=\"#6f6b66\" size=\"small\">vol</span> —"
+"format-bluetooth" = "<span foreground=\"#6f6b66\" size=\"small\">vol·bt</span> {volume}"
+"tooltip-format" = "{icon} {desc} | {volume}%"
+"format-icons" = { "headphone" = "", "hands-free" = "", "headset" = "", "phone" = "", "portable" = "", "car" = "", "default" = ["", "", "󰕾", ""] }
+fg = "hi"
+padding = 7
+
+[bar.modules.mic]
+format = "<span foreground=\"#6f6b66\" size=\"small\">mic</span> {volume}"
+"format-muted" = "<span foreground=\"#6f6b66\" size=\"small\">mic</span> —"
+"tooltip-format" = "{source_desc} | {source_volume}%"
+fg = "hi"
+padding = 7
+
+[bar.modules.network]
+format = "net"
+"format-wifi" = "<span foreground=\"#6f6b66\" size=\"small\">wifi</span> {signalStrength}"
+"format-ethernet" = "lan"
+"format-disconnected" = "<span foreground=\"#6f6b66\" size=\"small\">sin red</span>"
+"tooltip-format" = "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}"
+"format-linked" = "󰈁 {ifname} (No IP)"
+"tooltip-format-wifi" = "{essid} {icon} {signalStrength}%"
+"tooltip-format-ethernet" = "{ifname} 󰌘"
+"tooltip-format-disconnected" = "󰌙 Disconnected"
+"format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+fg = "hi"
+padding = 7
+
+[bar.modules.bluetooth]
+format = "bt"
+"format-disabled" = "<span foreground=\"#6f6b66\" size=\"small\">bt</span>"
+"format-connected" = "bt {num_connections}"
+"tooltip-format" = " {device_alias}"
+"tooltip-format-connected" = "{device_enumerate}"
+"tooltip-format-enumerate-connected" = " {device_alias} 󰂄{device_battery_percentage}%"
+tooltip = true
+"format-off" = "<span foreground=\"#6f6b66\" size=\"small\">bt</span>"
+fg = "hi"
+padding = 7
+
+[bar.modules.idle]
+tooltip = true
+"tooltip-format-activated" = "Stay awake: on\nScreen won't dim, lock or sleep"
+"tooltip-format-deactivated" = "Stay awake: off\nClick to keep the screen on"
+format = "{icon}"
+"format-icons" = { "activated" = "turno", "deactivated" = "<span foreground=\"#6f6b66\" size=\"small\">desc</span>" }
+fg = "hi"
+padding = 7
+
+[bar.modules.notifications]
+format = "{} {icon} "
+"format-icons" = { "notification" = "<span foreground='red'><sup></sup></span>", "none" = "", "dnd-notification" = "<span foreground='red'><sup></sup></span>", "dnd-none" = "" }
+fg = "hi"
+padding = 7
+
+[bar.modules.recorder]
+rec = "REC"
+paused = "ALTO"
+replay = "RPL"
+fg = "acc2"
+padding = 7
+
+[bar.modules.power]
+format = "󰐥"
+tooltip = true
+"tooltip-format" = "Left Click: Logout Menu\nRight Click: Change Blur"
+fg = "acc2"
+padding = 2
+"font-size" = 18
+
+[bar.modules.visualizer]
+style = "chars"
+bars = 10
+chars = "▁▂▃▄▅▆▇█"
+padding = 6
+"font-size" = 14
+color = "acc2"
+
+[bar.modules.battery]
+fg = "hi"
+padding = 7
+
+[bar.modules.app]
+padding = 6
+"font-size" = 18
+color = "dim"
+
+[bar.modules."app#more"]
+fg = "dim"
+padding = 6
+"font-size" = 18
+
+[bar.hover]
+fg = "acc2"
+modules = ["audio", "mic", "network", "bluetooth", "battery", "notifications"]
+
+[bar.hover-workspaces]
+fg = "hi"
+
+[bar.tooltip]
+bg = "bg0"
+border = "acc"
+radius = 2
+fg = "fg"
+
+[bar.groups.apps]
+modules = ["app#more", "app#d1", "app#d2", "app#d3", "app#d4", "app#d5", "app#d6", "app#d7", "app#d8"]
+drawer = { "transition-duration" = 250, "transition-left-to-right" = true }
+
+[bar.groups.mobo_drawer]
+modules = ["temperature", "cpu", "memory", "disk"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.audio]
+modules = ["audio", "mic"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.notify]
+modules = ["notifications"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = false }

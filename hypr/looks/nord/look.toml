@@ -78,3 +78,242 @@ active_tab_foreground = "nord0"
 active_tab_background = "nord8"
 inactive_tab_foreground = "nord4"
 inactive_tab_background = "nord1"
+
+[bar]
+# empalme, la barra de discada (LookBar.py: traducido de waybar/)
+position = "top"
+height = 32
+margin = [8, 10, 0, 10]     # arriba, derecha, abajo, izquierda (pixeles)
+style = "solid"
+radius = 0
+font-size = 13     # pixeles, como en el style.css de waybar
+pad = 0                # el relleno de cada módulo va en su padding (pixeles)
+gap = 0                # celdas entre módulos
+spacing = 2            # pixeles entre módulos (el spacing de waybar)
+left = ["workspaces", "visualizer", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
+center = ["clock"]
+right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
+
+[bar.box]
+bg = "alpha(nord0, 0.94)"
+border = "nord2"
+"border-width" = 1
+"border-sides" = "all"
+radius = 10
+
+[bar.modules.workspaces]
+format = "{name}"
+persistent = 5
+bg = "nord1"
+radius = 7
+margin = [4, 6, 4, 6]
+fg = "nord4"
+"empty-fg" = "nord3"
+"active-fg" = "nord0"
+"active-bg" = "nord8"
+"button-pad" = 1
+"button-radius" = 7
+
+[bar.modules.clock]
+format = "  {:%H:%M}"
+"format-alt" = "  {:L%a %d %b}"
+"tooltip-format" = "<tt><small>{calendar}</small></tt>"
+calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
+fg = "nord6"
+bg = "nord1"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 14
+bold = true
+
+[bar.modules.temperature]
+tooltip = true
+"format-critical" = "{temperatureC}°C {icon}"
+format = "{temperatureC}°C {icon}"
+"format-icons" = [""]
+interval = 10
+"critical-threshold" = 82
+fg = "nord13"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+
+[bar.modules.cpu]
+format = "{usage}% "
+"format-alt" = "{icon0}{icon1}{icon2}{icon3} {usage:>2}% "
+"format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+interval = 1
+fg = "nord9"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+
+[bar.modules.memory]
+format = "{used:0.1f}G "
+"format-alt" = "{percentage}% "
+tooltip = true
+"tooltip-format" = "{used:0.1f}GB/{total:0.1f}G"
+interval = 10
+fg = "nord15"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+
+[bar.modules.disk]
+format = "{percentage_used}% "
+"tooltip-format" = "{used} used out of {total} on {path} ({percentage_used}%)"
+interval = 30
+path = "/"
+fg = "nord7"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+
+[bar.modules.audio]
+format = "{icon} {volume}%"
+"format-muted" = ""
+"format-bluetooth" = "{icon} 󰂰 {volume}%"
+"tooltip-format" = "{icon} {desc} | {volume}%"
+"format-icons" = { "headphone" = "", "hands-free" = "", "headset" = "", "phone" = "", "portable" = "", "car" = "", "default" = ["", "", "", ""] }
+fg = "nord8"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+
+[bar.modules.mic]
+format = "󰍮 {volume}%"
+"format-muted" = "󰍭"
+"tooltip-format" = "{source_desc} | {source_volume}%"
+fg = "nord8"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+
+[bar.modules.network]
+format = "{ifname}"
+"format-wifi" = "{icon}"
+"format-ethernet" = ""
+"format-disconnected" = ""
+"tooltip-format" = "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}"
+"format-linked" = " {ifname} (No IP)"
+"tooltip-format-wifi" = "{essid} {icon} {signalStrength}%"
+"tooltip-format-ethernet" = "{ifname} "
+"tooltip-format-disconnected" = " Disconnected"
+"format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+fg = "nord14"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+"font-size" = 20
+
+[bar.modules.bluetooth]
+format = ""
+"format-disabled" = "󰂳"
+"format-connected" = "󰂱 {num_connections}"
+"tooltip-format" = " {device_alias}"
+"tooltip-format-connected" = "{device_enumerate}"
+"tooltip-format-enumerate-connected" = " {device_alias} 󰂄{device_battery_percentage}%"
+tooltip = true
+fg = "nord10"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+"font-size" = 20
+
+[bar.modules.idle]
+tooltip = true
+"tooltip-format-activated" = "Stay awake: on\nScreen won't dim, lock or sleep"
+"tooltip-format-deactivated" = "Stay awake: off\nClick to keep the screen on"
+format = "{icon}"
+"format-icons" = { "activated" = "", "deactivated" = "" }
+fg = "nord4"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+"font-size" = 20
+
+[bar.modules.notifications]
+format = "{} {icon}"
+"format-icons" = { "notification" = "<span foreground='red'><sup></sup></span>", "none" = "", "dnd-notification" = "<span foreground='red'><sup></sup></span>", "dnd-none" = "" }
+fg = "nord4"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+
+[bar.modules.recorder]
+rec = ""
+paused = ""
+replay = ""
+fg = "nord8"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+
+[bar.modules.power]
+format = ""
+tooltip = true
+"tooltip-format" = "Left Click: Logout Menu\nRight Click: Change Blur"
+fg = "nord11"
+radius = 7
+margin = [4, 4, 4, 0]
+padding = 9
+"font-size" = 20
+
+[bar.modules.visualizer]
+style = "braille"
+bars = 16
+padding = 6
+"font-size" = 14
+color = "nord8"
+
+[bar.modules.battery]
+fg = "nord10"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+"font-size" = 20
+
+[bar.modules.app]
+margin = [4, 0, 4, 0]
+padding = 6
+"font-size" = 20
+color = "nord8"
+"active-line" = "bottom"
+"active-color" = "nord8"
+
+[bar.modules."app#more"]
+fg = "nord8"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 6
+"font-size" = 20
+
+[bar.hover]
+bg = "nord1"
+modules = ["power", "audio", "mic", "network", "bluetooth", "battery", "notifications"]
+
+[bar.hover-workspaces]
+bg = "nord2"
+"active-bg" = "nord8"
+
+[bar.tooltip]
+bg = "nord0"
+border = "nord3"
+radius = 8
+fg = "nord4"
+
+[bar.groups.apps]
+modules = ["app#more", "app#d1", "app#d2", "app#d3", "app#d4", "app#d5", "app#d6", "app#d7", "app#d8"]
+drawer = { "transition-duration" = 250, "transition-left-to-right" = true }
+
+[bar.groups.mobo_drawer]
+modules = ["temperature", "cpu", "memory", "disk"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.audio]
+modules = ["audio", "mic"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.notify]
+modules = ["notifications"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = false }

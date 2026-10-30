@@ -34,24 +34,43 @@ tint = "phosphor"
 palette = "dark16"
 
 [bar]
-# empalme, la barra de discada (traducido de waybar/config)
+# empalme, la barra de discada (LookBar.py: traducido de waybar/)
 position = "top"
 height = 26
 margin = [0, 0, 0, 0]     # arriba, derecha, abajo, izquierda (pixeles)
 style = "solid"
 radius = 0
-font-size = 12     # pixeles, como en el style.css de waybar
-pad = 1                # celdas a cada lado de un módulo
+font-size = 13     # pixeles, como en el style.css de waybar
+pad = 0                # el relleno de cada módulo va en su padding (pixeles)
 gap = 0                # celdas entre módulos
-left = ["workspaces", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
+spacing = 0            # pixeles entre módulos (el spacing de waybar)
+left = ["workspaces", "visualizer", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
 center = ["clock"]
 right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
+
+[bar.box]
+bg = "background"
+border = "alpha(color12, 0.45)"
+"border-width" = 1
+"border-sides" = "bottom"
+dashed = true
+
+[bar.modules.workspaces]
+format = " {name} "
+persistent = 5
+fg = "alpha(color12, 0.45)"
+"empty-fg" = "alpha(color12, 0.2)"
+"active-fg" = "background"
+"active-bg" = "color12"
+"button-pad" = 0
 
 [bar.modules.clock]
 format = "[ {:%H:%M:%S} ]"
 "format-alt" = "[ {:%Y-%m-%d %a} ]"
 "tooltip-format" = "<tt><small>{calendar}</small></tt>"
 calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
+fg = "color12"
+padding = 6
 
 [bar.modules.temperature]
 tooltip = true
@@ -60,12 +79,16 @@ format = "tmp {temperatureC}c"
 "format-icons" = ["󰈸"]
 interval = 10
 "critical-threshold" = 82
+fg = "alpha(color12, 0.45)"
+padding = 6
 
 [bar.modules.cpu]
 format = "cpu {usage}%"
 "format-alt" = "cpu {icon0}{icon1}{icon2}{icon3}"
 "format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
 interval = 1
+fg = "alpha(color12, 0.45)"
+padding = 6
 
 [bar.modules.memory]
 format = "mem {used:0.1f}g"
@@ -73,12 +96,16 @@ format = "mem {used:0.1f}g"
 tooltip = true
 "tooltip-format" = "{used:0.1f}GB/{total:0.1f}G"
 interval = 10
+fg = "alpha(color12, 0.45)"
+padding = 6
 
 [bar.modules.disk]
 format = "dsk {percentage_used}%"
 "tooltip-format" = "{used} used out of {total} on {path} ({percentage_used}%)"
 interval = 30
 path = "/"
+fg = "alpha(color12, 0.45)"
+padding = 6
 
 [bar.modules.audio]
 format = "vol {volume}%"
@@ -86,11 +113,15 @@ format = "vol {volume}%"
 "format-bluetooth" = "vol(bt) {volume}%"
 "tooltip-format" = "{icon} {desc} | {volume}%"
 "format-icons" = { "headphone" = "", "hands-free" = "", "headset" = "", "phone" = "", "portable" = "", "car" = "", "default" = ["", "", "󰕾", ""] }
+fg = "color12"
+padding = 6
 
 [bar.modules.mic]
 format = "mic {volume}%"
 "format-muted" = "mic --"
 "tooltip-format" = "{source_desc} | {source_volume}%"
+fg = "color12"
+padding = 6
 
 [bar.modules.network]
 format = "{ifname}"
@@ -103,6 +134,8 @@ format = "{ifname}"
 "tooltip-format-ethernet" = "{ifname} 󰌘"
 "tooltip-format-disconnected" = "󰌙 Disconnected"
 "format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+fg = "color12"
+padding = 6
 
 [bar.modules.bluetooth]
 format = "bt"
@@ -112,6 +145,8 @@ format = "bt"
 "tooltip-format-connected" = "{device_enumerate}"
 "tooltip-format-enumerate-connected" = " {device_alias} 󰂄{device_battery_percentage}%"
 tooltip = true
+fg = "color12"
+padding = 6
 
 [bar.modules.idle]
 tooltip = true
@@ -119,29 +154,52 @@ tooltip = true
 "tooltip-format-deactivated" = "Stay awake: off\nClick to keep the screen on"
 format = "{icon}"
 "format-icons" = { "activated" = "caf+", "deactivated" = "caf-" }
+fg = "color12"
+padding = 6
 
 [bar.modules.notifications]
 format = "{icon}"
 "format-icons" = { "notification" = "msg*", "none" = "msg", "dnd-notification" = "dnd*", "dnd-none" = "dnd" }
+fg = "color12"
+padding = 6
 
 [bar.modules.recorder]
 rec = "[rec]"
 paused = "[||]"
 replay = "[rpl]"
+fg = "color12"
+padding = 6
 
 [bar.modules.power]
 format = "[x]"
 tooltip = true
 "tooltip-format" = "Left Click: Logout Menu\nRight Click: Change Blur"
+fg = "color12"
+padding = 6
+
+[bar.modules.visualizer]
+style = "chars"
+bars = 10
+chars = "▁▂▃▄▅▆▇█"
+padding = 6
+"font-size" = 14
+color = "color12"
+
+[bar.modules.battery]
+fg = "color12"
+padding = 6
 
 [bar.modules.app]
-color = "color12"
+padding = 6
 "font-size" = 20
+color = "color12"
+"active-line" = "bottom"
+"active-color" = "color12"
 
-[bar.tooltip]
-bg = "background"
-border = "color12"
+[bar.modules."app#more"]
 fg = "color12"
+padding = 6
+"font-size" = 20
 
 [bar.hover]
 fg = "background"
@@ -151,6 +209,11 @@ modules = ["power", "audio", "mic", "network", "bluetooth", "battery", "notifica
 [bar.hover-workspaces]
 fg = "color12"
 bg = "alpha(color12, 0.2)"
+
+[bar.tooltip]
+bg = "background"
+border = "color12"
+fg = "color12"
 
 [bar.groups.apps]
 modules = ["app#more", "app#d1", "app#d2", "app#d3", "app#d4", "app#d5", "app#d6", "app#d7", "app#d8"]

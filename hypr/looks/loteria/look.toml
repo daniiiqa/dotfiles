@@ -82,3 +82,312 @@ active_tab_foreground = "bg0"
 active_tab_background = "acc"
 inactive_tab_foreground = "dim"
 inactive_tab_background = "bg1"
+
+[bar]
+# empalme, la barra de discada (LookBar.py: traducido de waybar/)
+position = "top"
+height = 34
+margin = [8, 10, 0, 10]     # arriba, derecha, abajo, izquierda (pixeles)
+style = "solid"
+radius = 0
+font-size = 13     # pixeles, como en el style.css de waybar
+pad = 0                # el relleno de cada módulo va en su padding (pixeles)
+gap = 0                # celdas entre módulos
+spacing = 4            # pixeles entre módulos (el spacing de waybar)
+left = ["workspaces", "visualizer", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
+center = ["clock"]
+right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
+
+[bar.box]
+bg = "transparent"
+
+[bar.modules.workspaces]
+format = "{icon}"
+"format-icons" = { "1" = "1", "2" = "2", "3" = "3", "4" = "4", "5" = "5", "6" = "6", "7" = "7", "8" = "8", "9" = "9", "10" = "10", "default" = "·" }
+persistent = 5
+fg = "dim"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 2
+shadow = [3, 3, "bg3"]
+"empty-fg" = "bg2"
+"active-fg" = "bg0"
+"active-bg" = "acc"
+"button-pad" = 1
+"button-radius" = 3
+
+[bar.modules.clock]
+format = "<b>{:%H:%M}</b>"
+"format-alt" = "<b>{:%A %d}</b>"
+"tooltip-format" = "<tt><small>{calendar}</small></tt>"
+calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
+fg = "fg"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 16
+shadow = [3, 3, "bg3"]
+bold = true
+"font-size" = 15
+
+[bar.modules.temperature]
+tooltip = true
+"format-critical" = "󰈸 {temperatureC}°"
+format = "󰖙 {temperatureC}°"
+"format-icons" = ["󰈸"]
+interval = 10
+"critical-threshold" = 82
+fg = "gold"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.cpu]
+format = "󰘚 {usage}%"
+"format-alt" = "󰘚 {icon0}{icon1}{icon2}{icon3}"
+"format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+interval = 1
+fg = "dim"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.memory]
+format = "󰍛 {used:0.1f}G"
+"format-alt" = "󰍛 {percentage}%"
+tooltip = true
+"tooltip-format" = "{used:0.1f}GB/{total:0.1f}G"
+interval = 10
+fg = "dim"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.disk]
+format = "󰋊 {percentage_used}%"
+"tooltip-format" = "{used} used out of {total} on {path} ({percentage_used}%)"
+interval = 30
+path = "/"
+fg = "dim"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.audio]
+format = "󰝱 {volume}"
+"format-muted" = "󰝱 ✕"
+"format-bluetooth" = "󰂯 {volume}"
+"tooltip-format" = "{icon} {desc} | {volume}%"
+"format-icons" = { "headphone" = "", "hands-free" = "", "headset" = "", "phone" = "", "portable" = "", "car" = "", "default" = ["", "", "󰕾", ""] }
+fg = "ok"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.mic]
+format = "󰍬 {volume}"
+"format-muted" = "󰍭"
+"tooltip-format" = "{source_desc} | {source_volume}%"
+fg = "ok"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.network]
+format = "󰓎"
+"format-wifi" = "󰓎 {signalStrength}"
+"format-ethernet" = "󰓎 LAN"
+"format-disconnected" = "󰓒"
+"tooltip-format" = "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}"
+"format-linked" = "󰈁 {ifname} (No IP)"
+"tooltip-format-wifi" = "{essid} {icon} {signalStrength}%"
+"tooltip-format-ethernet" = "{ifname} 󰌘"
+"tooltip-format-disconnected" = "󰌙 Disconnected"
+"format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+fg = "acc2"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.bluetooth]
+format = "󰂯"
+"format-disabled" = "󰂲"
+"format-connected" = "󰂱 {num_connections}"
+"tooltip-format" = " {device_alias}"
+"tooltip-format-connected" = "{device_enumerate}"
+"tooltip-format-enumerate-connected" = " {device_alias} 󰂄{device_battery_percentage}%"
+tooltip = true
+"format-off" = "󰂲"
+fg = "acc2"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.idle]
+tooltip = true
+"tooltip-format-activated" = "Stay awake: on\nScreen won't dim, lock or sleep"
+"tooltip-format-deactivated" = "Stay awake: off\nClick to keep the screen on"
+format = "{icon}"
+"format-icons" = { "activated" = "󰖙", "deactivated" = "󰽥" }
+fg = "gold"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.notifications]
+format = "{} {icon} "
+"format-icons" = { "notification" = "<span foreground='red'><sup></sup></span>", "none" = "", "dnd-notification" = "<span foreground='red'><sup></sup></span>", "dnd-none" = "" }
+fg = "fg"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.recorder]
+rec = "󰋑"
+paused = "󰽥"
+replay = "󰘸"
+fg = "acc"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.power]
+format = " 󰋑 "
+tooltip = true
+"tooltip-format" = "Left Click: Logout Menu\nRight Click: Change Blur"
+fg = "bg0"
+bg = "acc"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+"font-size" = 17
+
+[bar.modules.visualizer]
+style = "chars"
+bars = 12
+chars = "▁▂▃▄▅▆▇█"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 6
+shadow = [3, 3, "bg3"]
+"font-size" = 14
+color = "acc"
+
+[bar.modules.battery]
+fg = "acc2"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
+[bar.modules.app]
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 6
+shadow = [3, 3, "bg3"]
+"font-size" = 17
+color = "fg"
+"active-bg" = "acc2"
+"active-fg" = "bg0"
+
+[bar.modules."app#more"]
+fg = "fg"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 6
+shadow = [3, 3, "bg3"]
+"font-size" = 17
+
+[bar.hover]
+bg = "bg1"
+modules = ["power", "audio", "mic", "network", "bluetooth", "battery", "notifications"]
+
+[bar.hover-workspaces]
+fg = "fg"
+bg = "bg1"
+
+[bar.tooltip]
+bg = "bg0"
+border = "bg3"
+radius = 6
+fg = "fg"
+
+[bar.groups.apps]
+modules = ["app#more", "app#d1", "app#d2", "app#d3", "app#d4", "app#d5", "app#d6", "app#d7", "app#d8"]
+drawer = { "transition-duration" = 250, "transition-left-to-right" = true }
+
+[bar.groups.mobo_drawer]
+modules = ["temperature", "cpu", "memory", "disk"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.audio]
+modules = ["audio", "mic"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.notify]
+modules = ["notifications"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = false }

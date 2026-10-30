@@ -33,3 +33,208 @@ transparent = false
 
 [wallust]
 palette = "light16"
+
+[bar]
+# empalme, la barra de discada (LookBar.py: traducido de waybar/)
+position = "top"
+height = 32
+margin = [0, 0, 0, 0]     # arriba, derecha, abajo, izquierda (pixeles)
+style = "solid"
+radius = 0
+font-size = 13     # pixeles, como en el style.css de waybar
+pad = 0                # el relleno de cada módulo va en su padding (pixeles)
+gap = 0                # celdas entre módulos
+spacing = 0            # pixeles entre módulos (el spacing de waybar)
+left = ["workspaces", "visualizer", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
+center = ["clock"]
+right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
+
+[bar.box]
+bg = "background"
+border = "alpha(foreground, 0.2)"
+"border-width" = 1
+"border-sides" = "bottom"
+
+[bar.modules.workspaces]
+format = "{name}"
+persistent = 5
+margin = [0, 0, 0, 10]
+fg = "alpha(foreground, 0.5)"
+"empty-fg" = "alpha(foreground, 0.25)"
+"active-fg" = "foreground"
+"button-pad" = 1
+"active-line" = "bottom"
+"active-color" = "foreground"
+
+[bar.modules.clock]
+format = "{:%H:%M}"
+"format-alt" = "{:L%A, %d de %B de %Y}"
+"tooltip-format" = "<tt><small>{calendar}</small></tt>"
+calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
+fg = "foreground"
+padding = 14
+"font-size" = 16
+
+[bar.modules.temperature]
+tooltip = true
+"format-critical" = "{temperatureC}°C {icon}"
+format = "{temperatureC}°C {icon}"
+"format-icons" = [""]
+interval = 10
+"critical-threshold" = 82
+fg = "alpha(foreground, 0.5)"
+padding = 8
+
+[bar.modules.cpu]
+format = "{usage}% "
+"format-alt" = "{icon0}{icon1}{icon2}{icon3} {usage:>2}% "
+"format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+interval = 1
+fg = "alpha(foreground, 0.5)"
+padding = 8
+
+[bar.modules.memory]
+format = "{used:0.1f}G "
+"format-alt" = "{percentage}% "
+tooltip = true
+"tooltip-format" = "{used:0.1f}GB/{total:0.1f}G"
+interval = 10
+fg = "alpha(foreground, 0.5)"
+padding = 8
+
+[bar.modules.disk]
+format = "{percentage_used}% "
+"tooltip-format" = "{used} used out of {total} on {path} ({percentage_used}%)"
+interval = 30
+path = "/"
+fg = "alpha(foreground, 0.5)"
+padding = 8
+
+[bar.modules.audio]
+format = "{icon} {volume}%"
+"format-muted" = ""
+"format-bluetooth" = "{icon} 󰂰 {volume}%"
+"tooltip-format" = "{icon} {desc} | {volume}%"
+"format-icons" = { "headphone" = "", "hands-free" = "", "headset" = "", "phone" = "", "portable" = "", "car" = "", "default" = ["", "", "", ""] }
+fg = "foreground"
+padding = 8
+
+[bar.modules.mic]
+format = " {volume}%"
+"format-muted" = ""
+"tooltip-format" = "{source_desc} | {source_volume}%"
+fg = "foreground"
+padding = 8
+
+[bar.modules.network]
+format = "{ifname}"
+"format-wifi" = "{icon}"
+"format-ethernet" = ""
+"format-disconnected" = ""
+"tooltip-format" = "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}"
+"format-linked" = " {ifname} (No IP)"
+"tooltip-format-wifi" = "{essid} {icon} {signalStrength}%"
+"tooltip-format-ethernet" = "{ifname} "
+"tooltip-format-disconnected" = " Disconnected"
+"format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+fg = "foreground"
+padding = 8
+"font-size" = 20
+
+[bar.modules.bluetooth]
+format = ""
+"format-disabled" = "󰂳"
+"format-connected" = "󰂱 {num_connections}"
+"tooltip-format" = " {device_alias}"
+"tooltip-format-connected" = "{device_enumerate}"
+"tooltip-format-enumerate-connected" = " {device_alias} 󰂄{device_battery_percentage}%"
+tooltip = true
+fg = "foreground"
+padding = 8
+"font-size" = 20
+
+[bar.modules.idle]
+tooltip = true
+"tooltip-format-activated" = "Stay awake: on\nScreen won't dim, lock or sleep"
+"tooltip-format-deactivated" = "Stay awake: off\nClick to keep the screen on"
+format = "{icon}"
+"format-icons" = { "activated" = "", "deactivated" = "" }
+fg = "foreground"
+padding = 8
+"font-size" = 20
+
+[bar.modules.notifications]
+format = "{} {icon}"
+"format-icons" = { "notification" = "<span foreground='red'><sup></sup></span>", "none" = "", "dnd-notification" = "<span foreground='red'><sup></sup></span>", "dnd-none" = "" }
+fg = "foreground"
+padding = 8
+
+[bar.modules.recorder]
+rec = ""
+paused = ""
+replay = ""
+fg = "foreground"
+padding = 8
+
+[bar.modules.power]
+format = ""
+tooltip = true
+"tooltip-format" = "Left Click: Logout Menu\nRight Click: Change Blur"
+fg = "foreground"
+padding = 8
+"font-size" = 20
+
+[bar.modules.visualizer]
+style = "chars"
+bars = 12
+chars = "_.-~^"
+padding = 6
+"font-size" = 14
+color = "foreground"
+
+[bar.modules.battery]
+fg = "foreground"
+padding = 8
+"font-size" = 20
+
+[bar.modules.app]
+padding = 8
+"font-size" = 20
+color = "foreground"
+"active-line" = "bottom"
+"active-color" = "foreground"
+
+[bar.modules."app#more"]
+fg = "foreground"
+padding = 8
+"font-size" = 20
+
+[bar.hover]
+bg = "alpha(foreground, 0.08)"
+modules = ["power", "audio", "mic", "network", "bluetooth", "battery", "notifications"]
+
+[bar.hover-workspaces]
+fg = "foreground"
+bg = "alpha(foreground, 0.06)"
+
+[bar.tooltip]
+bg = "background"
+border = "foreground"
+radius = 2
+fg = "foreground"
+
+[bar.groups.apps]
+modules = ["app#more", "app#d1", "app#d2", "app#d3", "app#d4", "app#d5", "app#d6", "app#d7", "app#d8"]
+drawer = { "transition-duration" = 250, "transition-left-to-right" = true }
+
+[bar.groups.mobo_drawer]
+modules = ["temperature", "cpu", "memory", "disk"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.audio]
+modules = ["audio", "mic"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.notify]
+modules = ["notifications"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = false }
