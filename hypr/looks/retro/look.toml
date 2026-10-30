@@ -177,6 +177,14 @@ tooltip = true
 fg = "color12"
 padding = 6
 
+[bar.modules.battery]
+format = "{icon} {percentage}%"
+"format-icons" = { "discharging" = ["bat"], "charging" = ["bat+"], "full" = ["ac"], "saver" = ["eco"] }
+"low-color" = "critical"
+"critical-color" = "critical"
+fg = "color12"
+padding = 6
+
 [bar.modules.visualizer]
 style = "chars"
 bars = 10
@@ -184,10 +192,6 @@ chars = "▁▂▃▄▅▆▇█"
 padding = 6
 "font-size" = 14
 color = "color12"
-
-[bar.modules.battery]
-fg = "color12"
-padding = 6
 
 [bar.modules.app]
 padding = 6

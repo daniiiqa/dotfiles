@@ -276,6 +276,12 @@ def translate(look):
     for k in ("tooltip", "tooltip-format"):
         if k in pw:
             mods["power"][k] = pw[k]
+    bat = mod("custom/battery")
+    mods["battery"] = {k: bat[k] for k in ("format", "format-icons") if k in bat}
+    for cls in ("low", "critical"):
+        col = css.color(css.props(f"#custom-battery.{cls}").get("color", "transparent"))
+        if col:
+            mods["battery"][f"{cls}-color"] = col
     if "visualizer" in used:
         vj = os.path.join(d, "waybar/visualizer.json")
         mods["visualizer"] = json.load(open(vj)) if os.path.exists(vj) else {}

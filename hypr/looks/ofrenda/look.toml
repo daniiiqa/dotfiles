@@ -234,17 +234,21 @@ margin = [0, 4, 0, 0]
 padding = 8
 "font-size" = 18
 
+[bar.modules.battery]
+format = "{icon} {percentage}"
+"format-icons" = { "discharging" = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"], "charging" = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"], "full" = ["󰚥"], "saver" = ["󰌪"] }
+"low-color" = "warn"
+"critical-color" = "warn"
+fg = "fg"
+padding = 8
+"font-size" = 18
+
 [bar.modules.visualizer]
 style = "peaks"
 bars = 20
 padding = 6
 "font-size" = 14
 color = "acc"
-
-[bar.modules.battery]
-fg = "fg"
-padding = 8
-"font-size" = 18
 
 [bar.modules.app]
 padding = 6

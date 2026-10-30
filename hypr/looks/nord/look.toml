@@ -259,19 +259,23 @@ margin = [4, 4, 4, 0]
 padding = 9
 "font-size" = 20
 
+[bar.modules.battery]
+format = "{icon} {percentage}%"
+"format-icons" = { "discharging" = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"], "charging" = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"], "full" = ["󰚥"], "saver" = ["󰌪"] }
+"low-color" = "nord11"
+"critical-color" = "nord11"
+fg = "nord10"
+radius = 7
+margin = [4, 0, 4, 0]
+padding = 9
+"font-size" = 20
+
 [bar.modules.visualizer]
 style = "braille"
 bars = 16
 padding = 6
 "font-size" = 14
 color = "nord8"
-
-[bar.modules.battery]
-fg = "nord10"
-radius = 7
-margin = [4, 0, 4, 0]
-padding = 9
-"font-size" = 20
 
 [bar.modules.app]
 margin = [4, 0, 4, 0]

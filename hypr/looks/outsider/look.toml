@@ -225,6 +225,14 @@ fg = "rec"
 margin = [0, 2, 0, 0]
 padding = 8
 
+[bar.modules.battery]
+format = "{icon} {percentage}"
+"format-icons" = { "discharging" = ["bat"], "charging" = ["bat+"], "full" = ["ac"], "saver" = ["eco"] }
+"low-color" = "rec"
+"critical-color" = "rec"
+fg = "cream"
+padding = 8
+
 [bar.modules.visualizer]
 style = "chars"
 bars = 10
@@ -232,10 +240,6 @@ chars = ".:-=+*#"
 padding = 6
 "font-size" = 14
 color = "rose"
-
-[bar.modules.battery]
-fg = "cream"
-padding = 8
 
 [bar.modules.app]
 padding = 6

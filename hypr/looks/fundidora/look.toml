@@ -245,6 +245,14 @@ fg = "acc2"
 padding = 2
 "font-size" = 18
 
+[bar.modules.battery]
+format = "{icon} {percentage}"
+"format-icons" = { "discharging" = ["<span foreground=\"#6f6b66\" size=\"small\">bat</span>"], "charging" = ["<span foreground=\"#6f6b66\" size=\"small\">bat</span>+"], "full" = ["ac"], "saver" = ["eco"] }
+"low-color" = "warn"
+"critical-color" = "warn"
+fg = "hi"
+padding = 7
+
 [bar.modules.visualizer]
 style = "chars"
 bars = 10
@@ -252,10 +260,6 @@ chars = "▁▂▃▄▅▆▇█"
 padding = 6
 "font-size" = 14
 color = "acc2"
-
-[bar.modules.battery]
-fg = "hi"
-padding = 7
 
 [bar.modules.app]
 padding = 6

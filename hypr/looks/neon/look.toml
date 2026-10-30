@@ -189,17 +189,21 @@ fg = "color13"
 padding = 8
 "font-size" = 20
 
+[bar.modules.battery]
+format = "{icon} {percentage}%"
+"format-icons" = { "discharging" = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"], "charging" = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"], "full" = ["󰚥"], "saver" = ["󰌪"] }
+"low-color" = "critical"
+"critical-color" = "critical"
+fg = "foreground"
+padding = 8
+"font-size" = 20
+
 [bar.modules.visualizer]
 style = "peaks"
 bars = 20
 padding = 6
 "font-size" = 14
 color = "color12"
-
-[bar.modules.battery]
-fg = "foreground"
-padding = 8
-"font-size" = 20
 
 [bar.modules.app]
 padding = 8

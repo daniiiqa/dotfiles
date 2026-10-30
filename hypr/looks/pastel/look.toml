@@ -215,18 +215,22 @@ radius = 12
 padding = 7
 "font-size" = 20
 
+[bar.modules.battery]
+format = "{icon} {percentage}%"
+"format-icons" = { "discharging" = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"], "charging" = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"], "full" = ["󰚥"], "saver" = ["󰌪"] }
+"low-color" = "critical"
+"critical-color" = "critical"
+fg = "color12"
+radius = 12
+padding = 7
+"font-size" = 20
+
 [bar.modules.visualizer]
 style = "braille"
 bars = 12
 padding = 6
 "font-size" = 14
 color = "color12"
-
-[bar.modules.battery]
-fg = "color12"
-radius = 12
-padding = 7
-"font-size" = 20
 
 [bar.modules.app]
 padding = 7

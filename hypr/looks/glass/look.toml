@@ -251,6 +251,20 @@ margin = [2, 0, 2, 0]
 padding = 14
 "font-size" = 20
 
+[bar.modules.battery]
+format = "{icon} {percentage}%"
+"format-icons" = { "discharging" = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"], "charging" = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"], "full" = ["󰚥"], "saver" = ["󰌪"] }
+"low-color" = "critical"
+"critical-color" = "critical"
+fg = "foreground"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+"font-size" = 20
+
 [bar.modules.visualizer]
 style = "braille"
 bars = 20
@@ -262,16 +276,6 @@ margin = [4, 3, 4, 3]
 padding = 6
 "font-size" = 14
 color = "color12"
-
-[bar.modules.battery]
-fg = "foreground"
-bg = "alpha(background, 0.58)"
-border = "alpha(white, 0.16)"
-"border-width" = 1
-radius = 20
-margin = [2, 0, 2, 0]
-padding = 14
-"font-size" = 20
 
 [bar.modules.app]
 bg = "alpha(background, 0.58)"

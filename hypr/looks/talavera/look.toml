@@ -306,14 +306,11 @@ margin = [3, 4, 3, 2]
 padding = 10
 "font-size" = 17
 
-[bar.modules.visualizer]
-style = "braille"
-bars = 16
-padding = 6
-"font-size" = 14
-color = "acc"
-
 [bar.modules.battery]
+format = "{icon} {percentage}"
+"format-icons" = { "discharging" = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"], "charging" = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"], "full" = ["󰚥"], "saver" = ["󰌪"] }
+"low-color" = "warn"
+"critical-color" = "warn"
 fg = "acc"
 bg = "bg1"
 border = "alpha(acc, 0.35)"
@@ -322,6 +319,13 @@ radius = 14
 margin = [3, 2, 3, 2]
 padding = 10
 "font-size" = 17
+
+[bar.modules.visualizer]
+style = "braille"
+bars = 16
+padding = 6
+"font-size" = 14
+color = "acc"
 
 [bar.modules.app]
 bg = "bg1"

@@ -214,6 +214,17 @@ fg = "background"
 bg = "color12"
 padding = 14
 
+[bar.modules.battery]
+format = "{icon} {percentage}%"
+"format-icons" = { "discharging" = ["BAT"], "charging" = ["BAT+"], "full" = ["AC"], "saver" = ["ECO"] }
+"low-color" = "critical"
+"critical-color" = "critical"
+fg = "foreground"
+border = "alpha(foreground, 0.12)"
+"border-width" = 1
+"border-sides" = "left"
+padding = 10
+
 [bar.modules.visualizer]
 style = "chars"
 bars = 8
@@ -221,13 +232,6 @@ chars = "▁▂▃▄▅▆▇█"
 padding = 6
 "font-size" = 14
 color = "color12"
-
-[bar.modules.battery]
-fg = "foreground"
-border = "alpha(foreground, 0.12)"
-"border-width" = 1
-"border-sides" = "left"
-padding = 10
 
 [bar.modules.app]
 border = "alpha(foreground, 0.12)"

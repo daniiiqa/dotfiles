@@ -314,6 +314,20 @@ padding = 9
 shadow = [3, 3, "bg3"]
 "font-size" = 17
 
+[bar.modules.battery]
+format = "{icon} {percentage}"
+"format-icons" = { "discharging" = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"], "charging" = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"], "full" = ["󰚥"], "saver" = ["󰌪"] }
+"low-color" = "warn"
+"critical-color" = "warn"
+fg = "acc2"
+bg = "bg0"
+border = "bg3"
+"border-width" = 2
+radius = 6
+margin = [2, 4, 5, 0]
+padding = 9
+shadow = [3, 3, "bg3"]
+
 [bar.modules.visualizer]
 style = "chars"
 bars = 12
@@ -327,16 +341,6 @@ padding = 6
 shadow = [3, 3, "bg3"]
 "font-size" = 14
 color = "acc"
-
-[bar.modules.battery]
-fg = "acc2"
-bg = "bg0"
-border = "bg3"
-"border-width" = 2
-radius = 6
-margin = [2, 4, 5, 0]
-padding = 9
-shadow = [3, 3, "bg3"]
 
 [bar.modules.app]
 bg = "bg0"
