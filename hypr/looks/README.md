@@ -73,7 +73,7 @@ selection_background = "acc"
 |---|---|---|---|
 | la barra (`[bar]` del look.toml) | `acc` | `alpha(acc, 0.5)` | — |
 | wlogout (CSS) | `@acc` | `alpha(@acc, 0.5)` | `{{font}}` |
-| rofi (`.rasi`) | `@acc` | `@acc_a80` | `{{font}}` |
+| rofi (`.rasi`) | `@acc` | `@acc-a80` (con guion: rofi no acepta `_`) | `{{font}}` |
 | hyprland (`.conf`), hyprlock | `$acc` | `$acc_a80` | `{{font}}` |
 | hyprland (`.lua`) | `c.acc` | `c.acc_a80` | — |
 | sddm/look.conf | `"@acc"` | — | `{{font}}` |

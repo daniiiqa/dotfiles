@@ -20,7 +20,7 @@ usan los nombres del look.toml. La barra (empalme) es el [bar] del look.toml.
 Colores en los archivos del look:
   wlogout (CSS)            @acc, alpha(@acc, 0.5)
   empalme ([bar])          acc, alpha(acc, 0.5)
-  rofi                     @acc            con transparencia: @acc_a80
+  rofi                     @acc            con transparencia: @acc-a80
   hyprland / hyprlock      $acc  (c.acc en Lua)       con transparencia: $acc_a80
   sddm/look.conf           "@acc"
 (_a80 = alpha en hex: 80 es la mitad. Se generan solas las que se usen.)
@@ -117,9 +117,10 @@ def wallust_colors():
 
 
 def alphas_used(look, names):
-    """name_aXX que usan los archivos del look (rofi, hyprland, hyprlock)."""
+    """name_aXX (name-aXX en rofi) que usan los archivos del look (rofi,
+    hyprland, hyprlock)."""
     used = set()
-    rx = re.compile(r"[@$.]([A-Za-z]\w*?)_a([0-9a-fA-F]{2})\b")
+    rx = re.compile(r"[@$.]([A-Za-z]\w*?)[_-]a([0-9a-fA-F]{2})\b")
     for rel in look_files(look):
         try:
             text = open(os.path.join(LOOKS, look, rel), errors="ignore").read()
@@ -170,7 +171,8 @@ def named_block(kind, lk, pal, alphas):
     elif kind == "rasi":
         lines = [f"\n/* {MARK} (LookBuild.py) */", "* {"]
         lines += [f"    {n}: #{pal[n]};" for n in names]
-        lines += [f"    {n}_a{a}: #{pal[n]}{a};" for n, a in alphas]
+        # con guion: rofi 2.0 no acepta "_" en un nombre (y todo el archivo falla)
+        lines += [f"    {n}-a{a}: #{pal[n]}{a};" for n, a in alphas]
         lines.append("}")
     elif kind == "kitty":
         extra = lk.get("kitty", {})

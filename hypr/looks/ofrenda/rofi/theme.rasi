@@ -108,7 +108,7 @@ element alternate.urgent {
 element selected.normal,
 element selected.active,
 element selected.urgent {
-    background-color:           @acc_a29;
+    background-color:           @acc-a29;
     border:                     0 0 0 3px;
     border-color:               @acc;
     text-color:                 @hi;

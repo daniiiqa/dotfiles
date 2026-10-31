@@ -39,7 +39,7 @@ mainbox {
     spacing:                    0;
     children:                   [ "inputbar", "message", "listview", "mode-switcher" ];
     border:                     1px;
-    border-color:               @bg3_a73;
+    border-color:               @bg3-a73;
     border-radius:              14px;
 }
 
@@ -47,7 +47,7 @@ inputbar {
     spacing:                    12px;
     padding:                    14px 18px;
     border:                     0 0 1px 0;
-    border-color:               @bg3_a66;
+    border-color:               @bg3-a66;
     background-color:           @bg1;
     children:                   [ "prompt", "textbox-prompt-colon", "entry" ];
 }
