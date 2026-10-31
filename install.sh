@@ -40,8 +40,8 @@ REPO_PKGS=(
   # Hyprland y lo que lo rodea
   hyprland hypridle hyprlock hyprpolkitagent
   xdg-desktop-portal-hyprland xdg-desktop-portal-gtk qt5-wayland qt6-wayland
-  # barra, menús, notificaciones
-  waybar rofi yad
+  # menús (la barra, empalme, y las notificaciones, arre, se compilan abajo)
+  rofi yad
   # terminal y herramientas de terminal
   kitty fastfetch btop cava
   # taco (archivos) usa fd, fzf, zoxide y las miniaturas; nvim con LazyVim
@@ -56,7 +56,7 @@ REPO_PKGS=(
   pamixer playerctl
   # wallpapers (imagen/gif con awww, antes swww) y colores
   awww imagemagick ffmpeg mpv
-  # rola (YouTube Music en la terminal): audio por mpv, mpris para waybar
+  # rola (YouTube Music en la terminal): audio por mpv, mpris para la barra
   yt-dlp mpv-mpris rustup
   # utilidades que usan los scripts
   libnotify libqalculate bc curl python xdg-user-dirs xdg-utils git
@@ -126,6 +126,7 @@ ROLA_REPO="https://github.com/daniiiqa/rola.git"
 VATO_REPO="https://github.com/daniiiqa/vato.git"
 ARRE_REPO="https://github.com/daniiiqa/arre.git"
 TACO_REPO="https://github.com/daniiiqa/taco.git"
+EMPALME_REPO="https://github.com/daniiiqa/empalme.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.conf hypr/workspaces.conf
@@ -560,6 +561,8 @@ say "arre ($(L "las notificaciones con el look de discada" "notifications with t
 run cargo install --git "$ARRE_REPO" --root "$HOME/.local" --locked
 say "taco ($(L "los archivos con el look de discada" "files with the discada look")) → ~/.local/bin/taco"
 run cargo install --git "$TACO_REPO" --root "$HOME/.local" --locked
+say "empalme ($(L "la barra de discada" "the discada bar")) → ~/.local/bin/empalme"
+run cargo install --git "$EMPALME_REPO" --root "$HOME/.local" --locked
 
 # nvim: si no hay config, el starter de LazyVim; luego el colorscheme de
 # discada (sigue al look; vive en hypr/nvim/). Del resto de tu config no se
@@ -588,7 +591,7 @@ else
     printf '[D-BUS Service]\nName=%s\nExec=%s\n' "$name" "$HOME/.local/bin/arre" > "$dbus_dir/$name.service"
   done
 fi
-# ~/.local/bin en el PATH (rola, vato, arre y taco viven ahí): en el perfil de
+# ~/.local/bin en el PATH (rola, vato, arre, taco y empalme viven ahí): en el perfil de
 # login, que SDDM lee al entrar a Hyprland. En un Arch nuevo no viene
 path_line='[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || export PATH="$HOME/.local/bin:$PATH"  # discada'
 for prof in "$HOME/.bash_profile" "$HOME/.zprofile"; do

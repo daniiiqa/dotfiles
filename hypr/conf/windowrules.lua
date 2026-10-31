@@ -5,11 +5,11 @@
 -- (looks/<nombre>/hypr/conf/decorations.conf). Si se pusiera aquí, paper,
 -- brutalist y retro dejarían de ser opacos y kitty quedaría doble-transparente.
 -- La excepción es el video, que siempre va sólido.
--- Las layerrules (waybar, swaync, rofi, wlogout) también viven en cada look.
+-- Las layerrules (la barra, swaync, rofi, wlogout) también viven en cada look.
 
--- waybar aparece sin animación: al recargar (SUPER+Alt+R, cambio de look) la
--- barra vuelve al instante en vez de deslizarse
-hl.layer_rule({ match = { namespace = "waybar" }, no_anim = true })
+-- la barra (empalme) aparece sin animación: al recargar (SUPER+Alt+R, cambio
+-- de look) vuelve al instante en vez de deslizarse
+hl.layer_rule({ match = { namespace = "empalme" }, no_anim = true })
 
 -- rofi con blur detrás: los looks con menú translúcido (glass) lo necesitan,
 -- en los opacos no se nota

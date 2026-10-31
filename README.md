@@ -37,7 +37,7 @@ shows everything without touching anything; `--help` lists the options):
   from `hypr/nvim/` (the rest of your config is left alone)
 - SDDM with the simple_sddm_2 theme when there is no other display manager
   (`--no-sddm` / `--sddm` to force)
-- builds [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre) and [taco](https://github.com/daniiiqa/taco) into `~/.local/bin`
+- builds [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre), [taco](https://github.com/daniiiqa/taco) and [empalme](https://github.com/daniiiqa/empalme) (the bar) into `~/.local/bin`
 - on first login, `hypr/scripts/FirstRun.sh` does the rest (a generated
   wallpaper if there is none, colors, dark GTK theme and icons)
 
@@ -68,7 +68,8 @@ pottery: cream glaze, cobalt linework)
 Each look lives in `hypr/looks/<name>/`: one master file, **`look.toml`**
 (colors, font, the style of the apps, the wallust palette), plus a mirror of
 `~/.config` with only the files it shapes: Hyprland decorations and animations,
-hyprlock, waybar, rofi, wlogout, kitty, fastfetch and SDDM. Those files carry no
+hyprlock, rofi, wlogout, kitty, fastfetch and SDDM (the bar is the `[bar]` in
+look.toml). Those files carry no
 colors or fonts of their own: they use the look's names (`@acc`, `$acc`,
 `{{font}}`), so a palette or a font lives in one place. Looks with
 `from = "palette"` bring their own colors; the rest take them from the wallpaper
@@ -110,7 +111,7 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
 - **Per-monitor wallpapers**: swww for images/gifs, one mpvpaper per monitor
   only where there's a video. Game mode pauses them and revives them on exit.
 - **Colors from video wallpapers**: the middle frame goes through wallust, so
-  waybar, rofi, kitty, arre, hyprlock and SDDM match.
+  the bar, rofi, kitty, arre, hyprlock and SDDM match.
 - **Readable on any wallpaper**: wallust with `check_contrast`, then
   `ContrastFix.py` lifts any text color to 4.5:1 (WCAG AA).
 - **Files: [taco](https://github.com/daniiiqa/taco)** — discada's file manager
@@ -145,7 +146,7 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
 Hyprland 0.57 drops the `.conf` format. The whole config already exists in Lua
 next to it (`hypr/hyprland.lua.new`, `hypr/conf/*.lua`, each look's
 `decorations.lua` / `animations.lua`) and is tested. It gets switched on once
-waybar can change workspaces on click under Lua (0.15.0 can't). Scripts, the
+the bar's workspace clicks are tested under Lua. Scripts, the
 bar and wlogout talk to Hyprland through `hypr/scripts/Hypr.sh`, which works
 with either format. Until then, config edits go in both the `.conf` and the
 `.lua` files.

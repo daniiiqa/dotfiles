@@ -22,7 +22,11 @@ reload_all() {
   "$scripts/FontSize.py" apply --no-reload
   "$scripts/AppColors.py" >/dev/null 2>&1
   hyprctl reload >/dev/null
-  pkill -SIGUSR2 waybar
+  # la barra es empalme (antes waybar): relanzarla con el binario nuevo
+  pkill -x waybar
+  pkill -x empalme
+  sleep 0.3
+  setsid "$scripts/Bar.sh" >/dev/null 2>&1 &
   pkill -USR1 -x kitty
 }
 

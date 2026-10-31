@@ -32,9 +32,9 @@ hl.on("hyprland.start", function()
     end
 
     -- Barra, notificaciones (arre las arranca D-Bus solo), idle
-    hl.exec_cmd(scriptsDir .. "/AppStrip.py daemon")  -- apps abiertas en waybar (antes que la barra)
+    hl.exec_cmd(scriptsDir .. "/AppStrip.py daemon")  -- apps abiertas en la barra (antes que ella)
     hl.exec_cmd(scriptsDir .. "/FitGuard.py")  -- apps que no caben en su tile (Discord) flotan
-    hl.exec_cmd(scriptsDir .. "/Waybar.sh")  -- relanza waybar si crashea al inicio (mpris)
+    hl.exec_cmd(scriptsDir .. "/Bar.sh")  -- la barra (empalme); la relanza si se cae
     hl.exec_cmd(scriptsDir .. "/FirstRun.sh")  -- solo la primera vez en una máquina nueva
     hl.exec_cmd("hypridle")
     hl.exec_cmd(scriptsDir .. "/Battery.py watch")  -- laptops: avisos, ahorro solo (BATTERY_SAVER_AT)

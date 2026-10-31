@@ -95,8 +95,8 @@ def rofi_override(total):
 
 
 def reload():
-    # empalme relee bar.json solo
-    subprocess.run(["pkill", "-SIGUSR2", "-x", "waybar"])
+    # la barra (empalme) relee bar.json sola; así es de una vez
+    subprocess.run(["pkill", "-SIGUSR2", "-x", "empalme"])
     subprocess.run(["pkill", "-USR1", "-x", "kitty"])
 
 

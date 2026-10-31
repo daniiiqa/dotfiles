@@ -68,8 +68,8 @@ hl.config({ group = {
 
 -- Esmerilado de capas — viven aquí (y no en windowrules.conf) porque son
 -- parte del look: al cambiar de look, hyprctl reload las quita.
-hl.layer_rule({ match = { namespace = "waybar" }, blur = true })
-hl.layer_rule({ match = { namespace = "waybar" }, ignore_alpha = 0.1 })
+hl.layer_rule({ match = { namespace = "empalme" }, blur = true })
+hl.layer_rule({ match = { namespace = "empalme" }, ignore_alpha = 0.1 })
 hl.layer_rule({ match = { namespace = "swaync-control-center" }, blur = true })
 hl.layer_rule({ match = { namespace = "swaync-control-center" }, ignore_alpha = 0.1 })
 hl.layer_rule({ match = { namespace = "swaync-notification-window" }, blur = true })

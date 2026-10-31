@@ -33,7 +33,7 @@ Super W|Elegir wallpaper|Pick wallpaper
 Super Shift W|Efectos de wallpaper|Wallpaper effects
 Ctrl Alt W|Wallpaper aleatorio|Random wallpaper
 Super Alt R|Recargar barra y menús|Reload bar and menus
-Super Ctrl Alt B|Mostrar/ocultar waybar|Show/hide waybar
+Super Ctrl Alt B|Mostrar/ocultar la barra|Show/hide the bar
 Super O|Opacidad de la ventana|Window opacity
 Super Alt O|Blur normal/ligero|Normal/light blur
 Super Shift G|Game mode|Game mode

@@ -48,7 +48,7 @@ hl.bind("SUPER + W", hl.dsp.exec_cmd(scriptsDir .. "/WallpaperSelect.sh"), { des
 hl.bind("SUPER + SHIFT + W", hl.dsp.exec_cmd(scriptsDir .. "/WallpaperEffects.sh"), { description = "wallpaper effects" })
 hl.bind("CTRL + ALT + W", hl.dsp.exec_cmd(scriptsDir .. "/WallpaperRandom.sh"), { description = "random wallpaper" })
 hl.bind("SUPER + ALT + R", hl.dsp.exec_cmd(scriptsDir .. "/Refresh.sh --full"), { description = "refresh bar and menus" })
-hl.bind("SUPER + CTRL + ALT + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"), { description = "toggle waybar" })
+hl.bind("SUPER + CTRL + ALT + B", hl.dsp.exec_cmd("pkill -SIGUSR1 -x empalme"), { description = "toggle bar" })
 hl.bind("SUPER + ALT + O", hl.dsp.exec_cmd(scriptsDir .. "/ChangeBlur.sh"), { description = "toggle blur" })
 hl.bind("SUPER + O", hl.dsp.window.set_prop({ prop = "opaque", value = "toggle" }), { description = "toggle window opacity" })
 hl.bind("SUPER + SHIFT + G", hl.dsp.exec_cmd(scriptsDir .. "/GameMode.sh"), { description = "toggle game mode" })

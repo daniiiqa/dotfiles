@@ -1,22 +1,17 @@
 #!/usr/bin/env bash
-# Recarga waybar/rofi tras un cambio de wallpaper.
+# Recarga la barra y rofi tras un cambio de wallpaper.
 # Uso: Refresh.sh [--full]
-#
-# Reload EN CALIENTE en lugar de matar y relanzar.
-# Lo único que este script necesita lograr tras un cambio de wallpaper es
-# que las barras relean los colores de wallust — waybar (SIGUSR2) sabe
-# hacerlo sin morir, así que la barra ya no parpadea
-# ni re-instancia sus módulos. El kill queda solo como fallback si el
-# proceso no está corriendo.
 
-# waybar: con "reload_style_on_change" la barra vigila style.css (y los
-# @import, o sea los colores de wallust) y se re-estiliza sola, sin
-# reconstruirse. Por eso un cambio de wallpaper no necesita señal.
-# --full (SUPER+Alt+R) fuerza el reload completo de config + CSS.
-if pidof waybar >/dev/null; then
-  [ "$1" = "--full" ] && killall -SIGUSR2 waybar
+# la barra (empalme) relee sola el look, los colores de wallust
+# (empalme/colors.json) y su [bar] (empalme/bar.json): un cambio de
+# wallpaper no necesita señal. --full (SUPER+Alt+R) la rearma de una vez
+# (SIGUSR2); si no está corriendo, la arranca (y cierra waybar, la barra de
+# antes, que puede seguir corriendo tras la primera actualización).
+if pidof empalme >/dev/null; then
+  [ "$1" = "--full" ] && pkill -SIGUSR2 -x empalme
 else
-  waybar &
+  pkill -x waybar
+  setsid "$HOME/.config/hypr/scripts/Bar.sh" >/dev/null 2>&1 &
 fi
 
 # las notificaciones (arre) toman el look solas, y si no corren las arranca
