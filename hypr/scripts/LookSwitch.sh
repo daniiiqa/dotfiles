@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Cambia el look del rice (SUPER+T). Cada look vive en hypr/looks/<nombre>/
 # como espejo de ~/.config con solo los archivos que le tocan (decoraciones,
-# animaciones, hyprlock, waybar, rofi, wlogout, kitty, fastfetch, sddm), más su
+# animaciones, hyprlock, rofi, wlogout, kitty, fastfetch, sddm), más su
 # look.toml: colores, fuente y estilo (LookBuild.py los aplica).
 #
 # Al cambiar, primero guarda los archivos vivos en el look actual — así lo

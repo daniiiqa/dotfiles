@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Tamaño de letra de discada (FONT_SIZE en hypr/discada.conf, de -2 a +4).
 
-Suma ese tanto a las fuentes de los archivos vivos del look: waybar y swaync
-(font-size en px), empalme (los "font-size" de empalme/bar.json), kitty
+Suma ese tanto a las fuentes de los archivos vivos del look: swaync
+(font-size en px), la barra (los "font-size" de empalme/bar.json), kitty
 (font_size) y rofi (rofi/discada-font.rasi, que config.rasi importa después
 del theme). Lo aplicado se guarda en hypr/looks/.fontsize; LookSwitch.sh hace
 `unapply` antes de guardar el look (así las carpetas de looks se quedan con sus
@@ -58,8 +58,7 @@ def shift_file(path, rx, d, floor):
 def shift(d):
     if not d:
         return
-    for f in ("waybar/style.css", "swaync/style.css"):
-        shift_file(os.path.join(CFG, f), r"(font-size:\s*)(\d+(?:\.\d+)?)(px)", d, 6)
+    shift_file(os.path.join(CFG, "swaync/style.css"), r"(font-size:\s*)(\d+(?:\.\d+)?)(px)", d, 6)
     shift_file(os.path.join(CFG, "empalme/bar.json"), r'("font-size":\s*)(\d+(?:\.\d+)?)()', d, 6)
     shift_file(os.path.join(CFG, "kitty/kitty.conf"), r"(^font_size\s+)(\d+(?:\.\d+)?)()", d, 6)
 

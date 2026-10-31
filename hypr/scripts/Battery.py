@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Batería y ahorro de energía de discada (laptops; en una de escritorio no hace nada).
 
-  Battery.py status        JSON para el módulo custom/battery de waybar
+  Battery.py status        JSON con el estado (el tooltip de la barra)
   Battery.py watch         daemon: avisos de batería baja, ahorro automático
                            y refresca la barra al conectar/desconectar
   Battery.py profile       siguiente perfil de energía (power-profiles-daemon)
@@ -30,7 +30,7 @@ STATE = os.path.join(RUN, "saver.json")
 DISCADA = os.path.expanduser("~/.config/hypr/discada.conf")
 ICON = "battery-caution-symbolic"
 WARN_AT = (20, 10, 5)
-SIGNAL = 11   # pkill -RTMIN+11 waybar (y empalme)
+SIGNAL = 11   # pkill -RTMIN+11 empalme
 
 
 def conf(key, default):
@@ -217,7 +217,7 @@ def saver_off():
 
 # ── barra y avisos ───────────────────────────────────────────────────────────
 def refresh_bar():
-    subprocess.run(["pkill", f"-RTMIN+{SIGNAL}", "-x", "waybar|empalme"], capture_output=True)
+    subprocess.run(["pkill", f"-RTMIN+{SIGNAL}", "-x", "empalme"], capture_output=True)
 
 
 def notify(title, body, urgency="low"):

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """discada: cada look sale de un solo archivo, hypr/looks/<look>/look.toml
 (colores, fuente, estilo de las apps). Los archivos de cada app en la carpeta
-del look (waybar/, rofi/, hypr/…) no llevan ni colores ni fuentes escritos:
-usan los nombres del look.toml.
+del look (empalme/, rofi/, hypr/…) no llevan ni colores ni fuentes escritos:
+usan los nombres del look.toml. La barra (empalme) es el [bar] del look.toml.
 
   LookBuild.py apply LOOK      copiar el look a ~/.config, con {{font}} rellenado,
                                más su wallust.toml, el look.json de rola y la
@@ -12,10 +12,14 @@ usan los nombres del look.toml.
                                look (o la de wallust si sigue al wallpaper) más
                                sus nombres propios (acc, hi…)
   LookBuild.py get LOOK CLAVE  un valor del look.toml (font.family, about.es…)
+  LookBuild.py bar-set MÓDULO JSON [LOOK]
+                               cambiar claves del [bar.modules.MÓDULO] del look
+                               (como el visualizador desde el menú de ajustes)
   LookBuild.py list            los looks, uno por línea
 
 Colores en los archivos del look:
-  waybar / wlogout (CSS)   @acc, alpha(@acc, 0.5)
+  wlogout (CSS)            @acc, alpha(@acc, 0.5)
+  empalme ([bar])          acc, alpha(acc, 0.5)
   rofi                     @acc            con transparencia: @acc_a80
   hyprland / hyprlock      $acc  (c.acc en Lua)       con transparencia: $acc_a80
   sddm/look.conf           "@acc"
@@ -259,9 +263,19 @@ def write_bar(lk):
         if os.path.exists(path):
             os.remove(path)
         return
+    # con el tamaño de letra que ya esté aplicado (FontSize.py), como lo demás vivo
+    try:
+        d = int(open(os.path.join(LOOKS, ".fontsize")).read().strip() or 0)
+    except (OSError, ValueError):
+        d = 0
+
+    def shift(v):
+        if isinstance(v, dict):
+            return {k: (max(6, x + d) if k == "font-size" and isinstance(x, (int, float)) else shift(x)) for k, x in v.items()}
+        return [shift(x) for x in v] if isinstance(v, list) else v
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:
-        json.dump(bar, f, indent=2)
+        json.dump(shift(bar) if d else bar, f, indent=2)
         f.write("\n")
 
 
@@ -313,6 +327,35 @@ def save(look):
         open(src, "w").write(now)
 
 
+def bar_set(look, module, values):
+    """Cambia (o agrega) claves del [bar.modules.<module>] del look.toml, sin
+    tocar el resto del archivo; si es el look actual, también la barra viva."""
+    import json
+    path = os.path.join(LOOKS, look, "look.toml")
+    lines = open(path).read().split("\n")
+    name = module if re.fullmatch(r"[\w-]+", module) else json.dumps(module)
+    head = f"[bar.modules.{name}]"
+    new = [f"{json.dumps(k) if not re.fullmatch(r'[\w-]+', k) else k} = {json.dumps(v, ensure_ascii=False)}"
+           for k, v in values.items()]
+    if head in lines:
+        i = lines.index(head) + 1
+        j = i
+        while j < len(lines) and not lines[j].startswith("["):
+            j += 1
+        keep = [l for l in lines[i:j]
+                if not any(re.match(rf'\s*"?{re.escape(k)}"?\s*=', l) for k in values)]
+        lines[i:j] = new + keep
+    else:
+        while lines and not lines[-1].strip():
+            lines.pop()
+        lines += ["", head] + new + [""]
+    text = "\n".join(lines)
+    tomllib.loads(text)   # que siga siendo TOML antes de escribirlo
+    open(path, "w").write(text)
+    if look == current():
+        write_bar(load(look))
+
+
 def get(look, key):
     v = load(look)
     for part in key.split("."):
@@ -329,6 +372,9 @@ def main():
                                if os.path.isfile(os.path.join(LOOKS, l, "look.toml")))))
     elif cmd == "get" and len(a) == 3:
         print(get(a[1], a[2]))
+    elif cmd == "bar-set" and len(a) in (3, 4):
+        import json
+        bar_set(a[3] if len(a) == 4 else current(), a[1], json.loads(a[2]))
     elif cmd in ("apply", "save", "colors") and look:
         {"apply": apply, "save": save, "colors": colors}[cmd](look)
     else:

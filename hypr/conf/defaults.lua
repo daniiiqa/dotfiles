@@ -1,4 +1,4 @@
--- Apps por defecto. QuickSettings.sh, RofiSearch.sh y WaybarScripts.sh leen
+-- Apps por defecto. QuickSettings.sh y RofiSearch.sh leen
 -- este archivo con sed: una por línea, `nombre = "valor",`.
 
 hl.env("EDITOR", "nvim")

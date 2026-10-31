@@ -52,7 +52,7 @@ def font_shift(rel, text, d):
     if not d:
         return text
     num = lambda x, like: f"{x:.1f}" if "." in like or x != int(x) else str(int(x))
-    if rel in ("waybar/style.css", "swaync/style.css"):
+    if rel == "swaync/style.css":
         rx = r"(font-size:\s*)(\d+(?:\.\d+)?)(px)"
     elif rel == "kitty/kitty.conf":
         rx = r"(^font_size\s+)(\d+(?:\.\d+)?)()"

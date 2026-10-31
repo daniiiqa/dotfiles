@@ -48,7 +48,7 @@ no-effects() {
     wait $!
     wallust run "$wallpaper_current" -s &&
     "$SCRIPTSDIR/ContrastFix.py"
-    # Refresh rofi, waybar, wallust palettes
+    # Refresh rofi, the bar, wallust palettes
 	sleep 2
 	"$SCRIPTSDIR/Refresh.sh"
 
@@ -88,7 +88,7 @@ main() {
   
             { wallust run "$wallpaper_output" -s && "$SCRIPTSDIR/ContrastFix.py"; } &
             sleep 1
-            # Refresh rofi, waybar, wallust palettes
+            # Refresh rofi, the bar, wallust palettes
             "${SCRIPTSDIR}/Refresh.sh"
             notify-send -u low -i "preferences-system-notifications-symbolic" "$choice" "effects applied"
         else

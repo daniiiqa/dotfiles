@@ -121,7 +121,7 @@ SDDM_THEME_REPO="https://github.com/JaKooLit/simple-sddm-2.git"
 SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 
 # carpetas del repo que van a ~/.config (las mismas del whitelist de .gitignore)
-CONFIG_DIRS=(hypr waybar rofi swaync wallust kitty cava btop fastfetch wlogout rola sddm Kvantum qt5ct qt6ct swappy)
+CONFIG_DIRS=(hypr rofi swaync wallust kitty cava btop fastfetch wlogout rola sddm Kvantum qt5ct qt6ct swappy)
 ROLA_REPO="https://github.com/daniiiqa/rola.git"
 VATO_REPO="https://github.com/daniiiqa/vato.git"
 ARRE_REPO="https://github.com/daniiiqa/arre.git"

@@ -1,7 +1,7 @@
 /* Look glass — wlogout: fondo esmerilado (layerrule logout_dialog), tiles de vidrio
    discretos que se marcan con el acento (color12) al pasar el cursor. */
 
-@import '../../.config/waybar/wallust/colors-waybar.css';
+@import '../../.config/wlogout/wallust/colors-wlogout.css';
 
 window {
     font-family: "{{font}}";

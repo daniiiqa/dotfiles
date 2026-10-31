@@ -10,7 +10,7 @@ rofi_theme="$HOME/.config/rofi/config-edit.rasi"
 iDIR="$HOME/.config/swaync/images"
 discada="$hypr/discada.conf"
 recconf="$hypr/recorder.conf"
-vis="$HOME/.config/waybar/visualizer.json"
+bar="$HOME/.config/empalme/bar.json"   # la barra del look (su [bar])
 
 # $term y $edit salen de conf/defaults (.lua o .conf, Hypr.sh lo resuelve)
 eval "$("$scripts/Hypr.sh" defaults | grep -E '^(term|edit)=')"
@@ -79,7 +79,7 @@ set_language() {
   # AppStrip lo relee en cada render (el reload lo dispara); el visualizador
   # se reinicia solo al ver el cambio
   hyprctl reload >/dev/null
-  pkill -RTMIN+10 -x "waybar|empalme"
+  pkill -RTMIN+10 -x empalme
   notify-send -e -u low -i "preferences-system-notifications-symbolic" "discada" "$(L "Idioma: español" "Language: English")"
 }
 
@@ -99,12 +99,12 @@ vis_menu() {
   local i
   i=$(row=0 pick "$(L visualizador visualizer)" \
       "$(L "se guarda en el look actual" "saved into the current look")" "${names[@]}") || return
-  printf '%s\n' "${json[$i]}" > "$vis"
+  "$scripts/LookBuild.py" bar-set visualizer "${json[$i]}"
 }
 
 vis_now() {
   local style bars chars
-  { read -r style; read -r bars; read -r chars; } < <(jq -r '.style // "braille", .bars // 16, .chars // ""' "$vis" 2>/dev/null)
+  { read -r style; read -r bars; read -r chars; } < <(jq -r '.modules.visualizer // {} | .style // "braille", .bars // 16, .chars // ""' "$bar" 2>/dev/null)
   case "$style" in
     chars) [[ $chars == ▁* ]] && echo "$(L bloques blocks) · $bars" || echo "$chars · $bars" ;;
     "") echo braille ;;

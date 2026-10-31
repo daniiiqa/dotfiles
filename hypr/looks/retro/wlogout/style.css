@@ -1,7 +1,7 @@
 /* Look retro — wlogout: pantalla de terminal, tiles con borde punteado,
    hover en video inverso. */
 
-@import '../../.config/waybar/wallust/colors-waybar.css';
+@import '../../.config/wlogout/wallust/colors-wlogout.css';
 
 window {
     font-family: "{{font}}";

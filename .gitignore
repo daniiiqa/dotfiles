@@ -18,7 +18,6 @@
 !/swappy/
 !/swaync/
 !/wallust/
-!/waybar/
 !/wlogout/
 !/rola/
 !/sddm/
@@ -46,11 +45,6 @@ rofi/discada-font.rasi
 
 # ── Archivos vivos que cambian solos (no se trackean) ──
 # Copias del look activo: salen de hypr/looks/<look>/ (LookSwitch.sh / install.sh)
-/waybar/config
-/waybar/style.css
-/waybar/appicons.json
-/waybar/visualizer.json
-/waybar/recorder.json
 /fastfetch/config.jsonc
 /hypr/conf/animations.conf
 /hypr/conf/decorations.conf
@@ -68,7 +62,7 @@ rofi/discada-font.rasi
 /wlogout/style.css
 # Generados por wallust con cada wallpaper y ajustes que rola reescribe;
 # install.sh pone las semillas de hypr/seed/ si faltan
-/waybar/wallust/colors-waybar.css
+/wlogout/wallust/colors-wlogout.css
 /rofi/wallust/colors-rofi.rasi
 /hypr/wallust/wallust-hyprland.conf
 /hypr/wallust/wallust-hyprland.lua

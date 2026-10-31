@@ -1,7 +1,7 @@
 /* Look paper — wlogout: hoja clara con tarjetas de tinta (los iconos de
    wlogout son blancos, así que las tarjetas van en tinta oscura). */
 
-@import '../../.config/waybar/wallust/colors-waybar.css';
+@import '../../.config/wlogout/wallust/colors-wlogout.css';
 
 window {
     font-family: "{{font_display}}";

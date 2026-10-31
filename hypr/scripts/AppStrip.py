@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Apps abiertas en waybar, con iconos de la fuente (los tiñe cada look).
+"""Apps abiertas en la barra (empalme), con iconos de la fuente (los tiñe cada look).
 
   AppStrip.py daemon        escucha los eventos de Hyprland (socket2) y escribe
                             un archivo por slot en $XDG_RUNTIME_DIR/appstrip/;
-                            luego avisa a waybar (y a empalme) con SIGRTMIN+9
+                            luego avisa a la barra con SIGRTMIN+9
   AppStrip.py focus SLOT    enfoca la app del slot (si ya está enfocada, cicla
                             entre sus ventanas)
   AppStrip.py close SLOT    cierra la ventana más reciente de esa app
@@ -14,7 +14,7 @@ salen con la clase "closed" y el click las lanza.
 Slots: i1..i8 = en línea; more = botón del menú y d1..d8 = el cajón. Con 1-5
 apps abiertas todo va en línea; con 6+ las fijadas se quedan en línea y el
 resto se va al cajón (las fijadas cerradas no cuentan para el límite). Un slot vacío escribe texto ""
-y waybar lo oculta. Una app = una class; las ventanas en workspaces
+y la barra lo oculta. Una app = una class; las ventanas en workspaces
 especiales (dropterm, scratchpad) no cuentan.
 """
 import json
@@ -66,7 +66,7 @@ MORE_ICON = ""
 # cada look puede cambiar iconos: {"nombre bonito": glyph, "_default": …,
 # "_more": …}. Lo copia LookSwitch; se relee cuando cambia (el reload de
 # Hyprland al cambiar de look dispara configreloaded → render).
-LOOK_ICONS = os.path.expanduser("~/.config/waybar/appicons.json")
+LOOK_ICONS = os.path.expanduser("~/.config/empalme/appicons.json")
 
 
 def lang():
@@ -225,7 +225,7 @@ def render():
         else:
             write(slot)
 
-    subprocess.run(["pkill", f"-RTMIN+{SIG}", "-x", "waybar|empalme"])
+    subprocess.run(["pkill", f"-RTMIN+{SIG}", "-x", "empalme"])
 
 
 def daemon():

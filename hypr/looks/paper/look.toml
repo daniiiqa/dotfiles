@@ -1,6 +1,6 @@
 # discada — look «paper»
 # Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
-# los archivos de cada app (waybar/, rofi/, hypr/…) usan estos nombres.
+# los archivos de cada app (empalme/, rofi/, hypr/…) usan estos nombres.
 # LookBuild.py lo aplica (lo llama LookSwitch.sh).
 
 [about]
@@ -35,16 +35,16 @@ transparent = false
 palette = "light16"
 
 [bar]
-# empalme, la barra de discada (LookBar.py: traducido de waybar/)
+# empalme, la barra de discada: módulos, formatos y estilo (empalme/src/style.rs)
 position = "top"
 height = 32
 margin = [0, 0, 0, 0]     # arriba, derecha, abajo, izquierda (pixeles)
 style = "solid"
 radius = 0
-font-size = 12     # pixeles, como en el style.css de waybar
+font-size = 12     # pixeles
 pad = 0                # el relleno de cada módulo va en su padding (pixeles)
 gap = 0                # celdas entre módulos
-spacing = 0            # pixeles entre módulos (el spacing de waybar)
+spacing = 0            # pixeles entre módulos
 left = ["workspaces", "visualizer", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
 center = ["clock"]
 right = ["recorder", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]

@@ -1,8 +1,8 @@
 -- discada — Hyprland en Lua · https://wiki.hypr.land/Configuring/Start/
 --
 -- TODAVÍA NO SE USA. Hyprland 0.57 quita el formato .conf; esta es la misma
--- config en Lua, lista y probada. Se activa cuando waybar sepa cambiar de
--- workspace con clic en modo Lua (0.15.0 no sabe):
+-- config en Lua, lista y probada. Se activa cuando se pruebe el clic en los
+-- workspaces de la barra (empalme) en modo Lua:
 --   mv ~/.config/hypr/hyprland.lua.new ~/.config/hypr/hyprland.lua
 -- y salir y volver a entrar. Para regresar, borrar hyprland.lua.
 -- Mientras tanto los cambios van en los .conf Y en los .lua de conf/.

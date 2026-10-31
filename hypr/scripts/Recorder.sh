@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 # Grabador de pantalla: gpu-screen-recorder sin su interfaz (gsr-ui). Los
-# avisos van por swaync, el menú por rofi y el indicador por waybar o empalme
-# (custom/recorder), así que todo sigue al look. Ajustes: hypr/recorder.conf.
+# avisos van por swaync, el menú por rofi y el indicador por la barra
+# (empalme), así que todo sigue al look. Ajustes: hypr/recorder.conf.
 #
 # Sin aviso al empezar ni al prender el replay: gsr captura por KMS (directo de
 # la GPU), así que lo que salga en pantalla queda en el video; las reglas de
-# Hyprland (noscreenshare) no aplican. El indicador de waybar basta.
+# Hyprland (noscreenshare) no aplican. El indicador de la barra basta.
 #
 # Uso: Recorder.sh menu                    menú de rofi (ALT+Z)
 #      Recorder.sh screen|region|window    empezar a grabar (o detener si ya graba)
 #      Recorder.sh stop | pause
 #      Recorder.sh replay [on|off]         replay buffer (sin argumento: alterna)
 #      Recorder.sh save [10|30|60|300|600] guardar el replay (todo o los últimos N s)
-#      Recorder.sh status                  JSON para waybar
+#      Recorder.sh status                  JSON con el estado (texto, clase, tooltip)
 #      Recorder.sh autostart               replay al iniciar sesión, si está activado
 #      Recorder.sh FILE TYPE               lo llama gpu-screen-recorder (-sc) al guardar
 
@@ -33,7 +33,7 @@ I_SCREEN=$'\U000f0379'; I_REGION=$'\U000f019e'; I_WINDOW=$'\U000f0614'
 I_STOP=$'\U000f0666'; I_SAVE=$'\U000f0193'
 
 alive() { [ -f "$run/$1.pid" ] && kill -0 "$(cat "$run/$1.pid")" 2>/dev/null; }
-bar() { pkill -RTMIN+10 -x "waybar|empalme"; }
+bar() { pkill -RTMIN+10 -x empalme; }
 # no molestar mientras graba (si ya estaba puesto, no se toca al terminar)
 dnd_on() {
   [ "$RECORD_DND" = yes ] || return
@@ -156,12 +156,13 @@ mmss() { printf '%02d:%02d' $(( $1 / 60 )) $(( $1 % 60 )); }
 
 status() {
   local text="" class=() tip=()
-  # cada look pone sus etiquetas en waybar/recorder.json (iconos o texto)
+  # cada look pone sus etiquetas en el [bar.modules.recorder] de su look.toml
+  # (iconos o texto; LookBuild.py las deja en empalme/bar.json)
   local b_rec=$I_REC b_pause=$I_PAUSE b_replay=$I_REPLAY
-  if [ -f "$cfg/waybar/recorder.json" ]; then
+  if [ -f "$cfg/empalme/bar.json" ]; then
     { read -r b_rec; read -r b_pause; read -r b_replay; } < <(jq -r \
       --arg r "$I_REC" --arg p "$I_PAUSE" --arg y "$I_REPLAY" \
-      '.rec // $r, .paused // $p, .replay // $y' "$cfg/waybar/recorder.json" 2>/dev/null)
+      '.modules.recorder // {} | .rec // $r, .paused // $p, .replay // $y' "$cfg/empalme/bar.json" 2>/dev/null)
   fi
   if alive rec; then
     local now; now=$(date +%s)

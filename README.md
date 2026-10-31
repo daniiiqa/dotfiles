@@ -164,7 +164,7 @@ hypr/
   looks/<look>/          what each look changes
   scripts/               every script
   shaders/               look screen shaders (outsider: film grain)
-waybar/  rofi/  swaync/  wlogout/  kitty/  sddm/  rola/
+rofi/  swaync/  wlogout/  kitty/  sddm/  rola/
 wallust/wallust.toml + templates/
 ```
 

@@ -6,8 +6,9 @@ archivos de cada app (un espejo de `~/.config` con solo lo que el look cambia).
 
 ```
 hypr/looks/<look>/
-  look.toml            colores, fuente, estilo: lo único obligatorio de tocar
-  waybar/              config (módulos) y style.css (forma de la barra)
+  look.toml            colores, fuente, estilo y la barra ([bar], de empalme):
+                       lo único obligatorio de tocar
+  empalme/appicons.json  los íconos de las apps en la barra
   rofi/                config.rasi, theme.rasi (forma de los menús), fuentes
   hypr/conf/           decorations (bordes, gaps, blur) y animations, .conf y .lua
   hypr/hyprlock.conf   la pantalla de bloqueo
@@ -70,7 +71,8 @@ selection_background = "acc"
 
 | archivo | color | con transparencia | fuente |
 |---|---|---|---|
-| waybar, wlogout (CSS) | `@acc` | `alpha(@acc, 0.5)` | `{{font}}` |
+| la barra (`[bar]` del look.toml) | `acc` | `alpha(acc, 0.5)` | — |
+| wlogout (CSS) | `@acc` | `alpha(@acc, 0.5)` | `{{font}}` |
 | rofi (`.rasi`) | `@acc` | `@acc_a80` | `{{font}}` |
 | hyprland (`.conf`), hyprlock | `$acc` | `$acc_a80` | `{{font}}` |
 | hyprland (`.lua`) | `c.acc` | `c.acc_a80` | — |
@@ -82,6 +84,7 @@ solas las que use el look. Los de la terminal (`@color12`, `@background`…)
 también sirven, y en los looks de wallpaper son los únicos que cambian con él.
 
 Lo que genera `LookBuild.py` (no se edita a mano): los colores de cada app
-(`waybar/wallust/colors-waybar.css`, `rofi/wallust/colors-rofi.rasi`,
+(`wlogout/wallust/colors-wlogout.css`, `rofi/wallust/colors-rofi.rasi`,
+`empalme/colors.json` y `empalme/bar.json`,
 `hypr/wallust/wallust-hyprland.{conf,lua}`, el theme de kitty, cava),
 `wallust/wallust.toml` (de `wallust/wallust.base.toml`) y `rola/look.json`.

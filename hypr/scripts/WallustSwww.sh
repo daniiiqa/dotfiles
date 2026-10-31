@@ -83,7 +83,7 @@ wallust run -s "$wallpaper_path" || true
 # wallpaper; en todos, sus nombres propios (acc, critical…)
 "$HOME/.config/hypr/scripts/LookBuild.py" colors || true
 wallust_targets=(
-  "$HOME/.config/waybar/wallust/colors-waybar.css"
+  "$HOME/.config/wlogout/wallust/colors-wlogout.css"
   "$HOME/.config/rofi/wallust/colors-rofi.rasi"
 )
 wait_for_templates "$start_ts" "${wallust_targets[@]}" || true
@@ -91,7 +91,7 @@ wait_for_templates "$start_ts" "${wallust_targets[@]}" || true
 # kitty relee su config (incluye kitty-themes/01-Wallust.conf) con SIGUSR1
 pkill -USR1 -x kitty 2>/dev/null || true
 
-# Custom (dany): aquí NO se recarga waybar. Este script genera colores;
+# Custom (dany): aquí NO se recarga la barra. Este script genera colores;
 # recargar la barra es chamba del caller (Refresh.sh). Cuando ambos lo
 # hacían, cada cambio de wallpaper parpadeaba la barra DOS veces: una al
 # click (esta recarga) y otra al acabar la transición (la de Refresh.sh).

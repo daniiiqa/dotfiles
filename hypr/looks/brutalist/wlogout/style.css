@@ -1,6 +1,6 @@
 /* Look brutalist — wlogout: tiles rectos, líneas de 2px, hover en acento. */
 
-@import '../../.config/waybar/wallust/colors-waybar.css';
+@import '../../.config/wlogout/wallust/colors-wlogout.css';
 
 window {
     font-family: "{{font}}";
