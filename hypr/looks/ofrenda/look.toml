@@ -85,7 +85,7 @@ inactive_tab_background = "bg1"
 # empalme, la barra de discada: módulos, formatos y estilo (empalme/src/style.rs)
 position = "top"
 height = 32
-margin = [10, 14, 0, 14]     # arriba, derecha, abajo, izquierda (pixeles)
+margin = [14, 14, 0, 14]     # arriba, derecha, abajo, izquierda (pixeles)
 style = "solid"
 radius = 0
 font-size = 14     # pixeles

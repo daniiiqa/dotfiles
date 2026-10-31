@@ -36,7 +36,7 @@ palette = "dark16"
 # empalme, la barra de discada: módulos, formatos y estilo (empalme/src/style.rs)
 position = "top"
 height = 31
-margin = [8, 8, 0, 8]     # arriba, derecha, abajo, izquierda (pixeles)
+margin = [6, 8, 0, 8]     # arriba, derecha, abajo, izquierda (pixeles)
 style = "solid"
 radius = 0
 font-size = 13     # pixeles
