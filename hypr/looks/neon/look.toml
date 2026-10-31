@@ -57,11 +57,15 @@ bg = "transparent"
 padding = [6, 28]
 underline = "color12"
 bg = "alpha(background, 0.96)"
+slant = "right"        # la orilla en diagonal (22px adentro arriba)
+"slant-width" = 22
 
 [bar.sections.right]
 padding = [28, 6]
 underline = "color13"
 bg = "alpha(background, 0.96)"
+slant = "left"
+"slant-width" = 22
 
 [bar.modules.workspaces]
 format = "{icon}"
