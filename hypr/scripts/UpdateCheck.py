@@ -112,10 +112,11 @@ def main():
         if old is None or ours == old:
             continue
         new = expected("HEAD", rel, is_live)
-        if ours == new:
+        # igual a lo nuevo, o ya no viene en discada (no se toca ni se usa)
+        if ours == new or new is None:
             continue
-        # sin cambios en discada (o ya no viene en ella): no se toca
-        print(f"{'keep' if new in (old, None) else 'replace'}\t{rel}")
+        # sin cambios en discada: no se toca
+        print(f"{'keep' if new == old else 'replace'}\t{rel}")
 
 
 if __name__ == "__main__":

@@ -438,6 +438,11 @@ if ((NEW_MACHINE)); then
   if [ -n "$keep" ]; then
     cp -a "$keep/." "$CFG/" && rm -rf "$keep"
   fi
+  # la barra de antes (waybar) ya no se usa: su carpeta va al respaldo
+  if ((UPDATE)) && [ -d "$CFG/waybar" ]; then
+    run mkdir -p "$BACKUP"
+    run mv "$CFG/waybar" "$BACKUP/waybar"
+  fi
   [ -d "$BACKUP" ] && say "$(L "Respaldo en" "Backup in") $BACKUP"
 
   # semillas de lo que no se trackea porque cambia solo (colores de wallust,
