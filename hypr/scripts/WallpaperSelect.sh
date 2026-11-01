@@ -132,7 +132,7 @@ modify_startup_config() {
     # sleep 1: mpvpaper debe mapear su superficie DESPUÉS de awww, o la imagen
     # cacheada de awww quedaría encima del video en este monitor
     selected_file="${selected_file/#$HOME/\$HOME}" # Replace /home/user with $HOME
-    echo "exec-once = sleep 1 && mpvpaper $focused_monitor -o \"load-scripts=no no-audio --loop hwdec=auto\" \"$selected_file\"" >> "$live_conf"
+    echo "exec-once = sleep 1 && mpvpaper $focused_monitor -o \"load-scripts=no no-audio --loop hwdec=auto panscan=1.0\" \"$selected_file\"" >> "$live_conf"
     echo "Configured live wallpaper (video) for $focused_monitor."
   else
     echo "Configured static wallpaper (image) for $focused_monitor."
@@ -191,7 +191,7 @@ apply_video_wallpaper() {
 
   # Apply video wallpaper using mpvpaper — SOLO en el monitor enfocado.
   # hwdec=auto: decodificación por hardware (un 4K por software costaba ~30% CPU)
-  mpvpaper "$focused_monitor" -o "load-scripts=no no-audio --loop hwdec=auto" "$video_path" &
+  mpvpaper "$focused_monitor" -o "load-scripts=no no-audio --loop hwdec=auto panscan=1.0" "$video_path" &
 
   # Custom (dany): el theme TAMBIÉN cambia con un wallpaper vivo. Wallust no
   # puede leer un video, así que se extrae el fotograma de en medio del clip
