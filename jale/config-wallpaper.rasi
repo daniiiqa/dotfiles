@@ -50,14 +50,15 @@ element {
   margin: 0px;
 }
 
-element selected.normal {
-  background-color: transparent;
-}
+/* Custom (dany): la selección la marca el look (video inverso en retro);
+   con el fondo transparente su texto quedaba invisible */
 
 element-icon {
     text-color:                  inherit;
     size:                        10%;
-    margin:                      -30px;
+    /* Custom (dany): sin margen negativo (el truco de rofi): jale llena la
+       celda con la miniatura en 16:9, sin encimarse con las de al lado */
+    margin:                      0px;
     cursor:                      inherit;
 }
 
