@@ -52,7 +52,7 @@ Safe to run more than once.
 | `SUPER+T` | switch look (top entry: the look's shader on/off) |
 | `SUPER+W` | wallpaper |
 | `SUPER+M` | music (rola) |
-| `SUPER+Alt+P` | your phone (picha) · the laptop's brand key: fierro |
+| `SUPER+P` | your phone (picha) · `SUPER+Shift+P` its screen here · the laptop's brand key: fierro |
 | `ALT+Z` | recording menu · `ALT+F9` record · `ALT+F10` save replay |
 | `SUPER+Shift+K` | search every shortcut |
 

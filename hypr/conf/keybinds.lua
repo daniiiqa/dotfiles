@@ -30,7 +30,8 @@ hl.bind("SUPER + SHIFT + Return", hl.dsp.exec_cmd(scriptsDir .. "/Dropterminal.s
 hl.bind("SUPER + E", hl.dsp.exec_cmd(d.files), { description = "file manager" })
 hl.bind("SUPER + B", hl.dsp.exec_cmd("xdg-open \"https://\""), { description = "browser" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd(scriptsDir .. "/FocusOrLaunch.sh rola kitty --class rola -e rola"), { description = "music player" })
-hl.bind("SUPER + ALT + P", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh picha"), { description = "phone (picha)" })
+hl.bind("SUPER + P", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh picha"), { description = "phone (picha)" })
+hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd("$HOME/.local/bin/picha pantalla --ya"), { description = "phone screen (picha)" })
 
 -- ─── Menús ───────────────────────────────────────────────────────────────────
 hl.bind("SUPER + H", hl.dsp.exec_cmd(scriptsDir .. "/KeyHints.sh"), { description = "cheat sheet" })
@@ -66,7 +67,7 @@ hl.bind("SUPER + F", hl.dsp.window.float({ action = "toggle" }), { description =
 hl.bind("SUPER + ALT + SPACE", float_all, { description = "float all windows" })
 hl.bind("SUPER + SHIFT + F", hl.dsp.window.fullscreen(), { description = "fullscreen" })
 hl.bind("SUPER + CTRL + F", hl.dsp.window.fullscreen({ mode = 1 }), { description = "maximize" })
-hl.bind("SUPER + P", hl.dsp.window.pseudo(), { description = "toggle pseudo (dwindle)" })
+hl.bind("SUPER + ALT + P", hl.dsp.window.pseudo(), { description = "toggle pseudo (dwindle)" })
 hl.bind("SUPER + SHIFT + I", hl.dsp.layout("togglesplit"), { description = "toggle split (dwindle)" })
 hl.bind("SUPER + ALT + L", hl.dsp.exec_cmd(scriptsDir .. "/ChangeLayout.sh"), { description = "toggle master/dwindle layout" })
 hl.bind("SUPER + I", hl.dsp.layout("addmaster"), { description = "add master" })
