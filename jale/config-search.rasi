@@ -1,0 +1,6 @@
+/* Búsqueda web (RofiSearch.sh): solo entrada */
+@import "~/.config/jale/menu.rasi"
+
+window   { width: 600px; }
+mainbox  { children: [ "inputbar", "message" ]; }
+entry    { placeholder: "search the web…"; }

@@ -1,6 +1,0 @@
-/* Búsqueda web (RofiSearch.sh): solo entrada */
-@import "~/.config/rofi/menu.rasi"
-
-window   { width: 600px; }
-mainbox  { children: [ "inputbar", "message" ]; }
-entry    { placeholder: "search the web…"; }

@@ -68,7 +68,7 @@ Puebla: esmalte crema, trazo cobalto)
 Cada look vive en `hypr/looks/<nombre>/`: un archivo maestro, **`look.toml`**
 (colores, fuente, el estilo de las apps, la paleta de wallust), más un espejo de
 `~/.config` con solo los archivos que le dan forma: decoraciones y animaciones de
-Hyprland, hyprlock, rofi, wlogout, kitty, fastfetch y SDDM (la barra es el
+Hyprland, hyprlock, jale, wlogout, kitty, fastfetch y SDDM (la barra es el
 `[bar]` del look.toml). Esos archivos
 no llevan colores ni fuentes escritos: usan los nombres del look (`@acc`, `$acc`,
 `{{font}}`), así una paleta o una fuente vive en un solo lugar. Los looks con
@@ -110,7 +110,7 @@ También aparece en el instalador. La guía está en `hypr/looks/README.md`.
 - **Wallpapers por monitor**: swww para imágenes/gifs, un mpvpaper por monitor
   solo donde hay video. Game mode los pausa y los revive al salir.
 - **Colores desde wallpapers de video**: el fotograma de en medio pasa por
-  wallust, así la barra, rofi, kitty, arre, hyprlock y SDDM combinan.
+  wallust, así la barra, jale, kitty, arre, hyprlock y SDDM combinan.
 - **Legible con cualquier wallpaper**: wallust con `check_contrast` y luego
   `ContrastFix.py` sube cualquier color de texto a 4.5:1 (WCAG AA).
 - **Archivos: [taco](https://github.com/daniiiqa/taco)** — el explorador de
@@ -164,7 +164,7 @@ hypr/
   looks/<look>/          lo que cambia cada look
   scripts/               todos los scripts
   shaders/               screen shaders de los looks (outsider: grano)
-rofi/  swaync/  wlogout/  kitty/  sddm/  rola/
+jale/  swaync/  wlogout/  kitty/  sddm/  rola/
 wallust/wallust.toml + templates/
 ```
 

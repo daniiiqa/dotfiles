@@ -69,7 +69,7 @@ pottery: cream glaze, cobalt linework)
 Each look lives in `hypr/looks/<name>/`: one master file, **`look.toml`**
 (colors, font, the style of the apps, the wallust palette), plus a mirror of
 `~/.config` with only the files it shapes: Hyprland decorations and animations,
-hyprlock, rofi, wlogout, kitty, fastfetch and SDDM (the bar is the `[bar]` in
+hyprlock, jale, wlogout, kitty, fastfetch and SDDM (the bar is the `[bar]` in
 look.toml). Those files carry no
 colors or fonts of their own: they use the look's names (`@acc`, `$acc`,
 `{{font}}`), so a palette or a font lives in one place. Looks with
@@ -112,7 +112,7 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
 - **Per-monitor wallpapers**: swww for images/gifs, one mpvpaper per monitor
   only where there's a video. Game mode pauses them and revives them on exit.
 - **Colors from video wallpapers**: the middle frame goes through wallust, so
-  the bar, rofi, kitty, arre, hyprlock and SDDM match.
+  the bar, jale, kitty, arre, hyprlock and SDDM match.
 - **Readable on any wallpaper**: wallust with `check_contrast`, then
   `ContrastFix.py` lifts any text color to 4.5:1 (WCAG AA).
 - **Files: [taco](https://github.com/daniiiqa/taco)** — discada's file manager
@@ -174,7 +174,7 @@ hypr/
   looks/<look>/          what each look changes
   scripts/               every script
   shaders/               look screen shaders (outsider: film grain)
-rofi/  swaync/  wlogout/  kitty/  sddm/  rola/
+jale/  swaync/  wlogout/  kitty/  sddm/  rola/
 wallust/wallust.toml + templates/
 ```
 

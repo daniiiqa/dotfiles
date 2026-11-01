@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Custom (dany): jale (el launcher, antes rofi) vive en ~/.local/bin,
+# fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 # discada — el centro de ajustes del rice (SUPER+Shift+E): look, shader,
 # idioma, visualizador, grabador, notificaciones, batería, game mode y blur; más los submenús para
 # editar la config y abrir las herramientas del sistema. Cada cambio vuelve a
@@ -6,7 +9,7 @@
 
 hypr="$HOME/.config/hypr"
 scripts="$hypr/scripts"
-rofi_theme="$HOME/.config/rofi/config-edit.rasi"
+jale_theme="$HOME/.config/jale/config-edit.rasi"
 iDIR="$HOME/.config/swaync/images"
 discada="$hypr/discada.conf"
 recconf="$hypr/recorder.conf"
@@ -62,8 +65,8 @@ onoff() { [ "$1" = yes ] && L "sí" "yes" || L "no" "no"; }
 # rofi con la fila elegida guardada en $row; imprime el índice
 pick() {
   local prompt=$1 mesg=$2; shift 2
-  printf '%s\n' "$@" | rofi -dmenu -i -format i -no-custom -p "$prompt" \
-    -config "$rofi_theme" -selected-row "${row:-0}" ${mesg:+-mesg "$mesg"}
+  printf '%s\n' "$@" | jale -dmenu -i -format i -no-custom -p "$prompt" \
+    -config "$jale_theme" -selected-row "${row:-0}" ${mesg:+-mesg "$mesg"}
 }
 
 # ── idioma ───────────────────────────────────────────────────────────────────
@@ -282,7 +285,7 @@ tools_menu() {
 }
 
 # ── menú principal ───────────────────────────────────────────────────────────
-pidof rofi >/dev/null && pkill rofi
+pidof jale >/dev/null && pkill -x jale
 
 row=0
 while true; do

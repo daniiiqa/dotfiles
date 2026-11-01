@@ -1,5 +1,0 @@
-/* Emojis (RofiEmoji.sh) */
-@import "~/.config/rofi/menu.rasi"
-
-window   { width: 620px; }
-listview { lines: 10; }

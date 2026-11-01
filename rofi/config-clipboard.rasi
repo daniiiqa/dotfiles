@@ -1,5 +1,0 @@
-/* Portapapeles (ClipManager.sh) */
-@import "~/.config/rofi/menu.rasi"
-
-window   { width: 720px; }
-listview { lines: 10; }

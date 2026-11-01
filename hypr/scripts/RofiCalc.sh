@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
+# Custom (dany): jale (el launcher, antes rofi) vive en ~/.local/bin,
+# fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 # Calculadora: qalc + rofi. El resultado se copia al portapapeles.
 
-rofi_theme="$HOME/.config/rofi/config-calc.rasi"
+jale_theme="$HOME/.config/jale/config-calc.rasi"
 
 # Kill Rofi if already running before execution
-if pgrep -x "rofi" >/dev/null; then
-    pkill rofi
+if pgrep -x "jale" >/dev/null; then
+    pkill -x jale
 fi
 
 # main function
 
 while true; do
     result=$(
-        rofi -i -dmenu -p calc \
-            -config $rofi_theme \
+        jale -dmenu -p calc \
+            -config $jale_theme \
             -mesg "${result:+$result  =  $calc_result  (copied)}${result:-enter to calculate · result is copied}"
     )
 

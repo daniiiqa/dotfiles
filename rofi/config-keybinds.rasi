@@ -1,5 +1,0 @@
-/* Buscador de atajos (KeyBinds.sh): ancho para que quepa la descripción */
-@import "~/.config/rofi/menu.rasi"
-
-window   { width: 860px; }
-listview { lines: 14; }

@@ -1,0 +1,2 @@
+/* Ajustes rápidos (QuickSettings.sh) y selector de look (LookSwitch.sh) */
+@import "~/.config/jale/menu.rasi"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """discada: cada look sale de un solo archivo, hypr/looks/<look>/look.toml
 (colores, fuente, estilo de las apps). Los archivos de cada app en la carpeta
-del look (empalme/, rofi/, hypr/…) no llevan ni colores ni fuentes escritos:
+del look (empalme/, jale/, hypr/…) no llevan ni colores ni fuentes escritos:
 usan los nombres del look.toml. La barra (empalme) es el [bar] del look.toml.
 
   LookBuild.py apply LOOK      copiar el look a ~/.config, con {{font}} rellenado,
@@ -20,7 +20,7 @@ usan los nombres del look.toml. La barra (empalme) es el [bar] del look.toml.
 Colores en los archivos del look:
   wlogout (CSS)            @acc, alpha(@acc, 0.5)
   empalme ([bar])          acc, alpha(acc, 0.5)
-  rofi                     @acc            con transparencia: @acc-a80
+  jale (.rasi)             @acc            con transparencia: @acc-a80
   hyprland / hyprlock      $acc  (c.acc en Lua)       con transparencia: $acc_a80
   sddm/look.conf           "@acc"
 (_a80 = alpha en hex: 80 es la mitad. Se generan solas las que se usen.)
@@ -117,7 +117,7 @@ def wallust_colors():
 
 
 def alphas_used(look, names):
-    """name_aXX (name-aXX en rofi) que usan los archivos del look (rofi,
+    """name_aXX (name-aXX en jale) que usan los archivos del look (jale,
     hyprland, hyprlock)."""
     used = set()
     rx = re.compile(r"[@$.]([A-Za-z]\w*?)[_-]a([0-9a-fA-F]{2})\b")
@@ -171,7 +171,7 @@ def named_block(kind, lk, pal, alphas):
     elif kind == "rasi":
         lines = [f"\n/* {MARK} (LookBuild.py) */", "* {"]
         lines += [f"    {n}: #{pal[n]};" for n in names]
-        # con guion: rofi 2.0 no acepta "_" en un nombre (y todo el archivo falla)
+        # con guion: rasi (rofi 2.0) no acepta "_" en un nombre (y todo el archivo falla)
         lines += [f"    {n}-a{a}: #{pal[n]}{a};" for n, a in alphas]
         lines.append("}")
     elif kind == "kitty":

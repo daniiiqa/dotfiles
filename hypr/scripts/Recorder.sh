@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Custom (dany): jale (el launcher, antes rofi) vive en ~/.local/bin,
+# fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 # Grabador de pantalla: gpu-screen-recorder sin su interfaz (gsr-ui). Los
 # avisos van por swaync, el menú por rofi y el indicador por la barra
 # (empalme), así que todo sigue al look. Ajustes: hypr/recorder.conf.
@@ -189,7 +192,7 @@ status() {
 click() { if alive rec; then stop; elif alive replay; then save; fi; }
 
 menu() {
-  pidof rofi >/dev/null && pkill rofi
+  pidof jale >/dev/null && pkill -x jale
   local opts=() acts=()
   add() { opts+=("$1"); acts+=("$2"); }
   if alive rec; then
@@ -210,8 +213,8 @@ menu() {
     add "$I_REPLAY  $(L "encender replay" "turn replay on")" replay-on
   fi
   local i
-  i=$(printf '%s\n' "${opts[@]}" | rofi -dmenu -i -format i -p "$(L grabar record)" \
-    -config "$cfg/rofi/config-edit.rasi" -mesg "$(L "videos en" "videos in") ${DIR/#$HOME/\~}") || return 0
+  i=$(printf '%s\n' "${opts[@]}" | jale -dmenu -i -format i -p "$(L grabar record)" \
+    -config "$cfg/jale/config-edit.rasi" -mesg "$(L "videos en" "videos in") ${DIR/#$HOME/\~}") || return 0
   case "${acts[$i]}" in
     stop) stop ;;
     pause) pause ;;

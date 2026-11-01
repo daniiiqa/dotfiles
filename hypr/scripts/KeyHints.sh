@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Custom (dany): jale (el launcher, antes rofi) vive en ~/.local/bin,
+# fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 # Cheat sheet (SUPER+H) — lo esencial, en rofi con el estilo del look actual.
 # Escribir filtra. La lista completa y siempre al día está en SUPER+Shift+K
 # (sale directo de conf/keybinds.conf). Idioma: hypr/discada.conf.
@@ -6,7 +9,7 @@
 # Formato de la lista: "# Sección|Section" o "tecla|acción|action[|key]"
 # (la última columna solo si la tecla también se traduce).
 
-pidof rofi >/dev/null && pkill rofi
+pidof jale >/dev/null && pkill -x jale
 pidof yad >/dev/null && pkill yad
 . "$HOME/.config/hypr/scripts/lang.sh"
 
@@ -150,8 +153,8 @@ done <<<"$SHEET"
 
 look=$(cat "$HOME/.config/hypr/looks/.current" 2>/dev/null)
 printf '%s\n' "${rows[@]}" |
-  rofi -dmenu -i -markup-rows -no-custom -p "$(L atajos shortcuts)" \
+  jale -dmenu -i -markup-rows -no-custom -p "$(L atajos shortcuts)" \
     -a "$(IFS=,; echo "${headers[*]}")" \
-    -config "$HOME/.config/rofi/config-cheatsheet.rasi" \
+    -config "$HOME/.config/jale/config-cheatsheet.rasi" \
     -mesg "discada · $(L "escribe para filtrar · Super Shift K: todos los atajos" "type to filter · Super Shift K: all shortcuts")${look:+ · look: $look}" \
     >/dev/null

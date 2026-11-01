@@ -1,0 +1,4 @@
+/* Efectos de wallpaper (WallpaperEffects.sh) */
+@import "~/.config/jale/menu.rasi"
+
+listview { lines: 12; }

@@ -3,7 +3,7 @@
 
 Suma ese tanto a las fuentes de los archivos vivos del look: swaync
 (font-size en px), la barra (los "font-size" de empalme/bar.json), kitty
-(font_size) y rofi (rofi/discada-font.rasi, que config.rasi importa después
+(font_size) y jale (jale/discada-font.rasi, que config.rasi importa después
 del theme). Lo aplicado se guarda en hypr/looks/.fontsize; LookSwitch.sh hace
 `unapply` antes de guardar el look (así las carpetas de looks se quedan con sus
 tamaños originales) y `apply` después de copiar el nuevo.
@@ -20,7 +20,8 @@ import sys
 CFG = os.path.expanduser("~/.config")
 DISCADA = os.path.join(CFG, "hypr/discada.conf")
 APPLIED = os.path.join(CFG, "hypr/looks/.fontsize")
-ROFI_OVERRIDE = os.path.join(CFG, "rofi/discada-font.rasi")
+JALE_OVERRIDE = os.path.join(CFG, "jale/discada-font.rasi")
+JALE = os.path.expanduser("~/.local/bin/jale")
 MIN, MAX = -2, 4
 
 
@@ -63,34 +64,24 @@ def shift(d):
     shift_file(os.path.join(CFG, "kitty/kitty.conf"), r"(^font_size\s+)(\d+(?:\.\d+)?)()", d, 6)
 
 
-def rofi_override(total):
-    """Las mismas reglas de fuente del theme efectivo, con el tamaño cambiado."""
+def jale_override(total):
+    """Las mismas reglas de fuente del theme efectivo de jale, con el tamaño
+    cambiado (jale -dump-fonts: "selector<TAB>familia tamaño" por regla)."""
     head = "/* tamaño de letra de discada (FontSize.py): no editar a mano */\n"
+    open(JALE_OVERRIDE, "w").write(head)  # que no cuente al leer el theme
     if not total:
-        open(ROFI_OVERRIDE, "w").write(head)
         return
-    open(ROFI_OVERRIDE, "w").write(head)  # que no cuente al leer el theme
-    dump = subprocess.run(["rofi", "-config", os.path.join(CFG, "rofi/config.rasi"), "-dump-theme"],
+    exe = JALE if os.path.exists(JALE) else "jale"
+    dump = subprocess.run([exe, "-dump-fonts", "-config", os.path.join(CFG, "jale/config.rasi")],
                           capture_output=True, text=True).stdout
-    rules, sel = [], None
+    rules = []
     for line in dump.splitlines():
-        m = re.match(r"^(\S[^{]*?)\s*\{\s*$", line)
-        if m:
-            sel = m.group(1)
-        elif line.strip() == "}":
-            sel = None
-        else:
-            f = re.match(r'^\s*font:\s*"(.*?)\s+(\d+(?:\.\d+)?)"\s*;', line)
-            if f and sel:
-                rules.append((sel, f.group(1), float(f.group(2))))
-    if not any(s == "*" for s, _, _ in rules):
-        conf = subprocess.run(["rofi", "-config", os.path.join(CFG, "rofi/config.rasi"), "-dump-config"],
-                              capture_output=True, text=True).stdout
-        f = re.search(r'^\s*font:\s*"(.*?)\s+(\d+(?:\.\d+)?)"\s*;', conf, re.M)
-        if f:
-            rules.insert(0, ("*", f.group(1), float(f.group(2))))
+        sel, _, font = line.partition("\t")
+        f = re.match(r"^(.*?)\s+(\d+(?:\.\d+)?)$", font.strip())
+        if sel and f:
+            rules.append((sel, f.group(1), float(f.group(2))))
     body = "".join(f'{s} {{ font: "{fam} {num(max(6, size + total))}"; }}\n' for s, fam, size in rules)
-    open(ROFI_OVERRIDE, "w").write(head + body)
+    open(JALE_OVERRIDE, "w").write(head + body)
 
 
 def reload():
@@ -106,7 +97,7 @@ def write_applied(n):
 def apply(do_reload=True):
     target, now = wanted(), applied()
     shift(target - now)
-    rofi_override(target)
+    jale_override(target)
     write_applied(target)
     if do_reload and target != now:
         reload()
@@ -114,7 +105,7 @@ def apply(do_reload=True):
 
 def unapply():
     shift(-applied())
-    rofi_override(0)
+    jale_override(0)
     write_applied(0)
 
 

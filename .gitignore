@@ -14,7 +14,7 @@
 !/Kvantum/
 !/qt5ct/
 !/qt6ct/
-!/rofi/
+!/jale/
 !/swappy/
 !/swaync/
 !/wallust/
@@ -34,14 +34,12 @@ btop/btop.log
 hypr/looks/.current
 # Caché de Python
 __pycache__/
-# Enlace al wallpaper actual (estado de cada máquina)
-rofi/.current_wallpaper
 # Salida Lua de nwg-displays (no se usa; Hyprland lee monitors.conf)
 hypr/monitors.lua
 hypr/workspaces.lua
 # Tamaño de letra aplicado (lo escribe FontSize.py)
 hypr/looks/.fontsize
-rofi/discada-font.rasi
+jale/discada-font.rasi
 
 # ── Archivos vivos que cambian solos (no se trackean) ──
 # Copias del look activo: salen de hypr/looks/<look>/ (LookSwitch.sh / install.sh)
@@ -52,9 +50,9 @@ rofi/discada-font.rasi
 /hypr/conf/decorations.lua
 /hypr/hyprlock.conf
 /kitty/kitty.conf
-/rofi/0-shared-fonts.rasi
-/rofi/config.rasi
-/rofi/theme.rasi
+/jale/0-shared-fonts.rasi
+/jale/config.rasi
+/jale/theme.rasi
 /rola/look.json
 /sddm/look.conf
 /swaync/style.css
@@ -63,7 +61,7 @@ rofi/discada-font.rasi
 # Generados por wallust con cada wallpaper y ajustes que rola reescribe;
 # install.sh pone las semillas de hypr/seed/ si faltan
 /wlogout/wallust/colors-wlogout.css
-/rofi/wallust/colors-rofi.rasi
+/jale/wallust/colors-jale.rasi
 /hypr/wallust/wallust-hyprland.conf
 /hypr/wallust/wallust-hyprland.lua
 /kitty/kitty-themes/01-Wallust.conf

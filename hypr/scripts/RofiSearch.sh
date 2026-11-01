@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Custom (dany): jale (el launcher, antes rofi) vive en ~/.local/bin,
+# fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 # For Searching via web browsers
 
 if ! command -v jq >/dev/null 2>&1; then
@@ -15,16 +18,16 @@ if [[ -z "$Search_Engine" ]]; then
 fi
 
 # Rofi theme and message
-rofi_theme="$HOME/.config/rofi/config-search.rasi"
+jale_theme="$HOME/.config/jale/config-search.rasi"
 msg='opens in your default browser'
 
 # Kill Rofi if already running before execution
-if pgrep -x "rofi" >/dev/null; then
-    pkill rofi
+if pgrep -x "jale" >/dev/null; then
+    pkill -x jale
 fi
 
 # Open Rofi and pass the selected query to xdg-open for the configured search engine
-query=$(printf '' | rofi -dmenu -p search -config "$rofi_theme" -mesg "$msg")
+query=$(printf '' | jale -dmenu -p search -config "$jale_theme" -mesg "$msg")
 
 if [[ -z "$query" ]]; then
     exit 0

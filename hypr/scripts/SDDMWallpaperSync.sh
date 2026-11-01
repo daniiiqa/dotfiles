@@ -10,7 +10,7 @@
 # sobre wallust)  3) wallpaper.
 
 wallpaper_current="$HOME/.config/hypr/wallpaper_effects/.wallpaper_current"
-rofi_wallust="$HOME/.config/rofi/wallust/colors-rofi.rasi"
+jale_wallust="$HOME/.config/jale/wallust/colors-jale.rasi"
 look_conf="$HOME/.config/sddm/look.conf"
 
 # Resolve SDDM themes directory (standard paths and NixOS path)
@@ -34,11 +34,11 @@ set_key() {
 }
 
 extract_color() {
-    grep -oP "(^|\s)$1:\s*\K#[A-Fa-f0-9]+" "$rofi_wallust" | head -n1
+    grep -oP "(^|\s)$1:\s*\K#[A-Fa-f0-9]+" "$jale_wallust" | head -n1
 }
 
 # 1) colores de wallust
-if [ -f "$rofi_wallust" ]; then
+if [ -f "$jale_wallust" ]; then
     bg=$(extract_color "background-color")
     fg=$(extract_color "foreground")
     c0=$(extract_color "color0")

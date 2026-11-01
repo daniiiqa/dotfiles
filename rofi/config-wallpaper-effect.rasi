@@ -1,4 +1,0 @@
-/* Efectos de wallpaper (WallpaperEffects.sh) */
-@import "~/.config/rofi/menu.rasi"
-
-listview { lines: 12; }

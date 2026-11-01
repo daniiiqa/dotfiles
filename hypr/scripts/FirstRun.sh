@@ -38,7 +38,7 @@ look=$(cat "$HOME/.config/hypr/looks/.current" 2>/dev/null)
 "$scripts/Refresh.sh" --full
 
 # 4) apps GTK y Qt con los colores del look (claro u oscuro según el look) e
-#    iconos (rofi los usa en el lanzador)
+#    iconos (jale los usa en el lanzador)
 "$scripts/AppColors.py"
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark' 2>/dev/null
 for v in 3.0 4.0; do

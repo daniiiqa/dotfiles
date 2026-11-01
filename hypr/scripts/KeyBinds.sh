@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
+# Custom (dany): jale (el launcher, antes rofi) vive en ~/.local/bin,
+# fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 # Buscador de atajos (SUPER+Shift+K): los atajos que tienen descripción, con
 # ella. Solo consulta — Enter no ejecuta nada.
 
 pkill yad 2>/dev/null
-pidof rofi >/dev/null && pkill rofi
+pidof jale >/dev/null && pkill -x jale
 
 # Le pregunta a Hyprland (sirve igual con la config .conf que con la de Lua)
 hyprctl -j binds | jq -r '
@@ -17,4 +20,4 @@ hyprctl -j binds | jq -r '
   | (.modmask | mods) as $m
   | "\(if $m == "" then $key else "\($m) + \($key)" end)|\(.description)"' |
   awk -F'|' '{ printf "%-32s %s\n", $1, $2 }' |
-  rofi -dmenu -i -config "$HOME/.config/rofi/config-keybinds.rasi" -p keys -mesg "read-only — edit in hypr/conf/keybinds"
+  jale -dmenu -i -config "$HOME/.config/jale/config-keybinds.rasi" -p keys -mesg "read-only — edit in hypr/conf/keybinds"

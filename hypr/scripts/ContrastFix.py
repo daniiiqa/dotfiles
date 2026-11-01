@@ -2,10 +2,10 @@
 """Garantiza que los colores de wallust se lean sobre el fondo.
 
 Con algunos wallpapers wallust saca acentos casi del color del fondo (texto
-invisible en la barra, rofi o swaync). Esto lee la paleta recién generada (del
+invisible en la barra, jale o swaync). Esto lee la paleta recién generada (del
 template de kitty, que trae todos los colores), sube cada color de texto a un
 contraste mínimo contra el fondo conservando su tono, y si cambió algo vuelve
-a renderizar TODOS los templates con `wallust cs`, así la barra, rofi, hypr,
+a renderizar TODOS los templates con `wallust cs`, así la barra, jale, hypr,
 kitty y cava quedan iguales entre sí.
 
 color0 y color8 no se tocan: son superficies/bordes, no texto.

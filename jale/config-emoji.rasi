@@ -1,0 +1,5 @@
+/* Emojis (RofiEmoji.sh) */
+@import "~/.config/jale/menu.rasi"
+
+window   { width: 620px; }
+listview { lines: 10; }

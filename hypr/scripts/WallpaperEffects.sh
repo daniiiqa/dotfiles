@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Custom (dany): jale (el launcher, antes rofi) vive en ~/.local/bin,
+# fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 # Wallpaper Effects using ImageMagick (SUPER SHIFT W)
 
 # Variables
@@ -7,7 +10,7 @@ wallpaper_current="$HOME/.config/hypr/wallpaper_effects/.wallpaper_current"
 wallpaper_output="$HOME/.config/hypr/wallpaper_effects/.wallpaper_modified"
 SCRIPTSDIR="$HOME/.config/hypr/scripts"
 focused_monitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
-rofi_theme="$HOME/.config/rofi/config-wallpaper-effect.rasi"
+jale_theme="$HOME/.config/jale/config-wallpaper-effect.rasi"
 
 # Directory for swaync
 iDIR="$HOME/.config/swaync/images"
@@ -65,7 +68,7 @@ main() {
         [[ "$effect" != "No Effects" ]] && options+=("$effect")
     done
 
-    choice=$(printf "%s\n" "${options[@]}" | LC_COLLATE=C sort | rofi -dmenu -i -p effect -config $rofi_theme)
+    choice=$(printf "%s\n" "${options[@]}" | LC_COLLATE=C sort | jale -dmenu -i -p effect -config $jale_theme)
 
     # Process user choice
     if [[ -n "$choice" ]]; then
@@ -98,8 +101,8 @@ main() {
 }
 
 # Check if rofi is already running and kill it
-if pidof rofi > /dev/null; then
-    pkill rofi
+if pidof jale > /dev/null; then
+    pkill -x jale
 fi
 
 main

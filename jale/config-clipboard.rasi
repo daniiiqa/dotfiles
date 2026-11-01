@@ -1,0 +1,5 @@
+/* Portapapeles (ClipManager.sh) */
+@import "~/.config/jale/menu.rasi"
+
+window   { width: 720px; }
+listview { lines: 10; }

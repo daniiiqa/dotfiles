@@ -45,8 +45,8 @@ hypr.template = 'colors-hyprland.conf'
 hypr.target = '~/.config/hypr/wallust/wallust-hyprland.conf'
 
 
-rofi.template = 'colors-rofi.rasi'
-rofi.target = '~/.config/rofi/wallust/colors-rofi.rasi'
+jale.template = 'colors-jale.rasi'
+jale.target = '~/.config/jale/wallust/colors-jale.rasi'
 
 wlogout.template = 'colors-wlogout.css'
 wlogout.target = '~/.config/wlogout/wallust/colors-wlogout.css'

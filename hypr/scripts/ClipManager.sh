@@ -1,24 +1,27 @@
 #!/usr/bin/env bash
+# Custom (dany): jale (el launcher, antes rofi) vive en ~/.local/bin,
+# fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 # Clipboard Manager. This script uses cliphist, rofi, and wl-copy.
 
 # Variables
-rofi_theme="$HOME/.config/rofi/config-clipboard.rasi"
+jale_theme="$HOME/.config/jale/config-clipboard.rasi"
 msg='enter: copy  ·  ctrl+del: delete  ·  alt+del: wipe all'
 # Actions:
 # CTRL Del to delete an entry
 # ALT Del to wipe clipboard contents
 
 # Check if rofi is already running
-if pidof rofi > /dev/null; then
-  pkill rofi
+if pidof jale > /dev/null; then
+  pkill -x jale
 fi
 
 while true; do
     result=$(
-        rofi -i -dmenu -p clipboard \
+        jale -dmenu -p clipboard \
             -kb-custom-1 "Control-Delete" \
             -kb-custom-2 "Alt-Delete" \
-            -config $rofi_theme < <(cliphist list) \
+            -config $jale_theme < <(cliphist list) \
 			-mesg "$msg" 
     )
 

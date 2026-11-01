@@ -1,0 +1,10 @@
+/* jale — config global. Fuentes en 0-shared-fonts.rasi, look en
+   theme.rasi (del look: hypr/looks/<look>/jale/theme.rasi). Los config-*.rasi de cada
+   menú importan este archivo y solo ajustan lo suyo. */
+
+@import "~/.config/jale/0-shared-fonts.rasi"
+
+@theme "~/.config/jale/theme.rasi"
+
+/* tamaño de letra de discada (FontSize.py); va después del theme */
+@import "~/.config/jale/discada-font.rasi"

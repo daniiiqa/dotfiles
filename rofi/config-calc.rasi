@@ -1,5 +1,0 @@
-/* Calculadora (RofiCalc.sh): solo entrada + resultado en el mensaje */
-@import "~/.config/rofi/menu.rasi"
-
-mainbox  { children: [ "inputbar", "message" ]; }
-entry    { placeholder: "2 + 2, 20% of 80, 5 usd to mxn…"; }
