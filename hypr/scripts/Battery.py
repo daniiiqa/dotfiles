@@ -129,13 +129,34 @@ def profile_name(p):
             "performance": T("rendimiento", "performance")}.get(p, p or "?")
 
 
-def profile_get():
+def fierro_status():
+    """`fierro status --json`, o None sin fierro."""
+    if not FIERRO:
+        return None
+    r = subprocess.run([FIERRO, "status", "--json"], capture_output=True, text=True)
+    try:
+        return json.loads(r.stdout)
+    except ValueError:
+        return None
+
+
+def charge_limit(fs):
+    """El límite de carga de fierro como en su tablero: 40–70% (casa)."""
+    t, kind = fs.get("charge"), fs.get("charge_kind")
+    if not t or not kind:
+        return None
+    if kind == "range":
+        text = f"{t['start']}–{t['end']}%"
+    elif kind == "end-only":
+        text = T(f"hasta {t['end']}%", f"up to {t['end']}%")
+    else:
+        return T("conservación: ", "conservation: ") + (T("sí", "on") if t["end"] < 100 else T("no", "off"))
+    return text + (f" ({fs['preset']})" if fs.get("preset") else "")
+
+
+def profile_get(fs=None):
     if FIERRO:
-        r = subprocess.run([FIERRO, "status", "--json"], capture_output=True, text=True)
-        try:
-            p = (json.loads(r.stdout).get("profile") or {}).get("profile")
-        except ValueError:
-            return None
+        p = ((fs or fierro_status() or {}).get("profile") or {}).get("profile")
         return {v: k for k, v in TO_FIERRO.items()}.get(p)
     if not shutil.which("powerprofilesctl"):
         return None
@@ -261,14 +282,20 @@ def status():
             cls.append("critical")
         elif b["pct"] <= 20:
             cls.append("low")
+    fs = fierro_status()
     state = {"charging": T("cargando", "charging"), "full": T("conectada", "plugged in"),
              "discharging": T("con batería", "on battery")}[b["status"]]
+    if fs and fs.get("held"):
+        state = T("detenida en el límite", "held at the limit")
     left = hm(b["secs"])
     if left:
         state += f" · {left} " + (T("para llenarse", "to full") if b["status"] == "charging"
                                   else T("restantes", "left"))
     lines = [f"{T('Batería', 'Battery')} {b['pct']}% · {state}"]
-    prof = profile_get()
+    limit = fs and charge_limit(fs)
+    if limit:
+        lines.append(f"{T('Carga', 'Charge')}: {limit}")
+    prof = profile_get(fs)
     if prof:
         lines.append(f"{T('Perfil', 'Profile')}: {profile_name(prof)}")
     lines.append(f"{T('Ahorro', 'Saver')}: " + (T("sí", "on") if saver else T("no", "off")))
@@ -276,6 +303,8 @@ def status():
     if prof:
         lines.append(T("Clic: cambiar perfil", "Click: change profile"))
     lines.append(T("Clic derecho: ahorro de batería", "Right click: battery saver"))
+    if FIERRO:
+        lines.append(T("Clic central: fierro (límites de carga)", "Middle click: fierro (charge limits)"))
     print(json.dumps({"text": str(b["pct"]), "percentage": b["pct"], "alt": alt,
                       "class": cls, "tooltip": "\n".join(lines)}))
 
