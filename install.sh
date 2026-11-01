@@ -567,30 +567,73 @@ if [ -e /usr/share/applications/zen.desktop ] || ((DRY)); then
   run xdg-mime default zen.desktop x-scheme-handler/http x-scheme-handler/https text/html application/xhtml+xml
 fi
 
+# Las apps de discada: el binario ya compilado de la release `edge` de cada repo
+# (GitHub Actions lo compila en cada push), solo si cambió desde la última vez.
+# Si el último commit todavía se está compilando allá, espera (hasta 15 min);
+# sin binario (otra arquitectura, sin red a GitHub, DISCADA_COMPILAR=1) compila
+# aquí, en una carpeta compartida para que las dependencias se compilen una vez.
+DISCADA_BIN_STATE="$HOME/.local/share/discada/bin"
+DISCADA_TARGET="$HOME/.cache/discada/target"
+app() {  # app <nombre> <repo>
+  local name="$1" repo="$2" slug head stamp base got tmp waited=0
+  slug="${repo#https://github.com/}"; slug="${slug%.git}"
+  stamp="$DISCADA_BIN_STATE/$name.commit"
+  head="$(git ls-remote "$repo" HEAD 2>/dev/null | cut -f1)"
+  if [ -n "$head" ] && [ -x "$HOME/.local/bin/$name" ] && [ "$(cat "$stamp" 2>/dev/null)" = "$head" ]; then
+    say "  $name: $(L "al día" "up to date")"
+    return
+  fi
+  ((DRY)) && { printf '   [dry-run] %s %s\n' "$name" "${head:0:7}"; return; }
+  base="https://github.com/$slug/releases/download/edge"
+  if [ "$(uname -m)" = x86_64 ] && [ -n "$head" ] && [ -z "${DISCADA_COMPILAR:-}" ]; then
+    while got="$(curl -fsL "$base/$name.commit" 2>/dev/null)"; [ -n "$got" ] && [ "$got" != "$head" ] && ((waited < 900)); do
+      ((waited)) || say "  $name: $(L "el último cambio se está compilando en GitHub, esperando…" "the latest change is still building on GitHub, waiting…")"
+      sleep 20; waited=$((waited + 20))
+    done
+    if [ "$got" = "$head" ]; then
+      tmp="$(mktemp -d)"
+      if curl -fsL -o "$tmp/$name-x86_64-linux" "$base/$name-x86_64-linux" &&
+         curl -fsL -o "$tmp/$name-x86_64-linux.sha256" "$base/$name-x86_64-linux.sha256" &&
+         (cd "$tmp" && sha256sum -c --quiet "$name-x86_64-linux.sha256"); then
+        mkdir -p "$HOME/.local/bin" "$DISCADA_BIN_STATE"
+        install -m755 "$tmp/$name-x86_64-linux" "$HOME/.local/bin/$name"
+        echo "$head" > "$stamp"
+        rm -rf "$tmp"
+        say "  $name: $(L "listo (ya compilado)" "done (prebuilt)") ${head:0:7}"
+        return
+      fi
+      rm -rf "$tmp"
+    fi
+  fi
+  say "  $name: $(L "compilando aquí…" "compiling here…")"
+  if ! rustup show active-toolchain >/dev/null 2>&1; then rustup default stable; fi
+  CARGO_TARGET_DIR="$DISCADA_TARGET" cargo install --git "$repo" --root "$HOME/.local" --locked --force &&
+    { mkdir -p "$DISCADA_BIN_STATE"; [ -n "$head" ] && echo "$head" > "$stamp"; }
+}
+
 say "rola ($(L "YouTube Music en la terminal" "YouTube Music in the terminal")) → ~/.local/bin/rola"
-if ! rustup show active-toolchain >/dev/null 2>&1; then run rustup default stable; fi
-run cargo install --git "$ROLA_REPO" --root "$HOME/.local" --locked
+app rola "$ROLA_REPO"
 say "vato ($(L "audio, bluetooth, red y sistema en la terminal" "audio, bluetooth, network and system in the terminal")) → ~/.local/bin/vato"
-run cargo install --git "$VATO_REPO" --root "$HOME/.local" --locked
+app vato "$VATO_REPO"
 say "arre ($(L "las notificaciones con el look de discada" "notifications with the discada look")) → ~/.local/bin/arre"
-run cargo install --git "$ARRE_REPO" --root "$HOME/.local" --locked
+app arre "$ARRE_REPO"
 say "taco ($(L "los archivos con el look de discada" "files with the discada look")) → ~/.local/bin/taco"
-run cargo install --git "$TACO_REPO" --root "$HOME/.local" --locked
+app taco "$TACO_REPO"
 say "empalme ($(L "la barra de discada" "the discada bar")) → ~/.local/bin/empalme"
-run cargo install --git "$EMPALME_REPO" --root "$HOME/.local" --locked
+app empalme "$EMPALME_REPO"
 say "picha ($(L "mandar y recibir: el cel y tus compus" "send and receive: the phone and your computers")) → ~/.local/bin/picha"
-run cargo install --git "$PICHA_REPO" --root "$HOME/.local" --locked
+app picha "$PICHA_REPO"
 say "jale ($(L "el launcher y los menús" "the launcher and the menus")) → ~/.local/bin/jale"
-run cargo install --git "$JALE_REPO" --root "$HOME/.local" --locked
+app jale "$JALE_REPO"
 say "brasa ($(L "volumen y brillo en pantalla" "volume and brightness on screen")) → ~/.local/bin/brasa"
-run cargo install --git "$BRASA_REPO" --root "$HOME/.local" --locked
+app brasa "$BRASA_REPO"
 say "rollo ($(L "los workspaces en miniatura" "workspace overview")) → ~/.local/bin/rollo"
-run cargo install --git "$ROLLO_REPO" --root "$HOME/.local" --locked
+app rollo "$ROLLO_REPO"
 say "farula ($(L "la animación al cambiar de fondo o de look" "the wallpaper and look change animation")) → ~/.local/bin/farula"
-run cargo install --git "$FARULA_REPO" --root "$HOME/.local" --locked
+app farula "$FARULA_REPO"
 if ((LAPTOP)); then
   say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
-  run cargo install --git "$FIERRO_REPO" --root "$HOME/.local" --locked
+  app fierro "$FIERRO_REPO"
   # una vez (y en cada --update, por si cambia): el grupo fierro y los permisos
   # de sysfs, para que fierro nunca pida root; apaga power-profiles-daemon
   if pacman -Q tlp &>/dev/null; then
