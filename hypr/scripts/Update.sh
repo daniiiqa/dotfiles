@@ -39,9 +39,10 @@ apply_look() {  # el look actual sobre lo vivo, desde su look.toml (como LookSwi
   "$scripts/LookBuild.py" apply "$1"
 }
 
-# el arte: la discada meneándose al empezar, el vaquero bailando al terminar
-# (solo en una terminal; DISCADA_SIN_ARTE=1 lo quita)
-python3 "$scripts/Discada.py" meneo 2>/dev/null
+# el arte (farula): la discada meneándose al empezar, el vaquero bailando al
+# terminar (solo en una terminal; DISCADA_SIN_ARTE=1 lo quita)
+farula="$HOME/.local/bin/farula"
+[ -x "$farula" ] && "$farula" meneo 2>/dev/null
 
 # sin autoreload mientras cambian los archivos (Hyprland se caía recargando a
 # media copia); reload_all recarga una vez al final, y si algo falla antes, la
@@ -80,5 +81,5 @@ else
   fail "$(L "No encontré el repo de discada (~/.config ni ~/dotfiles)" "Couldn't find the discada repo (~/.config or ~/dotfiles)")"
 fi
 
-python3 "$scripts/Discada.py" lista 2>/dev/null
+[ -x "$farula" ] && "$farula" lista 2>/dev/null
 notify-send -e -u low "discada" "$(L "Actualizada" "Updated")"
