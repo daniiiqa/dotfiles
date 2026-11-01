@@ -1,9 +1,22 @@
 #!/usr/bin/env bash
 # Scripts for volume controls for audio and mic 
 
+# Custom (dany): brasa (el OSD) vive en ~/.local/bin, fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 iDIR="$HOME/.config/swaync/icons"
 sDIR="$HOME/.config/hypr/scripts"
 . "$sDIR/lang.sh"
+
+# Custom (dany): el nivel sale en brasa (el OSD); sin brasa, en un aviso de arre
+osd() {  # tipo (volume|mic), nivel|muted, título, ícono del aviso
+    if command -v brasa >/dev/null; then
+        brasa "$1" "$2" "$3"
+    elif [ "$2" = muted ]; then
+        note "$4" "$3: $(L silenciado muted)"
+    else
+        note "$4" "$3" "$2"
+    fi
+}
 
 # un aviso que se reemplaza a sí mismo (volumen y micrófono comparten lugar)
 note() {  # ícono, título, [nivel]
@@ -50,9 +63,9 @@ notify_user() {
     local level="$(pamixer --get-volume)"
 
     if [[ "$muted" == "true" || "$level" -eq 0 ]]; then
-        note "$(get_icon)" "$(L "Volumen: silenciado" "Volume: muted")"
+        osd volume muted "$(L Volumen Volume)" "$(get_icon)"
     else
-        note "$(get_icon)" "$(L Volumen Volume)" "$level" && "$sDIR/Sounds.sh" --volume
+        osd volume "$level" "$(L Volumen Volume)" "$(get_icon)" && "$sDIR/Sounds.sh" --volume
     fi
 }
 
@@ -125,11 +138,9 @@ notify_mic_user() {
     local icon message
 
     if [[ "$muted" == "true" || "$level" -eq 0 ]]; then
-        icon="microphone-disabled-symbolic"
-        note "$icon" "$(L "Micrófono: silenciado" "Microphone: muted")"
+        osd mic muted "$(L Micrófono Microphone)" microphone-disabled-symbolic
     else
-        icon="audio-input-microphone-symbolic"
-        note "$icon" "$(L Micrófono Microphone)" "$level"
+        osd mic "$level" "$(L Micrófono Microphone)" audio-input-microphone-symbolic
     fi
 }
 

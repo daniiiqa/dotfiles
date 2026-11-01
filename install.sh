@@ -40,8 +40,9 @@ REPO_PKGS=(
   # Hyprland y lo que lo rodea
   hyprland hypridle hyprlock hyprpolkitagent
   xdg-desktop-portal-hyprland xdg-desktop-portal-gtk qt5-wayland qt6-wayland
-  # menús (la barra, empalme, y las notificaciones, arre, se compilan abajo)
-  rofi yad
+  # menús (el launcher, jale; la barra, empalme, y las notificaciones, arre,
+  # se compilan abajo)
+  yad
   # terminal y herramientas de terminal
   kitty fastfetch btop cava
   # taco (archivos) usa fd, fzf, zoxide y las miniaturas; nvim con LazyVim
@@ -124,13 +125,17 @@ SDDM_THEME_REPO="https://github.com/JaKooLit/simple-sddm-2.git"
 SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 
 # carpetas del repo que van a ~/.config (las mismas del whitelist de .gitignore)
-CONFIG_DIRS=(hypr rofi swaync wallust kitty cava btop fastfetch wlogout rola sddm Kvantum qt5ct qt6ct swappy)
+CONFIG_DIRS=(hypr jale swaync wallust kitty cava btop fastfetch wlogout rola sddm Kvantum qt5ct qt6ct swappy)
 ROLA_REPO="https://github.com/daniiiqa/rola.git"
 VATO_REPO="https://github.com/daniiiqa/vato.git"
 ARRE_REPO="https://github.com/daniiiqa/arre.git"
 TACO_REPO="https://github.com/daniiiqa/taco.git"
 EMPALME_REPO="https://github.com/daniiiqa/empalme.git"
 PICHA_REPO="https://github.com/daniiiqa/picha.git"
+JALE_REPO="https://github.com/daniiiqa/jale.git"
+BRASA_REPO="https://github.com/daniiiqa/brasa.git"
+ROLLO_REPO="https://github.com/daniiiqa/rollo.git"
+FARULA_REPO="https://github.com/daniiiqa/farula.git"
 FIERRO_REPO="https://github.com/daniiiqa/fierro.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
@@ -486,7 +491,7 @@ say "$(L "Scripts ejecutables" "Executable scripts")"
 run chmod +x "$CFG"/hypr/scripts/*.sh "$CFG"/hypr/scripts/*.py
 
 # enlace al wallpaper de la otra máquina: roto aquí. FirstRun pone uno nuevo.
-link="$CFG/rofi/.current_wallpaper"
+link="$CFG/hypr/wallpaper_effects/.wallpaper_link"
 if [ -L "$link" ] && [ ! -e "$link" ]; then run rm "$link"; fi
 
 looks_dir="$CFG/hypr/looks"
@@ -517,8 +522,8 @@ else
   python3 "$CFG/hypr/scripts/LookBuild.py" apply "$look"
   echo "$look" > "$looks_dir/.current"
   echo 0 > "$looks_dir/.fontsize"   # lo vivo está en el tamaño del look; FontSize.py lo vuelve a aplicar
-  # rofi importa este archivo (tamaño de letra, FontSize.py); vacío al empezar
-  [ -f "$CFG/rofi/discada-font.rasi" ] || printf '/* FontSize.py */\n' > "$CFG/rofi/discada-font.rasi"
+  # jale importa este archivo (tamaño de letra, FontSize.py); vacío al empezar
+  [ -f "$CFG/jale/discada-font.rasi" ] || printf '/* FontSize.py */\n' > "$CFG/jale/discada-font.rasi"
 fi
 # lo tuyo que discada no cambió, de vuelta (encima de la copia y del look)
 if [ -n "${mine:-}" ]; then
@@ -575,6 +580,14 @@ say "empalme ($(L "la barra de discada" "the discada bar")) → ~/.local/bin/emp
 run cargo install --git "$EMPALME_REPO" --root "$HOME/.local" --locked
 say "picha ($(L "el cel: Quick Share, Bluetooth y su pantalla" "the phone: Quick Share, Bluetooth and its screen")) → ~/.local/bin/picha"
 run cargo install --git "$PICHA_REPO" --root "$HOME/.local" --locked
+say "jale ($(L "el launcher y los menús" "the launcher and the menus")) → ~/.local/bin/jale"
+run cargo install --git "$JALE_REPO" --root "$HOME/.local" --locked
+say "brasa ($(L "volumen y brillo en pantalla" "volume and brightness on screen")) → ~/.local/bin/brasa"
+run cargo install --git "$BRASA_REPO" --root "$HOME/.local" --locked
+say "rollo ($(L "los workspaces en miniatura" "workspace overview")) → ~/.local/bin/rollo"
+run cargo install --git "$ROLLO_REPO" --root "$HOME/.local" --locked
+say "farula ($(L "la animación al cambiar de fondo o de look" "the wallpaper and look change animation")) → ~/.local/bin/farula"
+run cargo install --git "$FARULA_REPO" --root "$HOME/.local" --locked
 if ((LAPTOP)); then
   say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
   run cargo install --git "$FIERRO_REPO" --root "$HOME/.local" --locked

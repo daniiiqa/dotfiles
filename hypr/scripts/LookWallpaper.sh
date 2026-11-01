@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Custom (dany): farula (el telón) vive en ~/.local/bin, que no está en el
+# PATH de Hyprland: sin esto los atajos no lo encuentran
+PATH="$HOME/.local/bin:$PATH"
 # Wallpaper de los looks de paleta fija (los que no sacan colores del
 # wallpaper: hypr/wallpapers/<look>.jpg). Lo llama LookSwitch.sh.
 #
@@ -21,6 +24,8 @@ saved="${XDG_STATE_HOME:-$HOME/.local/state}/discada/wallpaper"
 live="$cfg/hypr/conf/livewallpaper.conf"
 target="$1"
 params=(--transition-type fade --transition-duration 1 --transition-fps 60)
+# con el telón puesto (LookSwitch) el fade quedaría tapado: de golpe
+farula active 2>/dev/null && params=(--transition-type none)
 
 img=$(find "$walls" -maxdepth 1 -name "$target.*" -print -quit 2>/dev/null)
 
@@ -30,7 +35,7 @@ if [ -n "$img" ]; then
     mkdir -p "$saved"
     awww query > "$saved/swww" 2>/dev/null
     [ -f "$live" ] && cp "$live" "$saved/livewallpaper.conf"
-    readlink -f "$cfg/rofi/.current_wallpaper" > "$saved/current" 2>/dev/null
+    readlink -f "$cfg/hypr/wallpaper_effects/.wallpaper_link" > "$saved/current" 2>/dev/null
   fi
   # 2) sin videos: el wallpaper del look en todos los monitores
   pkill -x mpvpaper 2>/dev/null

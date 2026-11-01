@@ -1,6 +1,6 @@
 # discada — look «outsider»
 # Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
-# los archivos de cada app (empalme/, rofi/, hypr/…) usan estos nombres.
+# los archivos de cada app (empalme/, jale/, hypr/…) usan estos nombres.
 # LookBuild.py lo aplica (lo llama LookSwitch.sh).
 
 [about]
@@ -35,7 +35,7 @@ color14 = "#a6c4bb"
 color15 = "#f3ead6"
 
 [colors.named]
-# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# nombres propios del look (@acc en css y jale, $acc en hyprland…);
 # el valor es un color o el nombre de otro (color12, background…)
 ink0 = "background"
 ink1 = "#1f1b16"
@@ -58,6 +58,12 @@ case = "lower"
 select = "fill"
 tint = "color"
 transparent = true
+
+[farula]
+# cómo se revela al cambiar wallpaper o look (película dañada): iris, quemado,
+# glitch, vidrio, derretido, fade, crt, azulejos, cartas, onda, tinta, wipe,
+# pixelado; una lista ["a", "b"] (uno al azar) o "random"
+fx = ["glitch", "pixelado"]
 
 [wallust]
 palette = "dark16"

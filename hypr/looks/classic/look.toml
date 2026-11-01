@@ -1,6 +1,6 @@
 # discada — look «classic»
 # Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
-# los archivos de cada app (empalme/, rofi/, hypr/…) usan estos nombres.
+# los archivos de cada app (empalme/, jale/, hypr/…) usan estos nombres.
 # LookBuild.py lo aplica (lo llama LookSwitch.sh).
 
 [about]
@@ -15,7 +15,7 @@ package = ""   # lo instala install.sh (va siempre)
 from = "wallpaper"   # wallust los saca del wallpaper (color0…color15)
 
 [colors.named]
-# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# nombres propios del look (@acc en css y jale, $acc en hyprland…);
 # el valor es un color o el nombre de otro (color12, background…)
 critical = "#ff0000"
 warning = "#f3f809"
@@ -29,6 +29,12 @@ case = "normal"
 select = "fill"
 tint = "color"
 transparent = true
+
+[farula]
+# cómo se revela al cambiar wallpaper o look (el de siempre): iris, quemado,
+# glitch, vidrio, derretido, fade, crt, azulejos, cartas, onda, tinta, wipe,
+# pixelado; una lista ["a", "b"] (uno al azar) o "random"
+fx = "iris"
 
 [wallust]
 palette = "dark16"
@@ -196,7 +202,7 @@ fg = "color12"
 
 [bar.modules."text#menu"]
 format = "  "
-"on-click" = "pkill rofi || rofi -show drun -modi run,drun,filebrowser,window"
+"on-click" = "$HOME/.local/bin/jale"
 "on-click-middle" = "$HOME/.config/hypr/scripts/WallpaperSelect.sh"
 tooltip = true
 "tooltip-format" = "Left Click: Rofi Menu\nMiddle Click: Wallpaper Menu"

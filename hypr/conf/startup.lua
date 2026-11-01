@@ -35,6 +35,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd(scriptsDir .. "/AppStrip.py daemon")  -- apps abiertas en la barra (antes que ella)
     hl.exec_cmd(scriptsDir .. "/FitGuard.py")  -- apps que no caben en su tile (Discord) flotan
     hl.exec_cmd(scriptsDir .. "/Bar.sh")  -- la barra (empalme); la relanza si se cae
+    hl.exec_cmd("sleep 20 && " .. scriptsDir .. "/WallustCache.sh")  -- caché de wallust: wallpapers nuevos al instante
     hl.exec_cmd(scriptsDir .. "/FirstRun.sh")  -- solo la primera vez en una máquina nueva
     hl.exec_cmd("hypridle")
     hl.exec_cmd(scriptsDir .. "/Battery.py watch")  -- laptops: avisos, ahorro solo (BATTERY_SAVER_AT)

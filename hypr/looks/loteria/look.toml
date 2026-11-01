@@ -1,6 +1,6 @@
 # discada — look «loteria»
 # Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
-# los archivos de cada app (empalme/, rofi/, hypr/…) usan estos nombres.
+# los archivos de cada app (empalme/, jale/, hypr/…) usan estos nombres.
 # LookBuild.py lo aplica (lo llama LookSwitch.sh).
 
 [about]
@@ -36,7 +36,7 @@ color14 = "#2a9696"
 color15 = "#2a241d"
 
 [colors.named]
-# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# nombres propios del look (@acc en css y jale, $acc en hyprland…);
 # el valor es un color o el nombre de otro (color12, background…)
 gold = "#b8860b"
 bg0 = "background"
@@ -66,6 +66,12 @@ case = "upper"
 select = "inverse"
 tint = "color"
 transparent = false
+
+[farula]
+# cómo se revela al cambiar wallpaper o look (¡lotería! las cartas se voltean): iris, quemado,
+# glitch, vidrio, derretido, fade, crt, azulejos, cartas, onda, tinta, wipe,
+# pixelado; una lista ["a", "b"] (uno al azar) o "random"
+fx = "cartas"
 
 [wallust]
 palette = "light16"

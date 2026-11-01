@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Custom (dany): farula (el telón) vive en ~/.local/bin, que no está en el
+# PATH de Hyprland: sin esto los atajos no lo encuentran
+PATH="$HOME/.local/bin:$PATH"
 # Script for Random Wallpaper ( CTRL ALT W)
 
 PICTURES_DIR="$(xdg-user-dir PICTURES 2>/dev/null || echo "$HOME/Pictures")"
@@ -39,6 +42,10 @@ if [ -f "$live_conf" ]; then
   mv "$live_conf.tmp" "$live_conf"
 fi
 
+# Custom (dany): el telón (~/farula) tapa el cambio y lo abre con un iris
+# desde el cursor; con él, awww cambia de golpe
+command -v farula >/dev/null && farula freeze && SWWW_PARAMS="--transition-type none"
+
 awww img -o "$focused_monitor" "$RANDOMPICS" $SWWW_PARAMS
 
 # Custom (dany): pasar la ruta exacta — sin argumento, WallustSwww lee el caché
@@ -48,5 +55,6 @@ awww img -o "$focused_monitor" "$RANDOMPICS" $SWWW_PARAMS
 # Custom (dany): elegiste wallpaper — si estabas en un look de paleta fija,
 # este es el que se queda (LookWallpaper.sh ya no devuelve el anterior)
 rm -rf "${XDG_STATE_HOME:-$HOME/.local/state}/discada/wallpaper"
-sleep 2
 "$SCRIPTSDIR/Refresh.sh"
+sleep 0.15 # que la barra y kitty alcancen a pintar los colores nuevos
+farula reveal 2>/dev/null

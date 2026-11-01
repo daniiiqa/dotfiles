@@ -6,7 +6,7 @@ set -euo pipefail
 
 # Inputs and paths
 passed_path="${1:-}"
-rofi_link="$HOME/.config/rofi/.current_wallpaper"
+wall_link="$HOME/.config/hypr/wallpaper_effects/.wallpaper_link"
 wallpaper_current="$HOME/.config/hypr/wallpaper_effects/.wallpaper_current"
 # Custom (dany): swww ahora es awww y su caché ya no es una ruta por monitor:
 # se pregunta al daemon (": DP-1: 1920x1080, ... image: /ruta")
@@ -44,7 +44,7 @@ if [[ -z "${wallpaper_path:-}" || ! -f "$wallpaper_path" ]]; then
 fi
 
 # Update helpers that depend on the path
-ln -sf "$wallpaper_path" "$rofi_link" || true
+ln -sf "$wallpaper_path" "$wall_link" || true
 mkdir -p "$(dirname "$wallpaper_current")"
 cp -f "$wallpaper_path" "$wallpaper_current" || true
 
@@ -84,7 +84,7 @@ wallust run -s "$wallpaper_path" || true
 "$HOME/.config/hypr/scripts/LookBuild.py" colors || true
 wallust_targets=(
   "$HOME/.config/wlogout/wallust/colors-wlogout.css"
-  "$HOME/.config/rofi/wallust/colors-rofi.rasi"
+  "$HOME/.config/jale/wallust/colors-jale.rasi"
 )
 wait_for_templates "$start_ts" "${wallust_targets[@]}" || true
 

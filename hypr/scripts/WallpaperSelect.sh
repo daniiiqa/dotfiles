@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Custom (dany): farula (el telón) vive en ~/.local/bin, que no está en el
+# PATH de Hyprland: sin esto los atajos no lo encuentran
+PATH="$HOME/.local/bin:$PATH"
 # This script for selecting wallpapers (SUPER W)
 
 # WALLPAPERS PATH
@@ -26,7 +29,7 @@ if ! command -v bc &>/dev/null; then
 fi
 
 # Variables
-rofi_theme="$HOME/.config/rofi/config-wallpaper.rasi"
+jale_theme="$HOME/.config/jale/config-wallpaper.rasi"
 focused_monitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')
 
 # Ensure focused_monitor is detected
@@ -41,7 +44,7 @@ monitor_height=$(hyprctl monitors -j | jq -r --arg mon "$focused_monitor" '.[] |
 
 icon_size=$(echo "scale=1; ($monitor_height * 3) / ($scale_factor * 150)" | bc)
 adjusted_icon_size=$(echo "$icon_size" | awk '{if ($1 < 15) $1 = 20; if ($1 > 25) $1 = 25; print $1}')
-rofi_override="element-icon{size:${adjusted_icon_size}%;}"
+icon_override="element-icon{size:${adjusted_icon_size}%;}"
 
 # Custom (dany): wallpapers independientes por monitor.
 # awww-daemon queda SIEMPRE vivo (imágenes/gifs); mpvpaper corre una instancia
@@ -80,7 +83,7 @@ RANDOM_PIC="${PICS[$((RANDOM % ${#PICS[@]}))]}"
 RANDOM_PIC_NAME=". random"
 
 # Rofi command
-rofi_command="rofi -i -show -dmenu -config $rofi_theme -theme-str $rofi_override"
+jale_command="jale -dmenu -config $jale_theme -theme-str $icon_override"
 
 # Sorting Wallpapers
 menu() {
@@ -136,10 +139,20 @@ modify_startup_config() {
   fi
 }
 
+# Custom (dany): el telón (~/farula): congela la pantalla, todo cambia por
+# debajo y `farula reveal` lo abre con un iris desde el cursor. Con telón,
+# awww cambia de golpe (su transición quedaría tapada); sin él (farula.off o
+# no instalado), la transición de awww de siempre.
+curtain_up() {
+  sleep 0.3 # que el menú (jale) termine de irse, o sale congelado en la foto
+  command -v farula >/dev/null && farula freeze && SWWW_PARAMS="--transition-type none"
+}
+
 # Apply Image Wallpaper
 apply_image_wallpaper() {
   local image_path="$1"
 
+  curtain_up
   kill_wallpaper_for_image
 
   if ! pgrep -x "awww-daemon" >/dev/null; then
@@ -151,8 +164,9 @@ apply_image_wallpaper() {
 
   # Run additional scripts (pass the image path to avoid cache race conditions)
   "$SCRIPTSDIR/WallustSwww.sh" "$image_path"
-  sleep 2
   "$SCRIPTSDIR/Refresh.sh"
+  sleep 0.15 # que la barra y kitty alcancen a pintar los colores nuevos
+  farula reveal 2>/dev/null
   sleep 1
 
 }
@@ -165,6 +179,7 @@ apply_video_wallpaper() {
     notify-send -i "dialog-error-symbolic" "E-R-R-O-R" "mpvpaper not found"
     return 1
   fi
+  curtain_up
   kill_wallpaper_for_video
 
   # Custom (dany): awww debe estar vivo ANTES de lanzar mpvpaper — sirve los
@@ -193,14 +208,21 @@ apply_video_wallpaper() {
   fi
   if [[ -f "$frame" ]]; then
     "$SCRIPTSDIR/WallustSwww.sh" "$frame"
-    sleep 2
     "$SCRIPTSDIR/Refresh.sh"
+    sleep 0.15 # que la barra y kitty alcancen a pintar los colores nuevos
+  else
+    sleep 1 # que mpvpaper alcance a pintar antes de abrir el telón
   fi
+  farula reveal 2>/dev/null
 }
 
 # Main function
 main() {
-  choice=$(menu | $rofi_command)
+  # Custom (dany): mientras escoges, cachear en wallust los wallpapers nuevos
+  # (WallustCache.sh): con caché sus colores salen en ms, no en segundos
+  setsid "$SCRIPTSDIR/WallustCache.sh" >/dev/null 2>&1 &
+
+  choice=$(menu | $jale_command)
   choice=$(echo "$choice" | xargs)
   RANDOM_PIC_NAME=$(echo "$RANDOM_PIC_NAME" | xargs)
 
@@ -240,8 +262,8 @@ main() {
 }
 
 # Check if rofi is already running
-if pidof rofi >/dev/null; then
-  pkill rofi
+if pidof jale >/dev/null; then
+  pkill -x jale
 fi
 
 main

@@ -24,7 +24,7 @@ end
 zoom_in, zoom_out = zoom(1.5), zoom(1 / 1.5)
 
 -- ─── Apps ────────────────────────────────────────────────────────────────────
-hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("pkill rofi || true && rofi -show drun -modi drun,filebrowser,run,window"), { description = "app launcher" })
+hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("$HOME/.local/bin/jale"), { description = "app launcher" })
 hl.bind("SUPER + Return", hl.dsp.exec_cmd(d.term), { description = "terminal" })
 hl.bind("SUPER + SHIFT + Return", hl.dsp.exec_cmd(scriptsDir .. "/Dropterminal.sh " .. d.term), { description = "dropdown terminal" })
 hl.bind("SUPER + E", hl.dsp.exec_cmd(d.files), { description = "file manager" })
@@ -38,7 +38,7 @@ hl.bind("SUPER + H", hl.dsp.exec_cmd(scriptsDir .. "/KeyHints.sh"), { descriptio
 hl.bind("SUPER + SHIFT + K", hl.dsp.exec_cmd(scriptsDir .. "/KeyBinds.sh"), { description = "search keybinds" })
 hl.bind("SUPER + SHIFT + E", hl.dsp.exec_cmd(scriptsDir .. "/QuickSettings.sh"), { description = "discada settings" })
 hl.bind("SUPER + S", hl.dsp.exec_cmd(scriptsDir .. "/RofiSearch.sh"), { description = "web search" })
-hl.bind("SUPER + CTRL + S", hl.dsp.exec_cmd("rofi -show window"), { description = "window switcher" })
+hl.bind("SUPER + CTRL + S", hl.dsp.exec_cmd("$HOME/.local/bin/jale -show window"), { description = "window switcher" })
 hl.bind("SUPER + ALT + E", hl.dsp.exec_cmd(scriptsDir .. "/RofiEmoji.sh"), { description = "emoji menu" })
 hl.bind("SUPER + ALT + C", hl.dsp.exec_cmd(scriptsDir .. "/RofiCalc.sh"), { description = "calculator" })
 hl.bind("SUPER + ALT + V", hl.dsp.exec_cmd(scriptsDir .. "/ClipManager.sh"), { description = "clipboard manager" })
@@ -111,7 +111,7 @@ hl.bind("SUPER + CTRL + L", hl.dsp.window.move({ into_group = "r" }), { descript
 hl.bind("SUPER + CTRL + H", hl.dsp.window.move({ out_of_group = true }), { description = "move out of group" })
 
 -- ─── Workspaces ──────────────────────────────────────────────────────────────
-hl.bind("SUPER + Tab", hl.dsp.focus({ workspace = "m+1" }), { description = "next workspace" })
+hl.bind("SUPER + Tab", hl.dsp.exec_cmd("$HOME/.local/bin/rollo"), { description = "workspace overview (rollo)" })
 hl.bind("SUPER + SHIFT + Tab", hl.dsp.focus({ workspace = "m-1" }), { description = "previous workspace" })
 hl.bind("SUPER + period", hl.dsp.focus({ workspace = "e+1" }), { description = "next workspace" })
 hl.bind("SUPER + comma", hl.dsp.focus({ workspace = "e-1" }), { description = "previous workspace" })

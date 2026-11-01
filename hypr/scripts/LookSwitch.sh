@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Custom (dany): farula (el telón) vive en ~/.local/bin, que no está en el
+# PATH de Hyprland: sin esto los atajos no lo encuentran
+PATH="$HOME/.local/bin:$PATH"
 # Cambia el look del rice (SUPER+T). Cada look vive en hypr/looks/<nombre>/
 # como espejo de ~/.config con solo los archivos que le tocan (decoraciones,
 # animaciones, hyprlock, rofi, wlogout, kitty, fastfetch, sddm), más su
@@ -30,10 +33,10 @@ fi
 if [ -n "$1" ]; then
   target="$1"
 else
-  pidof rofi >/dev/null && pkill rofi
+  pidof jale >/dev/null && pkill -x jale
   target=$( { [ -n "$shader_entry" ] && echo "$shader_entry"
     "$cfg/hypr/scripts/LookBuild.py" list; } |
-    rofi -dmenu -i -p look -config "$cfg/rofi/config-edit.rasi" -mesg "$(L actual current): ${current:-?}")
+    jale -dmenu -i -p look -config "$cfg/jale/config-edit.rasi" -mesg "$(L actual current): ${current:-?}")
 fi
 
 [ -z "$target" ] && exit 0
@@ -62,6 +65,20 @@ if [ ! -d "$looks/$target" ]; then
 fi
 [ "$target" = "$current" ] && exit 0
 
+# el telón (~/farula): congela la pantalla mientras todo cambia por debajo y
+# al final lo abre con un iris desde el cursor (sale con el acento nuevo)
+if command -v farula >/dev/null; then
+  [ -z "$1" ] && sleep 0.3 # que el menú (jale) termine de irse, o sale en la foto
+  farula freeze
+fi
+
+# sin autoreload mientras se cambia: Hyprland recargaba solo en cuanto
+# LookBuild copiaba decorations.conf, que ya usa los colores del look nuevo
+# ($alt, $line…) antes de que `LookBuild.py colors` los escriba — y salía la
+# barra roja de errores un segundo (más en los looks con wallpaper propio).
+# El `hyprctl reload` del paso 4 lo vuelve a prender (la config no lo apaga).
+"$cfg/hypr/scripts/Hypr.sh" set misc:disable_autoreload true
+
 # 0) quitar el tamaño de letra de discada (FontSize.py) para guardar el look
 #    con sus tamaños originales; se vuelve a aplicar después de copiar
 "$cfg/hypr/scripts/FontSize.py" unapply
@@ -87,7 +104,7 @@ walls_rc=$?
 # 3) si cambió la config de wallust (paleta, saturación…), regenerar colores
 wallust_after=$(md5sum < "$cfg/wallust/wallust.toml" 2>/dev/null)
 if [ "$walls_rc" != 10 ] && [ "$wallust_before" != "$wallust_after" ]; then
-  "$cfg/hypr/scripts/WallustSwww.sh" "$(readlink -f "$cfg/rofi/.current_wallpaper")" >/dev/null 2>&1
+  "$cfg/hypr/scripts/WallustSwww.sh" "$(readlink -f "$cfg/hypr/wallpaper_effects/.wallpaper_link")" >/dev/null 2>&1
 fi
 
 # 3b) los colores del look: su paleta (o la de wallust) y sus nombres propios
@@ -99,6 +116,9 @@ pkill -SIGUSR2 -x empalme
 "$cfg/hypr/scripts/SDDMWallpaperSync.sh" >/dev/null 2>&1   # sddm: fuente, forma y paleta del look
 "$cfg/hypr/scripts/AppColors.py" >/dev/null 2>&1          # apps GTK/Qt: colores del look
 pkill -USR1 -x kitty
-pkill rofi 2>/dev/null
+pkill -x jale 2>/dev/null
+# la barra (SIGUSR2) y kitty ya releyeron: un respiro para que pinten
+sleep 0.3
+farula reveal 2>/dev/null
 
 notify-send -e -u low -i "preferences-desktop-appearance-symbolic" "Look" "$target"

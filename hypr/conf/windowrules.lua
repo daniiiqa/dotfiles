@@ -5,16 +5,23 @@
 -- (looks/<nombre>/hypr/conf/decorations.conf). Si se pusiera aquí, paper,
 -- brutalist y retro dejarían de ser opacos y kitty quedaría doble-transparente.
 -- La excepción es el video, que siempre va sólido.
--- Las layerrules (la barra, swaync, rofi, wlogout) también viven en cada look.
+-- Las layerrules (la barra, swaync, jale, wlogout) también viven en cada look.
 
 -- la barra (empalme) aparece sin animación: al recargar (SUPER+Alt+R, cambio
 -- de look) vuelve al instante en vez de deslizarse
 hl.layer_rule({ match = { namespace = "empalme" }, no_anim = true })
 
--- rofi con blur detrás: los looks con menú translúcido (glass) lo necesitan,
--- en los opacos no se nota
-hl.layer_rule({ match = { namespace = "rofi" }, blur = true })
-hl.layer_rule({ match = { namespace = "rofi" }, ignore_alpha = 0.1 })
+-- el telón (farula freeze/reveal) es una foto de la pantalla: con animación
+-- de layer se notaría el brinco al ponerlo
+hl.layer_rule({ match = { namespace = "farula" }, no_anim = true })
+
+-- rollo (la vista de workspaces) hace su propio zoom
+hl.layer_rule({ match = { namespace = "rollo" }, no_anim = true })
+
+-- jale (el launcher, antes rofi) con blur detrás: los looks con menú
+-- translúcido (glass) lo necesitan, en los opacos no se nota
+hl.layer_rule({ match = { namespace = "jale" }, blur = true })
+hl.layer_rule({ match = { namespace = "jale" }, ignore_alpha = 0.1 })
 
 -- ─── Tags ────────────────────────────────────────────────────────────────────
 hl.window_rule({ match = { class = "^(zen|zen-browser)$" }, tag = "+browser" })

@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # Brillo de la pantalla y del teclado (laptops) con brightnessctl; el nivel se
-# ve en el aviso (arre), no en la barra.
+# ve en brasa (el OSD; sin brasa, en un aviso de arre), no en la barra.
 #   Brightness.sh --inc | --dec            pantalla, de 5 en 5 (curva exponencial)
 #   Brightness.sh --inc-precise | --dec-precise   de 1 en 1
 #   Brightness.sh --kbd-inc | --kbd-dec    luz del teclado
 #   Brightness.sh --idle-dim | --idle-restore     lo llama hypridle
 
+# Custom (dany): brasa (el OSD) vive en ~/.local/bin, fuera del PATH de Hyprland
+PATH="$HOME/.local/bin:$PATH"
 sDIR="$HOME/.config/hypr/scripts"
 . "$sDIR/lang.sh"
 
@@ -16,6 +18,7 @@ get_pct() { brightnessctl -m -c backlight 2>/dev/null | cut -d, -f4 | tr -d '%';
 
 notify_user() {
   local level; level=$(get_pct)
+  command -v brasa >/dev/null && { brasa brightness "$level" "$(L "Brillo" "Brightness")"; return; }
   notify-send -e -h int:value:"$level" -h string:x-canonical-private-synchronous:brightness_notif \
     -h boolean:SWAYNC_BYPASS_DND:true -u low -a discada -i display-brightness-symbolic \
     "$(L "Brillo" "Brightness")"
@@ -40,6 +43,7 @@ kbd() {
   [ -n "$dev" ] || exit 0
   brightnessctl -q -d "$dev" set "$1"
   local pct; pct=$(brightnessctl -m -d "$dev" | cut -d, -f4 | tr -d '%')
+  command -v brasa >/dev/null && { brasa kbd "$pct" "$(L "Luz del teclado" "Keyboard light")"; return; }
   notify-send -e -h int:value:"$pct" -h string:x-canonical-private-synchronous:kbd_notif \
     -u low -a discada -i "keyboard-brightness-symbolic" "$(L "Luz del teclado" "Keyboard light")"
 }

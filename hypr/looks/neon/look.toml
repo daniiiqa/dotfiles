@@ -1,6 +1,6 @@
 # discada — look «neon»
 # Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
-# los archivos de cada app (empalme/, rofi/, hypr/…) usan estos nombres.
+# los archivos de cada app (empalme/, jale/, hypr/…) usan estos nombres.
 # LookBuild.py lo aplica (lo llama LookSwitch.sh).
 
 [about]
@@ -15,7 +15,7 @@ package = "otf-monaspace-nerd"   # lo instala install.sh
 from = "wallpaper"   # wallust los saca del wallpaper (color0…color15)
 
 [colors.named]
-# nombres propios del look (@acc en css y rofi, $acc en hyprland…);
+# nombres propios del look (@acc en css y jale, $acc en hyprland…);
 # el valor es un color o el nombre de otro (color12, background…)
 critical = "#e06c75"
 
@@ -28,6 +28,12 @@ labels = "icons"
 case = "normal"
 select = "inverse"
 tint = "color"
+
+[farula]
+# cómo se revela al cambiar wallpaper o look (señal que se cae): iris, quemado,
+# glitch, vidrio, derretido, fade, crt, azulejos, cartas, onda, tinta, wipe,
+# pixelado; una lista ["a", "b"] (uno al azar) o "random"
+fx = "glitch"
 
 [wallust]
 palette = "harddark16"
