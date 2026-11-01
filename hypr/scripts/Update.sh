@@ -63,6 +63,18 @@ if git -C "$cfg" rev-parse --is-inside-work-tree >/dev/null 2>&1 && [ -d "$cfg/h
     "$scripts/FontSize.py" apply --no-reload
     fail "$(L "git pull falló: revisa el repo en ~/.config" "git pull failed: check the repo in ~/.config")"
   fi
+  # el autostash puede chocar con lo nuevo y git igual sale bien, dejando
+  # <<<<<<< en los archivos: recargar así tumba Hyprland. Se para aquí sin
+  # recargar (Hyprland se queda con la config que ya tenía en memoria) y tus
+  # cambios siguen a salvo en el stash.
+  conflictos=$(git -C "$cfg" diff --name-only --diff-filter=U)
+  if [ -n "$conflictos" ]; then
+    trap - EXIT
+    "$scripts/FontSize.py" apply --no-reload
+    printf '%s\n' "$conflictos" | sed 's/^/   /'
+    fail "$(L "Tus cambios chocaron con la actualización (arriba los archivos). Arréglalos (quita los <<<<<<< / >>>>>>>), luego: git -C ~/.config stash drop y hyprctl reload" \
+              "Your changes conflicted with the update (files above). Fix them (remove the <<<<<<< / >>>>>>>), then: git -C ~/.config stash drop and hyprctl reload")"
+  fi
   [ -n "$cur" ] && [ -d "$looks/$cur" ] && apply_look "$cur"
   reload_all
   if [ "$before" = "$(git -C "$cfg" rev-parse HEAD)" ]; then
