@@ -394,6 +394,15 @@ else
 fi
 
 # ── 3. Dotfiles ──────────────────────────────────────────────────────────────
+# Con Hyprland abierto: sin autoreload mientras se copia. Recargaba con cada
+# archivo, y a media copia (un `source` a un archivo que aún no llega, uno a
+# medio escribir) Hyprlang tiró una excepción y Hyprland se cayó (SIGABRT,
+# 2026-11-01, al actualizar). Al terminar, una sola recarga con todo en su lugar
+# (la config no apaga el autoreload, así que la recarga lo vuelve a prender).
+if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ] && ! ((DRY)) && command -v hyprctl >/dev/null; then
+  bash "$REPO_DIR/hypr/scripts/Hypr.sh" set misc:disable_autoreload true >/dev/null 2>&1
+  trap 'hyprctl reload >/dev/null 2>&1' EXIT
+fi
 if ((NEW_MACHINE)); then
   say "$(L "Copiando dotfiles a $CFG (lo que se pise va a $BACKUP)" "Copying dotfiles to $CFG (anything overwritten goes to $BACKUP)")"
   # Hyprland lee hyprland.lua antes que hyprland.conf: con la config Lua de

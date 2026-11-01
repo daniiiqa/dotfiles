@@ -39,6 +39,12 @@ apply_look() {  # el look actual sobre lo vivo, desde su look.toml (como LookSwi
   "$scripts/LookBuild.py" apply "$1"
 }
 
+# sin autoreload mientras cambian los archivos (Hyprland se caía recargando a
+# media copia); reload_all recarga una vez al final, y si algo falla antes, la
+# recarga de salida lo deja como estaba
+"$scripts/Hypr.sh" set misc:disable_autoreload true >/dev/null 2>&1
+trap 'hyprctl reload >/dev/null 2>&1' EXIT
+
 if git -C "$cfg" rev-parse --is-inside-work-tree >/dev/null 2>&1 && [ -d "$cfg/hypr/looks" ]; then
   cur=$(cat "$looks/.current" 2>/dev/null)
   say "$(L "discada vive en ~/.config: actualizando el repo" "discada lives in ~/.config: updating the repo")"
