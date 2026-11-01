@@ -64,7 +64,7 @@ REPO_PKGS=(
   # ajustes gráficos, red y bluetooth
   nwg-displays qt5ct qt6ct papirus-icon-theme adw-gtk-theme
   networkmanager bluez bluez-utils
-  # picha (el cel): recibir por Bluetooth (obex), lumbre (el Wi-Fi propio de la
+  # picha (el cel y las otras compus): recibir por Bluetooth (obex), lumbre (el Wi-Fi propio de la
   # laptop, dnsmasq) y la pantalla del cel (scrcpy, adb)
   bluez-obex dnsmasq scrcpy android-tools
   # fuentes base (JetBrainsMono Mono para iconos alineados, Adwaita Mono para
@@ -578,7 +578,7 @@ say "taco ($(L "los archivos con el look de discada" "files with the discada loo
 run cargo install --git "$TACO_REPO" --root "$HOME/.local" --locked
 say "empalme ($(L "la barra de discada" "the discada bar")) → ~/.local/bin/empalme"
 run cargo install --git "$EMPALME_REPO" --root "$HOME/.local" --locked
-say "picha ($(L "el cel: Quick Share, Bluetooth y su pantalla" "the phone: Quick Share, Bluetooth and its screen")) → ~/.local/bin/picha"
+say "picha ($(L "mandar y recibir: el cel y tus compus" "send and receive: the phone and your computers")) → ~/.local/bin/picha"
 run cargo install --git "$PICHA_REPO" --root "$HOME/.local" --locked
 say "jale ($(L "el launcher y los menús" "the launcher and the menus")) → ~/.local/bin/jale"
 run cargo install --git "$JALE_REPO" --root "$HOME/.local" --locked

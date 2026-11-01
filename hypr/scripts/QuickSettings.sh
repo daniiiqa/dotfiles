@@ -270,7 +270,7 @@ tools_menu() {
   local i
   i=$(row=0 pick "$(L herramientas tools)" "" \
       "Audio (vato)" "Bluetooth (vato)" "$(L "Red" "Network") (vato)" "$(L "Sistema" "System") (vato)" \
-      "$(L "Notificaciones" "Notifications") (vato)" "$(L "El cel" "Phone") (picha)" \
+      "$(L "Notificaciones" "Notifications") (vato)" "$(L "Mandar y recibir" "Send and receive") (picha)" \
       "$(L "Monitores" "Monitors") (nwg-displays)" "$(L "Buscar atajos" "Search shortcuts")" "‹ $(L volver back)") || return
   case "$i" in
     0) "$scripts/Vato.sh" audio & ;;

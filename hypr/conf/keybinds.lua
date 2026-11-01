@@ -30,7 +30,7 @@ hl.bind("SUPER + SHIFT + Return", hl.dsp.exec_cmd(scriptsDir .. "/Dropterminal.s
 hl.bind("SUPER + E", hl.dsp.exec_cmd(d.files), { description = "file manager" })
 hl.bind("SUPER + B", hl.dsp.exec_cmd("xdg-open \"https://\""), { description = "browser" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd(scriptsDir .. "/FocusOrLaunch.sh rola kitty --class rola -e rola"), { description = "music player" })
-hl.bind("SUPER + P", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh picha"), { description = "phone (picha)" })
+hl.bind("SUPER + P", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh picha"), { description = "send and receive (picha)" })
 hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd("$HOME/.local/bin/picha pantalla --ya"), { description = "phone screen (picha)" })
 
 -- ─── Menús ───────────────────────────────────────────────────────────────────

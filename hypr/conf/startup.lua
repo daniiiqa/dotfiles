@@ -40,7 +40,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hypridle")
     hl.exec_cmd(scriptsDir .. "/Battery.py watch")  -- laptops: avisos, ahorro solo (BATTERY_SAVER_AT)
     hl.exec_cmd("$HOME/.local/bin/fierro restore")  -- laptops: los límites de carga y el perfil de fierro
-    hl.exec_cmd("$HOME/.local/bin/picha recibe")  -- lo que comparte el cel (Quick Share, Bluetooth)
+    hl.exec_cmd("$HOME/.local/bin/picha recibe")  -- lo que te mandan el cel y tus compus (Quick Share, Bluetooth)
     hl.exec_cmd(scriptsDir .. "/FontSize.py apply")  -- tamaño de letra de discada (hypr/discada.conf)
     hl.exec_cmd(scriptsDir .. "/Recorder.sh autostart")  -- replay buffer (hypr/recorder.conf)
 

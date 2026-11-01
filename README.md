@@ -37,7 +37,7 @@ shows everything without touching anything; `--help` lists the options):
   from `hypr/nvim/` (the rest of your config is left alone)
 - SDDM with the simple_sddm_2 theme when there is no other display manager
   (`--no-sddm` / `--sddm` to force)
-- builds [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre), [taco](https://github.com/daniiiqa/taco), [empalme](https://github.com/daniiiqa/empalme) (the bar), [picha](https://github.com/daniiiqa/picha) (the phone) and, on laptops, [fierro](https://github.com/daniiiqa/fierro) into `~/.local/bin`
+- builds [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre), [taco](https://github.com/daniiiqa/taco), [empalme](https://github.com/daniiiqa/empalme) (the bar), [picha](https://github.com/daniiiqa/picha) (the phone and your other computers) and, on laptops, [fierro](https://github.com/daniiiqa/fierro) into `~/.local/bin`
 - on first login, `hypr/scripts/FirstRun.sh` does the rest (a generated
   wallpaper if there is none, colors, dark GTK theme and icons)
 
@@ -141,9 +141,10 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
 - **Music: [rola](https://github.com/daniiiqa/rola)** — YouTube Music in the
   terminal. `rola --login` connects your account. Each look brings its own
   `rola/look.json`.
-- **Phone: [picha](https://github.com/daniiiqa/picha)** — Quick Share and
-  Bluetooth both ways, the phone's screen (scrcpy) and its own Wi-Fi when there
-  is no network. `picha recibe` starts with the session; the bar shows an arrow
+- **Sharing: [picha](https://github.com/daniiiqa/picha)** — Quick Share and
+  Bluetooth both ways with the phone and with your other discada computers (pick
+  where to when sending), texts that arrive as a notification instead of a
+  `.txt`, the phone's screen (scrcpy) and its own Wi-Fi when there is no network. `picha recibe` starts with the session; the bar shows an arrow
   and the percentage while something is on its way, and taco sends the marked
   files with `P`.
 - **Laptop: [fierro](https://github.com/daniiiqa/fierro)** (laptops only) —
