@@ -46,7 +46,7 @@ gap = 0                # celdas entre módulos
 spacing = 8            # pixeles entre módulos
 left = ["clock", "visualizer"]
 center = ["workspaces"]
-right = ["recorder", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
+right = ["recorder", "picha", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
 
 [bar.box]
 bg = "transparent"

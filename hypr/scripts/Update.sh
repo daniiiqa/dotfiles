@@ -27,6 +27,11 @@ reload_all() {
   pkill -x empalme
   sleep 0.3
   setsid "$scripts/Bar.sh" >/dev/null 2>&1 &
+  # picha recibe con el binario nuevo (y la primera vez, sin volver a entrar)
+  if [ -x "$HOME/.local/bin/picha" ]; then
+    pkill -f '(^|/)picha recibe'
+    setsid "$HOME/.local/bin/picha" recibe >/dev/null 2>&1 &
+  fi
   pkill -USR1 -x kitty
 }
 

@@ -18,6 +18,7 @@ Super Shift Enter|Terminal dropdown|Dropdown terminal
 Super E|Archivos (taco)|Files (taco)
 Super B|Navegador|Browser
 Super M|Música (rola)|Music (rola)
+Super Alt P|El cel: mandar, recibir, su pantalla (picha)|Your phone: send, receive, its screen (picha)
 vato|Audio, bluetooth, red y sistema (en la terminal)|Audio, bluetooth, network and system (terminal)
 Super S|Buscar en la web|Web search
 Super Ctrl S|Cambiar de ventana|Window switcher

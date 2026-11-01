@@ -30,6 +30,7 @@ hl.bind("SUPER + SHIFT + Return", hl.dsp.exec_cmd(scriptsDir .. "/Dropterminal.s
 hl.bind("SUPER + E", hl.dsp.exec_cmd(d.files), { description = "file manager" })
 hl.bind("SUPER + B", hl.dsp.exec_cmd("xdg-open \"https://\""), { description = "browser" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd(scriptsDir .. "/FocusOrLaunch.sh rola kitty --class rola -e rola"), { description = "music player" })
+hl.bind("SUPER + ALT + P", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh picha"), { description = "phone (picha)" })
 
 -- ─── Menús ───────────────────────────────────────────────────────────────────
 hl.bind("SUPER + H", hl.dsp.exec_cmd(scriptsDir .. "/KeyHints.sh"), { description = "cheat sheet" })
@@ -211,3 +212,5 @@ hl.bind("ALT + xf86MonBrightnessDown", hl.dsp.exec_cmd(scriptsDir .. "/Brightnes
 hl.bind("xf86KbdBrightnessUp", hl.dsp.exec_cmd(scriptsDir .. "/Brightness.sh --kbd-inc"), { description = "keyboard light up", locked = true, repeating = true })
 hl.bind("xf86KbdBrightnessDown", hl.dsp.exec_cmd(scriptsDir .. "/Brightness.sh --kbd-dec"), { description = "keyboard light down", locked = true, repeating = true })
 hl.bind("xf86Battery", hl.dsp.exec_cmd(scriptsDir .. "/Battery.py saver"), { description = "battery saver on/off", locked = true })
+-- la tecla de la marca (la de Huawei manda XF86Tools): la laptop en fierro
+hl.bind("xf86Tools", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh fierro"), { description = "laptop (fierro)" })

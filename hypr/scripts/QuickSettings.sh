@@ -215,20 +215,22 @@ bat_menu() {
   local row=0
   while true; do
     local prof saver at i
-    prof=$(powerprofilesctl get 2>/dev/null)
+    prof=$("$bat" profile get)
     saver=$([ -f "$XDG_RUNTIME_DIR/discada/saver.json" ] && echo yes || echo no)
     at=$(get_conf "$discada" BATTERY_SAVER_AT)
     i=$(pick "$(L batería battery)" \
-        "$(L "ahorro: perfil power-saver, sin blur, sombras ni shader y el video en pausa" "saver: power-saver profile, no blur, shadows or shader, video paused")" \
+        "$(L "ahorro: perfil de ahorro, sin blur, sombras ni shader y el video en pausa" "saver: power-saving profile, no blur, shadows or shader, video paused")" \
         "$(L "ahorro de batería" "battery saver"): $(onoff "$saver")" \
         "$(L "perfil de energía" "power profile"): $(prof_name "$prof")" \
         "$(L "ahorro solo al" "saver by itself at"): $([ "${at:-20}" = 0 ] && L nunca never || echo "${at:-20}%")" \
+        "$(L "límites de carga y más" "charge limits and more") (fierro)" \
         "‹ $(L volver back)") || return
     row=$i
     case "$i" in
       0) "$bat" saver ;;
       1) "$bat" profile ;;
       2) set_conf "$discada" BATTERY_SAVER_AT "$(cycle "${at:-20}" 20 30 15 10 0)" ;;
+      3) "$scripts/TuiApp.sh" fierro & return ;;
       *) return ;;
     esac
   done
@@ -265,7 +267,7 @@ tools_menu() {
   local i
   i=$(row=0 pick "$(L herramientas tools)" "" \
       "Audio (vato)" "Bluetooth (vato)" "$(L "Red" "Network") (vato)" "$(L "Sistema" "System") (vato)" \
-      "$(L "Notificaciones" "Notifications") (vato)" \
+      "$(L "Notificaciones" "Notifications") (vato)" "$(L "El cel" "Phone") (picha)" \
       "$(L "Monitores" "Monitors") (nwg-displays)" "$(L "Buscar atajos" "Search shortcuts")" "‹ $(L volver back)") || return
   case "$i" in
     0) "$scripts/Vato.sh" audio & ;;
@@ -273,8 +275,9 @@ tools_menu() {
     2) "$scripts/Vato.sh" network & ;;
     3) "$scripts/Vato.sh" system & ;;
     4) "$scripts/Vato.sh" notifications & ;;
-    5) need nwg-displays && nwg-displays & ;;
-    6) "$scripts/KeyBinds.sh" & ;;
+    5) "$scripts/TuiApp.sh" picha & ;;
+    6) need nwg-displays && nwg-displays & ;;
+    7) "$scripts/KeyBinds.sh" & ;;
   esac
 }
 

@@ -4,7 +4,8 @@
   Battery.py status        JSON con el estado (el tooltip de la barra)
   Battery.py watch         daemon: avisos de batería baja, ahorro automático
                            y refresca la barra al conectar/desconectar
-  Battery.py profile       siguiente perfil de energía (power-profiles-daemon)
+  Battery.py profile       siguiente perfil de energía (fierro o power-profiles-daemon)
+  Battery.py profile get   el perfil de ahora (power-saver, balanced, performance)
   Battery.py saver [on|off|toggle]
   Battery.py idle-suspend  suspende solo si está con batería (lo llama hypridle)
   Battery.py has           sale con 0 si hay batería de laptop (exec-if)
@@ -113,8 +114,14 @@ def hm(secs):
     return f"{m // 60}:{m % 60:02d}"
 
 
-# ── perfiles (power-profiles-daemon) ─────────────────────────────────────────
+# ── perfiles (fierro, o power-profiles-daemon) ──────────────────────────────
+# fierro (la app de la laptop de discada) apaga power-profiles-daemon: si
+# está, los perfiles son los suyos (ahorro, balance, fierro) con los nombres de
+# power-profiles-daemon para el resto de discada
 PROFILES = ["power-saver", "balanced", "performance"]
+# (Hyprland no trae ~/.local/bin en el PATH)
+FIERRO = shutil.which("fierro", path=os.path.expanduser("~/.local/bin") + os.pathsep + os.environ.get("PATH", ""))
+TO_FIERRO = {"power-saver": "ahorro", "balanced": "balance", "performance": "fierro"}
 
 
 def profile_name(p):
@@ -123,18 +130,31 @@ def profile_name(p):
 
 
 def profile_get():
+    if FIERRO:
+        r = subprocess.run([FIERRO, "status", "--json"], capture_output=True, text=True)
+        try:
+            p = (json.loads(r.stdout).get("profile") or {}).get("profile")
+        except ValueError:
+            return None
+        return {v: k for k, v in TO_FIERRO.items()}.get(p)
     if not shutil.which("powerprofilesctl"):
         return None
     r = subprocess.run(["powerprofilesctl", "get"], capture_output=True, text=True)
     return r.stdout.strip() or None
 
 
-def profile_set(p):
-    if shutil.which("powerprofilesctl"):
+def profile_set(p, temp=False):
+    """temp: sin que fierro lo recuerde (el ahorro, que se va solo)."""
+    if FIERRO:
+        subprocess.run([FIERRO, "profile", TO_FIERRO.get(p, "balance"), *(["--temp"] if temp else [])],
+                       capture_output=True)
+    elif shutil.which("powerprofilesctl"):
         subprocess.run(["powerprofilesctl", "set", p], capture_output=True)
 
 
 def profiles_available():
+    if FIERRO:
+        return PROFILES
     r = subprocess.run(["powerprofilesctl", "list"], capture_output=True, text=True)
     return [p for p in PROFILES if f"{p}:" in r.stdout] or PROFILES[:2]
 
@@ -187,7 +207,7 @@ def saver_on(why="manual"):
     st = {"why": why, "profile": profile_get()}
     capture_look(st)
     save_state(st)
-    profile_set("power-saver")
+    profile_set("power-saver", temp=True)
     apply_saver()
     refresh_bar()
     msg = T("Se prendió solo con la batería baja" if why == "auto" else "Menos efectos y menos consumo",
@@ -210,7 +230,7 @@ def saver_off():
     if args:
         hypr("set", *args)
     subprocess.run(["pkill", "-CONT", "-x", "mpvpaper"], capture_output=True)
-    profile_set(st.get("profile") or "balanced")
+    profile_set(st.get("profile") or "balanced", temp=True)
     refresh_bar()
     notify(T("Ahorro de batería: no", "Battery saver: off"), "")
 
@@ -261,7 +281,7 @@ def status():
 
 
 def cycle_profile():
-    if not shutil.which("powerprofilesctl"):
+    if not FIERRO and not shutil.which("powerprofilesctl"):
         notify(T("Falta power-profiles-daemon", "power-profiles-daemon is missing"),
                "sudo pacman -S power-profiles-daemon", "normal")
         return
@@ -379,7 +399,7 @@ def main():
     elif cmd == "watch":
         watch()
     elif cmd == "profile":
-        cycle_profile()
+        print(profile_get() or "") if arg == "get" else cycle_profile()
     elif cmd == "saver":
         on = not saver_state() if arg == "toggle" else arg == "on"
         saver_on() if on else saver_off()

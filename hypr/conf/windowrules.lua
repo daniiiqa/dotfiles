@@ -34,8 +34,8 @@ hl.window_rule({ match = { class = "^(xarchiver|org.gnome.Loupe)$" }, tag = "+to
 hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, tag = "+tool" })
 
 -- ─── Herramientas y diálogos ─────────────────────────────────────────────────
--- vato (Vato.sh): audio, bluetooth, red y sistema en la terminal
-hl.window_rule({ match = { class = "^(vato|discada-update)$" }, float = true, center = true, size = "(monitor_w*0.55) (monitor_h*0.6)" })
+-- vato (Vato.sh), picha y fierro (TuiApp.sh): las apps de discada en la terminal
+hl.window_rule({ match = { class = "^(vato|picha|fierro|discada-update)$" }, float = true, center = true, size = "(monitor_w*0.55) (monitor_h*0.6)" })
 hl.window_rule({ match = { tag = "tool" }, float = true, center = true, size = "(monitor_w*0.7) (monitor_h*0.7)" })
 hl.window_rule({ match = { class = "^(qalculate-gtk)$" }, float = true, center = true })
 hl.window_rule({ match = { class = "^(org.xfce.mousepad)$" }, float = true, center = true, size = "(monitor_w*0.5) (monitor_h*0.6)" })

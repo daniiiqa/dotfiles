@@ -32,12 +32,12 @@ shows everything without touching anything; `--help` lists the options):
   in `~/.config-backup-<date>/`; displays are left on auto-detect
 - taco as the default file browser, Zen as the default browser, NetworkManager
   and bluetooth enabled
-- on a laptop, brightnessctl and power-profiles-daemon (unless you use tlp)
+- on a laptop, brightnessctl and [fierro](https://github.com/daniiiqa/fierro) for charge limits and power profiles (it stays hands-off if you use tlp)
 - nvim: the LazyVim starter if you have no config; plus discada's colorscheme
   from `hypr/nvim/` (the rest of your config is left alone)
 - SDDM with the simple_sddm_2 theme when there is no other display manager
   (`--no-sddm` / `--sddm` to force)
-- builds [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre), [taco](https://github.com/daniiiqa/taco) and [empalme](https://github.com/daniiiqa/empalme) (the bar) into `~/.local/bin`
+- builds [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre), [taco](https://github.com/daniiiqa/taco), [empalme](https://github.com/daniiiqa/empalme) (the bar), [picha](https://github.com/daniiiqa/picha) (the phone) and, on laptops, [fierro](https://github.com/daniiiqa/fierro) into `~/.local/bin`
 - on first login, `hypr/scripts/FirstRun.sh` does the rest (a generated
   wallpaper if there is none, colors, dark GTK theme and icons)
 
@@ -52,6 +52,7 @@ Safe to run more than once.
 | `SUPER+T` | switch look (top entry: the look's shader on/off) |
 | `SUPER+W` | wallpaper |
 | `SUPER+M` | music (rola) |
+| `SUPER+Alt+P` | your phone (picha) · the laptop's brand key: fierro |
 | `ALT+Z` | recording menu · `ALT+F9` record · `ALT+F10` save replay |
 | `SUPER+Shift+K` | search every shortcut |
 
@@ -127,7 +128,7 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
 - **Laptops**: battery on the bar (click changes the power profile, right click
   toggles the saver), brightness and keyboard light on their keys (the level
   shows in arre's popup), warnings at 20/10/5 %, and a page in the settings menu.
-  **Battery saver** (`Battery.py`) sets the power-saver profile, drops blur,
+  **Battery saver** (`Battery.py`) sets fierro's ahorro profile, drops blur,
   shadows and shader, and pauses video wallpapers; it turns on by itself at
   `BATTERY_SAVER_AT` (20 %) and off when you plug in. When idle the screen dims
   after 2.5 min and, on battery only, it suspends after 15. None of this shows
@@ -140,6 +141,15 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
 - **Music: [rola](https://github.com/daniiiqa/rola)** — YouTube Music in the
   terminal. `rola --login` connects your account. Each look brings its own
   `rola/look.json`.
+- **Phone: [picha](https://github.com/daniiiqa/picha)** — Quick Share and
+  Bluetooth both ways, the phone's screen (scrcpy) and its own Wi-Fi when there
+  is no network. `picha recibe` starts with the session; the bar shows an arrow
+  and the percentage while something is on its way, and taco sends the marked
+  files with `P`.
+- **Laptop: [fierro](https://github.com/daniiiqa/fierro)** (laptops only) —
+  charge limits, power profiles (the battery module's click and the saver use
+  them), fn-lock and keyboard light. `install.sh` sets up its group so it never
+  needs root, and turns power-profiles-daemon off; `fierro restore` runs at login.
 
 ## Hyprland in Lua (ready, not active yet)
 

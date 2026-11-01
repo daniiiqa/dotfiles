@@ -63,6 +63,9 @@ REPO_PKGS=(
   # ajustes gráficos, red y bluetooth
   nwg-displays qt5ct qt6ct papirus-icon-theme adw-gtk-theme
   networkmanager bluez bluez-utils
+  # picha (el cel): recibir por Bluetooth (obex), lumbre (el Wi-Fi propio de la
+  # laptop, dnsmasq) y la pantalla del cel (scrcpy, adb)
+  bluez-obex dnsmasq scrcpy android-tools
   # fuentes base (JetBrainsMono Mono para iconos alineados, Adwaita Mono para
   # el visualizador, Noto Serif para paper); las de cada look: [font] package
   # en su look.toml
@@ -84,14 +87,14 @@ AUR_PKGS=(
   zen-browser-bin   # el navegador (SUPER+B)
 )
 SDDM_PKGS=(sddm qt6-svg qt6-declarative qt6-5compat qt6-multimedia qt6-multimedia-ffmpeg)   # el tema usa QtMultimedia (fondos de video)
-# laptops (hay batería del equipo, no la de un mouse): brillo y perfiles de
-# energía. power-profiles-daemon choca con tlp: si ya está tlp, se respeta
+# laptops (hay batería del equipo, no la de un mouse): brillo; los perfiles de
+# energía y los límites de carga son de fierro (abajo), que apaga
+# power-profiles-daemon. Si ya está tlp, se respeta: fierro solo mira
 LAPTOP=0
 for b in /sys/class/power_supply/*; do
   [ "$(cat "$b/type" 2>/dev/null)" = Battery ] && [ "$(cat "$b/scope" 2>/dev/null)" != Device ] && LAPTOP=1
 done
 LAPTOP_PKGS=(brightnessctl)
-pacman -Q tlp &>/dev/null || LAPTOP_PKGS+=(power-profiles-daemon)
 ((LAPTOP)) && REPO_PKGS+=("${LAPTOP_PKGS[@]}")
 # GPU Intel: el driver de video por hardware (VA-API). Sin él el grabador
 # (gpu-screen-recorder) no encuentra codificador h264/hevc/av1. AMD ya lo trae
@@ -127,6 +130,8 @@ VATO_REPO="https://github.com/daniiiqa/vato.git"
 ARRE_REPO="https://github.com/daniiiqa/arre.git"
 TACO_REPO="https://github.com/daniiiqa/taco.git"
 EMPALME_REPO="https://github.com/daniiiqa/empalme.git"
+PICHA_REPO="https://github.com/daniiiqa/picha.git"
+FIERRO_REPO="https://github.com/daniiiqa/fierro.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.conf hypr/workspaces.conf
@@ -568,6 +573,22 @@ say "taco ($(L "los archivos con el look de discada" "files with the discada loo
 run cargo install --git "$TACO_REPO" --root "$HOME/.local" --locked
 say "empalme ($(L "la barra de discada" "the discada bar")) → ~/.local/bin/empalme"
 run cargo install --git "$EMPALME_REPO" --root "$HOME/.local" --locked
+say "picha ($(L "el cel: Quick Share, Bluetooth y su pantalla" "the phone: Quick Share, Bluetooth and its screen")) → ~/.local/bin/picha"
+run cargo install --git "$PICHA_REPO" --root "$HOME/.local" --locked
+if ((LAPTOP)); then
+  say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
+  run cargo install --git "$FIERRO_REPO" --root "$HOME/.local" --locked
+  # una vez (y en cada --update, por si cambia): el grupo fierro y los permisos
+  # de sysfs, para que fierro nunca pida root; apaga power-profiles-daemon
+  if pacman -Q tlp &>/dev/null; then
+    warn "$(L "tlp ya maneja la energía: fierro solo muestra (sin permisos)" "tlp already manages power: fierro only shows (no permissions)")"
+  else
+    fierro_src=$(mktemp -d)
+    run git clone -q --depth 1 "$FIERRO_REPO" "$fierro_src"
+    run sudo sh "$fierro_src/dist/install.sh" "$USER"
+    rm -rf "${fierro_src:?}"
+  fi
+fi
 
 # nvim: si no hay config, el starter de LazyVim; luego el colorscheme de
 # discada (sigue al look; vive en hypr/nvim/). Del resto de tu config no se
@@ -596,7 +617,7 @@ else
     printf '[D-BUS Service]\nName=%s\nExec=%s\n' "$name" "$HOME/.local/bin/arre" > "$dbus_dir/$name.service"
   done
 fi
-# ~/.local/bin en el PATH (rola, vato, arre, taco y empalme viven ahí): en el perfil de
+# ~/.local/bin en el PATH (rola, vato, arre, taco, empalme, picha y fierro viven ahí): en el perfil de
 # login, que SDDM lee al entrar a Hyprland. En un Arch nuevo no viene
 path_line='[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || export PATH="$HOME/.local/bin:$PATH"  # discada'
 for prof in "$HOME/.bash_profile" "$HOME/.zprofile"; do
@@ -622,9 +643,6 @@ run mkdir -p "$pics/wallpapers"
 say "$(L Servicios Services)"
 run sudo systemctl enable --now NetworkManager.service
 run sudo systemctl enable --now bluetooth.service || warn "$(L "bluetooth no arrancó (¿no hay adaptador?)" "bluetooth didn't start (no adapter?)")"
-if ((LAPTOP)) && in_list power-profiles-daemon "${LAPTOP_PKGS[@]}"; then
-  run sudo systemctl enable --now power-profiles-daemon.service
-fi
 
 say "$(L "Caché de fuentes" "Font cache")"
 run fc-cache -f
