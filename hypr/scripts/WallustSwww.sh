@@ -72,6 +72,18 @@ wait_for_templates() {
   return 1
 }
 
+# Custom (dany): sin autoreload mientras se escriben los colores. wallust
+# deja wallust-hyprland.conf sin los nombres del look ($acc, $line…) y
+# LookBuild.py los agrega un momento después; si Hyprland recarga en medio,
+# sale la barra roja de errores ("failed to parse $line as a color"). Si el
+# que llama ya lo apagó (LookSwitch.sh, Update.sh), él recarga al final.
+hypr="$HOME/.config/hypr/scripts/Hypr.sh"
+own_reload=false
+if [[ "$("$hypr" get misc:disable_autoreload 2>/dev/null)" != 1 ]]; then
+  "$hypr" set misc:disable_autoreload true || true
+  own_reload=true
+fi
+
 # Run wallust (silent) to regenerate templates defined in ~/.config/wallust/wallust.toml
 # -s is used in this repo to keep things quiet and avoid extra prompts
 start_ts=$(date +%s)
@@ -82,6 +94,9 @@ wallust run -s "$wallpaper_path" || true
 # los colores del look: en los de paleta fija su paleta gana sobre la del
 # wallpaper; en todos, sus nombres propios (acc, critical…)
 "$HOME/.config/hypr/scripts/LookBuild.py" colors || true
+# ya con todos los colores: una sola recarga (vuelve a prender el autoreload,
+# que la config no apaga)
+$own_reload && { hyprctl reload >/dev/null || true; }
 wallust_targets=(
   "$HOME/.config/wlogout/wallust/colors-wlogout.css"
   "$HOME/.config/jale/wallust/colors-jale.rasi"
