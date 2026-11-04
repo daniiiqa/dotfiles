@@ -96,4 +96,29 @@ if [ -f "$wallpaper_current" ] && [ -w "$sddm_simple/Backgrounds" ]; then
     [ -e "$sddm_simple/Backgrounds/default.png" ] && cp -f "$wallpaper_current" "$sddm_simple/Backgrounds/default.png"
 fi
 
+# 3b) Custom (dany): wallpaper en video (mpvpaper, livewallpaper.conf) → el
+# mismo video en SDDM: el tema lo reproduce en loop si Background termina en
+# .mp4/.webm/…; mientras carga se ve el cuadro fijo (default, el de arriba).
+# Sin video, de vuelta a la imagen. Solo se copia si cambió.
+live_conf="$HOME/.config/hypr/conf/livewallpaper.conf"
+video=""
+[ -f "$live_conf" ] && video=$(sed -nE 's/^exec-once *= *.*mpvpaper .*"([^"]+\.(mp4|webm|mkv|mov|m4v|avi))" *$/\1/p' "$live_conf" | head -n1)
+video=${video//\$HOME/$HOME}
+if [ -n "$video" ] && [ -f "$video" ] && [ -w "$sddm_simple/Backgrounds" ]; then
+    ext=${video##*.}
+    out="$sddm_simple/Backgrounds/live.$ext"
+    stamp="$sddm_simple/Backgrounds/.live-source"
+    src="$video $(stat -c %Y "$video")"
+    if [ ! -f "$out" ] || [ "$(cat "$stamp" 2>/dev/null)" != "$src" ]; then
+        rm -f "$sddm_simple/Backgrounds"/live.*
+        cp -f "$video" "$out" && echo "$src" > "$stamp"
+    fi
+    set_key Background "Backgrounds/live.$ext"
+    set_key BackgroundPlaceholder "Backgrounds/default"
+else
+    set_key Background "Backgrounds/default"
+    set_key BackgroundPlaceholder ""
+    rm -f "$sddm_simple/Backgrounds"/live.* "$sddm_simple/Backgrounds/.live-source"
+fi
+
 exit 0
