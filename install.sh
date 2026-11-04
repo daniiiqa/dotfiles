@@ -576,6 +576,13 @@ if [ -e /usr/share/applications/zen.desktop ] || ((DRY)); then
   run xdg-mime default zen.desktop x-scheme-handler/http x-scheme-handler/https text/html application/xhtml+xml
 fi
 
+# Pinta para abrir (y editar) imágenes desde taco, en vez de swappy, que solo
+# anota capturas. Solo si está instalado; mientras discada no tenga el suyo.
+if [ -e /usr/share/applications/com.github.PintaProject.Pinta.desktop ] || ((DRY)); then
+  say "$(L "Pinta para las imágenes" "Pinta for images")"
+  run xdg-mime default com.github.PintaProject.Pinta.desktop image/png image/jpeg image/jpg image/gif image/bmp image/tiff image/webp image/x-ico image/svg+xml
+fi
+
 # Las apps de discada: el binario ya compilado de la release `edge` de cada repo
 # (GitHub Actions lo compila en cada push), solo si cambió desde la última vez.
 # Si el último commit todavía se está compilando allá, espera (hasta 15 min);
