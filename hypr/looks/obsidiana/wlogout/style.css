@@ -1,0 +1,41 @@
+/* Look obsidiana — seis lajas de vidrio negro, sin borde; al pasar, la laja
+   se pule: se aclara y toma el filo del reflejo violeta. */
+
+@import '../../.config/wlogout/wallust/colors-wlogout.css';
+
+window {
+    font-family: "{{font}}";
+    font-size: 11pt;
+    color: @foreground;
+    background-color: alpha(@background, 0.82);
+}
+
+button {
+    color: @dim;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12%;
+    background-color: alpha(@bg1, 0.9);
+    border: 1px solid alpha(@hi, 0.06);
+    border-radius: 26px;
+    margin: 14px;
+    outline-style: none;
+    box-shadow: 0 16px 40px alpha(#000000, 0.6);
+    text-shadow: none;
+    transition: background-color 300ms ease, color 300ms ease;
+}
+
+button:focus,
+button:hover {
+    color: @hi;
+    background-color: alpha(@hi, 0.12);
+    border-color: alpha(@brillo, 0.5);
+}
+
+#lock      { background-image: image(url("/usr/share/wlogout/icons/lock.png")); }
+#logout    { background-image: image(url("/usr/share/wlogout/icons/logout.png")); }
+#suspend   { background-image: image(url("/usr/share/wlogout/icons/suspend.png")); }
+#hibernate { background-image: image(url("/usr/share/wlogout/icons/hibernate.png")); }
+#shutdown  { background-image: image(url("/usr/share/wlogout/icons/shutdown.png")); }
+#reboot    { background-image: image(url("/usr/share/wlogout/icons/reboot.png")); }
+

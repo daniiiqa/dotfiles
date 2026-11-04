@@ -1,0 +1,289 @@
+# discada — look «obsidiana»
+# Vidrio volcánico: negro pulido, grises de piedra y un solo reflejo violeta
+# pálido, el brillo que tiene la obsidiana al voltearla a la luz. Tranquilo,
+# pero de otra forma: la barra abajo hecha de islas sueltas, ventanas sin
+# borde (la activa se nota por su sombra), TUIs monocromas y sin marcos.
+# Paleta fija sobre tu wallpaper (no trae uno propio).
+# LookBuild.py lo aplica (lo llama LookSwitch.sh).
+
+[about]
+es = "obsidiana: vidrio volcánico, islas abajo, ventanas sin borde, un reflejo violeta"
+en = "obsidian: volcanic glass, bottom islands, borderless windows, one violet sheen"
+
+[font]
+family = "MonaspiceNe Nerd Font"   # {{font}} en los archivos del look
+display = "Noto Serif"   # {{font_display}}: la hora del lock y wlogout
+package = "otf-monaspace-nerd"   # lo instala install.sh
+
+[colors]
+from = "palette"   # sus propios colores; el wallpaper es el tuyo
+# los de la terminal: piedra apagada, nada chillón
+background = "#0b0b0d"
+foreground = "#d6d3cf"
+cursor = "#b9b6d8"
+color0 = "#161618"
+color1 = "#b07a7a"
+color2 = "#8a9e86"
+color3 = "#b8a67e"
+color4 = "#7d8aa8"
+color5 = "#9a88b0"
+color6 = "#7fa3a3"
+color7 = "#8c8a87"
+color8 = "#2a2a2e"
+color9 = "#c48f8f"
+color10 = "#9fb39b"
+color11 = "#b9b6d8"   # acento de las TUIs: el reflejo
+color12 = "#d6d3cf"   # primario de las TUIs (con tint ink van en blanco y negro)
+color13 = "#b09fc6"
+color14 = "#96baba"
+color15 = "#f2f0ed"
+
+[colors.named]
+# nombres propios del look (@acc en css y jale, $acc en hyprland…)
+bg0 = "background"
+bg1 = "#131315"
+bg2 = "color8"
+dim = "#6f6d6a"
+fg = "foreground"
+hi = "color15"
+acc = "#e8e6e3"      # blanco de piedra pulida
+brillo = "color11"   # el reflejo violeta: solo en lo activo
+ok = "color2"
+warn = "color1"
+critical = "#c46a6a"
+rec = "critical"     # el punto del recorder al grabar
+line = "#1c1c1f"
+
+[style]
+# cómo se ven rola, vato, taco, arre y nvim (ver el README de vato):
+# sin marcos, en tinta, la selección invertida
+borders = "none"
+bar = "line"
+labels = "words"
+case = "lower"
+select = "inverse"
+tint = "ink"
+transparent = true
+
+[farula]
+# cómo se revela al cambiar wallpaper o look: la pantalla vieja se hace humo
+# y sube (iris, quemado, glitch, vidrio, derretido, fade, crt, azulejos,
+# cartas, onda, tinta, wipe, pixelado, humo; una lista o "random")
+fx = "humo"
+
+[wallust]
+palette = "dark16"
+
+[kitty]
+# lo que el tema de kitty del look tiene además de la paleta (selección, pestañas…)
+selection_foreground = "bg0"
+selection_background = "brillo"
+url_color = "brillo"
+cursor_text_color = "bg0"
+active_border_color = "bg2"
+inactive_border_color = "bg1"
+active_tab_foreground = "hi"
+active_tab_background = "bg2"
+inactive_tab_foreground = "dim"
+inactive_tab_background = "bg0"
+
+[bar]
+# empalme (empalme/src/style.rs): abajo, sin barra de fondo; cada módulo una
+# isla de vidrio negro suelta (style = "islands" + [bar.pill])
+position = "bottom"
+height = 36
+margin = [0, 18, 14, 18]     # arriba, derecha, abajo, izquierda (pixeles)
+style = "islands"
+radius = 18
+font-size = 13     # pixeles
+pad = 0
+gap = 0
+spacing = 8            # pixeles entre islas
+left = ["workspaces", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps"]
+center = ["clock"]
+# el visualizador va con la derecha: en el centro movía la hora (solo sale con música)
+right = ["visualizer", "recorder", "picha", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
+
+[bar.pill]
+bg = "alpha(bg0, 0.86)"
+border = "alpha(hi, 0.07)"
+"border-width" = 1
+radius = 18
+margin = [0, 0, 0, 0]
+padding = 12
+fg = "fg"
+shadow = [0, 3, "alpha(bg0, 0.5)"]
+"button-radius" = 14
+
+# en números romanos; el activo en blanco con el reflejo debajo
+[bar.modules.workspaces]
+format = "{icon}"
+"format-icons" = { "1" = "i", "2" = "ii", "3" = "iii", "4" = "iv", "5" = "v", "6" = "vi", "7" = "vii", "8" = "viii", "9" = "ix", "10" = "x" }
+persistent = 5
+padding = 6
+fg = "fg"
+"empty-fg" = "dim"
+"active-fg" = "bg0"
+"active-bg" = "acc"
+"button-padding" = 11
+"button-radius" = 14
+"font-size" = 13
+
+[bar.modules.visualizer]
+style = "braille"
+bars = 10
+padding = 12
+color = "brillo"
+
+[bar.modules.clock]
+format = "{:%H:%M}"
+"format-alt" = "{:%A %d de %B}"
+"tooltip-format" = "<tt><small>{calendar}</small></tt>"
+calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
+fg = "hi"
+padding = 16
+bold = true
+"font-size" = 14
+
+[bar.modules.temperature]
+tooltip = true
+"format-critical" = "{temperatureC}° !"
+format = "{temperatureC}°"
+interval = 10
+"critical-threshold" = 82
+fg = "dim"
+
+[bar.modules.cpu]
+format = "cpu {usage}"
+"format-alt" = "cpu {icon0}{icon1}{icon2}{icon3}"
+"format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+interval = 2
+fg = "dim"
+
+[bar.modules.memory]
+format = "mem {used:0.1f}"
+"format-alt" = "mem {percentage}%"
+tooltip = true
+"tooltip-format" = "{used:0.1f}GB/{total:0.1f}G"
+interval = 10
+fg = "dim"
+
+[bar.modules.disk]
+format = "disco {percentage_used}%"
+"tooltip-format" = "{used} used out of {total} on {path} ({percentage_used}%)"
+interval = 30
+path = "/"
+fg = "dim"
+
+[bar.modules.audio]
+format = "vol {volume}"
+"format-muted" = "vol —"
+"format-bluetooth" = "vol {volume} 󰂯"
+"tooltip-format" = "{icon} {desc} | {volume}%"
+"format-icons" = { "headphone" = "", "hands-free" = "", "headset" = "", "phone" = "", "portable" = "", "car" = "", "default" = ["", "", "󰕾", ""] }
+
+[bar.modules.mic]
+format = "mic {volume}"
+"format-muted" = "mic —"
+"tooltip-format" = "{source_desc} | {source_volume}%"
+
+[bar.modules.network]
+format = "red"
+"format-wifi" = "wifi {signalStrength}"
+"format-ethernet" = "cable"
+"format-disconnected" = "sin red"
+"tooltip-format" = "{ipaddr}  {bandwidthUpBits}  {bandwidthDownBits}"
+"format-linked" = "{ifname} (sin ip)"
+"tooltip-format-wifi" = "{essid} {icon} {signalStrength}%"
+"tooltip-format-ethernet" = "{ifname} 󰌘"
+"tooltip-format-disconnected" = "󰌙 Disconnected"
+"format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+
+[bar.modules.bluetooth]
+format = "bt"
+"format-disabled" = "bt —"
+"format-connected" = "bt {num_connections}"
+"tooltip-format" = " {device_alias}"
+"tooltip-format-connected" = "{device_enumerate}"
+"tooltip-format-enumerate-connected" = " {device_alias} 󰂄{device_battery_percentage}%"
+tooltip = true
+"format-off" = "bt —"
+
+[bar.modules.battery]
+format = "{percentage}%"
+"format-icons" = { "discharging" = [""], "charging" = [""], "full" = [""], "saver" = [""] }
+"low-color" = "warn"
+"critical-color" = "critical"
+
+[bar.modules.idle]
+tooltip = true
+"tooltip-format-activated" = "Stay awake: on\nScreen won't dim, lock or sleep"
+"tooltip-format-deactivated" = "Stay awake: off\nClick to keep the screen on"
+format = "{icon}"
+"format-icons" = { "activated" = "despierto", "deactivated" = "z" }
+fg = "dim"
+
+[bar.modules.notifications]
+format = "{icon}"
+"format-icons" = { "notification" = "<span foreground='#b9b6d8'>●</span>", "none" = "○", "dnd-notification" = "<span foreground='#b9b6d8'>◐</span>", "dnd-none" = "◌" }
+fg = "dim"
+
+[bar.modules.recorder]
+rec = "● rec"
+paused = "‖ rec"
+replay = "↺ replay"
+fg = "dim"
+
+[bar.modules.picha]
+fg = "dim"
+
+[bar.modules.power]
+format = "󰐥"
+tooltip = true
+"tooltip-format" = "Left Click: Logout Menu\nRight Click: Change Blur"
+fg = "dim"
+padding = 14
+"font-size" = 15
+
+[bar.modules.app]
+padding = 8
+"font-size" = 16
+color = "dim"
+"active-fg" = "hi"
+"active-line" = "bottom"
+"active-color" = "brillo"
+
+[bar.modules."app#more"]
+fg = "dim"
+padding = 8
+"font-size" = 16
+
+[bar.hover]
+fg = "brillo"
+modules = ["power", "audio", "mic", "network", "bluetooth", "battery", "notifications", "idle", "clock"]
+
+[bar.hover-workspaces]
+fg = "hi"
+bg = "bg2"
+
+[bar.tooltip]
+bg = "bg0"
+border = "alpha(hi, 0.1)"
+radius = 12
+fg = "fg"
+
+[bar.groups.apps]
+modules = ["app#more", "app#d1", "app#d2", "app#d3", "app#d4", "app#d5", "app#d6", "app#d7", "app#d8"]
+drawer = { "transition-duration" = 400, "transition-left-to-right" = true }
+
+[bar.groups.mobo_drawer]
+modules = ["temperature", "cpu", "memory", "disk"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.audio]
+modules = ["audio", "mic"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.notify]
+modules = ["notifications"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = false }
