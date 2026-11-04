@@ -54,7 +54,9 @@ kill_mpvpaper_on() {
   local out="$1" pid
   for pid in $(pgrep -x mpvpaper); do
     if ps -o args= -p "$pid" | tr ' ' '\n' | grep -qx -e "$out" -e '\*' -e "'\*'"; then
-      kill "$pid" 2>/dev/null
+      # Custom (dany): congelado (ahorro de batería, SIGSTOP) no atiende el
+      # TERM hasta que lo despierten: sin el CONT se quedaba vivo para siempre
+      kill "$pid" 2>/dev/null; kill -CONT "$pid" 2>/dev/null
     fi
   done
 }

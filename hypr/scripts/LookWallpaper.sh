@@ -38,7 +38,8 @@ if [ -n "$img" ]; then
     readlink -f "$cfg/hypr/wallpaper_effects/.wallpaper_link" > "$saved/current" 2>/dev/null
   fi
   # 2) sin videos: el wallpaper del look en todos los monitores
-  pkill -x mpvpaper 2>/dev/null
+  # congelado por el ahorro de batería no se iría sin el CONT
+  pkill -x mpvpaper 2>/dev/null; pkill -CONT -x mpvpaper 2>/dev/null
   [ -f "$live" ] && grep '^#' "$live" > "$live.tmp" && mv "$live.tmp" "$live"
   pgrep -x awww-daemon >/dev/null || { awww-daemon --format xrgb & sleep 1; }
   awww img "$img" "${params[@]}"
