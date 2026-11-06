@@ -141,21 +141,18 @@ También aparece en el instalador. La guía está en `hypr/looks/README.md`.
   terminal. `rola --login` conecta tu cuenta. Cada look trae su
   `rola/look.json`.
 
-## Hyprland en Lua (lista, todavía apagada)
+## Hyprland en Lua
 
-Hyprland 0.57 quita el formato `.conf`. Toda la config ya existe en Lua junto a
-la de ahora (`hypr/hyprland.lua.new`, `hypr/conf/*.lua`, y el `decorations.lua`
-/ `animations.lua` de cada look) y está probada. Se activa cuando se pruebe
-el clic en los workspaces de la barra en modo Lua. Los scripts, la
-barra y wlogout le hablan a Hyprland por `hypr/scripts/Hypr.sh`, que sirve con
-los dos formatos. Mientras tanto, los cambios a la config van en los `.conf` y
-en los `.lua`.
+La config está en Lua (`hypr/hyprland.lua`, `hypr/conf/*.lua`, y el
+`decorations.lua` / `animations.lua` de cada look), porque Hyprland 0.57 ya no
+lee `.conf`. Los cambios a la config van en los `.lua`. Los scripts, la barra y
+wlogout le hablan a Hyprland por `hypr/scripts/Hypr.sh`.
 
 ## Estructura
 
 ```
 hypr/
-  hyprland.conf          solo hace `source` de conf/*
+  hyprland.lua           solo carga conf/*
   conf/                  defaults, env, startup, settings, decorations,
                          animations, windowrules, keybinds, pinned, livewallpaper
   discada.conf           idioma, tamaño de letra (no se trackea; sale de hypr/seed/)

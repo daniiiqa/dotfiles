@@ -152,21 +152,18 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
   them), fn-lock and keyboard light. `install.sh` sets up its group so it never
   needs root, and turns power-profiles-daemon off; `fierro restore` runs at login.
 
-## Hyprland in Lua (ready, not active yet)
+## Hyprland in Lua
 
-Hyprland 0.57 drops the `.conf` format. The whole config already exists in Lua
-next to it (`hypr/hyprland.lua.new`, `hypr/conf/*.lua`, each look's
-`decorations.lua` / `animations.lua`) and is tested. It gets switched on once
-the bar's workspace clicks are tested under Lua. Scripts, the
-bar and wlogout talk to Hyprland through `hypr/scripts/Hypr.sh`, which works
-with either format. Until then, config edits go in both the `.conf` and the
-`.lua` files.
+The config is in Lua (`hypr/hyprland.lua`, `hypr/conf/*.lua`, each look's
+`decorations.lua` / `animations.lua`), since Hyprland 0.57 no longer reads
+`.conf`. Config edits go in the `.lua` files. Scripts, the bar and wlogout talk
+to Hyprland through `hypr/scripts/Hypr.sh`.
 
 ## Layout
 
 ```
 hypr/
-  hyprland.conf          only sources conf/*
+  hyprland.lua           only loads conf/*
   conf/                  defaults, env, startup, settings, decorations,
                          animations, windowrules, keybinds, pinned, livewallpaper
   discada.conf           language, font size (untracked; starts from hypr/seed/)
