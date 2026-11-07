@@ -143,9 +143,10 @@ def hypr(*args):
     return json.loads(out) if "-j" in args else out
 
 
+# los workspaces especiales (dropterm, scratchpad) ya no traen "id" desde Hyprland 0.57
 def visible_clients():
     return [c for c in hypr("clients", "-j")
-            if c["mapped"] and c["workspace"]["id"] > 0 and c["class"]]
+            if c["mapped"] and (c["workspace"].get("id") or 0) > 0 and c["class"]]
 
 
 def write(slot, text="", cls="", tooltip="", klass=()):

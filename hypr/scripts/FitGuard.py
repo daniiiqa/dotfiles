@@ -52,7 +52,7 @@ def float_centered(c, monitors):
 
 
 def check():
-    clients = [c for c in hypr("clients", "-j") if c["mapped"] and c["workspace"]["id"] > 0]
+    clients = [c for c in hypr("clients", "-j") if c["mapped"] and (c["workspace"].get("id") or 0) > 0]
     alive = {c["address"] for c in clients}
     floated.intersection_update(alive)
     for a in list(retried):
