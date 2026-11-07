@@ -137,6 +137,7 @@ BRASA_REPO="https://github.com/daniiiqa/brasa.git"
 ROLLO_REPO="https://github.com/daniiiqa/rollo.git"
 FARULA_REPO="https://github.com/daniiiqa/farula.git"
 FIERRO_REPO="https://github.com/daniiiqa/fierro.git"
+CHISPA_REPO="https://github.com/daniiiqa/chispa.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.conf hypr/workspaces.conf
@@ -662,6 +663,19 @@ if ((LAPTOP)); then
   fi
 fi
 
+# Custom (dany): chispa, la luz del AULA F75, solo si está conectado (por cable,
+# el dongle o Bluetooth). La regla de udev deja hablarle al teclado sin root.
+if grep -qsiE '^HID_ID=[0-9a-f]+:(0000258A:0000010C|00003554:0000FA0[789])' /sys/class/hidraw/*/device/uevent; then
+  say "chispa ($(L "la luz del teclado AULA F75" "the AULA F75 keyboard lighting")) → ~/.local/bin/chispa"
+  app chispa "$CHISPA_REPO"
+  chispa_src=$(mktemp -d)
+  run git clone -q --depth 1 "$CHISPA_REPO" "$chispa_src"
+  run sudo install -m644 "$chispa_src/60-aula-f75.rules" /etc/udev/rules.d/
+  run sudo udevadm control --reload-rules
+  run sudo udevadm trigger
+  rm -rf "${chispa_src:?}"
+fi
+
 # nvim: si no hay config, el starter de LazyVim; luego el colorscheme de
 # discada (sigue al look; vive en hypr/nvim/). Del resto de tu config no se
 # toca nada.
@@ -689,7 +703,7 @@ else
     printf '[D-BUS Service]\nName=%s\nExec=%s\n' "$name" "$HOME/.local/bin/arre" > "$dbus_dir/$name.service"
   done
 fi
-# ~/.local/bin en el PATH (rola, vato, arre, taco, empalme, picha y fierro viven ahí): en el perfil de
+# ~/.local/bin en el PATH (rola, vato, arre, taco, empalme, picha, fierro y chispa viven ahí): en el perfil de
 # login, que SDDM lee al entrar a Hyprland. En un Arch nuevo no viene
 path_line='[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || export PATH="$HOME/.local/bin:$PATH"  # discada'
 for prof in "$HOME/.bash_profile" "$HOME/.zprofile"; do
