@@ -324,6 +324,7 @@ teclado_menu() {
   fi
   labels+=("$(L "Barrita junto al Esc ›" "Side light ›")"); keys+=(side)
   labels+=("$(L "Apagar las luces sin usarlo ›" "Lights off when idle ›")"); keys+=(sleep)
+  labels+=("$(L "Perilla ›" "Knob ›")"); keys+=(knob)
   labels+=("$(L "Escoger un color o efecto…" "Pick a color or effect…")"); keys+=(tui)
   i=$(row=0 pick "$(L teclado keyboard)" "$mesg" "${labels[@]}" "‹ $(L volver back)") || return
   case "${keys[$i]}" in
@@ -333,8 +334,20 @@ teclado_menu() {
     save) setsid -f chispa save >/dev/null 2>&1 ;;
     side) lateral_menu ;;
     sleep) dormir_menu ;;
+    knob) perilla_menu ;;
     tui) "$scripts/TuiApp.sh" chispa tui & exit 0 ;;
   esac
+}
+
+# la perilla: volumen y silencio, o brillo y siguiente efecto (dejarla apretada
+# también la cambia, en el teclado)
+perilla_menu() {
+  local i modos=(volume lighting) err
+  i=$(row=0 pick "$(L perilla knob)" "" \
+      "$(L "Volumen (apretar = silencio)" "Volume (press = mute)")" \
+      "$(L "Luz (brillo; apretar = siguiente efecto)" "Lighting (brightness; press = next effect)")" "‹ $(L volver back)") || return
+  [ -n "${modos[$i]}" ] || return
+  err=$(chispa knob "${modos[$i]}" 2>&1 >/dev/null) || notify-send -i "dialog-error-symbolic" "chispa" "$err"
 }
 
 # cuánto espera el teclado sin usarse para apagar las luces (2.4 GHz y Bluetooth)
