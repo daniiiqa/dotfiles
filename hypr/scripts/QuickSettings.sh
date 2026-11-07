@@ -3,7 +3,7 @@
 # fuera del PATH de Hyprland
 PATH="$HOME/.local/bin:$PATH"
 # discada — el centro de ajustes del rice (SUPER+Shift+E): look, shader,
-# idioma, visualizador, grabador, notificaciones, batería, game mode y blur; más los submenús para
+# idioma, visualizador, grabador, notificaciones, teclado, batería, game mode y blur; más los submenús para
 # editar la config y abrir las herramientas del sistema. Cada cambio vuelve a
 # abrir el menú en la misma fila, así se pueden tocar varias cosas seguidas.
 
@@ -25,7 +25,7 @@ edit=${EDITOR:-${edit:-nano}}
 I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
 I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
 I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'; I_UPDATE=$'\U000f06b0'
-I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'
+I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'; I_TECLADO=$'\U000f030c'
 arre="$HOME/.local/bin/arre"
 
 need() {
@@ -284,6 +284,81 @@ tools_menu() {
   esac
 }
 
+# ── la luz del teclado (chispa) ──────────────────────────────────────────────
+# solo si está el AULA F75 por cable
+hay_teclado() {
+  command -v chispa >/dev/null && grep -qsiE '^HID_ID=[0-9a-f]+:(0000258A:0000010C|00003554:0000FA0[789])' /sys/class/hidraw/*/device/uevent
+}
+
+teclado_now() {
+  case "$(get_conf "$discada" KEYBOARD_LIGHT)" in
+    wallpaper) L "wallpaper" "wallpaper" ;;
+    music) L "música" "music" ;;
+    *) L "a mano" "custom" ;;
+  esac
+}
+
+# lo que chispa sostiene en vivo, sin guardar todavía (sin hablarle al teclado)
+chispa_en_vivo() {
+  local p
+  p=$(cat "$XDG_RUNTIME_DIR/chispa-hold.pid" 2>/dev/null) && [ -s "$XDG_RUNTIME_DIR/chispa-hold" ] &&
+    [ "$(cat "/proc/$p/comm" 2>/dev/null)" = chispa ]
+}
+
+teclado_menu() {
+  # Custom (dany): lo que no se puede (sin wallust, sin cava) ni sale
+  local i labels=() keys=() bat mesg=""
+  # la batería (solo por 2.4 GHz): la última que se leyó, al instante, y se vuelve
+  # a leer de fondo para la próxima (leerla tarda unos segundos por radio)
+  bat=$(chispa battery --cached 2>/dev/null)
+  [ -n "$bat" ] && mesg="$(L batería battery): $bat"
+  setsid -f chispa battery >/dev/null 2>&1
+  if command -v wallust >/dev/null; then
+    labels+=("$(L "Seguir al wallpaper" "Follow the wallpaper")"); keys+=(wallpaper)
+  fi
+  if command -v cava >/dev/null; then
+    labels+=("$(L "Visualizador de música" "Music visualizer")"); keys+=(music)
+  fi
+  if chispa_en_vivo; then
+    labels+=("$(L "Guardar ya el color (parpadea)" "Save the color now (blinks)")"); keys+=(save)
+  fi
+  labels+=("$(L "Barrita junto al Esc ›" "Side light ›")"); keys+=(side)
+  labels+=("$(L "Apagar las luces sin usarlo ›" "Lights off when idle ›")"); keys+=(sleep)
+  labels+=("$(L "Escoger un color o efecto…" "Pick a color or effect…")"); keys+=(tui)
+  i=$(row=0 pick "$(L teclado keyboard)" "$mesg" "${labels[@]}" "‹ $(L volver back)") || return
+  case "${keys[$i]}" in
+    wallpaper) local err
+       err=$(chispa wallpaper 2>&1 >/dev/null) || notify-send -i "dialog-error-symbolic" "chispa" "$err" ;;
+    music) setsid -f chispa music >/dev/null 2>&1 ;;
+    save) setsid -f chispa save >/dev/null 2>&1 ;;
+    side) lateral_menu ;;
+    sleep) dormir_menu ;;
+    tui) "$scripts/TuiApp.sh" chispa tui & exit 0 ;;
+  esac
+}
+
+# cuánto espera el teclado sin usarse para apagar las luces (2.4 GHz y Bluetooth)
+dormir_menu() {
+  local i ahora err opciones=(never 1 1.5 2 3 4 5 10 15 20) labels=()
+  ahora=$(timeout 3 chispa sleep 2>/dev/null)
+  labels+=("$(L Nunca Never)")
+  for m in "${opciones[@]:1}"; do labels+=("$m min"); done
+  i=$(row=0 pick "$(L "apagar sin usarlo" "lights off when idle")" "${ahora:+$(L ahora now): $ahora}" \
+      "${labels[@]}" "‹ $(L volver back)") || return
+  [ -n "${opciones[$i]}" ] || return
+  err=$(chispa sleep "${opciones[$i]}" 2>&1 >/dev/null) || notify-send -i "dialog-error-symbolic" "chispa" "$err"
+}
+
+# la barrita blanca junto al Esc (Fn+Shift izquierdo)
+lateral_menu() {
+  local i modos=(off fill breathing static) err
+  i=$(row=0 pick "$(L barrita "side light")" "" \
+      "$(L Apagada Off)" "$(L "Llenar de arriba abajo" "Fill top to bottom")" \
+      "$(L Respirar Breathing)" "$(L Fija Static)" "‹ $(L volver back)") || return
+  [ -n "${modos[$i]}" ] || return
+  err=$(chispa side "${modos[$i]}" 2>&1 >/dev/null) || notify-send -i "dialog-error-symbolic" "chispa" "$err"
+}
+
 # ── menú principal ───────────────────────────────────────────────────────────
 pidof jale >/dev/null && pkill -x jale
 
@@ -308,6 +383,7 @@ while true; do
   add "$I_VIS  $(L visualizador visualizer): $(vis_now)"           vis
   add "$I_REC  $(L grabador recorder) ›"                           rec
   [ -x "$arre" ] && add "$I_NOTIF  $(L notificaciones notifications): $(pos_name "$("$arre" position)") ›" notif
+  hay_teclado && add "$I_TECLADO  $(L teclado keyboard): $(teclado_now) ›" teclado
   add "$I_GAME  game mode: $(onoff "$game")"                        game
   if "$bat" has; then
     add "$I_BAT  $(L batería battery): $("$bat" status | jq -r '"\(.percentage)%"') ›" battery
@@ -328,6 +404,7 @@ while true; do
     vis)    vis_menu ;;
     rec)    rec_menu ;;
     notif)  notif_menu ;;
+    teclado) teclado_menu ;;
     battery) bat_menu ;;
     game)   "$scripts/GameMode.sh"; sleep 0.3 ;;
     blur)   "$scripts/ChangeBlur.sh" ;;

@@ -48,6 +48,12 @@ ln -sf "$wallpaper_path" "$wall_link" || true
 mkdir -p "$(dirname "$wallpaper_current")"
 cp -f "$wallpaper_path" "$wallpaper_current" || true
 
+# el teclado (chispa), si sigue al wallpaper: de una vez y sin esperarlo, para que
+# cambie junto con la pantalla. Si no le toca o no está conectado no hace nada
+if [[ -x "$HOME/.local/bin/chispa" ]]; then
+  "$HOME/.local/bin/chispa" wallpaper --auto "$wallpaper_path" >/dev/null 2>&1 &
+fi
+
 wait_for_templates() {
   local start_ts="$1"
   shift

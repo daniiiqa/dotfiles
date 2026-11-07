@@ -61,6 +61,7 @@ Atajos clave: SUPER+T looks (`LookSwitch.sh`), SUPER+W wallpaper
 | fierro | hardware de la laptop | `~/fierro` |
 | picha | Quick Share con Android | `~/picha` |
 | compa | agente de IA en la terminal (Ollama local o Claude), con herramientas sobre el rice | `~/compa` |
+| chispa | la luz del AULA F75 desde la terminal (solo luz, por cable, 2.4 GHz o Bluetooth; los cambios de color se sostienen en vivo con `chispa hold` y se guardan al bloquear la pantalla, suspender o salir) | `~/chispa` |
 
 Las gráficas son clientes Wayland con smithay-client-toolkit + layer-shell +
 tiny-skia; las TUI usan ratatui. Todas toman colores y estilo de disco.
