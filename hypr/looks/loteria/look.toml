@@ -1,7 +1,7 @@
 # discada — look «loteria»
 # Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
 # los archivos de cada app (empalme/, jale/, hypr/…) usan estos nombres.
-# LookBuild.py lo aplica (lo llama LookSwitch.sh).
+# leña lo aplica (lo llama LookSwitch.sh).
 
 [about]
 es = "las cartas: papel viejo, contornos negros, colores de imprenta"

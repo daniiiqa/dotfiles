@@ -1,4 +1,4 @@
-# wallust — base de discada. LookBuild.py escribe wallust.toml con esto y el
+# wallust — base de discada. leña escribe wallust.toml con esto y el
 # `palette` del look ([wallust] en su look.toml). Aquí van las plantillas.
 # wallust configuration - for wallust version 3.0
 
@@ -34,7 +34,7 @@ palette = "dark16"
 #  100        Colors are exact opposite
 threshold = 11
 
-# legibilidad: wallust ajusta colores contra el fondo (ContrastFix.py remata)
+# legibilidad: wallust ajusta colores contra el fondo (`leña contrast` remata)
 check_contrast = true
 
 [templates]

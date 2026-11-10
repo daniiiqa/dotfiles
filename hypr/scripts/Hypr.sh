@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# Hablarle a Hyprland igual con la config vieja (.conf) que con la nueva (Lua).
-# Con Lua ya no existen `hyprctl keyword` ni `hyprctl dispatch workspace 2`:
-# todo es `hyprctl eval` / `hyprctl dispatch 'hl.dsp…'`. Los scripts, la barra
-# y wlogout pasan por aquí y no se enteran de cuál está activa.
+# Hablarle a Hyprland (config en Lua desde 0.57). Ya no existen `hyprctl
+# keyword` ni `hyprctl dispatch workspace 2`: todo es `hyprctl eval` /
+# `hyprctl dispatch 'hl.dsp…'`. Los scripts, la barra, jale, rollo y wlogout
+# pasan por aquí para no repetir cómo se escribe cada cosa.
 #
-#   Hypr.sh mode                       lua | conf
 #   Hypr.sh set KEY VALUE [KEY VALUE…] opciones (decoration:blur:size 4)
 #   Hypr.sh get KEY                    valor de una opción (sí/no como 1/0)
 #   Hypr.sh workspace W                ir al workspace (2, e+1, special…)
@@ -19,16 +18,9 @@
 #   Hypr.sh exec 'REGLAS' CMD         lanzar con reglas ('float; size 800 400; workspace special:x silent')
 #   Hypr.sh dpms on|off                prender / apagar las pantallas
 #   Hypr.sh exit                       salir de Hyprland
-#   Hypr.sh lua CODE                   Lua tal cual (solo en modo Lua)
-#   Hypr.sh file NOMBRE                conf/NOMBRE.lua o .conf, el formato que se usa
+#   Hypr.sh lua CODE                   Lua tal cual
+#   Hypr.sh file NOMBRE                conf/NOMBRE.lua
 #   Hypr.sh defaults                   apps por defecto como term="kitty" (para eval)
-
-mode() {
-  case "$(hyprctl eval 'return 1' 2>&1)" in
-    *"only supported with the lua"*) echo conf ;;
-    *) echo lua ;;
-  esac
-}
 
 # "texto" con comillas y \ escapados, para meterlo en código Lua
 q() { local s=${1//\\/\\\\}; printf '"%s"' "${s//\"/\\\"}"; }
@@ -59,105 +51,65 @@ dsp() { hyprctl dispatch "$1" >/dev/null; }
 
 hypr="$HOME/.config/hypr"
 
-# lo que se lee de archivos va por el formato que carga Hyprland al iniciar
-# (hyprland.lua si existe), no hace falta preguntarle
-case "$1" in
-  file)
-    if [ -f "$hypr/hyprland.lua" ]; then echo "$hypr/conf/$2.lua"; else echo "$hypr/conf/$2.conf"; fi
-    exit ;;
-  defaults)
-    # term, edit, files, search_engine
-    if [ -f "$hypr/hyprland.lua" ]; then
-      sed -nE 's/^\s*(term|edit|files|search_engine)\s*=\s*"(.*)",.*$/\1="\2"/p' "$hypr/conf/defaults.lua"
-    else
-      sed -nE 's/^\$(term|edit|files|Search_Engine)\s*=\s*"?([^"#]*[^"# ])"?.*$/\1="\2"/p' "$hypr/conf/defaults.conf" |
-        sed 's/^Search_Engine=/search_engine=/'
-    fi
-    exit ;;
-esac
-
-# HYPR_MODE=lua|conf se lo ahorra (scripts que llaman muchas veces seguidas)
-M=${HYPR_MODE:-$(mode)}
 cmd=$1
 shift
 
 case "$cmd" in
-  mode) echo "$M" ;;
+  file) echo "$hypr/conf/$1.lua" ;;
+  defaults)
+    # term, edit, files, search_engine
+    sed -nE 's/^\s*(term|edit|files|search_engine)\s*=\s*"(.*)",.*$/\1="\2"/p' "$hypr/conf/defaults.lua" ;;
   set)
-    if [ "$M" = lua ]; then
-      code=""
-      while (($# >= 2)); do code+="hl.config($(lua_table "$1" "$(lit "$2")")); "; shift 2; done
-      hyprctl eval "$code" >/dev/null
-    else
-      batch=""
-      while (($# >= 2)); do batch+="keyword $1 $2; "; shift 2; done
-      hyprctl --batch "$batch" >/dev/null
-    fi ;;
+    code=""
+    while (($# >= 2)); do code+="hl.config($(lua_table "$1" "$(lit "$2")")); "; shift 2; done
+    hyprctl eval "$code" >/dev/null ;;
   get)
     hyprctl -j getoption "$1" | jq -r '
       if has("bool") then (if .bool then 1 else 0 end)
       else (.int // .float // .str // .custom // .css // "") end' ;;
   workspace)
-    if [ "$M" = lua ]; then dsp "hl.dsp.focus({ workspace = $(ws "$1") })"
-    else dsp "workspace $1"; fi ;;
+    dsp "hl.dsp.focus({ workspace = $(ws "$1") })" ;;
   focus)
-    if [ "$M" = lua ]; then dsp "hl.dsp.focus({ window = $(q "$1") })"
-    else dsp "focuswindow $1"; fi ;;
+    dsp "hl.dsp.focus({ window = $(q "$1") })" ;;
   movetows)
-    if [ "$M" = lua ]; then
-      follow=true; [ "$3" = silent ] && follow=false
-      dsp "hl.dsp.window.move({ workspace = $(ws "$1"), follow = $follow, window = $(q "$2") })"
-    else
-      dsp "movetoworkspace$([ "$3" = silent ] && echo silent) $1,$2"
-    fi ;;
+    follow=true; [ "$3" = silent ] && follow=false
+    dsp "hl.dsp.window.move({ workspace = $(ws "$1"), follow = $follow, window = $(q "$2") })" ;;
   moveto)
-    if [ "$M" = lua ]; then dsp "hl.dsp.window.move({ x = $1, y = $2, window = $(q "$3") })"
-    else dsp "movewindowpixel exact $1 $2,$3"; fi ;;
+    dsp "hl.dsp.window.move({ x = $1, y = $2, window = $(q "$3") })" ;;
   resizeto)
-    if [ "$M" = lua ]; then
-      # con Lua el resize recentra la ventana; con .conf se queda donde estaba
-      at=""
-      [[ $3 == address:* ]] && at=$(hyprctl -j clients | jq -r --arg a "${3#address:}" '.[] | select(.address == $a) | "\(.at[0]) \(.at[1])"')
-      dsp "hl.dsp.window.resize({ x = $1, y = $2, window = $(q "$3") })"
-      [ -n "$at" ] && dsp "hl.dsp.window.move({ x = ${at% *}, y = ${at#* }, window = $(q "$3") })"
-    else dsp "resizewindowpixel exact $1 $2,$3"; fi ;;
+    # el resize recentra la ventana: se vuelve a poner donde estaba
+    at=""
+    [[ $3 == address:* ]] && at=$(hyprctl -j clients | jq -r --arg a "${3#address:}" '.[] | select(.address == $a) | "\(.at[0]) \(.at[1])"')
+    dsp "hl.dsp.window.resize({ x = $1, y = $2, window = $(q "$3") })"
+    [ -n "$at" ] && dsp "hl.dsp.window.move({ x = ${at% *}, y = ${at#* }, window = $(q "$3") })" ;;
   pin)
-    if [ "$M" = lua ]; then dsp "hl.dsp.window.pin({ window = $(q "$1") })"
-    else dsp "pin $1"; fi ;;
+    dsp "hl.dsp.window.pin({ window = $(q "$1") })" ;;
   float|tile)
-    if [ "$M" = lua ]; then
-      a=enable; [ "$cmd" = tile ] && a=disable
-      dsp "hl.dsp.window.float({ action = \"$a\", window = $(q "$1") })"
-    else dsp "$([ "$cmd" = tile ] && echo settiled || echo setfloating) $1"; fi ;;
+    a=enable; [ "$cmd" = tile ] && a=disable
+    dsp "hl.dsp.window.float({ action = \"$a\", window = $(q "$1") })" ;;
   close)
-    if [ "$M" = lua ]; then dsp "hl.dsp.window.close({ window = $(q "$1") })"
-    else dsp "closewindow $1"; fi ;;
+    dsp "hl.dsp.window.close({ window = $(q "$1") })" ;;
   opaque-all)
-    if [ "$M" = lua ]; then hyprctl eval 'hl.window_rule({ match = { class = ".*" }, opacity = "1 override" })' >/dev/null
-    else hyprctl keyword windowrule "match:class .*, opacity 1 override" >/dev/null; fi ;;
+    hyprctl eval 'hl.window_rule({ match = { class = ".*" }, opacity = "1 override" })' >/dev/null ;;
   exec)
-    if [ "$M" = lua ]; then
-      rules=""
-      IFS=';' read -ra rs <<<"$1"
-      for r in "${rs[@]}"; do
-        r=$(echo "$r" | xargs)
-        case "$r" in
-          float) rules+="float = true, " ;;
-          size\ *) rules+="size = $(q "${r#size }"), " ;;
-          workspace\ *) rules+="workspace = $(q "${r#workspace }"), " ;;
-          ?*) rules+="${r%% *} = $(q "${r#* }"), " ;;
-        esac
-      done
-      dsp "hl.dsp.exec_cmd($(q "$2"), { ${rules%, } })"
-    else dsp "exec [$1] $2"; fi ;;
+    rules=""
+    IFS=';' read -ra rs <<<"$1"
+    for r in "${rs[@]}"; do
+      r=$(echo "$r" | xargs)
+      case "$r" in
+        float) rules+="float = true, " ;;
+        size\ *) rules+="size = $(q "${r#size }"), " ;;
+        workspace\ *) rules+="workspace = $(q "${r#workspace }"), " ;;
+        ?*) rules+="${r%% *} = $(q "${r#* }"), " ;;
+      esac
+    done
+    dsp "hl.dsp.exec_cmd($(q "$2"), { ${rules%, } })" ;;
   dpms)
-    if [ "$M" = lua ]; then dsp "hl.dsp.dpms($(q "$1"))"
-    else dsp "dpms $1"; fi ;;
+    dsp "hl.dsp.dpms($(q "$1"))" ;;
   exit)
-    if [ "$M" = lua ]; then dsp "hl.dsp.exit()"
-    else dsp "exit 0"; fi ;;
+    dsp "hl.dsp.exit()" ;;
   lua)
-    [ "$M" = lua ] && hyprctl eval "$1" ;;
+    hyprctl eval "$1" ;;
   *)
     sed -n '2,/^$/s/^# \{0,1\}//p' "$0"
     exit 2 ;;

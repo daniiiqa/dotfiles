@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Primer arranque en una máquina nueva (lo lanza startup.conf; corre una vez).
+# Primer arranque en una máquina nueva (lo lanza startup.lua; corre una vez).
 # Deja el escritorio listo sin tocar nada: wallpaper, colores de wallust,
 # tema oscuro + iconos para las apps GTK y un aviso de bienvenida.
 # Para repetirlo: borrar ~/.local/state/dotfiles/firstrun-done
@@ -39,7 +39,7 @@ look=$(cat "$HOME/.config/hypr/looks/.current" 2>/dev/null)
 
 # 4) apps GTK y Qt con los colores del look (claro u oscuro según el look) e
 #    iconos (jale los usa en el lanzador)
-"$scripts/AppColors.py"
+"$HOME/.local/bin/lena" apps
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark' 2>/dev/null
 for v in 3.0 4.0; do
   f="$HOME/.config/gtk-$v/settings.ini"

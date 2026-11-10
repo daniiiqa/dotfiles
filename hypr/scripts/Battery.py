@@ -185,7 +185,7 @@ HYPR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Hypr.sh")
 
 
 def hypr(*args):
-    """Hypr.sh: igual con la config .conf que con la de Lua."""
+    """Hypr.sh: así se le habla a Hyprland desde los scripts."""
     return subprocess.run([HYPR, *args], capture_output=True, text=True).stdout.strip()
 
 

@@ -20,7 +20,7 @@ fail() { printf '\033[1;31m!!\033[0m %s\n' "$*"; notify-send -u critical "discad
 
 reload_all() {
   "$scripts/FontSize.py" apply --no-reload
-  "$scripts/AppColors.py" >/dev/null 2>&1
+  "$HOME/.local/bin/lena" apps >/dev/null 2>&1
   hyprctl reload >/dev/null
   # la barra es empalme (antes waybar): relanzarla con el binario nuevo
   pkill -x waybar
@@ -36,7 +36,7 @@ reload_all() {
 }
 
 apply_look() {  # el look actual sobre lo vivo, desde su look.toml (como LookSwitch.sh)
-  "$scripts/LookBuild.py" apply "$1"
+  "$HOME/.local/bin/lena" apply "$1"
 }
 
 # el arte (farula): la discada meneándose al empezar, el vaquero bailando al
@@ -56,7 +56,7 @@ if git -C "$cfg" rev-parse --is-inside-work-tree >/dev/null 2>&1 && [ -d "$cfg/h
   # lo vivo al look (como antes de cambiar de look), sin el tamaño de letra
   "$scripts/FontSize.py" unapply
   if [ -n "$cur" ] && [ -d "$looks/$cur" ]; then
-    "$scripts/LookBuild.py" save "$cur"
+    "$HOME/.local/bin/lena" save "$cur"
   fi
   before=$(git -C "$cfg" rev-parse HEAD)
   if ! git -C "$cfg" pull --rebase --autostash; then

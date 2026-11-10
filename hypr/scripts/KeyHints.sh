@@ -4,7 +4,7 @@
 PATH="$HOME/.local/bin:$PATH"
 # Cheat sheet (SUPER+H) — lo esencial, en rofi con el estilo del look actual.
 # Escribir filtra. La lista completa y siempre al día está en SUPER+Shift+K
-# (sale directo de conf/keybinds.conf). Idioma: hypr/discada.conf.
+# (se la pregunta a Hyprland). Idioma: hypr/discada.conf.
 #
 # Formato de la lista: "# Sección|Section" o "tecla|acción|action[|key]"
 # (la última columna solo si la tecla también se traduce).

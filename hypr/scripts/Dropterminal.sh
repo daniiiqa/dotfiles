@@ -11,7 +11,6 @@
 DEBUG=false
 SPECIAL_WS="special:scratchpad"
 HY="$HOME/.config/hypr/scripts/Hypr.sh"
-export HYPR_MODE=$("$HY" mode)   # una vez: los slides llaman a Hypr.sh muchas veces
 ADDR_FILE="/tmp/dropdown_terminal_addr"
 
 # Dropdown size and position configuration (percentages)

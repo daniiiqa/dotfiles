@@ -50,7 +50,7 @@ no-effects() {
     awww img -o "$focused_monitor" "$wallpaper_current" $SWWW_PARAMS &&
     wait $!
     wallust run "$wallpaper_current" -s &&
-    "$SCRIPTSDIR/ContrastFix.py"
+    "$HOME/.local/bin/lena" contrast
     # Refresh rofi, the bar, wallust palettes
 	sleep 2
 	"$SCRIPTSDIR/Refresh.sh"
@@ -89,7 +89,7 @@ main() {
 
             sleep 2
   
-            { wallust run "$wallpaper_output" -s && "$SCRIPTSDIR/ContrastFix.py"; } &
+            { wallust run "$wallpaper_output" -s && "$HOME/.local/bin/lena" contrast; } &
             sleep 1
             # Refresh rofi, the bar, wallust palettes
             "${SCRIPTSDIR}/Refresh.sh"

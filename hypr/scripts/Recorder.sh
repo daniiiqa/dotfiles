@@ -160,7 +160,7 @@ mmss() { printf '%02d:%02d' $(( $1 / 60 )) $(( $1 % 60 )); }
 status() {
   local text="" class=() tip=()
   # cada look pone sus etiquetas en el [bar.modules.recorder] de su look.toml
-  # (iconos o texto; LookBuild.py las deja en empalme/bar.json)
+  # (iconos o texto; leña las deja en empalme/bar.json)
   local b_rec=$I_REC b_pause=$I_PAUSE b_replay=$I_REPLAY
   if [ -f "$cfg/empalme/bar.json" ]; then
     { read -r b_rec; read -r b_pause; read -r b_replay; } < <(jq -r \

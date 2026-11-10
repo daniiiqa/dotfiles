@@ -80,7 +80,7 @@ wait_for_templates() {
 
 # Custom (dany): sin autoreload mientras se escriben los colores. wallust
 # deja wallust-hyprland.conf sin los nombres del look ($acc, $line…) y
-# LookBuild.py los agrega un momento después; si Hyprland recarga en medio,
+# leña los agrega un momento después; si Hyprland recarga en medio,
 # sale la barra roja de errores ("failed to parse $line as a color"). Si el
 # que llama ya lo apagó (LookSwitch.sh, Update.sh), él recarga al final.
 hypr="$HOME/.config/hypr/scripts/Hypr.sh"
@@ -95,11 +95,11 @@ fi
 start_ts=$(date +%s)
 wallust run -s "$wallpaper_path" || true
 # Custom (dany): sube los colores que quedaron ilegibles contra el fondo y
-# re-renderiza los templates (ver ContrastFix.py)
-"$HOME/.config/hypr/scripts/ContrastFix.py" || true
+# re-renderiza los templates (ver `leña contrast`)
+"$HOME/.local/bin/lena" contrast || true
 # los colores del look: en los de paleta fija su paleta gana sobre la del
 # wallpaper; en todos, sus nombres propios (acc, critical…)
-"$HOME/.config/hypr/scripts/LookBuild.py" colors || true
+"$HOME/.local/bin/lena" colors || true
 # ya con todos los colores: una sola recarga (vuelve a prender el autoreload,
 # que la config no apaga)
 $own_reload && { hyprctl reload >/dev/null || true; }
@@ -119,5 +119,5 @@ pkill -USR1 -x kitty 2>/dev/null || true
 
 # Custom (dany): fondo + colores de SDDM en sync con el wallpaper
 "$HOME/.config/hypr/scripts/SDDMWallpaperSync.sh" >/dev/null 2>&1 || true
-# Custom (dany): apps GTK y Qt con los colores del look (AppColors.py)
-"$HOME/.config/hypr/scripts/AppColors.py" >/dev/null 2>&1 || true
+# Custom (dany): apps GTK y Qt con los colores del look (leña apps)
+"$HOME/.local/bin/lena" apps >/dev/null 2>&1 || true

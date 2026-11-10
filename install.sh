@@ -138,10 +138,11 @@ ROLLO_REPO="https://github.com/daniiiqa/rollo.git"
 FARULA_REPO="https://github.com/daniiiqa/farula.git"
 FIERRO_REPO="https://github.com/daniiiqa/fierro.git"
 CHISPA_REPO="https://github.com/daniiiqa/chispa.git"
+LENA_REPO="https://github.com/daniiiqa/lena.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
-KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.conf hypr/workspaces.conf
-                hypr/conf/pinned.conf hypr/conf/defaults.conf hypr/conf/livewallpaper.conf)
+KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.lua hypr/workspaces.lua
+                hypr/conf/pinned.conf hypr/conf/defaults.lua hypr/conf/livewallpaper.conf)
 
 # ── Opciones ─────────────────────────────────────────────────────────────────
 DRY=0 SDDM=auto AUR=1 YES=() LOOKS_ARG="" UI_LANG="" UPDATE=0
@@ -483,15 +484,8 @@ if ((NEW_MACHINE)); then
     else sed -i 's/^REPLAY_ON_STARTUP=yes/REPLAY_ON_STARTUP=no /' "$CFG/hypr/recorder.conf"; fi
   fi
 
-  # el monitors.conf del repo es el de la máquina original (DP-1, posición
-  # fija): aquí, que Hyprland detecte las pantallas. nwg-displays lo reescribe.
-  if ! ((UPDATE)); then
-    say "$(L "Pantallas: detección automática" "Displays: automatic detection")"
-    if ((DRY)); then echo "   [dry-run] monitors.conf → monitor=,preferred,auto,1"
-    else
-      printf '# Detección automática. Para acomodar pantallas: nwg-displays\nmonitor=,preferred,auto,1\n' > "$CFG/hypr/monitors.conf"
-    fi
-  fi
+  # pantallas: el repo no trae monitors.lua (es de cada máquina), así que
+  # Hyprland las detecta solo hasta que nwg-displays escriba uno
 else
   say "$(L "El repo ya vive en ~/.config: nada que copiar" "The repo already lives in ~/.config: nothing to copy")"
 fi
@@ -515,10 +509,59 @@ elif ((${#LOOKS[@]} < ${#ALL_LOOKS[@]})); then
             "The repo lives in ~/.config: looks are not deleted (they'd be repo files)")"
 fi
 
+# Las apps de discada: el binario ya compilado de la release `edge` de cada repo
+# (GitHub Actions lo compila en cada push), solo si cambió desde la última vez.
+# Si el último commit todavía se está compilando allá, espera (hasta 15 min);
+# sin binario (otra arquitectura, sin red a GitHub, DISCADA_COMPILAR=1) compila
+# aquí, en una carpeta compartida para que las dependencias se compilen una vez.
+DISCADA_BIN_STATE="$HOME/.local/share/discada/bin"
+DISCADA_TARGET="$HOME/.cache/discada/target"
+app() {  # app <nombre> <repo>
+  local name="$1" repo="$2" slug head stamp base got tmp waited=0
+  slug="${repo#https://github.com/}"; slug="${slug%.git}"
+  stamp="$DISCADA_BIN_STATE/$name.commit"
+  head="$(git ls-remote "$repo" HEAD 2>/dev/null | cut -f1)"
+  if [ -n "$head" ] && [ -x "$HOME/.local/bin/$name" ] && [ "$(cat "$stamp" 2>/dev/null)" = "$head" ]; then
+    say "  $name: $(L "al día" "up to date")"
+    return
+  fi
+  ((DRY)) && { printf '   [dry-run] %s %s\n' "$name" "${head:0:7}"; return; }
+  base="https://github.com/$slug/releases/download/edge"
+  if [ "$(uname -m)" = x86_64 ] && [ -n "$head" ] && [ -z "${DISCADA_COMPILAR:-}" ]; then
+    while got="$(curl -fsL "$base/$name.commit" 2>/dev/null)"; [ -n "$got" ] && [ "$got" != "$head" ] && ((waited < 900)); do
+      ((waited)) || say "  $name: $(L "el último cambio se está compilando en GitHub, esperando…" "the latest change is still building on GitHub, waiting…")"
+      sleep 20; waited=$((waited + 20))
+    done
+    if [ "$got" = "$head" ]; then
+      tmp="$(mktemp -d)"
+      if curl -fsL -o "$tmp/$name-x86_64-linux" "$base/$name-x86_64-linux" &&
+         curl -fsL -o "$tmp/$name-x86_64-linux.sha256" "$base/$name-x86_64-linux.sha256" &&
+         (cd "$tmp" && sha256sum -c --quiet "$name-x86_64-linux.sha256"); then
+        mkdir -p "$HOME/.local/bin" "$DISCADA_BIN_STATE"
+        install -m755 "$tmp/$name-x86_64-linux" "$HOME/.local/bin/$name"
+        echo "$head" > "$stamp"
+        rm -rf "$tmp"
+        say "  $name: $(L "listo (ya compilado)" "done (prebuilt)") ${head:0:7}"
+        return
+      fi
+      rm -rf "$tmp"
+    fi
+  fi
+  say "  $name: $(L "compilando aquí…" "compiling here…")"
+  if ! rustup show active-toolchain >/dev/null 2>&1; then rustup default stable; fi
+  CARGO_TARGET_DIR="$DISCADA_TARGET" cargo install --git "$repo" --root "$HOME/.local" --locked --force &&
+    { mkdir -p "$DISCADA_BIN_STATE"; [ -n "$head" ] && echo "$head" > "$stamp"; }
+}
+
+# leña antes que el look: ella lo pone (sus archivos, colores y estilo)
+say "leña ($(L "lo que prende cada look" "what lights up each look")) → ~/.local/bin/lena"
+app lena "$LENA_REPO"
+((DRY)) || ln -sf lena "$HOME/.local/bin/leña"
+
 # Los archivos vivos del repo son del último look con el que se hizo commit,
 # no necesariamente el elegido: aplicar el look encima (como LookSwitch.sh) para
 # que lo vivo y .current coincidan. Si ya hay look activo aquí, se respeta.
-# el look: sus archivos con su fuente, sus colores y su estilo (LookBuild.py,
+# el look: sus archivos con su fuente, sus colores y su estilo (leña,
 # desde su look.toml). Al actualizar también se vuelve a aplicar el que ya
 # tenías: sus archivos pueden traer cambios
 look=$INITIAL
@@ -527,9 +570,9 @@ if ! ((NEW_MACHINE)) && [ -f "$looks_dir/.current" ]; then
   in_list "$cur" "${LOOKS[@]}" && look=$cur
 fi
 say "$(L "Look" "Look"): $look"
-if ((DRY)); then echo "   [dry-run] LookBuild.py apply $look y .current = $look"
+if ((DRY)); then echo "   [dry-run] leña apply $look y .current = $look"
 else
-  python3 "$CFG/hypr/scripts/LookBuild.py" apply "$look"
+  "$HOME/.local/bin/lena" apply "$look"
   echo "$look" > "$looks_dir/.current"
   echo 0 > "$looks_dir/.fontsize"   # lo vivo está en el tamaño del look; FontSize.py lo vuelve a aplicar
   # jale importa este archivo (tamaño de letra, FontSize.py); vacío al empezar
@@ -583,50 +626,6 @@ if [ -e /usr/share/applications/com.github.PintaProject.Pinta.desktop ] || ((DRY
   say "$(L "Pinta para las imágenes" "Pinta for images")"
   run xdg-mime default com.github.PintaProject.Pinta.desktop image/png image/jpeg image/jpg image/gif image/bmp image/tiff image/webp image/x-ico image/svg+xml
 fi
-
-# Las apps de discada: el binario ya compilado de la release `edge` de cada repo
-# (GitHub Actions lo compila en cada push), solo si cambió desde la última vez.
-# Si el último commit todavía se está compilando allá, espera (hasta 15 min);
-# sin binario (otra arquitectura, sin red a GitHub, DISCADA_COMPILAR=1) compila
-# aquí, en una carpeta compartida para que las dependencias se compilen una vez.
-DISCADA_BIN_STATE="$HOME/.local/share/discada/bin"
-DISCADA_TARGET="$HOME/.cache/discada/target"
-app() {  # app <nombre> <repo>
-  local name="$1" repo="$2" slug head stamp base got tmp waited=0
-  slug="${repo#https://github.com/}"; slug="${slug%.git}"
-  stamp="$DISCADA_BIN_STATE/$name.commit"
-  head="$(git ls-remote "$repo" HEAD 2>/dev/null | cut -f1)"
-  if [ -n "$head" ] && [ -x "$HOME/.local/bin/$name" ] && [ "$(cat "$stamp" 2>/dev/null)" = "$head" ]; then
-    say "  $name: $(L "al día" "up to date")"
-    return
-  fi
-  ((DRY)) && { printf '   [dry-run] %s %s\n' "$name" "${head:0:7}"; return; }
-  base="https://github.com/$slug/releases/download/edge"
-  if [ "$(uname -m)" = x86_64 ] && [ -n "$head" ] && [ -z "${DISCADA_COMPILAR:-}" ]; then
-    while got="$(curl -fsL "$base/$name.commit" 2>/dev/null)"; [ -n "$got" ] && [ "$got" != "$head" ] && ((waited < 900)); do
-      ((waited)) || say "  $name: $(L "el último cambio se está compilando en GitHub, esperando…" "the latest change is still building on GitHub, waiting…")"
-      sleep 20; waited=$((waited + 20))
-    done
-    if [ "$got" = "$head" ]; then
-      tmp="$(mktemp -d)"
-      if curl -fsL -o "$tmp/$name-x86_64-linux" "$base/$name-x86_64-linux" &&
-         curl -fsL -o "$tmp/$name-x86_64-linux.sha256" "$base/$name-x86_64-linux.sha256" &&
-         (cd "$tmp" && sha256sum -c --quiet "$name-x86_64-linux.sha256"); then
-        mkdir -p "$HOME/.local/bin" "$DISCADA_BIN_STATE"
-        install -m755 "$tmp/$name-x86_64-linux" "$HOME/.local/bin/$name"
-        echo "$head" > "$stamp"
-        rm -rf "$tmp"
-        say "  $name: $(L "listo (ya compilado)" "done (prebuilt)") ${head:0:7}"
-        return
-      fi
-      rm -rf "$tmp"
-    fi
-  fi
-  say "  $name: $(L "compilando aquí…" "compiling here…")"
-  if ! rustup show active-toolchain >/dev/null 2>&1; then rustup default stable; fi
-  CARGO_TARGET_DIR="$DISCADA_TARGET" cargo install --git "$repo" --root "$HOME/.local" --locked --force &&
-    { mkdir -p "$DISCADA_BIN_STATE"; [ -n "$head" ] && echo "$head" > "$stamp"; }
-}
 
 say "rola ($(L "YouTube Music en la terminal" "YouTube Music in the terminal")) → ~/.local/bin/rola"
 app rola "$ROLA_REPO"

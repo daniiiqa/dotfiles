@@ -7,7 +7,7 @@ o modelo que trabaje en él (Claude, opencode/Odysseus, codecompanion en nvim).
 
 - **Rust, nunca Python**, para herramientas nuevas. Un binario en
   `~/.local/bin`, su repo en `~/<nombre>`. Para pegar cosas, bash está bien.
-  Los `.py` que ya existen en `scripts/` (LookBuild, ContrastFix, FontSize…)
+  Los `.py` que ya existen en `scripts/` (FontSize, AppStrip, Battery…)
   son legado: se arreglan, pero no se agregan nuevos.
 - **Todo en español**: comentarios, mensajes y docs. Tono regio, casual.
   Lo que cambia dany sobre algo heredado se marca con `Custom (dany):`.
@@ -23,9 +23,8 @@ o modelo que trabaje en él (Claude, opencode/Odysseus, codecompanion en nvim).
 ~/.config/hypr/
   hyprland.lua           la config activa (Hyprland 0.57+, que ya no lee .conf)
   conf/*.lua             keybinds, windowrules, startup, decorations… lo que carga Hyprland
-  conf/*.conf            la config vieja, ya no se carga: no se edita (salvo los de abajo)
   discada.conf, recorder.conf, conf/pinned.conf, conf/livewallpaper.conf
-                         datos de discada, NO son config de Hyprland: siguen vivos
+                         datos de discada, NO son config de Hyprland (no hay .conf de Hyprland)
   hypridle.conf, hyprlock.conf   siguen en .conf (son de otros programas)
   scripts/               el pegamento (bash): Look*, Wallpaper*, Hypr.sh…
   looks/<look>/          un look: look.toml + espejo de ~/.config con lo que cambia
@@ -39,8 +38,9 @@ Atajos clave: SUPER+T looks (`LookSwitch.sh`), SUPER+W wallpaper
 
 1. `LookSwitch.sh` / `WallpaperSelect.sh` → `awww` (imagen) o `mpvpaper` (video, uno por monitor).
 2. `wallust` saca los colores del wallpaper (color0…color15).
-3. `LookBuild.py` arma los archivos del look (`{{font}}`, `@acc`, colores) y
-   `ContrastFix.py` corrige el contraste.
+3. **leña** (`~/.local/bin/lena`, repo `~/lena`) arma los archivos del look
+   (`{{font}}`, `@acc`, colores), corrige el contraste (`lena contrast`) y les
+   pasa los colores a GTK/Qt (`lena apps`). Su matemática de color está en disco.
 4. `farula` (el telón) tapa el cambio y lo revela con un iris.
 5. Las apps leen el look: las de Rust a través de **disco**.
 
@@ -120,7 +120,7 @@ errores de Hyprland; úsala en vez de estos scripts.
 (`LookSwitch.sh` no hace nada si ya es el actual):
 ```
 ~/.config/hypr/scripts/FontSize.py unapply
-~/.config/hypr/scripts/LookBuild.py apply <look>
+~/.local/bin/lena apply <look>
 ~/.config/hypr/scripts/FontSize.py apply      # recarga Hyprland
 ```
 Cambiar a OTRO look: `~/.config/hypr/scripts/LookSwitch.sh <look>`.

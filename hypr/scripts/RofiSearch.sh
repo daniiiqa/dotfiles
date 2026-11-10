@@ -9,7 +9,7 @@ if ! command -v jq >/dev/null 2>&1; then
     exit 1
 fi
 
-# el buscador sale de hypr/conf/defaults (.lua o .conf)
+# el buscador sale de hypr/conf/defaults.lua
 eval "$("$HOME/.config/hypr/scripts/Hypr.sh" defaults)"
 Search_Engine=$search_engine
 if [[ -z "$Search_Engine" ]]; then

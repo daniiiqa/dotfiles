@@ -4,7 +4,7 @@
 # pero de otra forma: la barra abajo hecha de islas sueltas, ventanas sin
 # borde (la activa se nota por su sombra), TUIs monocromas y sin marcos.
 # Paleta fija sobre tu wallpaper (no trae uno propio).
-# LookBuild.py lo aplica (lo llama LookSwitch.sh).
+# leña lo aplica (lo llama LookSwitch.sh).
 
 [about]
 es = "obsidiana: vidrio volcánico, islas abajo, ventanas sin borde, un reflejo violeta"

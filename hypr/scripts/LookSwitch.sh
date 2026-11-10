@@ -5,7 +5,7 @@ PATH="$HOME/.local/bin:$PATH"
 # Cambia el look del rice (SUPER+T). Cada look vive en hypr/looks/<nombre>/
 # como espejo de ~/.config con solo los archivos que le tocan (decoraciones,
 # animaciones, hyprlock, rofi, wlogout, kitty, fastfetch, sddm), más su
-# look.toml: colores, fuente y estilo (LookBuild.py los aplica).
+# look.toml: colores, fuente y estilo (leña los aplica).
 #
 # Al cambiar, primero guarda los archivos vivos en el look actual — así lo
 # que edites a mano no se pierde — y luego copia el nuevo encima.
@@ -18,15 +18,13 @@ current=$(cat "$state" 2>/dev/null)
 . "$cfg/hypr/scripts/lang.sh"
 
 # screen_shader del look actual (outsider trae grano). Se apaga comentando la
-# línea en el decorations.conf vivo, así sobrevive a los reload y al cambiar
+# línea en el decorations.lua vivo, así sobrevive a los reload y al cambiar
 # de look se guarda con él. Sin línea de shader no hay opción en el menú.
-# decorations.conf (#) o decorations.lua (--), el que cargue Hyprland; el
-# cambio se hace en los dos para que no se desfasen
-deco=$("$cfg/hypr/scripts/Hypr.sh" file decorations)
+deco="$cfg/hypr/conf/decorations.lua"
 shader_entry=""
 if grep -qE '^\s*screen_shader\s*=' "$deco"; then
   shader_entry="shader: off"
-elif grep -qE '^\s*(#|--)\s*screen_shader\s*=' "$deco"; then
+elif grep -qE '^\s*--\s*screen_shader\s*=' "$deco"; then
   shader_entry="shader: on"
 fi
 
@@ -35,21 +33,18 @@ if [ -n "$1" ]; then
 else
   pidof jale >/dev/null && pkill -x jale
   target=$( { [ -n "$shader_entry" ] && echo "$shader_entry"
-    "$cfg/hypr/scripts/LookBuild.py" list; } |
+    "$HOME/.local/bin/lena" list; } |
     jale -dmenu -i -p look -config "$cfg/jale/config-edit.rasi" -mesg "$(L actual current): ${current:-?}")
 fi
 
 [ -z "$target" ] && exit 0
 case "$target" in
   shader|"shader: off"|"shader: on")
-    conf="$cfg/hypr/conf/decorations.conf" lua="$cfg/hypr/conf/decorations.lua"
     if grep -qE '^\s*screen_shader\s*=' "$deco"; then
-      [ -f "$conf" ] && sed -i -E 's/^(\s*)screen_shader(\s*)=/\1# screen_shader\2=/' "$conf"
-      [ -f "$lua" ] && sed -i -E 's/^(\s*)screen_shader(\s*)=/\1-- screen_shader\2=/' "$lua"
+      sed -i -E 's/^(\s*)screen_shader(\s*)=/\1-- screen_shader\2=/' "$deco"
       msg=$(L "shader apagado" "shader off")
-    elif grep -qE '^\s*(#|--)\s*screen_shader\s*=' "$deco"; then
-      [ -f "$conf" ] && sed -i -E 's/^(\s*)#\s*screen_shader(\s*)=/\1screen_shader\2=/' "$conf"
-      [ -f "$lua" ] && sed -i -E 's/^(\s*)--\s*screen_shader(\s*)=/\1screen_shader\2=/' "$lua"
+    elif grep -qE '^\s*--\s*screen_shader\s*=' "$deco"; then
+      sed -i -E 's/^(\s*)--\s*screen_shader(\s*)=/\1screen_shader\2=/' "$deco"
       msg=$(L "shader encendido" "shader on")
     else
       msg=$(L "este look no tiene shader" "this look has no shader")
@@ -73,8 +68,8 @@ if command -v farula >/dev/null; then
 fi
 
 # sin autoreload mientras se cambia: Hyprland recargaba solo en cuanto
-# LookBuild copiaba decorations.conf, que ya usa los colores del look nuevo
-# ($alt, $line…) antes de que `LookBuild.py colors` los escriba — y salía la
+# leña copiaba decorations.lua, que ya usa los colores del look nuevo
+# ($alt, $line…) antes de que `leña colors` los escriba — y salía la
 # barra roja de errores un segundo (más en los looks con wallpaper propio).
 # El `hyprctl reload` del paso 4 lo vuelve a prender (la config no lo apaga).
 "$cfg/hypr/scripts/Hypr.sh" set misc:disable_autoreload true
@@ -83,15 +78,15 @@ fi
 #    con sus tamaños originales; se vuelve a aplicar después de copiar
 "$cfg/hypr/scripts/FontSize.py" unapply
 
-# 1) guardar lo vivo en el look actual (LookBuild.py: la fuente vuelve a {{font}})
+# 1) guardar lo vivo en el look actual (leña: la fuente vuelve a {{font}})
 if [ -n "$current" ] && [ -d "$looks/$current" ]; then
-  "$cfg/hypr/scripts/LookBuild.py" save "$current"
+  "$HOME/.local/bin/lena" save "$current"
 fi
 
 # 2) aplicar el nuevo: sus archivos con su fuente, su wallust.toml y el estilo
 #    de rola/vato/taco/arre (todo sale de hypr/looks/<look>/look.toml)
 wallust_before=$(md5sum < "$cfg/wallust/wallust.toml" 2>/dev/null)
-"$cfg/hypr/scripts/LookBuild.py" apply "$target"
+"$HOME/.local/bin/lena" apply "$target"
 echo "$target" > "$state"
 "$cfg/hypr/scripts/FontSize.py" apply --no-reload
 
@@ -108,13 +103,13 @@ if [ "$walls_rc" != 10 ] && [ "$wallust_before" != "$wallust_after" ]; then
 fi
 
 # 3b) los colores del look: su paleta (o la de wallust) y sus nombres propios
-"$cfg/hypr/scripts/LookBuild.py" colors "$target"
+"$HOME/.local/bin/lena" colors "$target"
 
 # 4) recargar todo
 hyprctl reload >/dev/null
 pkill -SIGUSR2 -x empalme
 "$cfg/hypr/scripts/SDDMWallpaperSync.sh" >/dev/null 2>&1   # sddm: fuente, forma y paleta del look
-"$cfg/hypr/scripts/AppColors.py" >/dev/null 2>&1          # apps GTK/Qt: colores del look
+"$HOME/.local/bin/lena" apps >/dev/null 2>&1          # apps GTK/Qt: colores del look
 pkill -USR1 -x kitty
 pkill -x jale 2>/dev/null
 # la barra (SIGUSR2) y kitty ya releyeron: un respiro para que pinten

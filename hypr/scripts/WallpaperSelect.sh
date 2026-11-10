@@ -118,7 +118,7 @@ menu() {
 
 # Custom (dany): la persistencia de videos vive en LiveWallpaper.conf (una
 # línea exec-once por monitor), regenerado aquí — nada de seds sobre
-# startup.conf. awww-daemon arranca siempre desde startup.conf.
+# startup.lua (que lee livewallpaper.conf). awww-daemon arranca desde startup.lua.
 modify_startup_config() {
   local selected_file="$1"
   local live_conf="$HOME/.config/hypr/conf/livewallpaper.conf"

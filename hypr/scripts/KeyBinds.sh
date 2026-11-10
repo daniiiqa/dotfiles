@@ -8,7 +8,7 @@ PATH="$HOME/.local/bin:$PATH"
 pkill yad 2>/dev/null
 pidof jale >/dev/null && pkill -x jale
 
-# Le pregunta a Hyprland (sirve igual con la config .conf que con la de Lua)
+# Le pregunta a Hyprland (hyprctl binds)
 hyprctl -j binds | jq -r '
   def mods: [ (if . % 128 >= 64 then "SUPER" else empty end),
               (if . % 8 >= 4 then "CTRL" else empty end),

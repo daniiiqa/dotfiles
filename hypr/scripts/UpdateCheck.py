@@ -10,12 +10,11 @@ un commit del repo) y con lo que va a instalar la nueva (el HEAD del repo):
 
 Cuenta los archivos del repo que van a ~/.config (CONFIG_DIRS de install.sh,
 sin los ajustes de KEEP_ON_UPDATE, que nunca se pisan) y los vivos del look
-actual (los que LookBuild.py escribe desde hypr/looks/<look>/, con su fuente
+actual (los que leña escribe desde hypr/looks/<look>/, con su fuente
 y el tamaño de letra de FontSize.py).
 
   UpdateCheck.py REPO BASE
 """
-import importlib.util
 import os
 import re
 import subprocess
@@ -23,6 +22,21 @@ import sys
 import tomllib
 
 CFG = os.path.expanduser("~/.config")
+GENERATED = {"look.toml", "README.md"}   # de la carpeta del look, lo que leña no copia
+
+
+def fonts(lk):
+    """{{font}} y {{font_display}} del look (como leña)."""
+    f = lk.get("font", {})
+    out = {"font": f.get("family", "")}
+    out["font_display"] = f.get("display", out["font"])
+    return out
+
+
+def render(text, values):
+    for k, v in values.items():
+        text = text.replace("{{" + k + "}}", v)
+    return text
 
 
 def git(repo, *args):
@@ -67,9 +81,6 @@ def main():
     dirs = bash_list(install, "CONFIG_DIRS")
     keep = set(bash_list(install, "KEEP_ON_UPDATE"))
 
-    spec = importlib.util.spec_from_file_location("LookBuild", os.path.join(repo, "hypr/scripts/LookBuild.py"))
-    lb = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(lb)
     try:
         look = open(os.path.join(CFG, "hypr/looks/.current")).read().strip()
     except OSError:
@@ -81,7 +92,7 @@ def main():
 
     def live_files(rev):
         pre = f"hypr/looks/{look}/"
-        return {p[len(pre):] for p in tracked(repo, rev, [pre]) if p[len(pre):] not in lb.GENERATED} if look else set()
+        return {p[len(pre):] for p in tracked(repo, rev, [pre]) if p[len(pre):] not in GENERATED} if look else set()
 
     def expected(rev, rel, live):
         """Lo que la versión `rev` deja en ~/.config/rel (None si nada)."""
@@ -95,7 +106,7 @@ def main():
             text = raw.decode()
         except UnicodeDecodeError:
             return raw
-        text = lb.render(text, lb.fonts(tomllib.loads(toml.decode())))
+        text = render(text, fonts(tomllib.loads(toml.decode())))
         return font_shift(rel, text, applied).encode()
 
     live = live_files(base) | live_files("HEAD")

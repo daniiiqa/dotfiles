@@ -74,7 +74,7 @@ look.toml). Those files carry no
 colors or fonts of their own: they use the look's names (`@acc`, `$acc`,
 `{{font}}`), so a palette or a font lives in one place. Looks with
 `from = "palette"` bring their own colors; the rest take them from the wallpaper
-through wallust. `LookBuild.py` applies a look and writes every app's color files.
+through wallust. **leña** (Rust) applies a look and writes every app's color files.
 
 **Make your own:** `hypr/scripts/LookNew.sh name base` copies a look, then edit its
 `look.toml` (and, for a different shape, its files) and pick it with `SUPER+T`. It
@@ -101,7 +101,7 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
   (`hypr/wallpapers/`). Your wallpapers (videos included) are saved and come
   back when you switch to a look that follows the wallpaper; pick another
   wallpaper while on a fixed look and that one stays.
-- **GTK and Qt apps follow the look**: `AppColors.py` takes the look's colors
+- **GTK and Qt apps follow the look**: `leña apps` takes the look's colors
   (wallust's or the fixed palette) into GTK 3 (adw-gtk3), GTK 4/libadwaita and
   Qt (Fusion + qt5ct/qt6ct palette), light or dark to match.
 - **Update discada** from the settings menu: on an installed machine it pulls
@@ -114,7 +114,7 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
 - **Colors from video wallpapers**: the middle frame goes through wallust, so
   the bar, jale, kitty, arre, hyprlock and SDDM match.
 - **Readable on any wallpaper**: wallust with `check_contrast`, then
-  `ContrastFix.py` lifts any text color to 4.5:1 (WCAG AA).
+  `leña contrast` lifts any text color to 4.5:1 (WCAG AA).
 - **Files: [taco](https://github.com/daniiiqa/taco)** — discada's file manager
   in kitty (`SUPER+E`, and for "open folder" from apps), styled by the look like
   vato: three columns, image/video/PDF previews, copy and move in the

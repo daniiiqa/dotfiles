@@ -73,7 +73,7 @@ Hyprland, hyprlock, jale, wlogout, kitty, fastfetch y SDDM (la barra es el
 no llevan colores ni fuentes escritos: usan los nombres del look (`@acc`, `$acc`,
 `{{font}}`), así una paleta o una fuente vive en un solo lugar. Los looks con
 `from = "palette"` traen sus colores; los demás los sacan del wallpaper con
-wallust. `LookBuild.py` aplica el look y escribe los colores de cada app.
+wallust. **leña** (Rust) aplica el look y escribe los colores de cada app.
 
 **Haz el tuyo:** `hypr/scripts/LookNew.sh nombre base` copia un look; luego editas
 su `look.toml` (y, para cambiar la forma, sus archivos) y lo eliges con `SUPER+T`.
@@ -99,7 +99,7 @@ También aparece en el instalador. La guía está en `hypr/looks/README.md`.
   lotería, talavera, nord, outsider) traen su wallpaper (`hypr/wallpapers/`).
   Los tuyos (videos incluidos) se guardan y vuelven al cambiar a un look que
   sigue al wallpaper; si eliges otro estando en un look fijo, ese se queda.
-- **Apps GTK y Qt con los colores del look**: `AppColors.py` lleva los colores
+- **Apps GTK y Qt con los colores del look**: `leña apps` lleva los colores
   del look (los de wallust o la paleta fija) a GTK 3 (adw-gtk3), GTK
   4/libadwaita y Qt (Fusion + paleta de qt5ct/qt6ct), en claro u oscuro.
 - **Actualizar discada** desde el menú de ajustes: en una máquina instalada
@@ -112,7 +112,7 @@ También aparece en el instalador. La guía está en `hypr/looks/README.md`.
 - **Colores desde wallpapers de video**: el fotograma de en medio pasa por
   wallust, así la barra, jale, kitty, arre, hyprlock y SDDM combinan.
 - **Legible con cualquier wallpaper**: wallust con `check_contrast` y luego
-  `ContrastFix.py` sube cualquier color de texto a 4.5:1 (WCAG AA).
+  `leña contrast` sube cualquier color de texto a 4.5:1 (WCAG AA).
 - **Archivos: [taco](https://github.com/daniiiqa/taco)** — el explorador de
   discada en kitty (`SUPER+E`, y para "abrir carpeta" desde apps), con el look
   como vato: tres columnas, vista previa de imágenes, video y PDF, copiar y mover

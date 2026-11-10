@@ -19,8 +19,7 @@ SCRIPT_NAME="$(basename "$0")"
 # Ensure map file exists
 touch "$MAP_FILE"
 
-# las distribuciones (input:kb_layout, "us,es") se le preguntan a Hyprland:
-# sirve igual con la config .conf que con la de Lua
+# las distribuciones (input:kb_layout, "us,es") se le preguntan a Hyprland
 layouts=$("$HOME/.config/hypr/scripts/Hypr.sh" get input:kb_layout)
 if [ -z "$layouts" ]; then
   echo "Error: kb_layout is not set (hypr/conf/settings)" >&2

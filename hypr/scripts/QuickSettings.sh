@@ -15,7 +15,7 @@ discada="$hypr/discada.conf"
 recconf="$hypr/recorder.conf"
 bar="$HOME/.config/empalme/bar.json"   # la barra del look (su [bar])
 
-# $term y $edit salen de conf/defaults (.lua o .conf, Hypr.sh lo resuelve)
+# $term y $edit salen de conf/defaults.lua (Hypr.sh defaults)
 eval "$("$scripts/Hypr.sh" defaults | grep -E '^(term|edit)=')"
 term=${term:-kitty}
 edit=${EDITOR:-${edit:-nano}}
@@ -102,7 +102,7 @@ vis_menu() {
   local i
   i=$(row=0 pick "$(L visualizador visualizer)" \
       "$(L "se guarda en el look actual" "saved into the current look")" "${names[@]}") || return
-  "$scripts/LookBuild.py" bar-set visualizer "${json[$i]}"
+  "$HOME/.local/bin/lena" bar-set visualizer "${json[$i]}"
 }
 
 vis_now() {
@@ -246,7 +246,7 @@ edit_menu() {
   add "discada ($(L "idioma" "language"))"            "$discada"
   add "Look: $(cat "$hypr/looks/.current" 2>/dev/null) (look.toml)" "$hypr/looks/$(cat "$hypr/looks/.current" 2>/dev/null)/look.toml"
   add "$(L "Grabador" "Recorder")"                    "$recconf"
-  local f="$scripts/Hypr.sh file"   # conf/X.lua o conf/X.conf, el que se usa
+  local f="$scripts/Hypr.sh file"   # conf/X.lua
   add "$(L "Apps por defecto" "Default apps")"        "$($f defaults)"
   add "$(L "Atajos" "Keybinds")"                      "$($f keybinds)"
   add "$(L "Arranque" "Startup")"                     "$($f startup)"
@@ -266,7 +266,7 @@ edit_menu() {
 tools_menu() {
   # vato (audio, bluetooth, red, sistema, notificaciones) en la terminal con el look; solo los
   # monitores siguen en una app gráfica. GTK/Qt ya no hacen falta aquí:
-  # AppColors.py les pone los colores del look solo.
+  # `leña apps` les pone los colores del look solo.
   local i
   i=$(row=0 pick "$(L herramientas tools)" "" \
       "Audio (vato)" "Bluetooth (vato)" "$(L "Red" "Network") (vato)" "$(L "Sistema" "System") (vato)" \

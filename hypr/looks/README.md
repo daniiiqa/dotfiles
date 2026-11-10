@@ -2,7 +2,7 @@
 
 Cada look es una carpeta aquí con un archivo maestro, `look.toml`, y los
 archivos de cada app (un espejo de `~/.config` con solo lo que el look cambia).
-`LookSwitch.sh` (SUPER+T) lo aplica con `LookBuild.py`.
+`LookSwitch.sh` (SUPER+T) lo aplica con leña (`~/.local/bin/lena`).
 
 ```
 hypr/looks/<look>/
@@ -10,7 +10,7 @@ hypr/looks/<look>/
                        lo único obligatorio de tocar
   empalme/appicons.json  los íconos de las apps en la barra
   rofi/                config.rasi, theme.rasi (forma de los menús), fuentes
-  hypr/conf/           decorations (bordes, gaps, blur) y animations, .conf y .lua
+  hypr/conf/           decorations.lua (bordes, gaps, blur) y animations.lua
   hypr/hyprlock.conf   la pantalla de bloqueo
   wlogout/  kitty/  fastfetch/  sddm/look.conf
 ```
@@ -74,7 +74,7 @@ selection_background = "acc"
 | la barra (`[bar]` del look.toml) | `acc` | `alpha(acc, 0.5)` | — |
 | wlogout (CSS) | `@acc` | `alpha(@acc, 0.5)` | `{{font}}` |
 | rofi (`.rasi`) | `@acc` | `@acc-a80` (con guion: rofi no acepta `_`) | `{{font}}` |
-| hyprland (`.conf`), hyprlock | `$acc` | `$acc_a80` | `{{font}}` |
+| hyprlock | `$acc` | `$acc_a80` | `{{font}}` |
 | hyprland (`.lua`) | `c.acc` | `c.acc_a80` | — |
 | sddm/look.conf | `"@acc"` | — | `{{font}}` |
 | kitty.conf | — | — | `{{font}} Mono` |
@@ -83,7 +83,7 @@ selection_background = "acc"
 solas las que use el look. Los de la terminal (`@color12`, `@background`…)
 también sirven, y en los looks de wallpaper son los únicos que cambian con él.
 
-Lo que genera `LookBuild.py` (no se edita a mano): los colores de cada app
+Lo que genera leña (no se edita a mano): los colores de cada app
 (`wlogout/wallust/colors-wlogout.css`, `rofi/wallust/colors-rofi.rasi`,
 `empalme/colors.json` y `empalme/bar.json`,
 `hypr/wallust/wallust-hyprland.{conf,lua}`, el theme de kitty, cava),
