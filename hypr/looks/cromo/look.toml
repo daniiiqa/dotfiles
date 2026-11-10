@@ -1,0 +1,365 @@
+# discada — look «cromo»
+# Lo único que hay que tocar para cambiar sus colores, fuente o estilo:
+# los archivos de cada app (empalme/, jale/, hypr/…) usan estos nombres.
+# leña lo aplica (lo llama LookSwitch.sh).
+
+[about]
+es = "cromo (basado en glass)"
+en = "cromo (based on glass)"
+
+[font]
+family = "GeistMono Nerd Font"   # {{font}} en los archivos del look
+package = "otf-geist-mono-nerd"   # lo instala install.sh
+
+[colors]
+from = "palette"
+background = "#1a1b26"
+foreground = "#e0f7fa"
+color0 = "#1a1b26"
+color1 = "#e0f7fa"
+color2 = "#ff79c6"
+color3 = "#bd93f9"
+color4 = "#50fa7b"
+color5 = "#f1fa8c"
+color6 = "#ff9e64"
+color7 = "#8be9fd"
+color8 = "#6272a4"
+color9 = "#ffb86c"
+color10 = "#ff5555"
+color11 = "#c792ea"
+color12 = "#ff79c6"
+color13 = "#8be9fd"
+color14 = "#50fa7b"
+color15 = "#f1fa8c"
+
+[colors.base]
+# Paleta Y2K: cromado, brillos y degradados rosa/cyan
+background = "#1a1b26"  # fondo oscuro con tinte cian
+foreground = "#e0f7fa"  # texto casi blanco, brillo
+accent = "#ff79c6"      # rosa neon (estilo dracula/vaporwave)
+border = "#bd93f9"      # violeta para bordes
+
+[colors.named]
+# nombres propios del look (@acc en css y jale, $acc en hyprland…);
+# el valor es un color o el nombre de otro (color12, background…)
+critical = "#e06c75"
+alert = "#ff8fa3"
+
+[style]
+# cómo se ven rola, vato, taco, arre y nvim (ver el README de vato)
+borders = "auto"
+bar = "knob"
+labels = "icons"
+case = "normal"
+select = "fill"
+tint = "color"
+transparent = true
+
+[farula]
+# cómo se revela al cambiar wallpaper o look (se estrella o se vuelve agua): iris, quemado,
+# glitch, vidrio, derretido, fade, crt, azulejos, cartas, onda, tinta, wipe,
+# pixelado; una lista ["a", "b"] (uno al azar) o "random"
+fx = ["vidrio", "onda"]
+
+[wallust]
+palette = "dark16"
+
+[bar]
+# empalme, la barra de discada: módulos, formatos y estilo (empalme/src/style.rs)
+position = "bottom"
+height = 40
+margin = [0, 16, 12, 16]     # arriba, derecha, abajo, izquierda (pixeles)
+style = "solid"
+radius = 0
+font-size = 13     # pixeles
+pad = 0                # el relleno de cada módulo va en su padding (pixeles)
+gap = 0                # celdas entre módulos
+spacing = 8            # pixeles entre módulos
+left = ["clock", "visualizer"]
+center = ["workspaces"]
+right = ["recorder", "picha", "app#i1", "app#i2", "app#i3", "app#i4", "app#i5", "app#i6", "app#i7", "app#i8", "group/apps", "group/mobo_drawer", "group/audio", "network", "bluetooth", "battery", "idle", "group/notify", "power"]
+
+[bar.box]
+bg = "transparent"
+
+[bar.pill]
+"text-shadow" = "0px 1px 3px alpha(black, 0.5)"
+
+[bar.modules.workspaces]
+format = "{name}"
+persistent = 5
+fg = "alpha(foreground, 0.55)"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 3
+"empty-fg" = "alpha(foreground, 0.22)"
+"active-fg" = "background"
+"active-bg" = "color12"
+"button-padding" = 14
+"active-padding" = 26
+"button-radius" = 16
+"active-text-shadow" = "none"
+
+[bar.modules.clock]
+format = "{:%H:%M  ·  %a %d}"
+"format-alt" = "{:L%A %d de %B %Y}"
+"tooltip-format" = "<tt><small>{calendar}</small></tt>"
+calendar = { "format" = { "today" = "<b><u>{}</u></b>" } }
+fg = "foreground"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 18
+bold = true
+
+[bar.modules.temperature]
+tooltip = true
+"format-critical" = "{temperatureC}°C {icon}"
+format = "{temperatureC}°C {icon}"
+"format-icons" = ["󰔏"]
+interval = 10
+"critical-threshold" = 82
+fg = "alpha(foreground, 0.75)"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+
+[bar.modules.cpu]
+format = "{usage}% 󰘚"
+"format-alt" = "{icon0}{icon1}{icon2}{icon3} {usage:>2}% 󰘚"
+"format-icons" = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+interval = 1
+fg = "alpha(foreground, 0.75)"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+
+[bar.modules.memory]
+format = "{used:0.1f}G 󰍛"
+"format-alt" = "{percentage}% 󰍛"
+tooltip = true
+"tooltip-format" = "{used:0.1f}GB/{total:0.1f}G"
+interval = 10
+fg = "alpha(foreground, 0.75)"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+
+[bar.modules.disk]
+format = "{percentage_used}% 󰋊"
+"tooltip-format" = "{used} used out of {total} on {path} ({percentage_used}%)"
+interval = 30
+path = "/"
+fg = "alpha(foreground, 0.75)"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+
+[bar.modules.audio]
+format = "{icon} {volume}%"
+"format-muted" = "󰖁"
+"format-bluetooth" = "{icon} 󰂰 {volume}%"
+"tooltip-format" = "{icon} {desc} | {volume}%"
+"format-icons" = { "headphone" = "󰋋", "hands-free" = "󰋋", "headset" = "󰋎", "phone" = "󰄜", "portable" = "󰄜", "car" = "󰄋", "default" = ["󰕿", "󰕿", "󰖀", "󰕾"] }
+fg = "foreground"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+
+[bar.modules.mic]
+format = "󰍮 {volume}%"
+"format-muted" = "󰍭"
+"tooltip-format" = "{source_desc} | {source_volume}%"
+fg = "foreground"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+
+[bar.modules.network]
+format = "{ifname}"
+"format-wifi" = "{icon}"
+"format-ethernet" = "󰌗"
+"format-disconnected" = "󰌙"
+"tooltip-format" = "{ipaddr} 󱦲 {bandwidthUpBits} 󱦳 {bandwidthDownBits}"
+"format-linked" = "󰈁 {ifname} (No IP)"
+"tooltip-format-wifi" = "{essid} {icon} {signalStrength}%"
+"tooltip-format-ethernet" = "{ifname} 󰌗"
+"tooltip-format-disconnected" = "󰌙 Disconnected"
+"format-icons" = ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+fg = "foreground"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+"font-size" = 20
+
+[bar.modules.bluetooth]
+format = "󰂯"
+"format-disabled" = "󰂲"
+"format-connected" = "󰂱 {num_connections}"
+"tooltip-format" = "󰂯 {device_alias}"
+"tooltip-format-connected" = "{device_enumerate}"
+"tooltip-format-enumerate-connected" = "󰂯 {device_alias} 󰂄{device_battery_percentage}%"
+tooltip = true
+fg = "foreground"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+"font-size" = 20
+
+[bar.modules.idle]
+tooltip = true
+"tooltip-format-activated" = "Stay awake: on\nScreen won't dim, lock or sleep"
+"tooltip-format-deactivated" = "Stay awake: off\nClick to keep the screen on"
+format = "{icon}"
+"format-icons" = { "activated" = "󰛊", "deactivated" = "󰾫" }
+fg = "foreground"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+"font-size" = 20
+
+[bar.modules.notifications]
+format = "{} {icon}"
+"format-icons" = { "notification" = "󰂜<span foreground='red'><sup>󰧟</sup></span>", "none" = "󰂜", "dnd-notification" = "󰪑<span foreground='red'><sup>󰧟</sup></span>", "dnd-none" = "󰪑" }
+fg = "foreground"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+
+[bar.modules.recorder]
+rec = "󰻃"
+paused = "󰏦"
+replay = "󰋚"
+fg = "color12"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+
+[bar.modules.power]
+format = "󰐥"
+tooltip = true
+"tooltip-format" = "Left Click: Logout Menu\nRight Click: Change Blur"
+fg = "color12"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+"font-size" = 20
+
+[bar.modules.battery]
+format = "{icon} {percentage}%"
+"format-icons" = { "discharging" = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"], "charging" = ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"], "full" = ["󰚥"], "saver" = ["󰌪"] }
+"low-color" = "critical"
+"critical-color" = "critical"
+fg = "foreground"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 14
+"font-size" = 20
+
+[bar.modules.visualizer]
+style = "braille"
+bars = 20
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 999
+margin = [4, 3, 4, 3]
+padding = 6
+"font-size" = 14
+color = "color12"
+
+[bar.modules.app]
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 12
+"font-size" = 20
+color = "color12"
+"active-bg" = "alpha(color12, 0.12)"
+"active-border" = "alpha(color12, 0.8)"
+
+[bar.modules."app#more"]
+fg = "color12"
+bg = "alpha(background, 0.58)"
+border = "alpha(white, 0.16)"
+"border-width" = 1
+radius = 20
+margin = [2, 0, 2, 0]
+padding = 12
+"font-size" = 20
+
+[bar.hover]
+bg = "alpha(background, 0.55)"
+modules = ["power", "audio", "mic", "network", "bluetooth", "battery", "notifications", "clock"]
+
+[bar.hover-workspaces]
+bg = "alpha(white, 0.1)"
+"active-bg" = "color12"
+
+[bar.tooltip]
+bg = "alpha(background, 0.85)"
+border = "alpha(white, 0.16)"
+radius = 14
+fg = "foreground"
+
+[bar.groups.apps]
+modules = ["app#more", "app#d1", "app#d2", "app#d3", "app#d4", "app#d5", "app#d6", "app#d7", "app#d8"]
+drawer = { "transition-duration" = 250, "transition-left-to-right" = true }
+
+[bar.groups.mobo_drawer]
+modules = ["temperature", "cpu", "memory", "disk"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.audio]
+modules = ["audio", "mic"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = true }
+
+[bar.groups.notify]
+modules = ["notifications"]
+drawer = { "transition-duration" = 500, "transition-left-to-right" = false }
