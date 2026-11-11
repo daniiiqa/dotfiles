@@ -21,6 +21,19 @@ fi
 
 pidof hyprlock >/dev/null && exit 0
 
+# Custom (dany): LOCKER=chapa en hypr/discada.conf → la chapa de discada en vez
+# de hyprlock (con huella si hay lector y dedos). chapa sale con 0 solo al
+# abrirse; si sale de otro modo (se cayó, no pudo bloquear), hyprlock toma el
+# bloqueo (misc:allow_session_lock_restore), para no quedarse en la pantalla
+# roja de Hyprland.
+locker=$(sed -nE 's/^LOCKER=([a-z]+).*/\1/p' "$HOME/.config/hypr/discada.conf" 2>/dev/null)
+if [ "$locker" = chapa ] && command -v chapa >/dev/null; then
+  pidof chapa >/dev/null && exit 0
+  chapa && exit 0
+  echo "LockScreen: chapa salió con $?, sigue hyprlock" >&2
+  exec hyprlock
+fi
+
 # con farula, hyprlock sin su fadeOut: al desbloquear se desvanecía medio
 # segundo sobre la misma imagen y luego apenas empezaba el efecto (se sentía
 # lento). Una copia de su config con solo eso apagado; si con ella no
