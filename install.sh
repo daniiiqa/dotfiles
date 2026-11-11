@@ -139,6 +139,7 @@ FARULA_REPO="https://github.com/daniiiqa/farula.git"
 FIERRO_REPO="https://github.com/daniiiqa/fierro.git"
 CHISPA_REPO="https://github.com/daniiiqa/chispa.git"
 CHAPA_REPO="https://github.com/daniiiqa/chapa.git"
+CARBON_REPO="https://github.com/daniiiqa/carbon.git"
 LENA_REPO="https://github.com/daniiiqa/lena.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
@@ -661,6 +662,10 @@ app farula "$FARULA_REPO"
 # en hypr/discada.conf (ver LockScreen.sh). Con huella si hay lector y dedos.
 say "chapa ($(L "el candado de discada, con huella" "the discada lock screen, with fingerprint")) → ~/.local/bin/chapa"
 app chapa "$CHAPA_REPO"
+# Custom (dany): carbon, el updater ("actualizar discada"): Update.sh le pasa
+# la estafeta si está, y carbon revisa es el antiguo UpdateCheck.py
+say "carbon ($(L "el updater de discada, con su lumbre" "the discada updater, with its fire")) → ~/.local/bin/carbon"
+app carbon "$CARBON_REPO"
 if ((LAPTOP)); then
   say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
   app fierro "$FIERRO_REPO"
