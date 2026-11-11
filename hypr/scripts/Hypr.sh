@@ -105,7 +105,9 @@ case "$cmd" in
     done
     dsp "hl.dsp.exec_cmd($(q "$2"), { ${rules%, } })" ;;
   dpms)
-    dsp "hl.dsp.dpms($(q "$1"))" ;;
+    # Custom (dany): con texto suelto, hl.dsp.dpms("on") *alterna* (apagaba la
+    # pantalla al volver de suspender); la acción va en una tabla
+    dsp "hl.dsp.dpms({action = $(q "$1")})" ;;
   exit)
     dsp "hl.dsp.exit()" ;;
   lua)

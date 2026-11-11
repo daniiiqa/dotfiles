@@ -70,6 +70,9 @@ hl.config({ misc = {
     disable_splash_rendering = true,
     vrr = 2,
     mouse_move_enables_dpms = true,
+    -- Custom (dany): una tecla también prende la pantalla (si se apaga sola,
+    -- que no haga falta el touchpad)
+    key_press_enables_dpms = true,
     enable_swallow = false,
     swallow_regex = "^(kitty)$",
     focus_on_activate = false,
