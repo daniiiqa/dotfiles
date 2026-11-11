@@ -138,6 +138,7 @@ ROLLO_REPO="https://github.com/daniiiqa/rollo.git"
 FARULA_REPO="https://github.com/daniiiqa/farula.git"
 FIERRO_REPO="https://github.com/daniiiqa/fierro.git"
 CHISPA_REPO="https://github.com/daniiiqa/chispa.git"
+CHAPA_REPO="https://github.com/daniiiqa/chapa.git"
 LENA_REPO="https://github.com/daniiiqa/lena.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
@@ -647,6 +648,10 @@ say "rollo ($(L "los workspaces en miniatura" "workspace overview")) → ~/.loca
 app rollo "$ROLLO_REPO"
 say "farula ($(L "la animación al cambiar de fondo o de look" "the wallpaper and look change animation")) → ~/.local/bin/farula"
 app farula "$FARULA_REPO"
+# Custom (dany): chapa no reemplaza a hyprlock solita: se usa con LOCKER=chapa
+# en hypr/discada.conf (ver LockScreen.sh). Con huella si hay lector y dedos.
+say "chapa ($(L "el candado de discada, con huella" "the discada lock screen, with fingerprint")) → ~/.local/bin/chapa"
+app chapa "$CHAPA_REPO"
 if ((LAPTOP)); then
   say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
   app fierro "$FIERRO_REPO"
