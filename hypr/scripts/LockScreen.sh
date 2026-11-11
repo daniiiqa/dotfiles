@@ -50,7 +50,12 @@ pidof hyprlock >/dev/null && exit 0
 locker=$(sed -nE 's/^LOCKER=([a-z]+).*/\1/p' "$HOME/.config/hypr/discada.conf" 2>/dev/null)
 if [ "$locker" = chapa ] && command -v chapa >/dev/null; then
   pidof chapa >/dev/null && exit 0
-  chapa && exit 0
+  # su log, que sobrevive al apagado (el de Hyprland vive en /run): las
+  # últimas 3000 líneas
+  clog="$HOME/.local/state/chapa/chapa.log"
+  mkdir -p "${clog%/*}"
+  [ -f "$clog" ] && tail -n 3000 "$clog" > "$clog.tmp" && mv "$clog.tmp" "$clog"
+  chapa 2>>"$clog" && exit 0
   echo "LockScreen: chapa salió con $?, sigue hyprlock" >&2
   hyprlock && exit 0
   sin_candado
