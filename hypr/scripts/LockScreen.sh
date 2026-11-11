@@ -14,6 +14,27 @@ PATH="$HOME/.local/bin:$PATH"
 # hyprlock sale, farula revela el escritorio. Bloqueado no se puede capturar
 # la pantalla, por eso la imagen y no una foto.
 
+# Custom (dany): `LockScreen.sh inicio` va primero en startup.lua. Con el
+# autologin de SDDM (/etc/sddm.conf.d/autologin.conf) el candado hace de login:
+# Hyprland arranca ya bloqueado. Si nada pudo bloquear, se cierra la sesión y
+# se regresa a SDDM (que no vuelve a entrar solo: Relogin=false). Sin
+# autologin (un login normal, otra máquina) no hace nada.
+inicio=0
+if [ "$1" = inicio ]; then
+  [ "$(loginctl show-session "$XDG_SESSION_ID" -p Service --value 2>/dev/null)" = sddm-autologin ] || exit 0
+  inicio=1
+  set -- run
+fi
+
+# al arrancar con autologin, una sesión sin candado no se queda abierta
+sin_candado() {
+  [ "$inicio" = 1 ] || return 0
+  echo "LockScreen: no se pudo bloquear al arrancar, se cierra la sesión" >&2
+  "$HOME/.config/hypr/scripts/Hypr.sh" exit
+  sleep 2
+  loginctl terminate-session "$XDG_SESSION_ID"
+}
+
 if [ "$1" != run ]; then
   loginctl lock-session
   exit
@@ -31,7 +52,9 @@ if [ "$locker" = chapa ] && command -v chapa >/dev/null; then
   pidof chapa >/dev/null && exit 0
   chapa && exit 0
   echo "LockScreen: chapa salió con $?, sigue hyprlock" >&2
-  exec hyprlock
+  hyprlock && exit 0
+  sin_candado
+  exit 1
 fi
 
 # con farula, hyprlock sin su fadeOut: al desbloquear se desvanecía medio
@@ -95,5 +118,5 @@ if [ -n "$img" ] && kill -0 "$lock" 2>/dev/null; then
   farula freeze --image "$img" --hold
 fi
 
-wait "$lock"
+wait "$lock" || sin_candado
 farula reveal 2>/dev/null

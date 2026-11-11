@@ -21,6 +21,9 @@ hl.on("hyprland.start", function()
     -- para probar la config en un Hyprland anidado sin arrancar nada dos veces
     if os.getenv("DISCADA_NO_START") then return end
 
+    -- con autologin de SDDM, el candado es el login: bloquear antes que nada
+    -- (sin autologin no hace nada; ver LockScreen.sh)
+    hl.exec_cmd(scriptsDir .. "/LockScreen.sh inicio")
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd(scriptsDir .. "/Polkit.sh")
