@@ -15,6 +15,13 @@ scripts="$cfg/hypr/scripts"
 looks="$cfg/hypr/looks"
 . "$scripts/lang.sh"
 
+# Custom (dany): carbon (el updater en Rust: los pasos a la izquierda, la
+# discada en la lumbre a la derecha) hace todo esto mismo. Si está, le toca;
+# si no (una máquina que aún no lo baja), sigue este script como siempre.
+if [ -x "$HOME/.local/bin/carbon" ] && [ -z "${DISCADA_SIN_CARBON:-}" ]; then
+  exec "$HOME/.local/bin/carbon"
+fi
+
 say() { printf '\033[1;35m::\033[0m %s\n' "$*"; }
 fail() { printf '\033[1;31m!!\033[0m %s\n' "$*"; notify-send -u critical "discada" "$*"; exit 1; }
 

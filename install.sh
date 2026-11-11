@@ -322,13 +322,22 @@ if ((UPDATE)) && ((NEW_MACHINE)); then
   base=$(cat "$REV_FILE" 2>/dev/null || true)
   git -C "$REPO_DIR" cat-file -e "${base:-x}^{commit}" 2>/dev/null ||
     base=$(git -C "$REPO_DIR" rev-parse -q --verify 'HEAD@{1}' 2>/dev/null || git -C "$REPO_DIR" rev-parse -q --verify ORIG_HEAD 2>/dev/null || true)
-  if [ -n "$base" ] && command -v python3 >/dev/null; then
+  # Custom (dany): `carbon revisa` (Rust, misma salida); UpdateCheck.py solo si
+  # esta máquina todavía no tiene carbon (se instala más abajo, en las apps)
+  if [ -n "$base" ] && [ -x "$HOME/.local/bin/carbon" ]; then
+    check=("$HOME/.local/bin/carbon" revisa "$REPO_DIR" "$base")
+  elif [ -n "$base" ] && command -v python3 >/dev/null; then
+    check=(python3 "$REPO_DIR/hypr/scripts/UpdateCheck.py" "$REPO_DIR" "$base")
+  else
+    check=()
+  fi
+  if ((${#check[@]})); then
     while IFS=$'\t' read -r what rel; do
       case "$what" in
         keep) KEEP_MINE+=("$rel") ;;
         replace) REPLACE_MINE+=("$rel") ;;
       esac
-    done < <(python3 "$REPO_DIR/hypr/scripts/UpdateCheck.py" "$REPO_DIR" "$base" 2>/dev/null)
+    done < <("${check[@]}" 2>/dev/null)
   fi
   if ((${#KEEP_MINE[@]})); then
     say "$(L "Archivos que cambiaste y que la actualización no toca (se quedan como los tienes):" \
