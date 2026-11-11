@@ -27,9 +27,18 @@ pidof hyprlock >/dev/null && exit 0
 # arrancara, el de siempre: el lock nunca se queda sin poner.
 conf="$HOME/.config/hypr/hyprlock.conf"
 lock_conf=()
+extra=""
 if command -v farula >/dev/null && [ ! -e "$HOME/.config/hypr/farula.off" ]; then
+  extra+=$'\nanimations {\n    animation = fadeOut, 0\n}\n'
+fi
+# huella: si fprintd ya tiene un dedo registrado, hyprlock también abre con el
+# lector, a la par de la contraseña (sin esperar a que se acabe el tiempo)
+if command -v fprintd-list >/dev/null && fprintd-list "$USER" 2>/dev/null | grep -q ' - #'; then
+  extra+=$'\nauth {\n    fingerprint:enabled = true\n}\n'
+fi
+if [ -n "$extra" ]; then
   quick="${XDG_RUNTIME_DIR:-/tmp}/hyprlock-farula.conf"
-  { cat "$conf"; printf '\nanimations {\n    animation = fadeOut, 0\n}\n'; } > "$quick"
+  { cat "$conf"; printf '%s' "$extra"; } > "$quick"
   lock_conf=(-c "$quick")
 fi
 hyprlock "${lock_conf[@]}" &
