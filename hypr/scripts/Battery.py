@@ -351,6 +351,10 @@ class Watcher:
                 auto_at = 20
             if auto_at and b["pct"] <= auto_at and not st:
                 saver_on("auto")
+            # se cargó sin que lo viéramos (p. ej. suspendida y enchufada):
+            # el ahorro automático ya no tiene razón de seguir
+            elif st and st.get("why") == "auto" and b["pct"] > auto_at + 5:
+                saver_off()
         else:
             self.warned.clear()
             if st and st.get("why") == "auto":
