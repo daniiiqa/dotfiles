@@ -61,6 +61,7 @@ Atajos clave: SUPER+T looks (`LookSwitch.sh`), SUPER+W wallpaper
 | fierro | hardware de la laptop | `~/fierro` |
 | carbon | el updater ("actualizar discada"): pasos y log a la izquierda, la discada en la lumbre a la derecha; `carbon revisa` es el antiguo UpdateCheck.py | `~/carbon` |
 | picha | Quick Share con Android | `~/picha` |
+| bicho | los animalitos del escritorio (bicho, michi, baba): caminan, trepan ventanas, bailan; menú `bicho menu` (SUPER+Shift+B), config `~/.config/bicho/config.json` | `~/bicho` |
 | compa | agente de IA en la terminal (Ollama local o Claude), con herramientas sobre el rice | `~/compa` |
 | chispa | la luz del AULA F75 desde la terminal (solo luz, por cable, 2.4 GHz o Bluetooth; los cambios de color se sostienen en vivo con `chispa hold` y se guardan al bloquear la pantalla, suspender o salir) | `~/chispa` |
 

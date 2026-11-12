@@ -140,6 +140,7 @@ FIERRO_REPO="https://github.com/daniiiqa/fierro.git"
 CHISPA_REPO="https://github.com/daniiiqa/chispa.git"
 CHAPA_REPO="https://github.com/daniiiqa/chapa.git"
 CARBON_REPO="https://github.com/daniiiqa/carbon.git"
+BICHO_REPO="https://github.com/daniiiqa/bicho.git"
 LENA_REPO="https://github.com/daniiiqa/lena.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
@@ -666,6 +667,10 @@ app chapa "$CHAPA_REPO"
 # la estafeta si está, y carbon revisa es el antiguo UpdateCheck.py
 say "carbon ($(L "el updater de discada, con su lumbre" "the discada updater, with its fire")) → ~/.local/bin/carbon"
 app carbon "$CARBON_REPO"
+# Custom (dany): bicho, los animalitos del escritorio (SUPER+Shift+B); salen
+# solos al iniciar sesión si en su menú dice que sí (bicho --auto)
+say "bicho ($(L "los animalitos que se pasean por el escritorio" "little pets that roam the desktop")) → ~/.local/bin/bicho"
+app bicho "$BICHO_REPO"
 if ((LAPTOP)); then
   say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
   app fierro "$FIERRO_REPO"

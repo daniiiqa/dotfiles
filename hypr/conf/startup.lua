@@ -45,6 +45,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("$HOME/.local/bin/fierro restore")  -- laptops: los límites de carga y el perfil de fierro
     hl.exec_cmd("$HOME/.local/bin/chispa music --auto")  -- el visualizador del teclado, si KEYBOARD_LIGHT=music
     hl.exec_cmd("$HOME/.local/bin/chispa video --auto")  -- con wallpaper en video, el teclado lo sigue (si KEYBOARD_LIGHT=wallpaper)
+    hl.exec_cmd("$HOME/.local/bin/bicho --auto")  -- los animalitos, si en su menú (SUPER+Shift+B) dice "al iniciar sesión: sí"
     hl.exec_cmd("$HOME/.local/bin/picha recibe")  -- lo que te mandan el cel y tus compus (Quick Share, Bluetooth)
     hl.exec_cmd(scriptsDir .. "/FontSize.py apply")  -- tamaño de letra de discada (hypr/discada.conf)
     hl.exec_cmd(scriptsDir .. "/Recorder.sh autostart")  -- replay buffer (hypr/recorder.conf)
