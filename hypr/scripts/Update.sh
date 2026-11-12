@@ -3,7 +3,8 @@
 # terminal para que se vea lo que pasa y se pueda escribir la contraseña.
 #
 # - Si ~/.config es el repo (la máquina donde se desarrolla): guarda lo vivo
-#   en el look actual, git pull --rebase --autostash y vuelve a aplicar el look.
+#   en el look actual, git pull --rebase --autostash e install.sh --update
+#   desde ahí mismo (las herramientas nuevas y el look, sin copiar archivos).
 # - Si discada se instaló con install.sh (repo en ~/dotfiles): git pull y
 #   install.sh --update (conserva idioma, looks, look actual y tus ajustes;
 #   solo instala paquetes que falten). Antes de copiar dice qué archivos
@@ -82,7 +83,15 @@ if git -C "$cfg" rev-parse --is-inside-work-tree >/dev/null 2>&1 && [ -d "$cfg/h
     fail "$(L "Tus cambios chocaron con la actualización (arriba los archivos). Arréglalos (quita los <<<<<<< / >>>>>>>), luego: git -C ~/.config stash drop y hyprctl reload" \
               "Your changes conflicted with the update (files above). Fix them (remove the <<<<<<< / >>>>>>>), then: git -C ~/.config stash drop and hyprctl reload")"
   fi
-  [ -n "$cur" ] && [ -d "$looks/$cur" ] && apply_look "$cur"
+  # Custom (dany): las herramientas (carbon, empalme, bicho…) también: antes
+  # aquí solo se hacía git pull y en esta máquina nunca se actualizaban.
+  # install.sh corriendo desde ~/.config no copia nada (no es máquina nueva):
+  # instala lo que falte, baja las apps que cambiaron y pone el look actual
+  if [ -f "$cfg/install.sh" ]; then
+    bash "$cfg/install.sh" --update || fail "$(L "install.sh --update falló" "install.sh --update failed")"
+  elif [ -n "$cur" ] && [ -d "$looks/$cur" ]; then
+    apply_look "$cur"
+  fi
   reload_all
   if [ "$before" = "$(git -C "$cfg" rev-parse HEAD)" ]; then
     say "$(L "Ya estabas al día." "Already up to date.")"
