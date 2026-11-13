@@ -18,6 +18,10 @@ hl.layer_rule({ match = { namespace = "farula" }, no_anim = true })
 -- rollo (la vista de workspaces) hace su propio zoom
 hl.layer_rule({ match = { namespace = "rollo" }, no_anim = true })
 
+-- bicho (los animalitos) se mueve cambiando su margen 30 veces por segundo:
+-- con animación de layer cada paso se desliza tarde y llega de un jalón
+hl.layer_rule({ match = { namespace = "bicho" }, no_anim = true })
+
 -- jale (el launcher, antes rofi) con blur detrás: los looks con menú
 -- translúcido (glass) lo necesitan, en los opacos no se nota
 hl.layer_rule({ match = { namespace = "jale" }, blur = true })
