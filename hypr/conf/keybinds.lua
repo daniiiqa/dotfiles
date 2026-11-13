@@ -29,6 +29,8 @@ hl.bind("SUPER + Return", hl.dsp.exec_cmd(d.term), { description = "terminal" })
 hl.bind("SUPER + SHIFT + Return", hl.dsp.exec_cmd(scriptsDir .. "/Dropterminal.sh " .. d.term), { description = "dropdown terminal" })
 hl.bind("SUPER + E", hl.dsp.exec_cmd(d.files), { description = "file manager" })
 hl.bind("SUPER + B", hl.dsp.exec_cmd("xdg-open \"https://\""), { description = "browser" })
+hl.bind("SUPER + N", hl.dsp.exec_cmd("$HOME/.local/bin/nota new"), { description = "new note" })
+hl.bind("SUPER + ALT + N", hl.dsp.exec_cmd("$HOME/.local/bin/nota"), { description = "notes" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd(scriptsDir .. "/FocusOrLaunch.sh rola kitty --class rola -e rola"), { description = "music player" })
 hl.bind("SUPER + P", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh picha"), { description = "send and receive (picha)" })
 -- Custom (dany): chispa, la luz del AULA F75

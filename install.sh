@@ -142,6 +142,7 @@ CHAPA_REPO="https://github.com/daniiiqa/chapa.git"
 CARBON_REPO="https://github.com/daniiiqa/carbon.git"
 BICHO_REPO="https://github.com/daniiiqa/bicho.git"
 LENA_REPO="https://github.com/daniiiqa/lena.git"
+NOTA_REPO="https://github.com/daniiiqa/nota.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.lua hypr/workspaces.lua
@@ -205,6 +206,8 @@ run()  { if ((DRY)); then printf '   [dry-run] %s\n' "$*"; else "$@"; fi; }
 # ── Comprobaciones ───────────────────────────────────────────────────────────
 command -v pacman >/dev/null || { echo "discada is for Arch Linux (pacman not found) / es para Arch Linux (no encontré pacman)."; exit 1; }
 [ "$EUID" -ne 0 ] || { echo "Run it as your user, not root / Córrelo como tu usuario, no como root."; exit 1; }
+# un repo que no existe (o es privado) falla en vez de pedir usuario y quedarse colgado
+export GIT_TERMINAL_PROMPT=0
 
 # ── 0. Arranque desde curl: clonar el repo y seguir desde ahí ────────────────
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-.}")" 2>/dev/null && pwd)"
@@ -532,7 +535,13 @@ app() {  # app <nombre> <repo>
   local name="$1" repo="$2" slug head stamp base got tmp waited=0
   slug="${repo#https://github.com/}"; slug="${slug%.git}"
   stamp="$DISCADA_BIN_STATE/$name.commit"
-  head="$(git ls-remote "$repo" HEAD 2>/dev/null | cut -f1)"
+  head="$(git ls-remote "$repo" HEAD 2>/dev/null | cut -f1)" || true
+  # Custom (dany): repo que no existe todavía (o sin red): se salta con aviso
+  # en vez de tumbar todo el --update con set -e (pasó con nota sin publicar)
+  if [ -z "$head" ]; then
+    say "  $name: $(L "no pude llegar a $repo, me lo salto" "couldn't reach $repo, skipping")"
+    return 0
+  fi
   if [ -n "$head" ] && [ -x "$HOME/.local/bin/$name" ] && [ "$(cat "$stamp" 2>/dev/null)" = "$head" ]; then
     say "  $name: $(L "al día" "up to date")"
     return
@@ -659,6 +668,8 @@ say "rollo ($(L "los workspaces en miniatura" "workspace overview")) → ~/.loca
 app rollo "$ROLLO_REPO"
 say "farula ($(L "la animación al cambiar de fondo o de look" "the wallpaper and look change animation")) → ~/.local/bin/farula"
 app farula "$FARULA_REPO"
+say "nota ($(L "las notas, cada una en su ventana: SUPER+N" "notes, each in its own window: SUPER+N")) → ~/.local/bin/nota"
+app nota "$NOTA_REPO"
 # Custom (dany): chapa no reemplaza a hyprlock solita: se usa con LOCKER=chapa
 # en hypr/discada.conf (ver LockScreen.sh). Con huella si hay lector y dedos.
 say "chapa ($(L "el candado de discada, con huella" "the discada lock screen, with fingerprint")) → ~/.local/bin/chapa"

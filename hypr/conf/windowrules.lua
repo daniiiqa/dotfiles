@@ -27,6 +27,10 @@ hl.layer_rule({ match = { namespace = "bicho" }, no_anim = true })
 hl.layer_rule({ match = { namespace = "jale" }, blur = true })
 hl.layer_rule({ match = { namespace = "jale" }, ignore_alpha = 0.1 })
 
+-- nota (la cajita para apuntar al vuelo): el mismo blur que jale
+hl.layer_rule({ match = { namespace = "nota" }, blur = true })
+hl.layer_rule({ match = { namespace = "nota" }, ignore_alpha = 0.1 })
+
 -- ─── Tags ────────────────────────────────────────────────────────────────────
 hl.window_rule({ match = { class = "^(zen|zen-browser)$" }, tag = "+browser" })
 hl.window_rule({ match = { class = "^(kitty|kitty-dropterm)$" }, tag = "+terminal" })
@@ -47,6 +51,8 @@ hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, tag = "+tool"
 -- ─── Herramientas y diálogos ─────────────────────────────────────────────────
 -- vato (Vato.sh), picha, fierro y chispa (TuiApp.sh): las apps de discada en la terminal
 hl.window_rule({ match = { class = "^(vato|picha|fierro|chispa|discada-update)$" }, float = true, center = true, size = "(monitor_w*0.55) (monitor_h*0.6)" })
+-- nota: cada nota es una ventana que flota donde la pongas (y se puede fijar)
+hl.window_rule({ match = { class = "^(nota)$" }, float = true })
 hl.window_rule({ match = { tag = "tool" }, float = true, center = true, size = "(monitor_w*0.7) (monitor_h*0.7)" })
 hl.window_rule({ match = { class = "^(qalculate-gtk)$" }, float = true, center = true })
 hl.window_rule({ match = { class = "^(org.xfce.mousepad)$" }, float = true, center = true, size = "(monitor_w*0.5) (monitor_h*0.6)" })
