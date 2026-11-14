@@ -1,0 +1,26 @@
+# discada's motd: one random line on every login (Entrada.sh).
+# One per line; lines starting with # don't count. Add your own.
+the discada is already on the fire
+today we build, compa
+coffee first, then we'll see
+may your code compile on the first try
+no excuses, give it your all
+slow down, I'm in a hurry
+relax, the carne asada won't cook itself
+good day to close some loose ends
+the early bird is already tired
+let's go, the world won't rice itself
+pura vida, pura discada
+if it doesn't build, you're missing a semicolon
+fewer open tabs, more finished things
+drink some water, put on a song and go
+your desktop looks delicious today
+life is short: commit often
+better late than buggy
+almost there, almost there
+nobody gives up today
+one step at a time, like tortillas on the comal
+stubbornness is a talent too
+if it isn't backed up, it doesn't exist
+let the fire do its job
+just don't stay up too late, okay

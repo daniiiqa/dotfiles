@@ -1,0 +1,7 @@
+# Custom (dany): el aviso del wrapped de discada (Semana.sh); lo lanza el timer
+[Unit]
+Description=discada: tu semana (cacha semana)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/hypr/scripts/Semana.sh

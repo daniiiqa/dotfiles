@@ -47,6 +47,8 @@ fi
 ln -sf "$wallpaper_path" "$wall_link" || true
 mkdir -p "$(dirname "$wallpaper_current")"
 cp -f "$wallpaper_path" "$wallpaper_current" || true
+# Custom (dany): para `cacha semana` (el wrapped): cuándo y cuál
+mkdir -p "${XDG_STATE_HOME:-$HOME/.local/state}/discada" && echo "$(date +%s) $wallpaper_path" >> "${XDG_STATE_HOME:-$HOME/.local/state}/discada/wallpapers.log"
 
 # el teclado (chispa), si sigue al wallpaper: de una vez y sin esperarlo, para que
 # cambie junto con la pantalla. Si no le toca o no está conectado no hace nada
@@ -111,6 +113,7 @@ wait_for_templates "$start_ts" "${wallust_targets[@]}" || true
 
 # kitty relee su config (incluye kitty-themes/01-Wallust.conf) con SIGUSR1
 pkill -USR1 -x kitty 2>/dev/null || true
+"$HOME/.config/hypr/scripts/Fetch.sh" refresh   # Custom (dany): las terminales recién abiertas redibujan su fastfetch
 
 # Custom (dany): aquí NO se recarga la barra. Este script genera colores;
 # recargar la barra es chamba del caller (Refresh.sh). Cuando ambos lo

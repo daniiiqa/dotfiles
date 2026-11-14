@@ -25,7 +25,7 @@ edit=${EDITOR:-${edit:-nano}}
 I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
 I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
 I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'; I_UPDATE=$'\U000f06b0'
-I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'; I_TECLADO=$'\U000f030c'
+I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'; I_TECLADO=$'\U000f030c'; I_FETCH=$'\U000f018d'; I_ENTRADA=$'\U000f0e24'; I_SEMANA=$'\U000f00f0'
 arre="$HOME/.local/bin/arre"
 
 need() {
@@ -372,6 +372,81 @@ lateral_menu() {
   err=$(chispa side "${modos[$i]}" 2>&1 >/dev/null) || notify-send -i "dialog-error-symbolic" "chispa" "$err"
 }
 
+# ── fastfetch ────────────────────────────────────────────────────────────────
+# Custom (dany): FETCH_STYLE en discada.conf (lo lee Fetch.sh al abrir una
+# terminal): el del look, tu wallpaper, la ficha regia o pixel art
+# (cacha/pixel/*.txt: los de discada y los que dibujes tú; lo dibuja cacha).
+fetch_pixel="$HOME/.config/cacha/pixel"
+fetch_name() {
+  case "$1" in
+    ""|look)   L "el del look" "the look's" ;;
+    wallpaper) L "tu wallpaper" "your wallpaper" ;;
+    ficha)     L "ficha regia" "regio card" ;;
+    pixel:*)   echo "pixel · ${1#pixel:}" ;;
+    none)      L "sin logo" "no logo" ;;
+    *)         echo "$1" ;;
+  esac
+}
+fetch_menu() {
+  local cur i names=() vals=() f v row=0
+  while true; do
+    cur=$(get_conf "$discada" FETCH_STYLE)
+    vals=(look wallpaper ficha)
+    for f in "$fetch_pixel"/*.txt; do
+      [ -f "$f" ] && f=${f##*/} && vals+=("pixel:${f%.txt}")
+    done
+    vals+=(none)
+    names=()
+    for i in "${!vals[@]}"; do
+      v=$(fetch_name "${vals[$i]}")
+      [ "${vals[$i]}" = "${cur:-look}" ] && v="$v  ✓" && row=$i
+      names+=("$v")
+    done
+    names+=("$(L "probar en una terminal" "try it in a terminal")" "$(L "dibujar el tuyo (abre la carpeta de pixel)" "draw your own (opens the pixel folder)")" "‹ $(L volver back)")
+    i=$(pick fastfetch "$(L "se pinta con los colores del look" "painted with the look's colors")" "${names[@]}") || return
+    if [ -n "${vals[$i]:-}" ]; then
+      set_conf "$discada" FETCH_STYLE "${vals[$i]}"
+      "$scripts/Fetch.sh" refresh   # las terminales recién abiertas lo cambian ya
+    else
+      case $(( i - ${#vals[@]} )) in
+        0) setsid $term -e bash -c "'$scripts/Fetch.sh'; read -rsn1" >/dev/null 2>&1 & ;;
+        1) xdg-open "$fetch_pixel" >/dev/null 2>&1 & return ;;
+        *) return ;;
+      esac
+    fi
+  done
+}
+
+# ── la entrada ───────────────────────────────────────────────────────────────
+# Custom (dany): ENTRADA en discada.conf (Entrada.sh: el telón con el saludo,
+# la campanita y lo que entra en cascada al iniciar sesión)
+entrada_name() {
+  case "$1" in
+    quiet) L "sin sonido" "silent" ;;
+    no)    L "apagada" "off" ;;
+    *)     L "con sonido" "with sound" ;;
+  esac
+}
+entrada_menu() {
+  local cur i v vals=(yes quiet no) names row=0
+  while true; do
+    cur=$(get_conf "$discada" ENTRADA); cur=${cur:-yes}
+    names=()
+    for i in "${!vals[@]}"; do
+      v=$(entrada_name "${vals[$i]}")
+      [ "${vals[$i]}" = "$cur" ] && v="$v  ✓" && row=$i
+      names+=("$v")
+    done
+    names+=("$(L "verla ahora" "see it now")" "‹ $(L volver back)")
+    i=$(pick "$(L entrada entrance)" "$(L "al iniciar sesión: el saludo, la campanita y todo entrando" "on login: the greeting, the chime and everything coming in")" "${names[@]}") || return
+    case $i in
+      0|1|2) set_conf "$discada" ENTRADA "${vals[$i]}" ;;
+      3) pkill -x jale; setsid "$scripts/Entrada.sh" demo >/dev/null 2>&1 & return ;;
+      *) return ;;
+    esac
+  done
+}
+
 # ── menú principal ───────────────────────────────────────────────────────────
 pidof jale >/dev/null && pkill -x jale
 
@@ -393,6 +468,9 @@ while true; do
   font=$(sed -nE 's/^FONT_SIZE=\s*([+-]?[0-9]+).*/\1/p' "$discada" | head -n1)
   case "${font:-0}" in 0) font_txt=normal ;; -*) font_txt=$font ;; *) font_txt=+$font ;; esac
   add "$I_FONT  $(L "tamaño de letra" "font size"): $font_txt"     font
+  add "$I_FETCH  fastfetch: $(fetch_name "$(get_conf "$discada" FETCH_STYLE)") ›" fetch
+  add "$I_ENTRADA  $(L entrada entrance): $(entrada_name "$(get_conf "$discada" ENTRADA)") ›" entrada
+  add "$I_SEMANA  $(L "tu semana" "your week")"                       semana
   add "$I_VIS  $(L visualizador visualizer): $(vis_now)"           vis
   add "$I_REC  $(L grabador recorder) ›"                           rec
   [ -x "$arre" ] && add "$I_NOTIF  $(L notificaciones notifications): $(pos_name "$("$arre" position)") ›" notif
@@ -413,6 +491,9 @@ while true; do
     look)   exec "$scripts/LookSwitch.sh" ;;
     shader) "$scripts/LookSwitch.sh" shader ;;
     font)   "$scripts/FontSize.py" set "$(cycle "${font:-0}" 0 1 2 3 4 -2 -1)" ;;
+    fetch)  fetch_menu ;;
+    entrada) entrada_menu ;;
+    semana) exec "$scripts/Semana.sh" ver ;;
     lang)   set_language "$([ "$DISCADA_LANG" = es ] && echo en || echo es)" ;;
     vis)    vis_menu ;;
     rec)    rec_menu ;;

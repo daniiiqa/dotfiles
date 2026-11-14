@@ -125,7 +125,7 @@ SDDM_THEME_REPO="https://github.com/JaKooLit/simple-sddm-2.git"
 SDDM_THEME_DIR="/usr/share/sddm/themes/simple_sddm_2"
 
 # carpetas del repo que van a ~/.config (las mismas del whitelist de .gitignore)
-CONFIG_DIRS=(hypr jale swaync wallust kitty cava btop fastfetch wlogout rola sddm Kvantum qt5ct qt6ct swappy)
+CONFIG_DIRS=(hypr jale swaync wallust kitty cava btop fastfetch cacha wlogout rola sddm Kvantum qt5ct qt6ct swappy)
 ROLA_REPO="https://github.com/daniiiqa/rola.git"
 VATO_REPO="https://github.com/daniiiqa/vato.git"
 ARRE_REPO="https://github.com/daniiiqa/arre.git"
@@ -143,6 +143,7 @@ CARBON_REPO="https://github.com/daniiiqa/carbon.git"
 BICHO_REPO="https://github.com/daniiiqa/bicho.git"
 LENA_REPO="https://github.com/daniiiqa/lena.git"
 NOTA_REPO="https://github.com/daniiiqa/nota.git"
+CACHA_REPO="https://github.com/daniiiqa/cacha.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.lua hypr/workspaces.lua
@@ -670,6 +671,8 @@ say "farula ($(L "la animación al cambiar de fondo o de look" "the wallpaper an
 app farula "$FARULA_REPO"
 say "nota ($(L "las notas, cada una en su ventana: SUPER+N" "notes, each in its own window: SUPER+N")) → ~/.local/bin/nota"
 app nota "$NOTA_REPO"
+say "cacha ($(L "tu compu de un vistazo al abrir la terminal, en vivo" "your computer at a glance when a terminal opens, live")) → ~/.local/bin/cacha"
+app cacha "$CACHA_REPO"
 # Custom (dany): chapa no reemplaza a hyprlock solita: se usa con LOCKER=chapa
 # en hypr/discada.conf (ver LockScreen.sh). Con huella si hay lector y dedos.
 say "chapa ($(L "el candado de discada, con huella" "the discada lock screen, with fingerprint")) → ~/.local/bin/chapa"
@@ -747,13 +750,30 @@ for prof in "$HOME/.bash_profile" "$HOME/.zprofile"; do
 done
 export PATH="$HOME/.local/bin:$PATH"
 
-# fastfetch al abrir una terminal (con la config del look)
-ff_line='[[ $- == *i* ]] && command -v fastfetch >/dev/null && fastfetch  # discada'
+# fastfetch al abrir una terminal (con la config del look y el logo de
+# FETCH_STYLE en hypr/discada.conf: Fetch.sh; FetchHook.sh lo redibuja al cambiar de look)
+ff_line='[[ $- == *i* ]] && [ -r "$HOME/.config/hypr/scripts/FetchHook.sh" ] && . "$HOME/.config/hypr/scripts/FetchHook.sh"  # discada'
+ff_old='[[ $- == *i* ]] && command -v fastfetch >/dev/null && fastfetch  # discada'
 for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
   [ "$rc" = "$HOME/.zshrc" ] && [ ! -e "$rc" ] && [[ "$SHELL" != */zsh ]] && continue
-  grep -qs 'fastfetch' "$rc" && continue
+  # Custom (dany): la línea de antes (fastfetch solo) pasa a Fetch.sh
+  if grep -qsxF "$ff_old" "$rc"; then
+    if ((DRY)); then echo "   [dry-run] fastfetch → Fetch.sh en $rc"
+    else tmp=$(mktemp); grep -vxF "$ff_old" "$rc" > "$tmp"; printf '%s\n' "$ff_line" >> "$tmp"; cat "$tmp" > "$rc"; rm -f "$tmp"; fi
+    continue
+  fi
+  grep -qs 'fastfetch\|Fetch.sh' "$rc" && continue
   if ((DRY)); then echo "   [dry-run] fastfetch en $rc"; else printf '\n%s\n' "$ff_line" >> "$rc"; fi
 done
+
+# Custom (dany): el wrapped de los domingos (Semana.sh → cacha semana)
+say "$(L "Tu semana en discada, los domingos" "Your week in discada, on Sundays")"
+if ((DRY)); then echo "   [dry-run] systemd --user: discada-semana.timer"
+else
+  mkdir -p "$HOME/.config/systemd/user"
+  for u in discada-semana.service discada-semana.timer; do ln -sf "$CFG/hypr/systemd/$u" "$HOME/.config/systemd/user/$u"; done
+  systemctl --user daemon-reload 2>/dev/null && systemctl --user enable --now discada-semana.timer >/dev/null 2>&1 || true
+fi
 
 say "$(L "Carpetas de usuario y de wallpapers" "User and wallpaper folders")"
 run xdg-user-dirs-update

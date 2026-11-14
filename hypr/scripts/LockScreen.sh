@@ -82,6 +82,8 @@ if [ -n "$extra" ]; then
   { cat "$conf"; printf '%s' "$extra"; } > "$quick"
   lock_conf=(-c "$quick")
 fi
+# Custom (dany): una frase nueva del motd para el candado (hyprlock-motd.conf)
+"$HOME/.config/hypr/scripts/Motd.sh" --guardar >/dev/null 2>&1
 hyprlock "${lock_conf[@]}" &
 lock=$!
 if [ ${#lock_conf[@]} -gt 0 ]; then
@@ -114,7 +116,14 @@ lock_image() {
   magick "${wall}[0]" -resize "${geo}^" -gravity center -extent "$geo" "${blur[@]}" \
     -resize "${geo}!" -evaluate multiply "$bright" "ppm:$out" 2>/dev/null && echo "$out"
 }
-img=$(lock_image)
+# Custom (dany): al arrancar con autologin, el telón lleva el saludo de la
+# entrada (Entrada.sh) y al quitar el candado entra todo como al iniciar sesión
+entrada=0
+if [ "$inicio" = 1 ] && "$HOME/.config/hypr/scripts/Entrada.sh" activa; then
+  entrada=1
+  img=$("$HOME/.config/hypr/scripts/Entrada.sh" imagen)
+fi
+[ -n "${img:-}" ] || img=$(lock_image)
 
 # que hyprlock ya tape la pantalla antes de poner el telón (si no, se vería
 # encima del escritorio un instante)
@@ -124,4 +133,8 @@ if [ -n "$img" ] && kill -0 "$lock" 2>/dev/null; then
 fi
 
 wait "$lock" || sin_candado
-farula reveal 2>/dev/null
+if [ "$entrada" = 1 ]; then
+  "$HOME/.config/hypr/scripts/Entrada.sh" revelar
+else
+  farula reveal 2>/dev/null
+fi

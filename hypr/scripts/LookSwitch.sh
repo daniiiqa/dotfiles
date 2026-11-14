@@ -88,6 +88,8 @@ fi
 wallust_before=$(md5sum < "$cfg/wallust/wallust.toml" 2>/dev/null)
 "$HOME/.local/bin/lena" apply "$target"
 echo "$target" > "$state"
+# Custom (dany): para `cacha semana` (el wrapped): cuándo y a qué look
+mkdir -p "${XDG_STATE_HOME:-$HOME/.local/state}/discada" && echo "$(date +%s) $target" >> "${XDG_STATE_HOME:-$HOME/.local/state}/discada/looks.log"
 "$cfg/hypr/scripts/FontSize.py" apply --no-reload
 
 # 2b) looks de paleta fija: su wallpaper (hypr/wallpapers/<look>.jpg); al
@@ -111,6 +113,7 @@ pkill -SIGUSR2 -x empalme
 "$cfg/hypr/scripts/SDDMWallpaperSync.sh" >/dev/null 2>&1   # sddm: fuente, forma y paleta del look
 "$HOME/.local/bin/lena" apps >/dev/null 2>&1          # apps GTK/Qt: colores del look
 pkill -USR1 -x kitty
+"$cfg/hypr/scripts/Fetch.sh" refresh   # Custom (dany): las terminales recién abiertas redibujan su fastfetch
 pkill -x jale 2>/dev/null
 # la barra (SIGUSR2) y kitty ya releyeron: un respiro para que pinten
 sleep 0.3

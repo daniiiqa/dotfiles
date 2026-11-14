@@ -1,0 +1,11 @@
+# Custom (dany): los domingos a las 8 de la noche, tu semana en discada. Si la
+# compu estaba apagada, en cuanto prende (Persistent)
+[Unit]
+Description=discada: tu semana, los domingos
+
+[Timer]
+OnCalendar=Sun 20:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

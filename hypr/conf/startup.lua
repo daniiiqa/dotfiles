@@ -21,6 +21,12 @@ hl.on("hyprland.start", function()
     -- para probar la config en un Hyprland anidado sin arrancar nada dos veces
     if os.getenv("DISCADA_NO_START") then return end
 
+    -- Custom (dany): la entrada (el telón con el saludo, la campanita y lo que
+    -- entra en cascada; ENTRADA en discada.conf). Lo primero, para que tape
+    -- todo mientras carga. Lo que lleva "Entrada.sh luego S" entra S segundos
+    -- después de que se abre (o a los 8 s si no hubo entrada)
+    hl.exec_cmd(scriptsDir .. "/Entrada.sh inicio")
+
     -- con autologin de SDDM, el candado es el login: bloquear antes que nada
     -- (sin autologin no hace nada; ver LockScreen.sh)
     hl.exec_cmd(scriptsDir .. "/LockScreen.sh inicio")
@@ -37,7 +43,7 @@ hl.on("hyprland.start", function()
     -- Barra, notificaciones (arre las arranca D-Bus solo), idle
     hl.exec_cmd(scriptsDir .. "/AppStrip.py daemon")  -- apps abiertas en la barra (antes que ella)
     hl.exec_cmd(scriptsDir .. "/FitGuard.py")  -- apps que no caben en su tile (Discord) flotan
-    hl.exec_cmd(scriptsDir .. "/Bar.sh")  -- la barra (empalme); la relanza si se cae
+    hl.exec_cmd(scriptsDir .. "/Entrada.sh luego 0.1 " .. scriptsDir .. "/Bar.sh")  -- la barra (empalme); la relanza si se cae
     hl.exec_cmd("sleep 20 && " .. scriptsDir .. "/WallustCache.sh")  -- caché de wallust: wallpapers nuevos al instante
     hl.exec_cmd(scriptsDir .. "/FirstRun.sh")  -- solo la primera vez en una máquina nueva
     hl.exec_cmd("hypridle")
@@ -45,9 +51,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("$HOME/.local/bin/fierro restore")  -- laptops: los límites de carga y el perfil de fierro
     hl.exec_cmd("$HOME/.local/bin/chispa music --auto")  -- el visualizador del teclado, si KEYBOARD_LIGHT=music
     hl.exec_cmd("$HOME/.local/bin/chispa video --auto")  -- con wallpaper en video, el teclado lo sigue (si KEYBOARD_LIGHT=wallpaper)
-    hl.exec_cmd("$HOME/.local/bin/bicho --auto")  -- los animalitos, si en su menú (SUPER+Shift+B) dice "al iniciar sesión: sí"
+    hl.exec_cmd(scriptsDir .. "/Entrada.sh luego 1.2 $HOME/.local/bin/bicho --auto")  -- los animalitos, si en su menú (SUPER+Shift+B) dice "al iniciar sesión: sí"
     hl.exec_cmd("$HOME/.local/bin/picha recibe")  -- lo que te mandan el cel y tus compus (Quick Share, Bluetooth)
-    hl.exec_cmd("$HOME/.local/bin/nota restore")  -- las notas que dejaste abiertas, donde estaban (si no había, nada)
+    hl.exec_cmd(scriptsDir .. "/Entrada.sh luego 0.7 $HOME/.local/bin/nota restore")  -- las notas que dejaste abiertas, donde estaban (si no había, nada)
     hl.exec_cmd(scriptsDir .. "/FontSize.py apply")  -- tamaño de letra de discada (hypr/discada.conf)
     hl.exec_cmd(scriptsDir .. "/Recorder.sh autostart")  -- replay buffer (hypr/recorder.conf)
 

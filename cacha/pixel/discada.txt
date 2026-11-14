@@ -1,0 +1,55 @@
+# discada: la lumbre baila
+.kk................kk.
+k..k..............k..k
+k..kkkkkkkkkkkkkkkk..k
+.kkKKKKKKKKKKKKKKKKkk.
+..kKKyKKrKKyKKrKKyKk..
+..kKrKKyKKrKKyKKrKKk..
+...kKKKKKKKKKKKKKKk...
+....kkkkkkkkkkkkkk....
+.......r.....r....r...
+......rRr...rYr..rRr..
+.....rRYRr.rRYRr.rYr..
+....rRYYYRrRYYYRrRYRr.
+....RYYWYYRYYWYYRYYYR.
+...kkkkkkkkkkkkkkkkkk.
+....k..k........k..k..
+...k..k..........k..k.
+..kk.kk...........kk.kk
+--- 2
+.kk................kk.
+k..k..............k..k
+k..kkkkkkkkkkkkkkkk..k
+.kkKKKKKKKKKKKKKKKKkk.
+..kKKyKKrKKyKKrKKyKk..
+..kKrKKyKKrKKyKKrKKk..
+...kKKKKKKKKKKKKKKk...
+....kkkkkkkkkkkkkk....
+........r....r.....r..
+.......rRr..rRr..rRr..
+.....rRYRr.rRYYRrRYRr.
+....rRYYYRrRYWYRrRYYRr
+....RYYWYYRYYWYYRYYWR.
+...kkkkkkkkkkkkkkkkkk.
+....k..k........k..k..
+...k..k..........k..k.
+..kk.kk...........kk.kk
+--- 2
+.kk................kk.
+k..k..............k..k
+k..kkkkkkkkkkkkkkkk..k
+.kkKKKKKKKKKKKKKKKKkk.
+..kKKyKKrKKyKKrKKyKk..
+..kKrKKyKKrKKyKKrKKk..
+...kKKKKKKKKKKKKKKk...
+....kkkkkkkkkkkkkk....
+......r.....r.....r...
+.....rRr...rRYr..rRr..
+....rRYRr.rRYYRr.rYYr.
+...rRYYYRrRYYYRrRYYRr.
+....RYWWYYRYYYWYRYYYR.
+...kkkkkkkkkkkkkkkkkk.
+....k..k........k..k..
+...k..k..........k..k.
+..kk.kk...........kk.kk
+--- 2
