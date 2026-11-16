@@ -19,3 +19,4 @@ act=$(notify-send -a discada -i "view-calendar-week-symbolic" -A ver="$(L ver se
   "$(L "tu semana en discada" "your week in discada")" \
   "$(L "lo que sonó, a qué jugaste y en qué le picaste" "what you played, listened to and worked on")")
 [ "$act" = ver ] && ver
+exit 0  # sin «ver» el && de arriba sale con 1 y systemd marca discada-semana como failed
