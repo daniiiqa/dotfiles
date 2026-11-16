@@ -67,6 +67,8 @@ REPO_PKGS=(
   # picha (el cel y las otras compus): recibir por Bluetooth (obex), lumbre (el Wi-Fi propio de la
   # laptop, dnsmasq) y la pantalla del cel (scrcpy, adb)
   bluez-obex dnsmasq scrcpy android-tools
+  # Custom (dany): machín (la pantalla de la otra compu como monitor extra): Moonlight la muestra
+  moonlight-qt
   # fuentes base (JetBrainsMono Mono para iconos alineados, Adwaita Mono para
   # el visualizador, Noto Serif para paper); las de cada look: [font] package
   # en su look.toml
@@ -86,6 +88,7 @@ AUR_PKGS=(
   wallust    # colores desde el wallpaper
   wlogout    # menú de apagado
   zen-browser-bin   # el navegador (SUPER+B)
+  sunshine-bin      # Custom (dany): machín: Sunshine transmite el monitor extra
 )
 SDDM_PKGS=(sddm qt6-svg qt6-declarative qt6-5compat qt6-multimedia qt6-multimedia-ffmpeg)   # el tema usa QtMultimedia (fondos de video)
 # laptops (hay batería del equipo, no la de un mouse): brillo; los perfiles de
@@ -144,6 +147,7 @@ BICHO_REPO="https://github.com/daniiiqa/bicho.git"
 LENA_REPO="https://github.com/daniiiqa/lena.git"
 NOTA_REPO="https://github.com/daniiiqa/nota.git"
 CACHA_REPO="https://github.com/daniiiqa/cacha.git"
+MACHIN_REPO="https://github.com/daniiiqa/machin.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.lua hypr/workspaces.lua
@@ -685,6 +689,11 @@ app carbon "$CARBON_REPO"
 # solos al iniciar sesión si en su menú dice que sí (bicho --auto)
 say "bicho ($(L "los animalitos que se pasean por el escritorio" "little pets that roam the desktop")) → ~/.local/bin/bicho"
 app bicho "$BICHO_REPO"
+# Custom (dany): machín, la pantalla de la otra compu como monitor extra
+# (SUPER+Shift+M); `machin escucha` arranca al iniciar sesión (startup.lua)
+say "machín ($(L "la pantalla de tu otra compu como monitor extra" "your other computer's screen as an extra monitor")) → ~/.local/bin/machin"
+app machin "$MACHIN_REPO"
+((DRY)) || ln -sf machin "$HOME/.local/bin/machín"
 if ((LAPTOP)); then
   say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
   app fierro "$FIERRO_REPO"
