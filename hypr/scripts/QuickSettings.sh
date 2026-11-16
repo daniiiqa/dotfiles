@@ -25,7 +25,7 @@ edit=${EDITOR:-${edit:-nano}}
 I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
 I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
 I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'; I_UPDATE=$'\U000f06b0'
-I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'; I_TECLADO=$'\U000f030c'; I_FETCH=$'\U000f018d'; I_ENTRADA=$'\U000f0e24'; I_SEMANA=$'\U000f00f0'
+I_MACHIN=$'\U000f037a'; I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'; I_TECLADO=$'\U000f030c'; I_FETCH=$'\U000f018d'; I_ENTRADA=$'\U000f0e24'; I_SEMANA=$'\U000f00f0'
 arre="$HOME/.local/bin/arre"
 
 need() {
@@ -473,6 +473,16 @@ while true; do
   add "$I_SEMANA  $(L "tu semana" "your week")"                       semana
   add "$I_VIS  $(L visualizador visualizer): $(vis_now)"           vis
   add "$I_REC  $(L grabador recorder) ›"                           rec
+  # Custom (dany): machín, la otra compu como monitor extra (su menú: sonido, lado, calidad)
+  if [ -x "$HOME/.local/bin/machin" ]; then
+    m=$("$HOME/.local/bin/machin" estado 2>/dev/null)
+    case "$m" in
+      principal\ *) m="$(L usando using) ${m#principal }" ;;
+      presta\ *)    m="$(L "prestada a" "lent to") ${m#presta }" ;;
+      *)            m=$(L apagado off) ;;
+    esac
+    add "$I_MACHIN  machín: $m ›"                                   machin
+  fi
   [ -x "$arre" ] && add "$I_NOTIF  $(L notificaciones notifications): $(pos_name "$("$arre" position)") ›" notif
   hay_teclado && add "$I_TECLADO  $(L teclado keyboard): $(teclado_now) ›" teclado
   add "$I_GAME  game mode: $(onoff "$game")"                        game
@@ -497,6 +507,7 @@ while true; do
     lang)   set_language "$([ "$DISCADA_LANG" = es ] && echo en || echo es)" ;;
     vis)    vis_menu ;;
     rec)    rec_menu ;;
+    machin) exec "$HOME/.local/bin/machin" menu ;;
     notif)  notif_menu ;;
     teclado) teclado_menu ;;
     battery) bat_menu ;;
