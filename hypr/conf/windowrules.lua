@@ -49,8 +49,8 @@ hl.window_rule({ match = { class = "^(xarchiver|org.gnome.Loupe)$" }, tag = "+to
 hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, tag = "+tool" })
 
 -- ─── Herramientas y diálogos ─────────────────────────────────────────────────
--- vato (Vato.sh), picha, fierro y chispa (TuiApp.sh): las apps de discada en la terminal
-hl.window_rule({ match = { class = "^(vato|picha|fierro|chispa|discada-update)$" }, float = true, center = true, size = "(monitor_w*0.55) (monitor_h*0.6)" })
+-- vato (Vato.sh), picha, fierro, compa y chispa (TuiApp.sh): las apps de discada en la terminal
+hl.window_rule({ match = { class = "^(vato|picha|fierro|compa|chispa|discada-update)$" }, float = true, center = true, size = "(monitor_w*0.55) (monitor_h*0.6)" })
 -- nota: cada nota es una ventana que flota donde la pongas (y se puede fijar)
 hl.window_rule({ match = { class = "^(nota)$" }, float = true })
 hl.window_rule({ match = { tag = "tool" }, float = true, center = true, size = "(monitor_w*0.7) (monitor_h*0.7)" })

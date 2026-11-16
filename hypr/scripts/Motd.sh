@@ -12,6 +12,8 @@
 #                     (la leen el candado y la ficha de cacha)
 #   Motd.sh --foto    solo la foto de hoy de Steam (para `cacha semana`)
 #   Motd.sh --leer    la guardada, y ya (la etiqueta del candado)
+#   Motd.sh --alberca solo deja las dinámicas en $XDG_RUNTIME_DIR/discada-motd-alberca
+#                     (de ahí escoge cacha una nueva cada vez que se invoca)
 
 hypr="$HOME/.config/hypr"
 # --leer: solo la guardada (el candado la pide seguido: nada de Steam aquí)
@@ -22,7 +24,10 @@ fi
 . "$hypr/scripts/lang.sh"
 now=$(date +%s)
 frases=()
+# un tema = un renglón; sus versiones (si trae varias) van separadas por tabulador,
+# para que un juego con tres frases no salga tres veces más que los demás
 di() { frases+=("$(L "$1" "$2")"); }
+otra() { frases[-1]+=$'\t'"$(L "$1" "$2")"; }
 
 # ── Steam ─────────────────────────────────────────────────────────────────────
 steam="$HOME/.local/share/Steam"
@@ -68,10 +73,10 @@ if [ -d "$steam/userdata" ]; then
   if [ -n "$reciente" ]; then
     g=${nombre[$reciente]}
     di "¿hoy le darás a $g?" "playing $g today?"
-    di "¿otra partidita de $g?" "one more round of $g?"
+    otra "¿otra partidita de $g?" "one more round of $g?"
     case $(date +%u) in
-      5) di "ya es viernes: ¿unas de $g?" "it's Friday: some $g?" ;;
-      6|7) di "fin de semana y $g, ¿o qué?" "weekend and $g, right?" ;;
+      5) otra "ya es viernes: ¿unas de $g?" "it's Friday: some $g?" ;;
+      6|7) otra "fin de semana y $g, ¿o qué?" "weekend and $g, right?" ;;
     esac
   fi
   ((t_h >= 20)) && di "llevas ${t_h} horas en ${nombre[$top]}. respeto." "${t_h} hours in ${nombre[$top]}. respect."
@@ -101,7 +106,7 @@ hist="$HOME/.local/share/rola/history.jsonl"
 if [ -f "$hist" ] && command -v jq >/dev/null; then
   artista=$(tail -n 2000 "$hist" | jq -r --argjson desde $((now - 7 * 86400)) 'select(.t > $desde) | .artist | split(", ")[0]' 2>/dev/null |
     sort | uniq -c | sort -rn | awk 'NR == 1 && $1 >= 5 { $1 = ""; sub(/^ /, ""); print }')
-  [ -n "$artista" ] && di "¿más $artista hoy?" "more $artista today?" && di "esta semana fue de $artista" "this week was all $artista"
+  [ -n "$artista" ] && di "¿más $artista hoy?" "more $artista today?" && otra "esta semana fue de $artista" "this week was all $artista"
 fi
 
 # ── lo que estás picando: el repo con el commit más nuevo (2 días) ───────────
@@ -125,12 +130,20 @@ disco=$(df --output=pcent / 2>/dev/null | tail -n1 | tr -dc 0-9)
 # lo mismo que el telón (se escoge otra en cada entrada y en cada bloqueo)
 guardada="${XDG_RUNTIME_DIR:-/tmp}/discada-motd"
 fijas() { grep -v -e '^#' -e '^[[:space:]]*$' "$hypr/motd/$DISCADA_LANG.txt" 2>/dev/null; }
+# la alberca: las dinámicas de ahorita, para que cacha escoja una distinta en
+# cada invocación sin esperar a Steam (la refresca en segundo plano con --alberca)
+alberca="${XDG_RUNTIME_DIR:-/tmp}/discada-motd-alberca"
+llenar() { printf '%s\n' "${frases[@]}" > "$alberca.$$" && mv -f "$alberca.$$" "$alberca"; }
 case "${1:-}" in
-  --todas) printf '%s\n' "${frases[@]}"; exit 0 ;;
+  --todas) printf '%s\n' "${frases[@]}" | tr '\t' '\n'; exit 0 ;;
   --foto) exit 0 ;;
+  --alberca) llenar; exit 0 ;;
+  --guardar) llenar ;;
 esac
 if ((${#frases[@]})) && ((RANDOM % 4 != 0)); then
-  frase=${frases[RANDOM % ${#frases[@]}]}
+  # primero el tema, luego una de sus versiones
+  IFS=$'\t' read -ra versiones <<<"${frases[RANDOM % ${#frases[@]}]}"
+  frase=${versiones[RANDOM % ${#versiones[@]}]}
 else
   frase=$(fijas | shuf -n1)
 fi

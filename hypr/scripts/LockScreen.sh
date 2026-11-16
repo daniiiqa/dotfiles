@@ -48,6 +48,9 @@ pidof hyprlock >/dev/null && exit 0
 # bloqueo (misc:allow_session_lock_restore), para no quedarse en la pantalla
 # roja de Hyprland.
 locker=$(sed -nE 's/^LOCKER=([a-z]+).*/\1/p' "$HOME/.config/hypr/discada.conf" 2>/dev/null)
+# Custom (dany): una frase nueva del motd para el candado, sea chapa o hyprlock
+# (los dos la leen de hyprlock-motd.conf con `Motd.sh --leer`)
+"$HOME/.config/hypr/scripts/Motd.sh" --guardar >/dev/null 2>&1
 if [ "$locker" = chapa ] && command -v chapa >/dev/null; then
   pidof chapa >/dev/null && exit 0
   # su log, que sobrevive al apagado (el de Hyprland vive en /run): las
@@ -82,8 +85,6 @@ if [ -n "$extra" ]; then
   { cat "$conf"; printf '%s' "$extra"; } > "$quick"
   lock_conf=(-c "$quick")
 fi
-# Custom (dany): una frase nueva del motd para el candado (hyprlock-motd.conf)
-"$HOME/.config/hypr/scripts/Motd.sh" --guardar >/dev/null 2>&1
 hyprlock "${lock_conf[@]}" &
 lock=$!
 if [ ${#lock_conf[@]} -gt 0 ]; then

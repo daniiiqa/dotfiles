@@ -33,6 +33,8 @@ hl.bind("SUPER + N", hl.dsp.exec_cmd("$HOME/.local/bin/nota new"), { description
 hl.bind("SUPER + ALT + N", hl.dsp.exec_cmd("$HOME/.local/bin/nota"), { description = "notes" })
 hl.bind("SUPER + M", hl.dsp.exec_cmd(scriptsDir .. "/FocusOrLaunch.sh rola kitty --class rola -e rola"), { description = "music player" })
 hl.bind("SUPER + P", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh picha"), { description = "send and receive (picha)" })
+-- Custom (dany): compa, el agente de discada en la terminal
+hl.bind("SUPER + A", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh compa"), { description = "AI agent (compa)" })
 -- Custom (dany): chispa, la luz del AULA F75
 hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh chispa tui"), { description = "keyboard lighting (chispa)" })
 hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd("$HOME/.local/bin/picha pantalla --ya"), { description = "phone screen (picha)" })
