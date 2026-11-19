@@ -46,7 +46,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd(scriptsDir .. "/Entrada.sh luego 0.1 " .. scriptsDir .. "/Bar.sh")  -- la barra (empalme); la relanza si se cae
     hl.exec_cmd("sleep 20 && " .. scriptsDir .. "/WallustCache.sh")  -- caché de wallust: wallpapers nuevos al instante
     hl.exec_cmd(scriptsDir .. "/FirstRun.sh")  -- solo la primera vez en una máquina nueva
-    hl.exec_cmd("$HOME/.local/bin/lena apps")  -- Custom (dany): los colores del look a GTK/Qt otra vez (si entraste a KDE, allá se quitaron)
+    hl.exec_cmd(scriptsDir .. "/FueraDeHyprland.sh regresa; $HOME/.local/bin/lena apps")  -- Custom (dany): si vienes de KDE, tu tema, iconos y cursor de Hyprland otra vez, y los colores del look a GTK/Qt
     hl.exec_cmd("hypridle")
     hl.exec_cmd(scriptsDir .. "/Battery.py watch")  -- laptops: avisos, ahorro solo (BATTERY_SAVER_AT)
     hl.exec_cmd("$HOME/.local/bin/fierro restore")  -- laptops: los límites de carga y el perfil de fierro

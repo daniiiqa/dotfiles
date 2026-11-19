@@ -94,7 +94,7 @@ tiny-skia; las TUI usan ratatui. Todas toman colores y estilo de disco.
   escriben en el de todos), arre solo arranca en Hyprland, el fetch en KDE es
   fastfetch, y `scripts/FueraDeHyprland.sh` (desde
   `~/.config/plasma-workspace/env/discada.sh`) quita el import de leña en
-  `gtk.css`; `lena apps` en startup.lua lo vuelve a poner.
+  `gtk.css` y le regresa a KDE su tema, iconos y cursor (gsettings y settings.ini, una copia por escritorio en `~/.local/state/discada/escritorio`); `FueraDeHyprland.sh regresa` + `lena apps` en startup.lua ponen los de discada. Kvantum es de KDE: su config no se pisa al actualizar.
 
 ## Recetas (cómo se hace cada cosa, sin adivinar)
 

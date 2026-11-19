@@ -151,7 +151,8 @@ MACHIN_REPO="https://github.com/daniiiqa/machin.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.lua hypr/workspaces.lua
-                hypr/conf/pinned.conf hypr/conf/defaults.lua hypr/conf/livewallpaper.conf)
+                hypr/conf/pinned.conf hypr/conf/defaults.lua hypr/conf/livewallpaper.conf
+                Kvantum/kvantum.kvconfig)  # Custom (dany): Kvantum es de KDE (discada usa qt6ct); el tuyo no se pisa
 
 # ── Opciones ─────────────────────────────────────────────────────────────────
 DRY=0 SDDM=auto AUR=1 YES=() LOOKS_ARG="" UI_LANG="" UPDATE=0
@@ -787,16 +788,18 @@ else
     printf '[D-BUS Service]\nName=%s\nExec=%s\n' "$name" "$arre_exec" > "$dbus_dir/$name.service"
   done
 fi
-# Custom (dany): si en esta compu también hay KDE Plasma, al entrar ahí se
-# quitan los colores de discada de las apps GTK (FueraDeHyprland.sh; Plasma
-# hace `source` de lo que haya en plasma-workspace/env antes de arrancar)
-plasma_env="$HOME/.config/plasma-workspace/env/discada.sh"
-if ((DRY)); then echo "   [dry-run] $plasma_env"
-else
-  mkdir -p "$(dirname "$plasma_env")"
+# Custom (dany): si en esta compu también hay KDE Plasma, lo de discada no se
+# le pasa: al entrar ahí se quitan los colores de discada de las apps GTK y
+# regresan su tema, iconos y cursor; al salir se guardan (FueraDeHyprland.sh;
+# Plasma hace `source` de plasma-workspace/env al arrancar y de
+# plasma-workspace/shutdown al salir)
+for p in env:entra shutdown:sale; do
+  plasma_sh="$HOME/.config/plasma-workspace/${p%%:*}/discada.sh"
+  if ((DRY)); then echo "   [dry-run] $plasma_sh"; continue; fi
+  mkdir -p "$(dirname "$plasma_sh")"
   printf '%s\n' '# discada: lo de Hyprland no se pasa a Plasma (lo pone install.sh)' \
-    '[ -x "$HOME/.config/hypr/scripts/FueraDeHyprland.sh" ] && "$HOME/.config/hypr/scripts/FueraDeHyprland.sh" || true' > "$plasma_env"
-fi
+    "[ -x \"\$HOME/.config/hypr/scripts/FueraDeHyprland.sh\" ] && \"\$HOME/.config/hypr/scripts/FueraDeHyprland.sh\" ${p#*:} || true" > "$plasma_sh"
+done
 # ~/.local/bin en el PATH (rola, vato, arre, taco, empalme, picha, fierro y chispa viven ahí): en el perfil de
 # login, que SDDM lee al entrar a Hyprland. En un Arch nuevo no viene
 path_line='[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || export PATH="$HOME/.local/bin:$PATH"  # discada'
