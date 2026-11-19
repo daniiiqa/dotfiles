@@ -765,10 +765,18 @@ ff_line='[[ $- == *i* ]] && [ -r "$HOME/.config/hypr/scripts/FetchHook.sh" ] && 
 ff_old='[[ $- == *i* ]] && command -v fastfetch >/dev/null && fastfetch  # discada'
 for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
   [ "$rc" = "$HOME/.zshrc" ] && [ ! -e "$rc" ] && [[ "$SHELL" != */zsh ]] && continue
-  # Custom (dany): la línea de antes (fastfetch solo) pasa a Fetch.sh
-  if grep -qsxF "$ff_old" "$rc"; then
-    if ((DRY)); then echo "   [dry-run] fastfetch → Fetch.sh en $rc"
-    else tmp=$(mktemp); grep -vxF "$ff_old" "$rc" > "$tmp"; printf '%s\n' "$ff_line" >> "$tmp"; cat "$tmp" > "$rc"; rm -f "$tmp"; fi
+  # Custom (dany): la línea de antes (fastfetch solo, la nuestra o un
+  # `fastfetch` a secas como el que trae Arch) pasa a cacha, en su lugar
+  if grep -qsxF "$ff_old" "$rc" || grep -qsxE '[[:space:]]*fastfetch[[:space:]]*' "$rc"; then
+    if ((DRY)); then echo "   [dry-run] fastfetch → cacha en $rc"
+    else
+      tmp=$(mktemp)
+      awk -v old="$ff_old" -v new="$ff_line" '
+        !done && ($0 == old || $0 ~ /^[[:space:]]*fastfetch[[:space:]]*$/) { print new; done = 1; next }
+        $0 == old || $0 ~ /^[[:space:]]*fastfetch[[:space:]]*$/ { next }
+        { print }' "$rc" > "$tmp" && cat "$tmp" > "$rc"
+      rm -f "$tmp"
+    fi
     continue
   fi
   grep -qs 'fastfetch\|Fetch.sh' "$rc" && continue
