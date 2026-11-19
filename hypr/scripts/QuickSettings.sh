@@ -25,7 +25,7 @@ edit=${EDITOR:-${edit:-nano}}
 I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
 I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
 I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'; I_UPDATE=$'\U000f06b0'
-I_MACHIN=$'\U000f037a'; I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'; I_TECLADO=$'\U000f030c'; I_FETCH=$'\U000f018d'; I_ENTRADA=$'\U000f0e24'; I_SEMANA=$'\U000f00f0'
+I_TRACKPAD=$'\U000f0322'; I_MACHIN=$'\U000f037a'; I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'; I_TECLADO=$'\U000f030c'; I_FETCH=$'\U000f018d'; I_ENTRADA=$'\U000f0e24'; I_SEMANA=$'\U000f00f0'
 arre="$HOME/.local/bin/arre"
 
 need() {
@@ -284,6 +284,75 @@ tools_menu() {
   esac
 }
 
+# ── el trackpad ──────────────────────────────────────────────────────────────
+# Custom (dany): todo en hypr/discada.conf (TRACKPAD_*), que el updater no
+# pisa; conf/settings.lua lo lee al recargar Hyprland. Solo en compus con
+# trackpad.
+hay_trackpad() { grep -qsi '^N: Name=".*touchpad' /proc/bus/input/devices; }
+
+trackpad_menu() {
+  local row=0 i
+  while true; do
+    local g; g() { local v; v=$(get_conf "$discada" "TRACKPAD_$1"); echo "${v:-$2}"; }
+    local en nat tap tdrag lock map click mid dwt speed accel sspeed smeth d3 swipe inv zoom
+    en=$(g ENABLED yes) nat=$(g NATURAL yes) tap=$(g TAP yes) tdrag=$(g TAP_DRAG yes)
+    lock=$(g DRAG_LOCK no) map=$(g TAP_MAP lrm) click=$(g CLICK areas) mid=$(g MIDDLE no)
+    dwt=$(g DWT yes) speed=$(g SPEED 0) accel=$(g ACCEL adaptive) sspeed=$(g SCROLL_SPEED 1.0)
+    smeth=$(g SCROLL_METHOD 2fg) d3=$(g DRAG_3FG no) swipe=$(g SWIPE 3) inv=$(g SWIPE_INVERT yes) zoom=$(g ZOOM yes)
+    local lock_t map_t click_t accel_t smeth_t d3_t swipe_t
+    case "$lock" in timeout) lock_t=$(L "un ratito" "briefly") ;; sticky) lock_t=$(L "hasta otro toque" "until next tap") ;; *) lock_t=no ;; esac
+    [ "$map" = lmr ] && map_t=$(L "2 dedos = medio, 3 = derecho" "2 fingers = middle, 3 = right") || map_t=$(L "2 dedos = derecho, 3 = medio" "2 fingers = right, 3 = middle")
+    [ "$click" = fingers ] && click_t=$(L "por dedos (2 = derecho, 3 = medio)" "by fingers (2 = right, 3 = middle)") || click_t=$(L "por zona (abajo a la derecha = derecho)" "by area (bottom right = right)")
+    [ "$accel" = flat ] && accel_t=$(L "plana (siempre igual)" "flat (always the same)") || accel_t=$(L "adaptiva (más rápido = más lejos)" "adaptive (faster = farther)")
+    [ "$smeth" = edge ] && smeth_t=$(L "la orilla derecha" "the right edge") || smeth_t=$(L "dos dedos" "two fingers")
+    case "$d3" in 3|4) d3_t="$d3 $(L dedos fingers)" ;; *) d3_t=no ;; esac
+    case "$swipe" in 3|4) swipe_t="$swipe $(L dedos fingers)" ;; *) swipe_t=no ;; esac
+    i=$(pick trackpad \
+        "$(L "se aplica al instante · ojo: arrastrar con 3 dedos le gana a deslizar con 3" "applies right away · note: 3-finger drag beats 3-finger swipe")" \
+        "$(L "trackpad" "trackpad"): $(onoff "$en")" \
+        "$(L "scroll natural (como en el cel)" "natural scroll (like a phone)"): $(onoff "$nat")" \
+        "$(L "tocar para hacer clic" "tap to click"): $(onoff "$tap")" \
+        "$(L "tocar y arrastrar" "tap and drag"): $(onoff "$tdrag")" \
+        "$(L "seguir arrastrando al soltar" "keep dragging after lifting"): $lock_t" \
+        "$(L "toques" "taps"): $map_t" \
+        "$(L "clic al apretar" "click when pressing"): $click_t" \
+        "$(L "clic medio con izquierdo + derecho" "middle click with left + right"): $(onoff "$mid")" \
+        "$(L "apagarlo mientras escribes" "off while typing"): $(onoff "$dwt")" \
+        "$(L "velocidad" "speed"): $speed" \
+        "$(L "aceleración" "acceleration"): $accel_t" \
+        "$(L "velocidad del scroll" "scroll speed"): ${sspeed}×" \
+        "$(L "scroll con" "scroll with"): $smeth_t" \
+        "$(L "arrastrar con" "drag with"): $d3_t" \
+        "$(L "cambiar de escritorio deslizando" "swipe between workspaces"): $swipe_t" \
+        "$(L "deslizar al revés" "inverted swipe"): $(onoff "$inv")" \
+        "$(L "zoom con 4 dedos (arriba/abajo)" "4-finger zoom (up/down)"): $(onoff "$zoom")" \
+        "‹ $(L volver back)") || return
+    row=$i
+    local yn; yn() { [ "$1" = yes ] && echo no || echo yes; }
+    case "$i" in
+      0)  set_conf "$discada" TRACKPAD_ENABLED "$(yn "$en")" ;;
+      1)  set_conf "$discada" TRACKPAD_NATURAL "$(yn "$nat")" ;;
+      2)  set_conf "$discada" TRACKPAD_TAP "$(yn "$tap")" ;;
+      3)  set_conf "$discada" TRACKPAD_TAP_DRAG "$(yn "$tdrag")" ;;
+      4)  set_conf "$discada" TRACKPAD_DRAG_LOCK "$(cycle "$lock" no timeout sticky)" ;;
+      5)  set_conf "$discada" TRACKPAD_TAP_MAP "$(cycle "$map" lrm lmr)" ;;
+      6)  set_conf "$discada" TRACKPAD_CLICK "$(cycle "$click" areas fingers)" ;;
+      7)  set_conf "$discada" TRACKPAD_MIDDLE "$(yn "$mid")" ;;
+      8)  set_conf "$discada" TRACKPAD_DWT "$(yn "$dwt")" ;;
+      9)  set_conf "$discada" TRACKPAD_SPEED "$(cycle "$speed" 0 0.2 0.4 0.6 0.8 -0.6 -0.4 -0.2)" ;;
+      10) set_conf "$discada" TRACKPAD_ACCEL "$(cycle "$accel" adaptive flat)" ;;
+      11) set_conf "$discada" TRACKPAD_SCROLL_SPEED "$(cycle "$sspeed" 1.0 1.25 1.5 2.0 0.5 0.75)" ;;
+      12) set_conf "$discada" TRACKPAD_SCROLL_METHOD "$(cycle "$smeth" 2fg edge)" ;;
+      13) set_conf "$discada" TRACKPAD_DRAG_3FG "$(cycle "$d3" no 3 4)" ;;
+      14) set_conf "$discada" TRACKPAD_SWIPE "$(cycle "$swipe" 3 4 no)" ;;
+      15) set_conf "$discada" TRACKPAD_SWIPE_INVERT "$(yn "$inv")" ;;
+      16) set_conf "$discada" TRACKPAD_ZOOM "$(yn "$zoom")" ;;
+      *)  return ;;
+    esac
+    hyprctl reload >/dev/null
+  done
+}
+
 # ── la luz del teclado (chispa) ──────────────────────────────────────────────
 # solo si está el AULA F75 por cable
 hay_teclado() {
@@ -485,6 +554,7 @@ while true; do
   fi
   [ -x "$arre" ] && add "$I_NOTIF  $(L notificaciones notifications): $(pos_name "$("$arre" position)") ›" notif
   hay_teclado && add "$I_TECLADO  $(L teclado keyboard): $(teclado_now) ›" teclado
+  hay_trackpad && add "$I_TRACKPAD  trackpad ›"                         trackpad
   add "$I_GAME  game mode: $(onoff "$game")"                        game
   if "$bat" has; then
     add "$I_BAT  $(L batería battery): $("$bat" status | jq -r '"\(.percentage)%"') ›" battery
@@ -510,6 +580,7 @@ while true; do
     machin) exec "$HOME/.local/bin/machin" menu ;;
     notif)  notif_menu ;;
     teclado) teclado_menu ;;
+    trackpad) trackpad_menu ;;
     battery) bat_menu ;;
     game)   "$scripts/GameMode.sh"; sleep 0.3 ;;
     blur)   "$scripts/ChangeBlur.sh" ;;
