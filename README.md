@@ -2,7 +2,7 @@
 
 **A Hyprland rice made of looks.** A *discada* is the norteño dish where a bunch
 of meats cook together on one disco and come out as one clean, delicious plate.
-Here the meats are fourteen looks — each one changes the bar, fonts, icons, colors,
+Here the meats are eighteen looks — each one changes the bar, fonts, icons, colors,
 menus, lock screen and login — served on one rice. Colors come from your
 wallpaper (video wallpapers too) through wallust.
 
@@ -37,7 +37,7 @@ shows everything without touching anything; `--help` lists the options):
   from `hypr/nvim/` (the rest of your config is left alone)
 - SDDM with the simple_sddm_2 theme when there is no other display manager
   (`--no-sddm` / `--sddm` to force)
-- installs [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre), [taco](https://github.com/daniiiqa/taco), [empalme](https://github.com/daniiiqa/empalme) (the bar), [picha](https://github.com/daniiiqa/picha) (the phone and your other computers), [jale](https://github.com/daniiiqa/jale), [brasa](https://github.com/daniiiqa/brasa), [rollo](https://github.com/daniiiqa/rollo), [farula](https://github.com/daniiiqa/farula), [nota](https://github.com/daniiiqa/nota) (notes, SUPER+N), [cacha](https://github.com/daniiiqa/cacha) (discada's fastfetch, live), [bicho](https://github.com/daniiiqa/bicho) (desktop pets) and, on laptops, [fierro](https://github.com/daniiiqa/fierro) into `~/.local/bin`: the prebuilt binary each repo publishes on every push (its `edge` release, checked against its sha256), and only the ones that changed since last time. Without one (not x86_64, or `DISCADA_COMPILAR=1`) it compiles them, sharing one build folder (`~/.cache/discada/target`) so common dependencies compile once
+- installs [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre), [taco](https://github.com/daniiiqa/taco), [empalme](https://github.com/daniiiqa/empalme) (the bar), [picha](https://github.com/daniiiqa/picha) (the phone and your other computers), [jale](https://github.com/daniiiqa/jale), [brasa](https://github.com/daniiiqa/brasa), [rollo](https://github.com/daniiiqa/rollo), [farula](https://github.com/daniiiqa/farula), [nota](https://github.com/daniiiqa/nota) (notes, SUPER+N), [cacha](https://github.com/daniiiqa/cacha) (discada's fastfetch, live), [bicho](https://github.com/daniiiqa/bicho) (desktop pets), [chapa](https://github.com/daniiiqa/chapa) (the lock screen), [carbon](https://github.com/daniiiqa/carbon) (the updater), [machín](https://github.com/daniiiqa/machin) (your other computer as a monitor), [machaca](https://github.com/daniiiqa/machaca) (the settings panel), [trompo](https://github.com/daniiiqa/trompo) (the computer from your phone), on laptops [fierro](https://github.com/daniiiqa/fierro) and, where the AULA F75 is plugged in, [chispa](https://github.com/daniiiqa/chispa) into `~/.local/bin`: the prebuilt binary each repo publishes on every push (its `edge` release, checked against its sha256), and only the ones that changed since last time. Without one (not x86_64, or `DISCADA_COMPILAR=1`) it compiles them, sharing one build folder (`~/.cache/discada/target`) so common dependencies compile once
 - on first login, `hypr/scripts/FirstRun.sh` does the rest (a generated
   wallpaper if there is none, colors, dark GTK theme and icons)
 
@@ -48,7 +48,7 @@ Safe to run more than once.
 | keys | |
 |---|---|
 | `SUPER+H` | cheat sheet (themed, type to filter) |
-| `SUPER+Shift+E` | **discada settings**: look, shader, language, font size, visualizer, recorder, battery (laptops), game mode, blur, edit config, tools, update |
+| `SUPER+Shift+E` | **discada settings** (machaca): look, shader, language, font size, visualizer, recorder, battery (laptops), game mode, blur, edit config, tools, update |
 | `SUPER+T` | switch look (top entry: the look's shader on/off) |
 | `SUPER+W` | wallpaper |
 | `SUPER+M` | music (rola) |
@@ -58,8 +58,9 @@ Safe to run more than once.
 
 ## Looks
 
-`brutalist` · `classic` · `glass` · `minimal` · `neon` · `nord` · `outsider` ·
-`paper` · `pastel` · `retro`
+`brutalist` · `classic` · `cromo` · `eco` · `frutiger-aero` · `glass` · `minimal` ·
+`neon` · `nord` · `obsidiana` (volcanic glass: polished black, one pale violet
+glint) · `outsider` · `paper` · `pastel` · `retro`
 
 Hecho en México: `fundidora` (Monterrey steel, blast-furnace orange, the Cerro
 de la Silla) · `ofrenda` (Day of the Dead: marigolds, papel picado, candlelight)
@@ -151,6 +152,23 @@ shows up in the installer too. The guide is in `hypr/looks/README.md`.
   charge limits, power profiles (the battery module's click and the saver use
   them), fn-lock and keyboard light. `install.sh` sets up its group so it never
   needs root, and turns power-profiles-daemon off; `fierro restore` runs at login.
+
+- **Settings panel: [machaca](https://github.com/daniiiqa/machaca)** (`SUPER+Shift+E`) — the
+  wallpaper and look up top, appearance / system / your computers and phone,
+  every submenu as a page of the panel, drawn as cells in the look's style.
+- **Lock screen: [chapa](https://github.com/daniiiqa/chapa)** — reads the look's `hyprlock.conf`,
+  video wallpapers, fingerprint (fprintd), and farula's curtain when unlocking
+  (`LOCKER=chapa` in `hypr/discada.conf`).
+- **Updater: [carbon](https://github.com/daniiiqa/carbon)** — "update discada": what changed, in
+  two columns, with its fire.
+- **Your other computer as a monitor: [machín](https://github.com/daniiiqa/machin)**
+  (`SUPER+Shift+M`) — a virtual monitor streamed with Sunshine/Moonlight, either
+  way between two discada computers.
+- **The computer from your phone: [trompo](https://github.com/daniiiqa/trompo)** — a PWA with
+  the look for music, volume, brightness, looks, wallpapers, machín, lock and
+  suspend; run `trompo` and scan the QR to pair. Local network only, its own CA.
+- **Keyboard light: [chispa](https://github.com/daniiiqa/chispa)** — the AULA F75's effects and
+  colors, key by key, following the wallpaper or the music.
 
 ## Hyprland in Lua
 

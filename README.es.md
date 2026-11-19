@@ -2,7 +2,7 @@
 
 **Un rice de Hyprland hecho de looks.** La discada es el platillo norteño donde
 un montón de carnes se cocinan juntas en el disco y salen en un solo plato,
-limpio y delicioso. Aquí las carnes son catorce looks — cada uno cambia la barra,
+limpio y delicioso. Aquí las carnes son dieciocho looks — cada uno cambia la barra,
 fuentes, iconos, colores, menús, pantalla de bloqueo y login — servidos en un
 solo rice. Los colores salen del wallpaper (también de los de video) con wallust.
 
@@ -37,7 +37,7 @@ Qué hace `install.sh` (también corre desde un clone: `./install.sh`;
   discada de `hypr/nvim/` (lo demás de tu config no se toca)
 - SDDM con el tema simple_sddm_2 si no hay otro display manager
   (`--no-sddm` / `--sddm` para forzar)
-- instala [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre), [taco](https://github.com/daniiiqa/taco), [empalme](https://github.com/daniiiqa/empalme) (la barra), [picha](https://github.com/daniiiqa/picha) (el cel y tus otras compus), [jale](https://github.com/daniiiqa/jale), [brasa](https://github.com/daniiiqa/brasa), [rollo](https://github.com/daniiiqa/rollo), [farula](https://github.com/daniiiqa/farula), [nota](https://github.com/daniiiqa/nota) (las notas, SUPER+N), [cacha](https://github.com/daniiiqa/cacha) (el fastfetch de discada, en vivo), [bicho](https://github.com/daniiiqa/bicho) (los animalitos del escritorio) y, en laptops, [fierro](https://github.com/daniiiqa/fierro) en `~/.local/bin`: el binario ya compilado que cada repo publica en cada push (su release `edge`, revisado con su sha256), y solo los que cambiaron desde la última vez. Sin él (no x86_64, o `DISCADA_COMPILAR=1`) los compila, todos en una misma carpeta (`~/.cache/discada/target`) para que las dependencias comunes se compilen una vez
+- instala [rola](https://github.com/daniiiqa/rola), [vato](https://github.com/daniiiqa/vato), [arre](https://github.com/daniiiqa/arre), [taco](https://github.com/daniiiqa/taco), [empalme](https://github.com/daniiiqa/empalme) (la barra), [picha](https://github.com/daniiiqa/picha) (el cel y tus otras compus), [jale](https://github.com/daniiiqa/jale), [brasa](https://github.com/daniiiqa/brasa), [rollo](https://github.com/daniiiqa/rollo), [farula](https://github.com/daniiiqa/farula), [nota](https://github.com/daniiiqa/nota) (las notas, SUPER+N), [cacha](https://github.com/daniiiqa/cacha) (el fastfetch de discada, en vivo), [bicho](https://github.com/daniiiqa/bicho) (los animalitos del escritorio), [chapa](https://github.com/daniiiqa/chapa) (el candado), [carbon](https://github.com/daniiiqa/carbon) (el updater), [machín](https://github.com/daniiiqa/machin) (tu otra compu como monitor), [machaca](https://github.com/daniiiqa/machaca) (el panel de ajustes), [trompo](https://github.com/daniiiqa/trompo) (la compu desde el cel), en laptops [fierro](https://github.com/daniiiqa/fierro) y, donde esté conectado el AULA F75, [chispa](https://github.com/daniiiqa/chispa) en `~/.local/bin`: el binario ya compilado que cada repo publica en cada push (su release `edge`, revisado con su sha256), y solo los que cambiaron desde la última vez. Sin él (no x86_64, o `DISCADA_COMPILAR=1`) los compila, todos en una misma carpeta (`~/.cache/discada/target`) para que las dependencias comunes se compilen una vez
 - en el primer login, `hypr/scripts/FirstRun.sh` termina el resto (wallpaper
   generado si no hay ninguno, colores, tema oscuro e iconos para GTK)
 
@@ -48,7 +48,7 @@ Se puede correr varias veces sin romper nada.
 | teclas | |
 |---|---|
 | `SUPER+H` | cheat sheet (con el estilo del look, escribe para filtrar) |
-| `SUPER+Shift+E` | **ajustes de discada**: look, shader, idioma, tamaño de letra, visualizador, grabador, batería (laptops), game mode, blur, editar config, herramientas, actualizar |
+| `SUPER+Shift+E` | **ajustes de discada** (machaca): look, shader, idioma, tamaño de letra, visualizador, grabador, batería (laptops), game mode, blur, editar config, herramientas, actualizar |
 | `SUPER+T` | cambiar de look (arriba: shader del look on/off) |
 | `SUPER+W` | wallpaper |
 | `SUPER+M` | música (rola) |
@@ -57,8 +57,9 @@ Se puede correr varias veces sin romper nada.
 
 ## Looks
 
-`brutalist` · `classic` · `glass` · `minimal` · `neon` · `nord` · `outsider` ·
-`paper` · `pastel` · `retro`
+`brutalist` · `classic` · `cromo` · `eco` · `frutiger-aero` · `glass` · `minimal` ·
+`neon` · `nord` · `obsidiana` (vidrio volcánico: negro pulido y un solo reflejo
+violeta pálido) · `outsider` · `paper` · `pastel` · `retro`
 
 Hechos en México: `fundidora` (acero regio, naranja de alto horno, el Cerro de
 la Silla) · `ofrenda` (Día de Muertos: cempasúchil, papel picado, luz de vela)
@@ -140,6 +141,23 @@ También aparece en el instalador. La guía está en `hypr/looks/README.md`.
 - **Música: [rola](https://github.com/daniiiqa/rola)** — YouTube Music en la
   terminal. `rola --login` conecta tu cuenta. Cada look trae su
   `rola/look.json`.
+
+- **Panel de ajustes: [machaca](https://github.com/daniiiqa/machaca)** (`SUPER+Shift+E`) — el
+  wallpaper y el look arriba, apariencia / sistema / tus compus y el cel, cada
+  submenú como página del panel, dibujado en celdas con el estilo del look.
+- **Candado: [chapa](https://github.com/daniiiqa/chapa)** — lee el `hyprlock.conf` del look,
+  wallpapers en video, huella (fprintd) y la cortina de farula al desbloquear
+  (`LOCKER=chapa` en `hypr/discada.conf`).
+- **Updater: [carbon](https://github.com/daniiiqa/carbon)** — «actualizar discada»: qué cambió, en
+  dos columnas, con su lumbre.
+- **Tu otra compu como monitor: [machín](https://github.com/daniiiqa/machin)** (`SUPER+Shift+M`) —
+  un monitor virtual que se transmite con Sunshine/Moonlight, en los dos sentidos
+  entre dos compus con discada.
+- **La compu desde el cel: [trompo](https://github.com/daniiiqa/trompo)** — una PWA con el look
+  para música, volumen, brillo, looks, wallpapers, machín, bloquear y suspender;
+  corre `trompo` y escanea el QR para emparejar. Solo en tu red, con su propia CA.
+- **Luz del teclado: [chispa](https://github.com/daniiiqa/chispa)** — efectos y colores del AULA
+  F75, tecla por tecla, siguiendo al wallpaper o a la música.
 
 ## Hyprland en Lua
 
