@@ -620,6 +620,42 @@ if ((NEW_MACHINE)) || [[ " $* " == *" --lang="* ]]; then
   fi
 fi
 
+# Custom (dany): los programas por defecto de discada van en
+# ~/.config/hyprland-mimeapps.list, que solo cuenta dentro de Hyprland
+# (XDG_CURRENT_DESKTOP=Hyprland; lo leen xdg-open y GLib). En KDE o GNOME en
+# la misma compu siguen los suyos (Dolphin, su navegador…).
+#   mime_hypr APP tipo…
+# Por tipo: si mimeapps.list (el de todos) lo tiene con APP, lo puso discada
+# antes: se mueve. Si lo tiene con otra app, lo escogiste tú: no se toca. Si
+# nadie lo tiene, va al de Hyprland. Lo que ya esté en el de Hyprland se queda.
+MIME_ALL="$HOME/.config/mimeapps.list"
+MIME_HYPR="$HOME/.config/hyprland-mimeapps.list"
+mime_get() {  # archivo tipo → la primera app de [Default Applications]
+  [ -f "$1" ] || return 0
+  awk -v k="$2" '/^\[/ { s = ($0 == "[Default Applications]") } s && index($0, k "=") == 1 { v = substr($0, length(k) + 2); sub(/;.*/, "", v); print v; exit }' "$1"
+}
+mime_put() {  # archivo tipo app (o "" para quitarlo)
+  local tmp; tmp=$(mktemp)
+  [ -f "$1" ] || printf '[Default Applications]\n' > "$1"
+  awk -v k="$2" -v v="$3" '
+    /^\[/ { if (s && !done && v != "") { print k "=" v; done = 1 } s = ($0 == "[Default Applications]"); if (s) seen = 1 }
+    s && index($0, k "=") == 1 { if (!done && v != "") { print k "=" v; done = 1 } next }
+    { print }
+    END { if (!done && v != "") { if (!seen) print "[Default Applications]"; print k "=" v } }' "$1" > "$tmp" && cat "$tmp" > "$1"
+  rm -f "$tmp"
+}
+mime_hypr() {
+  local app=$1 t all; shift
+  if ((DRY)); then echo "   [dry-run] $app → $MIME_HYPR: $*"; return; fi
+  for t in "$@"; do
+    all=$(mime_get "$MIME_ALL" "$t")
+    if [ "$all" = "$app" ]; then mime_put "$MIME_ALL" "$t" ""
+    elif [ -n "$all" ]; then continue
+    fi
+    [ -n "$(mime_get "$MIME_HYPR" "$t")" ] || mime_put "$MIME_HYPR" "$t" "$app"
+  done
+}
+
 say "$(L "taco como explorador de carpetas por defecto" "taco as the default folder browser")"
 desk="$HOME/.local/share/applications/taco.desktop"
 if ((DRY)); then echo "   [dry-run] escribir $desk + xdg-mime default"
@@ -636,21 +672,20 @@ Type=Application
 Categories=System;FileTools;FileManager;
 MimeType=inode/directory;
 EOF
-  xdg-mime default taco.desktop inode/directory
+  mime_hypr taco.desktop inode/directory
 fi
 
 # Zen como navegador por defecto (enlaces, SUPER+B, "abrir en el navegador")
 if [ -e /usr/share/applications/zen.desktop ] || ((DRY)); then
   say "$(L "Zen como navegador por defecto" "Zen as the default browser")"
-  run xdg-settings set default-web-browser zen.desktop
-  run xdg-mime default zen.desktop x-scheme-handler/http x-scheme-handler/https text/html application/xhtml+xml
+  mime_hypr zen.desktop x-scheme-handler/http x-scheme-handler/https x-scheme-handler/about x-scheme-handler/unknown text/html application/xhtml+xml
 fi
 
 # Pinta para abrir (y editar) imágenes desde taco, en vez de swappy, que solo
 # anota capturas. Solo si está instalado; mientras discada no tenga el suyo.
 if [ -e /usr/share/applications/com.github.PintaProject.Pinta.desktop ] || ((DRY)); then
   say "$(L "Pinta para las imágenes" "Pinta for images")"
-  run xdg-mime default com.github.PintaProject.Pinta.desktop image/png image/jpeg image/jpg image/gif image/bmp image/tiff image/webp image/x-ico image/svg+xml
+  mime_hypr com.github.PintaProject.Pinta.desktop image/png image/jpeg image/jpg image/gif image/bmp image/tiff image/webp image/x-ico image/svg+xml
 fi
 
 say "rola ($(L "YouTube Music en la terminal" "YouTube Music in the terminal")) → ~/.local/bin/rola"
@@ -745,9 +780,22 @@ dbus_dir="$HOME/.local/share/dbus-1/services"
 if ((DRY)); then echo "   [dry-run] $dbus_dir/org.freedesktop.Notifications.service + org.discada.Arre.service"
 else
   mkdir -p "$dbus_dir"
+  # Custom (dany): solo en Hyprland (o sin escritorio); en KDE/GNOME las
+  # notificaciones son de ellos y arre no se mete
+  arre_exec="/bin/sh -c 'case \":\$XDG_CURRENT_DESKTOP:\" in ::|*:Hyprland:*) exec $HOME/.local/bin/arre ;; esac; exit 1'"
   for name in org.freedesktop.Notifications org.discada.Arre; do
-    printf '[D-BUS Service]\nName=%s\nExec=%s\n' "$name" "$HOME/.local/bin/arre" > "$dbus_dir/$name.service"
+    printf '[D-BUS Service]\nName=%s\nExec=%s\n' "$name" "$arre_exec" > "$dbus_dir/$name.service"
   done
+fi
+# Custom (dany): si en esta compu también hay KDE Plasma, al entrar ahí se
+# quitan los colores de discada de las apps GTK (FueraDeHyprland.sh; Plasma
+# hace `source` de lo que haya en plasma-workspace/env antes de arrancar)
+plasma_env="$HOME/.config/plasma-workspace/env/discada.sh"
+if ((DRY)); then echo "   [dry-run] $plasma_env"
+else
+  mkdir -p "$(dirname "$plasma_env")"
+  printf '%s\n' '# discada: lo de Hyprland no se pasa a Plasma (lo pone install.sh)' \
+    '[ -x "$HOME/.config/hypr/scripts/FueraDeHyprland.sh" ] && "$HOME/.config/hypr/scripts/FueraDeHyprland.sh" || true' > "$plasma_env"
 fi
 # ~/.local/bin en el PATH (rola, vato, arre, taco, empalme, picha, fierro y chispa viven ahí): en el perfil de
 # login, que SDDM lee al entrar a Hyprland. En un Arch nuevo no viene

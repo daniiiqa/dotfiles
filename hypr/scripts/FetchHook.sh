@@ -6,8 +6,18 @@
 # wallpaper o de estilo, `Fetch.sh refresh` le manda SIGUSR2 y ella limpia y
 # vuelve a dibujar con lo nuevo (lo que ibas escribiendo se queda). En cuanto
 # corres un comando, cacha se calla y la terminal sale de la lista.
+#
+# En otro escritorio (KDE, GNOME… en la misma compu) va fastfetch a secas: lo
+# de discada es nomás para Hyprland. En una tty o por ssh sí sale cacha.
 
-if [ -n "${ZSH_VERSION:-}" ] && [ -x "$HOME/.local/bin/cacha" ]; then
+_discada_otro_escritorio() {
+  [ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ] && [ -n "${XDG_CURRENT_DESKTOP:-}" ] &&
+    case ":$XDG_CURRENT_DESKTOP:" in *:Hyprland:*) false ;; *) true ;; esac
+}
+
+if _discada_otro_escritorio; then
+  command -v fastfetch >/dev/null && fastfetch
+elif [ -n "${ZSH_VERSION:-}" ] && [ -x "$HOME/.local/bin/cacha" ]; then
   _discada_dir="${XDG_RUNTIME_DIR:-/tmp}/discada-fetch"
   _discada_fetch="$_discada_dir/$$"
   _discada_cacha="$_discada_dir/.cacha-$$"

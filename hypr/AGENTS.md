@@ -88,6 +88,13 @@ tiny-skia; las TUI usan ratatui. Todas toman colores y estilo de disco.
 - Imágenes grandes (wallpapers): nunca decodificar a tamaño completo en el
   hilo que dibuja. Miniaturas en caché (`~/.cache/<herramienta>`) y en hilos.
 - `looks/README.md` todavía dice `rofi/`; las carpetas ya son `jale/`.
+- **Puede haber otro escritorio (KDE) en la misma compu.** Lo de discada no
+  se le pasa: programas por defecto en `~/.config/hyprland-mimeapps.list`
+  (`mime_hypr` en install.sh; nunca `xdg-mime default` ni `xdg-settings`, que
+  escriben en el de todos), arre solo arranca en Hyprland, el fetch en KDE es
+  fastfetch, y `scripts/FueraDeHyprland.sh` (desde
+  `~/.config/plasma-workspace/env/discada.sh`) quita el import de leña en
+  `gtk.css`; `lena apps` en startup.lua lo vuelve a poner.
 
 ## Recetas (cómo se hace cada cosa, sin adivinar)
 
