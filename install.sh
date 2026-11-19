@@ -491,6 +491,30 @@ if ((NEW_MACHINE)); then
   if [ -n "$keep" ]; then
     cp -a "$keep/." "$CFG/" && rm -rf "$keep"
   fi
+  # Custom (dany): lo que se quitó del repo también se quita de aquí (va al
+  # respaldo, no se borra). Candidatos: lo que se copió la vez pasada (la
+  # lista en ~/.local/state/discada) y lo que git dice que se borró. Nunca lo
+  # que ignora el .gitignore (copias vivas que se generan) ni tus ajustes.
+  lista="$HOME/.local/state/discada/archivos"
+  if ((UPDATE)) && ! ((DRY)); then
+    gone=()
+    while IFS= read -r rel; do
+      [ -n "$rel" ] && [ -e "$CFG/$rel" ] || continue
+      [ -e "$REPO_DIR/$rel" ] && continue
+      git -C "$REPO_DIR" check-ignore -q --no-index "$rel" 2>/dev/null && continue
+      in_list "$rel" "${KEEP_ON_UPDATE[@]}" "${KEEP_MINE[@]}" && continue
+      mkdir -p "$BACKUP/$(dirname "$rel")"
+      mv "$CFG/$rel" "$BACKUP/$rel" && gone+=("$rel")
+    done < <({ cat "$lista" 2>/dev/null || true
+               git -C "$REPO_DIR" log --diff-filter=D --name-only --format= -- "${CONFIG_DIRS[@]}" 2>/dev/null; } | sort -u)
+    if ((${#gone[@]})); then
+      say "$(L "Ya no vienen en discada (van al respaldo):" "No longer part of discada (moved to the backup):") ${gone[*]}"
+    fi
+  fi
+  if ! ((DRY)); then
+    mkdir -p "$(dirname "$lista")"
+    { (cd "$REPO_DIR" && find "${CONFIG_DIRS[@]}" -type f 2>/dev/null) || true; } | sort > "$lista"
+  fi
   # la barra de antes (waybar) ya no se usa: su carpeta va al respaldo
   if ((UPDATE)) && [ -d "$CFG/waybar" ]; then
     run mkdir -p "$BACKUP"
