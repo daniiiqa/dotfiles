@@ -16,7 +16,10 @@ _discada_otro_escritorio() {
 }
 
 if _discada_otro_escritorio; then
-  command -v fastfetch >/dev/null && fastfetch
+  # sin el config del look (~/.config/fastfetch es de discada); el tuyo para
+  # allá, si quieres, en ~/.config/fastfetch/fuera.jsonc
+  if [ -f "$HOME/.config/fastfetch/fuera.jsonc" ]; then command -v fastfetch >/dev/null && fastfetch -c "$HOME/.config/fastfetch/fuera.jsonc"
+  else command -v fastfetch >/dev/null && fastfetch -c none; fi
 elif [ -n "${ZSH_VERSION:-}" ] && [ -x "$HOME/.local/bin/cacha" ]; then
   _discada_dir="${XDG_RUNTIME_DIR:-/tmp}/discada-fetch"
   _discada_fetch="$_discada_dir/$$"

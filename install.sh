@@ -152,7 +152,7 @@ LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.lua hypr/workspaces.lua
                 hypr/conf/pinned.conf hypr/conf/defaults.lua hypr/conf/livewallpaper.conf
-                Kvantum/kvantum.kvconfig)  # Custom (dany): Kvantum es de KDE (discada usa qt6ct); el tuyo no se pisa
+                Kvantum/kvantum.kvconfig btop/btop.conf)  # Custom (dany): Kvantum es de KDE (discada usa qt6ct) y btop lo usas en los dos escritorios: los tuyos no se pisan
 
 # ── Opciones ─────────────────────────────────────────────────────────────────
 DRY=0 SDDM=auto AUR=1 YES=() LOOKS_ARG="" UI_LANG="" UPDATE=0
@@ -249,9 +249,16 @@ NEW_MACHINE=0
 [ "$SDDM" = auto ] && ((UPDATE)) && SDDM=no   # actualizar no toca la pantalla de login (salvo --sddm)
 if [ "$SDDM" = auto ]; then
   # si ya hay SDDM (CachyOS lo trae) se le pone el tema de discada; otro
-  # display manager se respeta
+  # display manager se respeta. Custom (dany): con otro escritorio en la
+  # compu (KDE, GNOME…) la pantalla de login es de los dos: no se toca
+  # (con --sddm sí)
+  otro_escritorio=0
+  for f in /usr/share/wayland-sessions/*.desktop /usr/share/xsessions/*.desktop; do
+    [ -e "$f" ] && [[ "$(basename "$f")" != hyprland* ]] && otro_escritorio=1
+  done
   dm=$(readlink -f /etc/systemd/system/display-manager.service 2>/dev/null || true)
-  if [[ "$dm" == */sddm.service ]] || ! systemctl is-enabled display-manager.service >/dev/null 2>&1; then SDDM=yes
+  if ((otro_escritorio)); then SDDM=no
+  elif [[ "$dm" == */sddm.service ]] || ! systemctl is-enabled display-manager.service >/dev/null 2>&1; then SDDM=yes
   else SDDM=no; fi
 fi
 
@@ -672,6 +679,7 @@ Terminal=false
 Type=Application
 Categories=System;FileTools;FileManager;
 MimeType=inode/directory;
+OnlyShowIn=Hyprland;
 EOF
   mime_hypr taco.desktop inode/directory
 fi
@@ -765,10 +773,14 @@ say "nvim (LazyVim) $(L "con el look de discada" "with the discada look")"
 nvim_dir="$CFG/nvim"
 if [ ! -e "$nvim_dir/init.lua" ] && [ ! -e "$nvim_dir/init.vim" ]; then
   run git clone --depth 1 "$LAZYVIM_STARTER" "$nvim_dir" && run rm -rf "$nvim_dir/.git"
+  ((DRY)) || touch "$nvim_dir/.discada"   # este LazyVim lo puso discada
 fi
 nvim_files=(colors/discada.lua lua/discada.lua)
-# el spec que lo pone como colorscheme solo tiene sentido con LazyVim
-if ((DRY)) || [ -e "$nvim_dir/lazyvim.json" ] || grep -qs LazyVim "$nvim_dir/lua/config/lazy.lua"; then
+# el spec que lo pone como colorscheme solo tiene sentido con LazyVim.
+# Custom (dany): solo en el LazyVim que puso discada o si ya lo tenías (si lo
+# borras, no regresa); y el spec mismo solo cambia el colorscheme en Hyprland
+if { ((DRY)) || [ -e "$nvim_dir/lazyvim.json" ] || grep -qs LazyVim "$nvim_dir/lua/config/lazy.lua"; } &&
+   { ((DRY)) || [ -e "$nvim_dir/.discada" ] || [ -e "$nvim_dir/lua/plugins/discada.lua" ]; }; then
   nvim_files+=(lua/plugins/discada.lua)
 fi
 for f in "${nvim_files[@]}"; do

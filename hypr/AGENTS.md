@@ -94,7 +94,7 @@ tiny-skia; las TUI usan ratatui. Todas toman colores y estilo de disco.
   escriben en el de todos), arre solo arranca en Hyprland, el fetch en KDE es
   fastfetch, y `scripts/FueraDeHyprland.sh` (desde
   `~/.config/plasma-workspace/env/discada.sh`) quita el import de leña en
-  `gtk.css` y le regresa a KDE su tema, iconos y cursor (gsettings y settings.ini, una copia por escritorio en `~/.local/state/discada/escritorio`); `FueraDeHyprland.sh regresa` + `lena apps` en startup.lua ponen los de discada. Kvantum es de KDE: su config no se pisa al actualizar.
+  `gtk.css` y le regresa a KDE su tema, iconos y cursor (gsettings y settings.ini, una copia por escritorio en `~/.local/state/discada/escritorio`); `FueraDeHyprland.sh regresa` + `lena apps` en startup.lua ponen los de discada. Kvantum y btop.conf no se pisan al actualizar; el colorscheme de nvim y «tu semana» solo en Hyprland; taco con `OnlyShowIn=Hyprland`; con otro escritorio instalado no se toca SDDM y fierro deja prendido power-profiles-daemon (pone los perfiles con powerprofilesctl).
 
 ## Recetas (cómo se hace cada cosa, sin adivinar)
 

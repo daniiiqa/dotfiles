@@ -9,6 +9,9 @@
 PATH="$HOME/.local/bin:$PATH"
 . "$HOME/.config/hypr/scripts/lang.sh"
 command -v cacha >/dev/null || exit 0
+# Custom (dany): solo si estás en Hyprland (el timer de systemd también corre
+# si entraste a KDE en la misma compu)
+case ":${XDG_CURRENT_DESKTOP:-Hyprland}:" in *:Hyprland:*) ;; *) [ "${1:-}" = ver ] || exit 0 ;; esac
 
 ver() {
   setsid kitty --class discada-update -e sh -c "cacha semana; printf '  %s' '$(L "cualquier tecla para cerrar" "any key to close")'; stty -echo -icanon; dd bs=1 count=1 >/dev/null 2>&1" >/dev/null 2>&1 &
