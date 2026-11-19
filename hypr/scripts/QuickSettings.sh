@@ -523,6 +523,9 @@ entrada_menu() {
 #   QuickSettings.sh hacer CLAVE [V]  cambia una cosa sin menú
 #   QuickSettings.sh menu NOMBRE      abre ese submenú directo (en jale)
 # Sin argumentos: el menú de siempre (por si machaca no está).
+# el trackpad (TRACKPAD_* en discada.conf; ver trackpad_menu)
+tp() { local v; v=$(get_conf "$discada" "TRACKPAD_$1"); echo "${v:-$2}"; }
+TP_SINO=(ENABLED:yes NATURAL:yes TAP:yes TAP_DRAG:yes MIDDLE:no DWT:yes SWIPE_INVERT:yes ZOOM:yes)
 qs_estado() {
   local deco v f
   printf 'maquina\t%s\n' "$(cat /etc/hostname 2>/dev/null)"
@@ -554,6 +557,7 @@ qs_estado() {
   fi
   hay_teclado && printf 'teclado\t%s\n' "$(teclado_now)"
   "$bat" has && printf 'bateria\t%s\n' "$("$bat" status | jq -r '"\(.percentage)%"')"
+  hay_trackpad && printf 'trackpad\t%s\n' "$(onoff "$(tp ENABLED yes)")"
   if [ -x "$HOME/.local/bin/machin" ]; then
     v=$("$HOME/.local/bin/machin" estado 2>/dev/null)
     case "$v" in
@@ -662,6 +666,38 @@ qs_pagina() {
       printf 'abre\tvato:notifications\t%s\tvato\n' "$(L notificaciones notifications)"
       printf 'abre\tmonitores\t%s\tnwg-displays\n' "$(L monitores monitors)"
       printf 'abre\tbuscar-atajos\t%s\t\n' "$(L "buscar atajos" "search shortcuts")" ;;
+    trackpad)
+      local k n d o
+      printf 'titulo\ttrackpad\nnota\t%s\n' "$(L "se aplica al instante · arrastrar con 3 dedos le gana a deslizar con 3" "applies right away · 3-finger drag beats 3-finger swipe")"
+      sino() { printf 'interruptor\ttp-%s\t%s\t%s\n' "$1" "$2" "$(tp "$1" "$3")"; }
+      op() { printf 'opcion\ttp-%s\t%s\t%s\n' "$1" "$2" "$(tp "$1" "$3")"; }
+      va() { printf 'valor\ttp-%s\t%s\t%s\n' "$1" "$2" "$3"; }
+      sino ENABLED trackpad yes
+      sino NATURAL "$(L "scroll natural (como en el cel)" "natural scroll (like a phone)")" yes
+      sino TAP "$(L "tocar para hacer clic" "tap to click")" yes
+      sino TAP_DRAG "$(L "tocar y arrastrar" "tap and drag")" yes
+      op DRAG_LOCK "$(L "seguir arrastrando al soltar" "keep dragging after lifting")" no
+      va DRAG_LOCK no no; va DRAG_LOCK timeout "$(L "un ratito" "briefly")"; va DRAG_LOCK sticky "$(L "hasta otro toque" "until next tap")"
+      op TAP_MAP "$(L toques taps)" lrm
+      va TAP_MAP lrm "$(L "2 dedos = derecho, 3 = medio" "2 fingers = right, 3 = middle")"; va TAP_MAP lmr "$(L "2 dedos = medio, 3 = derecho" "2 fingers = middle, 3 = right")"
+      op CLICK "$(L "clic al apretar" "click when pressing")" areas
+      va CLICK areas "$(L "por zona" "by area")"; va CLICK fingers "$(L "por dedos" "by fingers")"
+      sino MIDDLE "$(L "clic medio con izquierdo + derecho" "middle click with left + right")" no
+      sino DWT "$(L "apagarlo mientras escribes" "off while typing")" yes
+      op SPEED "$(L velocidad speed)" 0
+      for v in -0.6 -0.4 -0.2 0 0.2 0.4 0.6 0.8; do va SPEED "$v" "$v"; done
+      op ACCEL "$(L aceleración acceleration)" adaptive
+      va ACCEL adaptive "$(L adaptiva adaptive)"; va ACCEL flat "$(L plana flat)"
+      op SCROLL_SPEED "$(L "velocidad del scroll" "scroll speed")" 1.0
+      for v in 0.5 0.75 1.0 1.25 1.5 2.0; do va SCROLL_SPEED "$v" "$v×"; done
+      op SCROLL_METHOD "$(L "scroll con" "scroll with")" 2fg
+      va SCROLL_METHOD 2fg "$(L "dos dedos" "two fingers")"; va SCROLL_METHOD edge "$(L "la orilla" "the edge")"
+      op DRAG_3FG "$(L "arrastrar con" "drag with")" no
+      va DRAG_3FG no no; va DRAG_3FG 3 "3 $(L dedos fingers)"; va DRAG_3FG 4 "4 $(L dedos fingers)"
+      op SWIPE "$(L "cambiar de escritorio deslizando" "swipe between workspaces")" 3
+      va SWIPE 3 "3 $(L dedos fingers)"; va SWIPE 4 "4 $(L dedos fingers)"; va SWIPE no no
+      sino SWIPE_INVERT "$(L "deslizar al revés" "inverted swipe")" yes
+      sino ZOOM "$(L "zoom con 4 dedos" "4-finger zoom")" yes ;;
     *) return 2 ;;
   esac
 }
@@ -677,6 +713,14 @@ qs_hacer() {
     rec-rs)       local r; r=$(get_conf "$recconf" REPLAY_ON_STARTUP); set_conf "$recconf" REPLAY_ON_STARTUP "$(cycle "${r:-no}" yes no)" ;;
     rec-carpeta)  . "$recconf" 2>/dev/null; exec xdg-open "${DIR:-$HOME/Videos}" ;;
     bat-saver)    "$bat" saver ;;
+    tp-*)         local k=${1#tp-} e d=
+                  for e in "${TP_SINO[@]}"; do [ "${e%%:*}" = "$k" ] && d=${e#*:}; done
+                  if [ -n "$d" ] && [ -z "${2:-}" ]; then
+                    set_conf "$discada" "TRACKPAD_$k" "$([ "$(tp "$k" "$d")" = yes ] && echo no || echo yes)"
+                  else
+                    [[ "${2:-}" =~ ^[a-z0-9.-]+$ ]] && set_conf "$discada" "TRACKPAD_$k" "$2"
+                  fi
+                  hyprctl reload >/dev/null ;;
     bat-perfil)   local n; for n in 1 2 3; do [ "$("$bat" profile get)" = "$2" ] && break; "$bat" profile >/dev/null; done ;;
     bat-at)       set_conf "$discada" BATTERY_SAVER_AT "$2" ;;
     fierro)       exec "$scripts/TuiApp.sh" fierro ;;
