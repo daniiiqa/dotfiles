@@ -516,7 +516,225 @@ entrada_menu() {
   done
 }
 
+# ── para machaca (el panel de SUPER+Shift+E) ─────────────────────────────────
+# Custom (dany): machaca es solo la cara; lo que se lee y se cambia sigue aquí.
+#   QuickSettings.sh estado           una línea por cosa: clave<TAB>valor[<TAB>etiqueta]
+#                                     y `opcion<TAB>clave<TAB>valor<TAB>etiqueta` por cada opción
+#   QuickSettings.sh hacer CLAVE [V]  cambia una cosa sin menú
+#   QuickSettings.sh menu NOMBRE      abre ese submenú directo (en jale)
+# Sin argumentos: el menú de siempre (por si machaca no está).
+qs_estado() {
+  local deco v f
+  printf 'maquina\t%s\n' "$(cat /etc/hostname 2>/dev/null)"
+  printf 'look\t%s\n' "$(cat "$hypr/looks/.current" 2>/dev/null)"
+  deco=$("$scripts/Hypr.sh" file decorations)
+  if grep -qE '^\s*screen_shader\s*=' "$deco"; then printf 'shader\tyes\n'
+  elif grep -qE '^\s*(#|--)\s*screen_shader\s*=' "$deco"; then printf 'shader\tno\n'; fi
+  printf 'game\t%s\n' "$([ "$("$scripts/Hypr.sh" get animations:enabled)" = 0 ] && echo yes || echo no)"
+  printf 'blur\t%s\n' "$([ "$("$scripts/Hypr.sh" get decoration:blur:passes)" = 2 ] && echo normal || echo ligero)"
+  printf 'opcion\tblur\tligero\t%s\nopcion\tblur\tnormal\tnormal\n' "$(L ligero light)"
+  printf 'lang\t%s\n' "$DISCADA_LANG"
+  printf 'opcion\tlang\tes\tespañol\nopcion\tlang\ten\tEnglish\n'
+  printf 'font\t%s\n' "$(sed -nE 's/^FONT_SIZE=\s*([+-]?[0-9]+).*/\1/p' "$discada" | head -n1)"
+  v=$(get_conf "$discada" FETCH_STYLE)
+  printf 'fetch\t%s\t%s\n' "${v:-look}" "$(fetch_name "${v:-look}")"
+  for v in look wallpaper ficha; do printf 'opcion\tfetch\t%s\t%s\n' "$v" "$(fetch_name "$v")"; done
+  for f in "$fetch_pixel"/*.txt; do
+    [ -f "$f" ] && f=${f##*/} && printf 'opcion\tfetch\tpixel:%s\t%s\n' "${f%.txt}" "$(fetch_name "pixel:${f%.txt}")"
+  done
+  printf 'opcion\tfetch\tnone\t%s\n' "$(fetch_name none)"
+  v=$(get_conf "$discada" ENTRADA)
+  printf 'entrada\t%s\n' "${v:-yes}"
+  for v in yes quiet no; do printf 'opcion\tentrada\t%s\t%s\n' "$v" "$(entrada_name "$v")"; done
+  printf 'vis\t%s\n' "$(vis_now)"
+  if [ -x "$arre" ]; then
+    printf 'notif\t%s\n' "$("$arre" position)"
+    for v in "${POSITIONS[@]}"; do printf 'opcion\tnotif\t%s\t%s\n' "$v" "$(pos_name "$v")"; done
+    printf 'dnd\t%s\n' "$([ "$("$arre" dnd 2>/dev/null)" = on ] && echo yes || echo no)"
+  fi
+  hay_teclado && printf 'teclado\t%s\n' "$(teclado_now)"
+  "$bat" has && printf 'bateria\t%s\n' "$("$bat" status | jq -r '"\(.percentage)%"')"
+  if [ -x "$HOME/.local/bin/machin" ]; then
+    v=$("$HOME/.local/bin/machin" estado 2>/dev/null)
+    case "$v" in
+      principal\ *) v="$(L usando using) ${v#principal }" ;;
+      presta\ *)    v="$(L "prestada a" "lent to") ${v#presta }" ;;
+      *)            v=$(L apagado off) ;;
+    esac
+    printf 'machin\t%s\n' "$v"
+  fi
+  command -v picha >/dev/null && printf 'picha\t1\n'
+  command -v trompo >/dev/null && printf 'trompo\t%s\n' "$(trompo cels 2>/dev/null | grep -vc '(')"
+  return 0
+}
+
+# Las páginas de machaca (los submenús, ya sin jale). Un renglón por cosa:
+#   titulo<TAB>texto                    nota<TAB>texto (va abajo del título)
+#   opcion<TAB>clave<TAB>nombre<TAB>actual   + valor<TAB>clave<TAB>v<TAB>etiqueta
+#   interruptor<TAB>clave<TAB>nombre<TAB>yes|no
+#   elige<TAB>clave<TAB>v<TAB>etiqueta<TAB>1|0   (una lista: se queda la elegida)
+#   botones<TAB>clave<TAB>nombre          + valor… (se aplica y ya; sin actual)
+#   abre<TAB>accion<TAB>nombre<TAB>valor  (cierra el panel y `hacer accion`)
+# Todo se aplica con `hacer clave [v]`.
+VIS_NOMBRES=("braille · 12" "braille · 16" "braille · 20" "peaks · 16" "peaks · 20" "bloques · 8   ▁▃▅█" "bloques · 12  ▁▃▅█" "ascii · 10  .:-=+*#" "lápiz · 12  _.-~^")
+VIS_JSON=('{"style": "braille", "bars": 12}' '{"style": "braille", "bars": 16}' '{"style": "braille", "bars": 20}' '{"style": "peaks", "bars": 16}' '{"style": "peaks", "bars": 20}' '{"style": "chars", "bars": 8, "chars": "▁▂▃▄▅▆▇█"}' '{"style": "chars", "bars": 12, "chars": "▁▂▃▄▅▆▇█"}' '{"style": "chars", "bars": 10, "chars": ".:-=+*#"}' '{"style": "chars", "bars": 12, "chars": "_.-~^"}')
+qs_pagina() {
+  local t=$'\t' v i
+  case "$1" in
+    vis)
+      printf 'titulo\t%s\nnota\t%s\n' "$(L visualizador visualizer)" "$(L "se guarda en el look actual" "saved into the current look")"
+      local ahora
+      ahora=$(jq -c '.modules.visualizer // {} | {style: (.style // "braille"), bars: (.bars // 16), chars: (.chars // "")}' "$bar" 2>/dev/null)
+      for i in "${!VIS_NOMBRES[@]}"; do
+        v=$(jq -c '{style: (.style // "braille"), bars: (.bars // 16), chars: (.chars // "")}' <<<"${VIS_JSON[$i]}")
+        printf 'elige\tvis\t%s\t%s\t%s\n' "$i" "${VIS_NOMBRES[$i]}" "$([ "$v" = "$ahora" ] && echo 1 || echo 0)"
+      done ;;
+    rec)
+      local fps q audio rs rlen dnd
+      fps=$(get_conf "$recconf" FPS); q=$(get_conf "$recconf" QUALITY)
+      audio=$(sed -nE 's/^AUDIO="?([^"#]*)"?.*/\1/p' "$recconf" | head -n1 | sed 's/ *$//')
+      rs=$(get_conf "$recconf" REPLAY_ON_STARTUP); rlen=$(get_conf "$recconf" REPLAY_SECONDS)
+      dnd=$(get_conf "$recconf" RECORD_DND)
+      printf 'titulo\t%s\nnota\t%s\n' "$(L grabador recorder)" "$(L "el replay toma los cambios al volver a encenderlo" "replay picks up changes when turned on again")"
+      printf 'opcion\trec-fps\tfps\t%s\n' "${fps:-60}"
+      for v in 30 60 120 144; do printf 'valor\trec-fps\t%s\t%s\n' "$v" "$v"; done
+      printf 'opcion\trec-q\t%s\t%s\n' "$(L calidad quality)" "${q:-very_high}"
+      for v in medium high very_high ultra; do printf 'valor\trec-q\t%s\t%s\n' "$v" "${v/_/ }"; done
+      printf 'opcion\trec-audio\taudio\t%s\n' "$audio"
+      for v in "default_output|default_input" default_output default_input ""; do printf 'valor\trec-audio\t%s\t%s\n' "$v" "$(audio_name "$v")"; done
+      printf 'opcion\trec-len\t%s\t%s\n' "$(L "duración del replay" "replay length")" "${rlen:-60}"
+      for v in 30 60 120 300; do printf 'valor\trec-len\t%s\t%ss\n' "$v" "$v"; done
+      printf 'interruptor\trec-dnd\t%s\t%s\n' "$(L "no molestar al grabar" "do not disturb while recording")" "${dnd:-yes}"
+      printf 'interruptor\trec-rs\t%s\t%s\n' "$(L "replay al iniciar sesión" "replay at login")" "${rs:-no}"
+      printf 'abre\trec-carpeta\t%s\t%s\n' "$(L "carpeta de videos" "videos folder")" "$(L abrir open)" ;;
+    bateria)
+      local prof saver at
+      prof=$("$bat" profile get)
+      saver=$([ -f "$XDG_RUNTIME_DIR/discada/saver.json" ] && echo yes || echo no)
+      at=$(get_conf "$discada" BATTERY_SAVER_AT)
+      printf 'titulo\t%s\nnota\t%s\n' "$(L batería battery)" "$(L "ahorro: perfil de ahorro, sin blur, sombras ni shader y el video en pausa" "saver: power-saving profile, no blur, shadows or shader, video paused")"
+      printf 'interruptor\tbat-saver\t%s\t%s\n' "$(L "ahorro de batería" "battery saver")" "$saver"
+      printf 'opcion\tbat-perfil\t%s\t%s\n' "$(L "perfil de energía" "power profile")" "$prof"
+      for v in power-saver balanced performance; do printf 'valor\tbat-perfil\t%s\t%s\n' "$v" "$(prof_name "$v")"; done
+      printf 'opcion\tbat-at\t%s\t%s\n' "$(L "ahorro solo al" "saver by itself at")" "${at:-20}"
+      for v in 10 15 20 30 0; do printf 'valor\tbat-at\t%s\t%s\n' "$v" "$([ "$v" = 0 ] && L nunca never || echo "$v%")"; done
+      printf 'abre\tfierro\t%s\t%s\n' "$(L "límites de carga y más" "charge limits and more")" fierro ;;
+    teclado)
+      local b modo
+      printf 'titulo\t%s\n' "$(L teclado keyboard)"
+      b=$(chispa battery --cached 2>/dev/null); setsid -f chispa battery >/dev/null 2>&1
+      [ -n "$b" ] && printf 'nota\t%s: %s\n' "$(L batería battery)" "$b"
+      modo=$(get_conf "$discada" KEYBOARD_LIGHT)
+      command -v wallust >/dev/null && printf 'elige\tteclado-modo\twallpaper\t%s\t%s\n' "$(L "seguir al wallpaper" "follow the wallpaper")" "$([ "$modo" = wallpaper ] && echo 1 || echo 0)"
+      command -v cava >/dev/null && printf 'elige\tteclado-modo\tmusic\t%s\t%s\n' "$(L "visualizador de música" "music visualizer")" "$([ "$modo" = music ] && echo 1 || echo 0)"
+      chispa_en_vivo && printf 'boton\tteclado-modo\tsave\t%s\n' "$(L "guardar ya el color (parpadea)" "save the color now (blinks)")"
+      printf 'botones\tteclado-lado\t%s\n' "$(L "barrita junto al Esc" "side light")"
+      printf 'valor\tteclado-lado\toff\t%s\nvalor\tteclado-lado\tfill\t%s\nvalor\tteclado-lado\tbreathing\t%s\nvalor\tteclado-lado\tstatic\t%s\n' "$(L apagada off)" "$(L llenar fill)" "$(L respirar breathing)" "$(L fija static)"
+      printf 'botones\tteclado-dormir\t%s\n' "$(L "apagar sin usarlo" "lights off when idle")"
+      printf 'valor\tteclado-dormir\tnever\t%s\n' "$(L nunca never)"
+      for v in 1 2 5 10 20; do printf 'valor\tteclado-dormir\t%s\t%s min\n' "$v" "$v"; done
+      printf 'botones\tteclado-perilla\t%s\n' "$(L perilla knob)"
+      printf 'valor\tteclado-perilla\tvolume\t%s\nvalor\tteclado-perilla\tlighting\t%s\n' "$(L volumen volume)" "$(L luz lighting)"
+      printf 'abre\tteclado-tui\t%s\t%s\n' "$(L "escoger un color o efecto" "pick a color or effect")" chispa ;;
+    edit)
+      local f="$scripts/Hypr.sh file" lk
+      lk=$(cat "$hypr/looks/.current" 2>/dev/null)
+      printf 'titulo\t%s\nnota\t%s\n' "$(L "editar config" "edit config")" "$(L "se abre en $edit" "opens in $edit")"
+      ed() { printf 'abre\teditar:%s\t%s\t%s\n' "$2" "$1" "${2##*/}"; }
+      ed "discada" "$discada"
+      ed "look: $lk" "$hypr/looks/$lk/look.toml"
+      ed "$(L grabador recorder)" "$recconf"
+      ed "$(L "apps por defecto" "default apps")" "$($f defaults)"
+      ed "$(L atajos keybinds)" "$($f keybinds)"
+      ed "$(L arranque startup)" "$($f startup)"
+      ed "$(L "ajustes generales" "general settings")" "$($f settings)"
+      ed "$(L "decoraciones (del look)" "decorations (look)")" "$($f decorations)"
+      ed "$(L "animaciones (del look)" "animations (look)")" "$($f animations)"
+      ed "$(L "reglas de ventanas" "window rules")" "$($f windowrules)"
+      ed "$(L "apps fijadas" "pinned apps")" "$hypr/conf/pinned.conf"
+      ed "$(L "variables de entorno" "environment")" "$($f env)"
+      ed "idle (hypridle)" "$hypr/hypridle.conf"
+      ed "lock (hyprlock)" "$hypr/hyprlock.conf" ;;
+    tools)
+      printf 'titulo\t%s\n' "$(L "audio, red y sistema" "audio, network and system")"
+      printf 'abre\tvato:audio\taudio\tvato\nabre\tvato:bluetooth\tbluetooth\tvato\n'
+      printf 'abre\tvato:network\t%s\tvato\nabre\tvato:system\t%s\tvato\n' "$(L red network)" "$(L sistema system)"
+      printf 'abre\tvato:notifications\t%s\tvato\n' "$(L notificaciones notifications)"
+      printf 'abre\tmonitores\t%s\tnwg-displays\n' "$(L monitores monitors)"
+      printf 'abre\tbuscar-atajos\t%s\t\n' "$(L "buscar atajos" "search shortcuts")" ;;
+    *) return 2 ;;
+  esac
+}
+
+qs_hacer() {
+  case "$1" in
+    vis)          [ -n "${VIS_JSON[$2]:-}" ] && "$HOME/.local/bin/lena" bar-set visualizer "${VIS_JSON[$2]}" ;;
+    rec-fps)      set_conf "$recconf" FPS "$2" ;;
+    rec-q)        set_conf "$recconf" QUALITY "$2" ;;
+    rec-audio)    set_conf "$recconf" AUDIO "\"$2\"" ;;
+    rec-len)      set_conf "$recconf" REPLAY_SECONDS "$2" ;;
+    rec-dnd)      local d; d=$(get_conf "$recconf" RECORD_DND); set_conf "$recconf" RECORD_DND "$(cycle "${d:-yes}" yes no)" ;;
+    rec-rs)       local r; r=$(get_conf "$recconf" REPLAY_ON_STARTUP); set_conf "$recconf" REPLAY_ON_STARTUP "$(cycle "${r:-no}" yes no)" ;;
+    rec-carpeta)  . "$recconf" 2>/dev/null; exec xdg-open "${DIR:-$HOME/Videos}" ;;
+    bat-saver)    "$bat" saver ;;
+    bat-perfil)   local n; for n in 1 2 3; do [ "$("$bat" profile get)" = "$2" ] && break; "$bat" profile >/dev/null; done ;;
+    bat-at)       set_conf "$discada" BATTERY_SAVER_AT "$2" ;;
+    fierro)       exec "$scripts/TuiApp.sh" fierro ;;
+    teclado-modo) case "$2" in
+                    wallpaper) local err; err=$(chispa wallpaper 2>&1 >/dev/null) || notify-send -i "dialog-error-symbolic" "chispa" "$err" ;;
+                    music) setsid -f chispa music >/dev/null 2>&1 ;;
+                    save) setsid -f chispa save >/dev/null 2>&1 ;;
+                  esac ;;
+    teclado-lado|teclado-dormir|teclado-perilla)
+                  local sub=${1#teclado-} err; sub=${sub/lado/side}; sub=${sub/dormir/sleep}; sub=${sub/perilla/knob}
+                  err=$(chispa "$sub" "$2" 2>&1 >/dev/null) || notify-send -i "dialog-error-symbolic" "chispa" "$err" ;;
+    teclado-tui)  exec "$scripts/TuiApp.sh" chispa tui ;;
+    editar:*)     exec $term -e $edit "${1#editar:}" ;;
+    vato:*)       exec "$scripts/Vato.sh" "${1#vato:}" ;;
+    monitores)    need nwg-displays && exec nwg-displays ;;
+    buscar-atajos) exec "$scripts/KeyBinds.sh" ;;
+    lang)    [ "$2" != "$DISCADA_LANG" ] && set_language "$2" ;;
+    font)    "$scripts/FontSize.py" set "$2" ;;
+    blur)    [ "$2" != "$([ "$("$scripts/Hypr.sh" get decoration:blur:passes)" = 2 ] && echo normal || echo ligero)" ] && "$scripts/ChangeBlur.sh" ;;
+    shader)  "$scripts/LookSwitch.sh" shader ;;
+    game)    "$scripts/GameMode.sh" ;;
+    fetch)   set_conf "$discada" FETCH_STYLE "$2"; "$scripts/Fetch.sh" refresh ;;
+    entrada) set_conf "$discada" ENTRADA "$2" ;;
+    notif)   "$arre" position "$2" && notif_sample ;;
+    dnd)     "$arre" dnd toggle >/dev/null ;;
+    semana)  exec "$scripts/Semana.sh" ver ;;
+    atajos)  exec "$scripts/KeyHints.sh" ;;
+    update)  exec $term --class discada-update -e bash -c "'$scripts/Update.sh'; echo; read -rp '$(L "Enter para cerrar" "Press Enter to close")'" ;;
+    picha)   exec "$scripts/TuiApp.sh" picha ;;
+    trompo)  exec $term --class discada-trompo -e trompo ;;
+    machin)  exec "$HOME/.local/bin/machin" menu ;;
+    wallpaper) exec "$scripts/WallpaperSelect.sh" ;;
+    entrada-demo) exec "$scripts/Entrada.sh" demo ;;
+    *) echo "no sé hacer '$1'" >&2; return 2 ;;
+  esac
+}
+
+case "$1" in
+  estado) qs_estado; exit ;;
+  pagina) qs_pagina "$2"; exit ;;
+  hacer)  shift; qs_hacer "$@"; exit ;;
+  menu)
+    pidof jale >/dev/null && pkill -x jale
+    case "$2" in
+      vis) vis_menu ;; rec) rec_menu ;; notif) notif_menu ;; bateria) bat_menu ;;
+      teclado) teclado_menu ;; edit) edit_menu ;; tools) tools_menu ;;
+      fetch) fetch_menu ;; entrada) entrada_menu ;;
+      *) echo "no hay menú '$2'" >&2; exit 2 ;;
+    esac
+    exit 0 ;;
+esac
+
 # ── menú principal ───────────────────────────────────────────────────────────
+# Custom (dany): con machaca instalado, el panel; si no está o falla, el menú
+# de jale de siempre (`QuickSettings.sh lista` lo abre directo)
+if [ "$1" != lista ] && [ -x "$HOME/.local/bin/machaca" ]; then
+  "$HOME/.local/bin/machaca" && exit 0
+fi
 pidof jale >/dev/null && pkill -x jale
 
 row=0

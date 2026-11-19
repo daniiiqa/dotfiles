@@ -31,6 +31,11 @@ hl.layer_rule({ match = { namespace = "jale" }, ignore_alpha = 0.1 })
 hl.layer_rule({ match = { namespace = "nota" }, blur = true })
 hl.layer_rule({ match = { namespace = "nota" }, ignore_alpha = 0.1 })
 
+-- machaca (el panel de SUPER+Shift+E): blur solo detrás del panel; la pantalla
+-- oscurecida de alrededor va por debajo del ignore_alpha y no se difumina
+hl.layer_rule({ match = { namespace = "machaca" }, blur = true })
+hl.layer_rule({ match = { namespace = "machaca" }, ignore_alpha = 0.3 })
+
 -- ─── Tags ────────────────────────────────────────────────────────────────────
 hl.window_rule({ match = { class = "^(zen|zen-browser)$" }, tag = "+browser" })
 hl.window_rule({ match = { class = "^(kitty|kitty-dropterm)$" }, tag = "+terminal" })

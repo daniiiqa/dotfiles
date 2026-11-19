@@ -222,6 +222,12 @@ apply_video_wallpaper() {
 
 # Main function
 main() {
+  # Custom (dany): con una ruta se aplica sin menú (trompo, desde el cel)
+  if [[ -n "$1" && -f "$1" ]]; then
+    apply_selected "$1"
+    return
+  fi
+
   # Custom (dany): mientras escoges, cachear en wallust los wallpapers nuevos
   # (WallustCache.sh): con caché sus colores salen en ms, no en segundos
   setsid "$SCRIPTSDIR/WallustCache.sh" >/dev/null 2>&1 &
@@ -250,6 +256,11 @@ main() {
     exit 1
   fi
 
+  apply_selected "$selected_file"
+}
+
+apply_selected() {
+  local selected_file="$1"
   # Persistir el wallpaper (livewallpaper.conf) según su tipo
   modify_startup_config "$selected_file"
 
@@ -266,8 +277,8 @@ main() {
 }
 
 # Check if rofi is already running
-if pidof jale >/dev/null; then
+if [[ -z "$1" ]] && pidof jale >/dev/null; then
   pkill -x jale
 fi
 
-main
+main "$@"

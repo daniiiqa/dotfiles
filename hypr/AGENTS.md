@@ -50,7 +50,7 @@ Atajos clave: SUPER+T looks (`LookSwitch.sh`), SUPER+W wallpaper
 |---|---|---|
 | disco | la base compartida: el look y cómo dibujar (`features = ["paint"]`) | `~/disco`, github.com/daniiiqa/disco |
 | empalme | la barra | `~/empalme` |
-| jale | launcher y menús (dmenu, lee los `.rasi` de rofi) | `~/jale` |
+| jale | launcher y menús (dmenu). Se dibuja como TUI, en celdas con disco y el `[style]` del look (como machaca); de los `.rasi` solo toma la forma de cada menú (ancho, renglones, columnas, íconos). `JALE_ESTILO=rasi` dibuja como antes, con el theme de rofi | `~/jale` |
 | arre | notificaciones | `~/arre` |
 | brasa | OSD: volumen, brillo, mic, teclado | `~/brasa` |
 | rollo | vista de los workspaces en miniatura | `~/rollo` |
@@ -67,6 +67,8 @@ Atajos clave: SUPER+T looks (`LookSwitch.sh`), SUPER+W wallpaper
 | chapa | el candado de discada en vez de hyprlock (`LOCKER=chapa` en discada.conf, lo lanza `scripts/LockScreen.sh`; si falla, sigue hyprlock): lee el `hyprlock.conf` del look (labels con `cmd[…]`, como el motd), huella con fprintd, log en `~/.local/state/chapa/chapa.log` | `~/chapa` |
 | machín | la pantalla de la otra compu como monitor extra, en las dos direcciones: `machin` (SUPER+Shift+M) busca la otra por mDNS (`_machin._tcp`), crea el monitor virtual `MACHIN` (headless) del tamaño de su pantalla, Sunshine lo transmite (`output_name = MACHIN`, por nombre) y la otra lo abre en Moonlight tras *Aceptar / Siempre / No*; `machin escucha` (startup.lua) atiende en el 47392, solo a compus emparejadas en Moonlight; `machin vigila` re-aplica la regla del monitor en cada recarga; binario `machin`, symlink `machín` | `~/machin` |
 | chispa | la luz del AULA F75 desde la terminal (solo luz, por cable, 2.4 GHz o Bluetooth; los cambios de color se sostienen en vivo con `chispa hold` y se guardan al bloquear la pantalla, suspender o salir) | `~/chispa` |
+| trompo | la compu desde el cel: una PWA con el look (colores, fuente y estilo vía disco) para música, volumen, brillo, looks, wallpapers, machín, bloquear y suspender. `trompo sirve` (startup.lua) sirve http 47420 (bienvenida: bajar su CA) y https 47421 (la app y su API, por SSE); `trompo` enseña un QR de un solo uso (5 min) para emparejar un cel; `trompo cels` / `trompo olvida N`. Su propia CA en `~/.config/trompo/` (name constraints: solo IPs privadas y `.local`), los cels en `confianza.json` (solo el sha256 de cada llave). Aplica wallpapers con `WallpaperSelect.sh <ruta>` | `~/trompo` |
+| machaca | el panel de discada (SUPER+Shift+E, vía `QuickSettings.sh` sin argumentos; `QuickSettings.sh lista` abre el menú viejo de jale): cabecera con el wallpaper y el look, columnas Apariencia / Sistema / Tus compus y el cel, fila de herramientas, página de looks. Solo es la cara: lee con `QuickSettings.sh estado`, los submenús son páginas del panel descritas por `QuickSettings.sh pagina X` (opcion, interruptor, elige, botones, abre) y todo se cambia con `QuickSettings.sh hacer CLAVE [V]` (`menu X` sigue para el menú viejo). Layer `machaca` (blur en windowrules.lua; opaco si el look no tiene blur). Para probar sin teclado: `MACHACA_TECLAS="Tab Down Return"` | `~/machaca` |
 
 Las gráficas son clientes Wayland con smithay-client-toolkit + layer-shell +
 tiny-skia; las TUI usan ratatui. Todas toman colores y estilo de disco.

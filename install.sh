@@ -148,6 +148,8 @@ LENA_REPO="https://github.com/daniiiqa/lena.git"
 NOTA_REPO="https://github.com/daniiiqa/nota.git"
 CACHA_REPO="https://github.com/daniiiqa/cacha.git"
 MACHIN_REPO="https://github.com/daniiiqa/machin.git"
+MACHACA_REPO="https://github.com/daniiiqa/machaca.git"
+TROMPO_REPO="https://github.com/daniiiqa/trompo.git"
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.lua hypr/workspaces.lua
@@ -738,6 +740,14 @@ app bicho "$BICHO_REPO"
 say "machín ($(L "la pantalla de tu otra compu como monitor extra" "your other computer's screen as an extra monitor")) → ~/.local/bin/machin"
 app machin "$MACHIN_REPO"
 ((DRY)) || ln -sf machin "$HOME/.local/bin/machín"
+# Custom (dany): machaca, el panel de SUPER+Shift+E (QuickSettings.sh sin
+# argumentos lo abre; si no está, sigue el menú viejo de jale)
+say "machaca ($(L "el panel de discada: SUPER+Shift+E" "the discada panel: SUPER+Shift+E")) → ~/.local/bin/machaca"
+app machaca "$MACHACA_REPO"
+# Custom (dany): trompo, la compu desde el cel; `trompo sirve` arranca al iniciar
+# sesión (startup.lua) y `trompo` enseña el QR para emparejar
+say "trompo ($(L "la compu desde el cel: corre trompo para emparejar" "your computer from your phone: run trompo to pair")) → ~/.local/bin/trompo"
+app trompo "$TROMPO_REPO"
 if ((LAPTOP)); then
   say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
   app fierro "$FIERRO_REPO"
