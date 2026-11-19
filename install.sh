@@ -45,6 +45,8 @@ REPO_PKGS=(
   yad
   # terminal y herramientas de terminal
   kitty fastfetch btop cava
+  # Custom (dany): la shell de discada: zsh con oh-my-zsh (abajo), ls con iconos (lsd)
+  zsh lsd
   # taco (archivos) usa fd, fzf, zoxide y las miniaturas; nvim con LazyVim
   fd ripgrep zoxide resvg 7zip poppler ffmpegthumbnailer jq fzf udisks2 neovim
   # portapapeles, capturas y grabación (Recorder.sh)
@@ -822,6 +824,30 @@ for p in env:entra shutdown:sale; do
   printf '%s\n' '# discada: lo de Hyprland no se pasa a Plasma (lo pone install.sh)' \
     "[ -x \"\$HOME/.config/hypr/scripts/FueraDeHyprland.sh\" ] && \"\$HOME/.config/hypr/scripts/FueraDeHyprland.sh\" ${p#*:} || true" > "$plasma_sh"
 done
+# Custom (dany): la terminal de discada, igual en todas tus compus: zsh con
+# oh-my-zsh (tema murilasso; plugins git, archlinux, autosuggestions y
+# syntax-highlighting), lsd en vez de ls y fzf en Ctrl+R. El ~/.zshrc sale de
+# hypr/shell/zshrc solo si el tuyo no tiene la marca "# discada: zshrc" (el de
+# antes queda en ~/.zshrc.antes-de-discada); con la marca ya no se toca.
+say "$(L "La terminal: zsh con oh-my-zsh" "The terminal: zsh with oh-my-zsh")"
+omz="$HOME/.oh-my-zsh"
+if ((DRY)); then echo "   [dry-run] oh-my-zsh, plugins y ~/.zshrc"
+else
+  [ -d "$omz" ] || git clone -q --depth 1 https://github.com/ohmyzsh/ohmyzsh.git "$omz" ||
+    warn "$(L "no se pudo bajar oh-my-zsh" "couldn't download oh-my-zsh")"
+  for p in zsh-autosuggestions zsh-syntax-highlighting; do
+    [ -d "$omz/custom/plugins/$p" ] || git clone -q --depth 1 "https://github.com/zsh-users/$p" "$omz/custom/plugins/$p" || true
+  done
+  if ! grep -qs '^# discada: zshrc' "$HOME/.zshrc"; then
+    [ -e "$HOME/.zshrc" ] && cp "$HOME/.zshrc" "$HOME/.zshrc.antes-de-discada"
+    cp "$CFG/hypr/shell/zshrc" "$HOME/.zshrc"
+  fi
+  if [ "$(getent passwd "$USER" | cut -d: -f7)" != /usr/bin/zsh ] && [ -x /usr/bin/zsh ]; then
+    sudo chsh -s /usr/bin/zsh "$USER" && SHELL=/usr/bin/zsh ||
+      warn "$(L "no se cambió tu shell a zsh: chsh -s /usr/bin/zsh" "shell not switched to zsh: chsh -s /usr/bin/zsh")"
+  fi
+fi
+
 # ~/.local/bin en el PATH (rola, vato, arre, taco, empalme, picha, fierro y chispa viven ahí): en el perfil de
 # login, que SDDM lee al entrar a Hyprland. En un Arch nuevo no viene
 path_line='[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || export PATH="$HOME/.local/bin:$PATH"  # discada'
