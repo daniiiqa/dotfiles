@@ -56,9 +56,9 @@ hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, tag = "+tool"
 -- ─── Herramientas y diálogos ─────────────────────────────────────────────────
 -- vato (Vato.sh), picha, fierro, compa y chispa (TuiApp.sh): las apps de discada en la terminal
 hl.window_rule({ match = { class = "^(vato|picha|fierro|compa|chispa|discada-update)$" }, float = true, center = true, size = "(monitor_w*0.55) (monitor_h*0.6)" })
--- solar: más grande (es para verlo); de protector, a pantalla completa
-hl.window_rule({ match = { class = "^(solar)$" }, float = true, center = true, size = "(monitor_w*0.8) (monitor_h*0.75)" })
-hl.window_rule({ match = { class = "^(solar-protector)$" }, fullscreen = true })
+-- jardín: más grande (es para verlo); de protector, a pantalla completa
+hl.window_rule({ match = { class = "^(jardin)$" }, float = true, center = true, size = "(monitor_w*0.8) (monitor_h*0.75)" })
+hl.window_rule({ match = { class = "^(jardin-protector)$" }, fullscreen = true })
 -- nota: cada nota es una ventana que flota donde la pongas (y se puede fijar)
 hl.window_rule({ match = { class = "^(nota)$" }, float = true })
 hl.window_rule({ match = { tag = "tool" }, float = true, center = true, size = "(monitor_w*0.7) (monitor_h*0.7)" })

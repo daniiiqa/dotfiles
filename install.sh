@@ -152,7 +152,7 @@ CACHA_REPO="https://github.com/daniiiqa/cacha.git"
 MACHIN_REPO="https://github.com/daniiiqa/machin.git"
 MACHACA_REPO="https://github.com/daniiiqa/machaca.git"
 TROMPO_REPO="https://github.com/daniiiqa/trompo.git"
-SOLAR_REPO="https://github.com/daniiiqa/solar.git"   # privado: solo en tus compus (con tu sesión de gh)
+JARDIN_REPO="https://github.com/daniiiqa/jardin.git"   # privado: solo en tus compus (con tu sesión de gh)
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.lua hypr/workspaces.lua
@@ -573,7 +573,7 @@ fi
 # aquí, en una carpeta compartida para que las dependencias se compilen una vez.
 DISCADA_BIN_STATE="$HOME/.local/share/discada/bin"
 DISCADA_TARGET="$HOME/.cache/discada/target"
-# Custom (dany): un archivo de la release edge. Los repos privados (solar) no
+# Custom (dany): un archivo de la release edge. Los repos privados (jardín) no
 # se bajan con curl: entonces con tu sesión de gh, si la hay.
 bajar() {  # bajar <dueño/repo> <archivo> <destino>
   curl -fsL -o "$3" "https://github.com/$1/releases/download/edge/$2" 2>/dev/null && return 0
@@ -782,10 +782,11 @@ app machaca "$MACHACA_REPO"
 # sesión (startup.lua) y `trompo` enseña el QR para emparejar
 say "trompo ($(L "la compu desde el cel: corre trompo para emparejar" "your computer from your phone: run trompo to pair")) → ~/.local/bin/trompo"
 app trompo "$TROMPO_REPO"
-# Custom (dany): solar, lo que hemos hecho juntos, sembrado (SUPER+Shift+J; y
+# Custom (dany): jardín, lo que hemos hecho juntos, sembrado (SUPER+Shift+J; y
 # de protector antes del bloqueo). Repo privado: en una compu sin acceso se salta
-say "solar ($(L "lo que hemos hecho juntos, sembrado: SUPER+Shift+J" "what we've made together, planted: SUPER+Shift+J")) → ~/.local/bin/solar"
-app solar "$SOLAR_REPO"
+say "jardín ($(L "lo que hemos hecho juntos, sembrado: SUPER+Shift+J" "what we've made together, planted: SUPER+Shift+J")) → ~/.local/bin/jardin"
+app jardin "$JARDIN_REPO"
+((DRY)) || { [ -x "$HOME/.local/bin/jardin" ] && ln -sf jardin "$HOME/.local/bin/jardín"; rm -f "$HOME/.local/bin/solar"; }
 if ((LAPTOP)); then
   say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
   app fierro "$FIERRO_REPO"
