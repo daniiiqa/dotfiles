@@ -45,6 +45,8 @@ hl.bind("SUPER + SHIFT + K", hl.dsp.exec_cmd(scriptsDir .. "/KeyBinds.sh"), { de
 hl.bind("SUPER + SHIFT + E", hl.dsp.exec_cmd(scriptsDir .. "/QuickSettings.sh"), { description = "discada settings" })
 -- Custom (dany): bicho, los animalitos que se pasean por el escritorio
 hl.bind("SUPER + SHIFT + B", hl.dsp.exec_cmd("$HOME/.local/bin/bicho menu"), { description = "desktop pets (bicho)" })
+-- Custom (dany): solar, lo que hemos hecho juntos, sembrado (lo hizo Claude)
+hl.bind("SUPER + SHIFT + J", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh solar"), { description = "solar: what we've made together, planted" })
 hl.bind("SUPER + SHIFT + M", hl.dsp.exec_cmd("$HOME/.local/bin/machin"), { description = "other computer as extra monitor (machín)" })  -- Custom (dany): prende / apaga
 hl.bind("SUPER + S", hl.dsp.exec_cmd(scriptsDir .. "/RofiSearch.sh"), { description = "web search" })
 hl.bind("SUPER + CTRL + S", hl.dsp.exec_cmd("$HOME/.local/bin/jale -show window"), { description = "window switcher" })

@@ -152,6 +152,7 @@ CACHA_REPO="https://github.com/daniiiqa/cacha.git"
 MACHIN_REPO="https://github.com/daniiiqa/machin.git"
 MACHACA_REPO="https://github.com/daniiiqa/machaca.git"
 TROMPO_REPO="https://github.com/daniiiqa/trompo.git"
+SOLAR_REPO="https://github.com/daniiiqa/solar.git"   # privado: solo en tus compus (con tu sesión de gh)
 LAZYVIM_STARTER="https://github.com/LazyVim/starter"
 # tus ajustes: --update no los pisa
 KEEP_ON_UPDATE=(hypr/discada.conf hypr/recorder.conf hypr/monitors.lua hypr/workspaces.lua
@@ -572,11 +573,19 @@ fi
 # aquí, en una carpeta compartida para que las dependencias se compilen una vez.
 DISCADA_BIN_STATE="$HOME/.local/share/discada/bin"
 DISCADA_TARGET="$HOME/.cache/discada/target"
+# Custom (dany): un archivo de la release edge. Los repos privados (solar) no
+# se bajan con curl: entonces con tu sesión de gh, si la hay.
+bajar() {  # bajar <dueño/repo> <archivo> <destino>
+  curl -fsL -o "$3" "https://github.com/$1/releases/download/edge/$2" 2>/dev/null && return 0
+  command -v gh >/dev/null && gh release download edge -R "$1" -p "$2" -O "$3" --clobber >/dev/null 2>&1
+}
+
 app() {  # app <nombre> <repo>
   local name="$1" repo="$2" slug head stamp base got tmp waited=0
   slug="${repo#https://github.com/}"; slug="${slug%.git}"
   stamp="$DISCADA_BIN_STATE/$name.commit"
-  head="$(git ls-remote "$repo" HEAD 2>/dev/null | cut -f1)" || true
+  # sin acceso (repo privado en otra compu) que no se quede pidiendo usuario
+  head="$(GIT_TERMINAL_PROMPT=0 git ls-remote "$repo" HEAD 2>/dev/null | cut -f1)" || true
   # Custom (dany): repo que no existe todavía (o sin red): se salta con aviso
   # en vez de tumbar todo el --update con set -e (pasó con nota sin publicar)
   if [ -z "$head" ]; then
@@ -588,16 +597,15 @@ app() {  # app <nombre> <repo>
     return
   fi
   ((DRY)) && { printf '   [dry-run] %s %s\n' "$name" "${head:0:7}"; return; }
-  base="https://github.com/$slug/releases/download/edge"
   if [ "$(uname -m)" = x86_64 ] && [ -n "$head" ] && [ -z "${DISCADA_COMPILAR:-}" ]; then
-    while got="$(curl -fsL "$base/$name.commit" 2>/dev/null)"; [ -n "$got" ] && [ "$got" != "$head" ] && ((waited < 900)); do
+    tmp="$(mktemp -d)"
+    while got="$(bajar "$slug" "$name.commit" "$tmp/c" && cat "$tmp/c")"; [ -n "$got" ] && [ "$got" != "$head" ] && ((waited < 900)); do
       ((waited)) || say "  $name: $(L "el último cambio se está compilando en GitHub, esperando…" "the latest change is still building on GitHub, waiting…")"
       sleep 20; waited=$((waited + 20))
     done
     if [ "$got" = "$head" ]; then
-      tmp="$(mktemp -d)"
-      if curl -fsL -o "$tmp/$name-x86_64-linux" "$base/$name-x86_64-linux" &&
-         curl -fsL -o "$tmp/$name-x86_64-linux.sha256" "$base/$name-x86_64-linux.sha256" &&
+      if bajar "$slug" "$name-x86_64-linux" "$tmp/$name-x86_64-linux" &&
+         bajar "$slug" "$name-x86_64-linux.sha256" "$tmp/$name-x86_64-linux.sha256" &&
          (cd "$tmp" && sha256sum -c --quiet "$name-x86_64-linux.sha256"); then
         mkdir -p "$HOME/.local/bin" "$DISCADA_BIN_STATE"
         install -m755 "$tmp/$name-x86_64-linux" "$HOME/.local/bin/$name"
@@ -606,12 +614,12 @@ app() {  # app <nombre> <repo>
         say "  $name: $(L "listo (ya compilado)" "done (prebuilt)") ${head:0:7}"
         return
       fi
-      rm -rf "$tmp"
     fi
+    rm -rf "$tmp"
   fi
   say "  $name: $(L "compilando aquí…" "compiling here…")"
   if ! rustup show active-toolchain >/dev/null 2>&1; then rustup default stable; fi
-  CARGO_TARGET_DIR="$DISCADA_TARGET" cargo install --git "$repo" --root "$HOME/.local" --locked --force &&
+  CARGO_NET_GIT_FETCH_WITH_CLI=true CARGO_TARGET_DIR="$DISCADA_TARGET" cargo install --git "$repo" --root "$HOME/.local" --locked --force &&
     { mkdir -p "$DISCADA_BIN_STATE"; [ -n "$head" ] && echo "$head" > "$stamp"; }
 }
 
@@ -774,6 +782,10 @@ app machaca "$MACHACA_REPO"
 # sesión (startup.lua) y `trompo` enseña el QR para emparejar
 say "trompo ($(L "la compu desde el cel: corre trompo para emparejar" "your computer from your phone: run trompo to pair")) → ~/.local/bin/trompo"
 app trompo "$TROMPO_REPO"
+# Custom (dany): solar, lo que hemos hecho juntos, sembrado (SUPER+Shift+J; y
+# de protector antes del bloqueo). Repo privado: en una compu sin acceso se salta
+say "solar ($(L "lo que hemos hecho juntos, sembrado: SUPER+Shift+J" "what we've made together, planted: SUPER+Shift+J")) → ~/.local/bin/solar"
+app solar "$SOLAR_REPO"
 if ((LAPTOP)); then
   say "fierro ($(L "la laptop: límites de carga, perfiles, fn-lock" "the laptop: charge limits, profiles, fn-lock")) → ~/.local/bin/fierro"
   app fierro "$FIERRO_REPO"
