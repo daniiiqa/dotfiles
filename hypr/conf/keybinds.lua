@@ -47,6 +47,8 @@ hl.bind("SUPER + SHIFT + E", hl.dsp.exec_cmd(scriptsDir .. "/QuickSettings.sh"),
 hl.bind("SUPER + SHIFT + B", hl.dsp.exec_cmd("$HOME/.local/bin/bicho menu"), { description = "desktop pets (bicho)" })
 -- Custom (dany): jardín, lo que hemos hecho juntos, sembrado (lo hizo Claude)
 hl.bind("SUPER + SHIFT + J", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh jardin"), { description = "jardín: what we've made together, planted" })
+-- Custom (dany): MCServers, los servers de Minecraft de la compu
+hl.bind("SUPER + SHIFT + O", hl.dsp.exec_cmd(scriptsDir .. "/TuiApp.sh mcservers"), { description = "Minecraft servers (MCServers)" })
 hl.bind("SUPER + SHIFT + M", hl.dsp.exec_cmd("$HOME/.local/bin/machin"), { description = "other computer as extra monitor (machín)" })  -- Custom (dany): prende / apaga
 hl.bind("SUPER + S", hl.dsp.exec_cmd(scriptsDir .. "/RofiSearch.sh"), { description = "web search" })
 hl.bind("SUPER + CTRL + S", hl.dsp.exec_cmd("$HOME/.local/bin/jale -show window"), { description = "window switcher" })

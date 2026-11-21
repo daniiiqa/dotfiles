@@ -54,8 +54,8 @@ hl.window_rule({ match = { class = "^(xarchiver|org.gnome.Loupe)$" }, tag = "+to
 hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, tag = "+tool" })
 
 -- ─── Herramientas y diálogos ─────────────────────────────────────────────────
--- vato (Vato.sh), picha, fierro, compa y chispa (TuiApp.sh): las apps de discada en la terminal
-hl.window_rule({ match = { class = "^(vato|picha|fierro|compa|chispa|discada-update)$" }, float = true, center = true, size = "(monitor_w*0.55) (monitor_h*0.6)" })
+-- vato (Vato.sh), picha, fierro, compa, chispa y mcservers (TuiApp.sh): las apps de discada en la terminal
+hl.window_rule({ match = { class = "^(vato|picha|fierro|compa|chispa|mcservers|discada-update)$" }, float = true, center = true, size = "(monitor_w*0.55) (monitor_h*0.6)" })
 -- jardín: más grande (es para verlo); de protector, a pantalla completa
 hl.window_rule({ match = { class = "^(jardin)$" }, float = true, center = true, size = "(monitor_w*0.8) (monitor_h*0.75)" })
 hl.window_rule({ match = { class = "^(jardin-protector)$" }, fullscreen = true })
