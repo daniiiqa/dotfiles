@@ -53,6 +53,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("$HOME/.local/bin/chispa music --auto")  -- el visualizador del teclado, si KEYBOARD_LIGHT=music
     hl.exec_cmd("$HOME/.local/bin/chispa video --auto")  -- con wallpaper en video, el teclado lo sigue (si KEYBOARD_LIGHT=wallpaper)
     hl.exec_cmd(scriptsDir .. "/Entrada.sh luego 1.2 $HOME/.local/bin/bicho --auto")  -- los animalitos, si en su menú (SUPER+Shift+B) dice "al iniciar sesión: sí"
+    hl.exec_cmd(scriptsDir .. "/Entrada.sh luego 1.2 $HOME/.local/bin/maceta --auto")  -- Custom (dany): la dalia de fondo, si en discada (SUPER+Shift+E › maceta) dice "al iniciar sesión: sí"
     hl.exec_cmd("$HOME/.local/bin/picha recibe")  -- lo que te mandan el cel y tus compus (Quick Share, Bluetooth)
     hl.exec_cmd("$HOME/.local/bin/machin escucha")  -- Custom (dany): machín: la otra compu puede pedirte la pantalla (y tú a ella con SUPER+Shift+M)
     hl.exec_cmd("$HOME/.local/bin/trompo sirve")  -- Custom (dany): trompo: la compu desde el cel (PWA en https://<ip>:47421; emparejar con `trompo`)

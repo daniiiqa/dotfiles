@@ -62,6 +62,7 @@ Atajos clave: SUPER+T looks (`LookSwitch.sh`), SUPER+W wallpaper
 | carbon | el updater ("actualizar discada"): pasos y log a la izquierda, la discada en la lumbre a la derecha; `carbon revisa` es el antiguo UpdateCheck.py | `~/carbon` |
 | picha | Quick Share con Android | `~/picha` |
 | bicho | los animalitos del escritorio (bicho, michi, baba): caminan, trepan ventanas, bailan; menú `bicho menu` (SUPER+Shift+B), config `~/.config/bicho/config.json` | `~/bicho` |
+| maceta | la dalia de letras de fondo (layer-shell abajo de las ventanas); su submenú en discada (SUPER+Shift+E › maceta), `maceta estado` / `maceta pon CLAVE V`, arranque `maceta --auto` (si `al_iniciar = si`), config `~/.config/maceta/config` | `~/maceta` |
 | compa | agente de IA en la terminal (Ollama local o Claude), con herramientas sobre el rice | `~/compa` |
 | cacha | el sucesor de fastfetch: lee el fastfetch de cada look y lo dibuja en vivo (info, pixel art animado de `~/.config/cacha/pixel`, visualizador de cava); estilo en `FETCH_STYLE` (discada.conf), lo lanza `scripts/FetchHook.sh` | `~/cacha` |
 | chapa | el candado de discada en vez de hyprlock (`LOCKER=chapa` en discada.conf, lo lanza `scripts/LockScreen.sh`; si falla, sigue hyprlock): lee el `hyprlock.conf` del look (labels con `cmd[…]`, como el motd), huella con fprintd, log en `~/.local/state/chapa/chapa.log` | `~/chapa` |

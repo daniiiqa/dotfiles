@@ -25,7 +25,7 @@ edit=${EDITOR:-${edit:-nano}}
 I_LOOK=$'\U000f03d8'; I_SHADER=$'\U000f0068'; I_LANG=$'\U000f05ca'; I_VIS=$'\U000f0ea2'
 I_REC=$'\U000f044b'; I_GAME=$'\U000f0297'; I_BLUR=$'\U000f00b5'; I_EDIT=$'\U000f03eb'
 I_TOOLS=$'\U000f1064'; I_KEYS=$'\U000f030c'; I_FONT=$'\U000f027f'; I_UPDATE=$'\U000f06b0'
-I_TRACKPAD=$'\U000f0322'; I_MACHIN=$'\U000f037a'; I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'; I_TECLADO=$'\U000f030c'; I_FETCH=$'\U000f018d'; I_ENTRADA=$'\U000f0e24'; I_SEMANA=$'\U000f00f0'
+I_TRACKPAD=$'\U000f0322'; I_MACHIN=$'\U000f037a'; I_NOTIF=$'\U000f009a'; I_BAT=$'\U000f0079'; I_TECLADO=$'\U000f030c'; I_FETCH=$'\U000f018d'; I_ENTRADA=$'\U000f0e24'; I_SEMANA=$'\U000f00f0'; I_MACETA=$'\U000f024a'
 arre="$HOME/.local/bin/arre"
 
 need() {
@@ -235,6 +235,72 @@ bat_menu() {
       2) set_conf "$discada" BATTERY_SAVER_AT "$(cycle "${at:-20}" 20 30 15 10 0)" ;;
       3) "$scripts/TuiApp.sh" fierro & return ;;
       *) return ;;
+    esac
+  done
+}
+
+# ── maceta (la dalia de letras de fondo) ─────────────────────────────────────
+# Custom (dany): `maceta estado` da "clave<TAB>valor"; `maceta pon CLAVE V`
+# cambia su config y la que está puesta la vuelve a leer sola.
+maceta="$HOME/.local/bin/maceta"
+declare -A MC
+mc_lee() { MC=(); local k v; while IFS=$'\t' read -r k v; do MC[$k]=$v; done < <("$maceta" estado 2>/dev/null); }
+mc_color() { case "$1" in negra) L negra black ;; roja) L roja red ;; blanca) L blanca white ;; azul) L azul blue ;; *) echo "$1" ;; esac; }
+mc_flores() { case "$1" in plantadas) L plantadas planted ;; ramo) L "en ramo" bouquet ;; una) L "una sola" "just one" ;; *) echo "$1" ;; esac; }
+mc_cuantas() { [ "$1" = auto ] && L "al azar (2 a 5)" "random (2 to 5)" || echo "$1"; }
+mc_lluvia() { case "$1" in a_veces) L "a veces" sometimes ;; siempre) L siempre always ;; nunca) L nunca never ;; *) echo "$1" ;; esac; }
+mc_luces() { case "$1" in de_noche) L "de noche" "at night" ;; siempre) L siempre always ;; nunca) L nunca never ;; *) echo "$1" ;; esac; }
+mc_hora() { case "$1" in real) L "la de verdad" "real time" ;; dia) L "siempre de día" "always day" ;; noche) L "siempre de noche" "always night" ;; *) echo "$1" ;; esac; }
+mc_vida() { [ "$1" = 0 ] && L "siempre en flor" "always in bloom" || echo "$1 $(L días days)"; }
+mc_ahora() { [ "${MC[puesta]}" = yes ] && L "de fondo" "on" || L guardada off; }
+mc_no() { [ "$1" = yes ] && echo no || echo si; }
+mc_pon() { "$maceta" pon "$@" >/dev/null 2>&1; }
+mc_prende() {
+  if [ "${MC[puesta]}" = yes ]; then "$maceta" off
+  else setsid -f "$maceta" >/dev/null 2>&1; sleep 0.3; fi
+}
+MC_COLORES=(negra roja blanca azul); MC_FLORES=(plantadas ramo una); MC_VIDAS=(7 3 14 30 0)
+MC_CUANTAS=(auto 2 3 4 5); MC_LLUVIAS=(a_veces siempre nunca); MC_HORAS=(real dia noche); MC_LUCES=(de_noche siempre nunca)
+
+maceta_menu() {
+  local row=0 i names acts
+  while true; do
+    mc_lee
+    names=() acts=()
+    add() { names+=("$1"); acts+=("$2"); }
+    add "$(L "de fondo" "on the desktop"): $(onoff "${MC[puesta]}")"              puesta
+    add "$(L "verla crecer de nuevo" "watch it grow again")"                      crecer
+    [ "${MC[flores]}" != una ] && add "$(L "otra combinación de flores" "another mix of flowers")" otra
+    add "color: $(mc_color "${MC[color]}")"                                       color
+    add "$(L flores flowers): $(mc_flores "${MC[flores]}")"                       flores
+    [ "${MC[flores]}" != una ] && add "$(L cuántas "how many"): $(mc_cuantas "${MC[cuantas]:-auto}")" cuantas
+    add "$(L velas candles): $(onoff "${MC[velas]}")"                             velas
+    add "$(L lluvia rain): $(mc_lluvia "${MC[lluvia]:-a_veces}")"                 lluvia
+    add "$(L luciérnagas fireflies): $(mc_luces "${MC[luciernagas]:-de_noche}")" luces
+    add "$(L hora time): $(mc_hora "${MC[hora]:-real}")"                          hora
+    add "$(L "una vida dura" "one life lasts"): $(mc_vida "${MC[ciclo_dias]}")"   vida
+    add "$(L "crecer desde la tierra al ponerla" "grow from the ground when started"): $(onoff "${MC[crece]:-yes}")" crece
+    add "$(L "al iniciar sesión" "at login"): $(onoff "${MC[al_iniciar]}")"       login
+    add "$(L "editar config" "edit config")"                                      editar
+    add "‹ $(L volver back)"                                                      volver
+    i=$(pick maceta "$(L "una dalia de letras de fondo · los cambios se ven al momento" "a flower made of letters behind your windows · changes show right away")" "${names[@]}") || return
+    row=$i
+    case "${acts[$i]}" in
+      puesta)  mc_prende ;;
+      crecer)  "$maceta" crece >/dev/null 2>&1; return ;;
+      otra)    "$maceta" otra >/dev/null 2>&1 ;;
+      luces)   mc_pon luciernagas "$(cycle "${MC[luciernagas]:-de_noche}" "${MC_LUCES[@]}")" ;;
+      color)   mc_pon color "$(cycle "${MC[color]}" "${MC_COLORES[@]}")" ;;
+      flores)  mc_pon flores "$(cycle "${MC[flores]}" "${MC_FLORES[@]}")" ;;
+      cuantas) mc_pon cuantas "$(cycle "${MC[cuantas]:-auto}" "${MC_CUANTAS[@]}")" ;;
+      velas)   mc_pon velas "$(mc_no "${MC[velas]}")" ;;
+      lluvia)  mc_pon lluvia "$(cycle "${MC[lluvia]:-a_veces}" "${MC_LLUVIAS[@]}")" ;;
+      hora)    mc_pon hora "$(cycle "${MC[hora]:-real}" "${MC_HORAS[@]}")" ;;
+      vida)    mc_pon ciclo_dias "$(cycle "${MC[ciclo_dias]}" "${MC_VIDAS[@]}")" ;;
+      crece)   mc_pon crece "$(mc_no "${MC[crece]:-yes}")" ;;
+      login)   mc_pon al_iniciar "$(mc_no "${MC[al_iniciar]}")" ;;
+      editar)  setsid -f $term -e $edit "${MC[config]}" >/dev/null 2>&1; return ;;
+      *)       return ;;
     esac
   done
 }
@@ -567,6 +633,7 @@ qs_estado() {
     esac
     printf 'machin\t%s\n' "$v"
   fi
+  if [ -x "$maceta" ]; then mc_lee; printf 'maceta\t%s\t%s\n' "${MC[puesta]:-no}" "$(mc_ahora)"; fi
   command -v picha >/dev/null && printf 'picha\t1\n'
   command -v trompo >/dev/null && printf 'trompo\t%s\n' "$(trompo cels 2>/dev/null | grep -vc '(')"
   return 0
@@ -623,6 +690,32 @@ qs_pagina() {
       printf 'opcion\tbat-at\t%s\t%s\n' "$(L "ahorro solo al" "saver by itself at")" "${at:-20}"
       for v in 10 15 20 30 0; do printf 'valor\tbat-at\t%s\t%s\n' "$v" "$([ "$v" = 0 ] && L nunca never || echo "$v%")"; done
       printf 'abre\tfierro\t%s\t%s\n' "$(L "límites de carga y más" "charge limits and more")" fierro ;;
+    maceta)
+      mc_lee
+      printf 'titulo\tmaceta\nnota\t%s\n' "$(L "una dalia de letras de fondo · los cambios se ven al momento" "a flower made of letters behind your windows · changes show right away")"
+      printf 'interruptor\tmc-puesta\t%s\t%s\n' "$(L "de fondo" "on the desktop")" "${MC[puesta]:-no}"
+      printf 'abre\tmc-crecer\t%s\t\n' "$(L "verla crecer de nuevo" "watch it grow again")"
+      [ "${MC[flores]}" != una ] && printf 'abre\tmc-otra\t%s\t\n' "$(L "otra combinación de flores" "another mix of flowers")"
+      printf 'opcion\tmc-color\tcolor\t%s\n' "${MC[color]}"
+      for v in "${MC_COLORES[@]}"; do printf 'valor\tmc-color\t%s\t%s\n' "$v" "$(mc_color "$v")"; done
+      printf 'opcion\tmc-flores\t%s\t%s\n' "$(L flores flowers)" "${MC[flores]}"
+      for v in "${MC_FLORES[@]}"; do printf 'valor\tmc-flores\t%s\t%s\n' "$v" "$(mc_flores "$v")"; done
+      if [ "${MC[flores]}" != una ]; then
+        printf 'opcion\tmc-cuantas\t%s\t%s\n' "$(L cuántas "how many")" "${MC[cuantas]:-auto}"
+        for v in "${MC_CUANTAS[@]}"; do printf 'valor\tmc-cuantas\t%s\t%s\n' "$v" "$(mc_cuantas "$v")"; done
+      fi
+      printf 'interruptor\tmc-velas\t%s\t%s\n' "$(L velas candles)" "${MC[velas]}"
+      printf 'opcion\tmc-lluvia\t%s\t%s\n' "$(L lluvia rain)" "${MC[lluvia]:-a_veces}"
+      for v in "${MC_LLUVIAS[@]}"; do printf 'valor\tmc-lluvia\t%s\t%s\n' "$v" "$(mc_lluvia "$v")"; done
+      printf 'opcion\tmc-luces\t%s\t%s\n' "$(L luciérnagas fireflies)" "${MC[luciernagas]:-de_noche}"
+      for v in "${MC_LUCES[@]}"; do printf 'valor\tmc-luces\t%s\t%s\n' "$v" "$(mc_luces "$v")"; done
+      printf 'opcion\tmc-hora\t%s\t%s\n' "$(L hora time)" "${MC[hora]:-real}"
+      for v in "${MC_HORAS[@]}"; do printf 'valor\tmc-hora\t%s\t%s\n' "$v" "$(mc_hora "$v")"; done
+      printf 'opcion\tmc-vida\t%s\t%s\n' "$(L "una vida dura" "one life lasts")" "${MC[ciclo_dias]}"
+      for v in "${MC_VIDAS[@]}"; do printf 'valor\tmc-vida\t%s\t%s\n' "$v" "$(mc_vida "$v")"; done
+      printf 'interruptor\tmc-crece\t%s\t%s\n' "$(L "crecer desde la tierra al ponerla" "grow from the ground when started")" "${MC[crece]:-yes}"
+      printf 'interruptor\tmc-login\t%s\t%s\n' "$(L "al iniciar sesión" "at login")" "${MC[al_iniciar]}"
+      printf 'abre\teditar:%s\t%s\tconfig\n' "${MC[config]}" "$(L "editar config" "edit config")" ;;
     teclado)
       local b modo
       printf 'titulo\t%s\n' "$(L teclado keyboard)"
@@ -724,6 +817,19 @@ qs_hacer() {
     bat-perfil)   local n; for n in 1 2 3; do [ "$("$bat" profile get)" = "$2" ] && break; "$bat" profile >/dev/null; done ;;
     bat-at)       set_conf "$discada" BATTERY_SAVER_AT "$2" ;;
     fierro)       exec "$scripts/TuiApp.sh" fierro ;;
+    mc-puesta)    mc_lee; mc_prende ;;
+    mc-color)     mc_pon color "$2" ;;
+    mc-flores)    mc_pon flores "$2" ;;
+    mc-vida)      mc_pon ciclo_dias "$2" ;;
+    mc-cuantas)   mc_pon cuantas "$2" ;;
+    mc-lluvia)    mc_pon lluvia "$2" ;;
+    mc-hora)      mc_pon hora "$2" ;;
+    mc-luces)     mc_pon luciernagas "$2" ;;
+    mc-crecer)    "$maceta" crece >/dev/null 2>&1 ;;
+    mc-otra)      "$maceta" otra >/dev/null 2>&1 ;;
+    mc-crece)     mc_lee; mc_pon crece "$(mc_no "${MC[crece]:-yes}")" ;;
+    mc-velas)     mc_lee; mc_pon velas "$(mc_no "${MC[velas]}")" ;;
+    mc-login)     mc_lee; mc_pon al_iniciar "$(mc_no "${MC[al_iniciar]}")" ;;
     teclado-modo) case "$2" in
                     wallpaper) local err; err=$(chispa wallpaper 2>&1 >/dev/null) || notify-send -i "dialog-error-symbolic" "chispa" "$err" ;;
                     music) setsid -f chispa music >/dev/null 2>&1 ;;
@@ -767,7 +873,7 @@ case "$1" in
     case "$2" in
       vis) vis_menu ;; rec) rec_menu ;; notif) notif_menu ;; bateria) bat_menu ;;
       teclado) teclado_menu ;; edit) edit_menu ;; tools) tools_menu ;;
-      fetch) fetch_menu ;; entrada) entrada_menu ;;
+      fetch) fetch_menu ;; entrada) entrada_menu ;; maceta) maceta_menu ;;
       *) echo "no hay menú '$2'" >&2; exit 2 ;;
     esac
     exit 0 ;;
@@ -802,6 +908,7 @@ while true; do
   add "$I_FETCH  fastfetch: $(fetch_name "$(get_conf "$discada" FETCH_STYLE)") ›" fetch
   add "$I_ENTRADA  $(L entrada entrance): $(entrada_name "$(get_conf "$discada" ENTRADA)") ›" entrada
   add "$I_SEMANA  $(L "tu semana" "your week")"                       semana
+  if [ -x "$maceta" ]; then mc_lee; add "$I_MACETA  maceta: $(mc_ahora) ›" maceta; fi
   add "$I_VIS  $(L visualizador visualizer): $(vis_now)"           vis
   add "$I_REC  $(L grabador recorder) ›"                           rec
   # Custom (dany): machín, la otra compu como monitor extra (su menú: sonido, lado, calidad)
@@ -836,6 +943,7 @@ while true; do
     fetch)  fetch_menu ;;
     entrada) entrada_menu ;;
     semana) exec "$scripts/Semana.sh" ver ;;
+    maceta) maceta_menu ;;
     lang)   set_language "$([ "$DISCADA_LANG" = es ] && echo en || echo es)" ;;
     vis)    vis_menu ;;
     rec)    rec_menu ;;
