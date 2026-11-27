@@ -92,7 +92,6 @@ tiny-skia; las TUI usan ratatui. Todas toman colores y estilo de disco.
   Hyprland no pinta ninguno encima.
 - Imágenes grandes (wallpapers): nunca decodificar a tamaño completo en el
   hilo que dibuja. Miniaturas en caché (`~/.cache/<herramienta>`) y en hilos.
-- `looks/README.md` todavía dice `rofi/`; las carpetas ya son `jale/`.
 - **Puede haber otro escritorio (KDE) en la misma compu.** Lo de discada no
   se le pasa: programas por defecto en `~/.config/hyprland-mimeapps.list`
   (`mime_hypr` en install.sh; nunca `xdg-mime default` ni `xdg-settings`, que

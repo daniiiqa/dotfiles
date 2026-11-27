@@ -9,7 +9,7 @@ hypr/looks/<look>/
   look.toml            colores, fuente, estilo y la barra ([bar], de empalme):
                        lo único obligatorio de tocar
   empalme/appicons.json  los íconos de las apps en la barra
-  rofi/                config.rasi, theme.rasi (forma de los menús), fuentes
+  jale/                config.rasi, theme.rasi (forma de los menús), fuentes
   hypr/conf/           decorations.lua (bordes, gaps, blur) y animations.lua
   hypr/hyprlock.conf   la pantalla de bloqueo
   wlogout/  kitty/  fastfetch/  sddm/look.conf
@@ -73,7 +73,7 @@ selection_background = "acc"
 |---|---|---|---|
 | la barra (`[bar]` del look.toml) | `acc` | `alpha(acc, 0.5)` | — |
 | wlogout (CSS) | `@acc` | `alpha(@acc, 0.5)` | `{{font}}` |
-| rofi (`.rasi`) | `@acc` | `@acc-a80` (con guion: rofi no acepta `_`) | `{{font}}` |
+| jale (`.rasi`) | `@acc` | `@acc-a80` (con guion: el formato rasi no acepta `_`) | `{{font}}` |
 | hyprlock | `$acc` | `$acc_a80` | `{{font}}` |
 | hyprland (`.lua`) | `c.acc` | `c.acc_a80` | — |
 | sddm/look.conf | `"@acc"` | — | `{{font}}` |
@@ -84,7 +84,7 @@ solas las que use el look. Los de la terminal (`@color12`, `@background`…)
 también sirven, y en los looks de wallpaper son los únicos que cambian con él.
 
 Lo que genera leña (no se edita a mano): los colores de cada app
-(`wlogout/wallust/colors-wlogout.css`, `rofi/wallust/colors-rofi.rasi`,
+(`wlogout/wallust/colors-wlogout.css`, `jale/wallust/colors-jale.rasi`,
 `empalme/colors.json` y `empalme/bar.json`,
 `hypr/wallust/wallust-hyprland.{conf,lua}`, el theme de kitty, cava),
 `wallust/wallust.toml` (de `wallust/wallust.base.toml`) y `rola/look.json`.
