@@ -1,61 +1,66 @@
 #!/usr/bin/env bash
-# Playerctl
+# Teclas multimedia: manejan lo que esté sonando (rola, el cel por Bluetooth,
+# un video…) y avisan con el mismo aviso que el volumen (arre): canción,
+# artista, de dónde sale y una barra con lo que lleva.
+# Uso: MediaCtrl.sh --nxt|--prv|--pause|--stop|--show
 
-music_icon="audio-x-generic-symbolic"
+sDIR="$HOME/.config/hypr/scripts"
+. "$sDIR/lang.sh"
 
-# Play the next track
-play_next() {
-  playerctl next
-  show_music_notification
+# El que está sonando; si nada suena, el primero que haya (rola casi siempre).
+pick_player() {
+  local p
+  for p in $(playerctl -l 2>/dev/null); do
+    [ "$(playerctl -p "$p" status 2>/dev/null)" = Playing ] && { echo "$p"; return; }
+  done
+  playerctl -l 2>/dev/null | grep -v '^playerctld$' | head -1
 }
 
-# Play the previous track
-play_previous() {
-  playerctl previous
-  show_music_notification
+player=$(pick_player)
+[ -n "$player" ] || exit 0
+pc() { playerctl -p "$player" "$@" 2>/dev/null; }
+
+# "Galaxy de Ana Media Player" (un cel por Bluetooth) → "Galaxy de Ana"
+source_name() {
+  local id
+  id=$(busctl --user get-property "org.mpris.MediaPlayer2.$player" /org/mpris/MediaPlayer2 \
+    org.mpris.MediaPlayer2 Identity 2>/dev/null | sed -E 's/^s "(.*)"$/\1/; s/\\//g')
+  echo "${id% Media Player}"
 }
 
-# Toggle play/pause
-toggle_play_pause() {
-  playerctl play-pause
-  sleep 0.1
-  show_music_notification
+# un aviso que se reemplaza a sí mismo, como el del volumen
+note() {  # ícono, título, cuerpo, [nivel]
+  notify-send -e -a discada -u low -h string:x-canonical-private-synchronous:media_notif \
+    -h boolean:SWAYNC_BYPASS_DND:true ${4:+-h int:value:$4} -i "$1" "$2" "$3"
 }
 
-# Stop playback
-stop_playback() {
-  playerctl stop
-  notify-send -e -u low -i $music_icon " Playback:" " Stopped"
-}
-
-# Display notification with song information
-show_music_notification() {
-  status=$(playerctl status)
-  if [[ "$status" == "Playing" ]]; then
-    song_title=$(playerctl metadata title)
-    song_artist=$(playerctl metadata artist)
-    notify-send -e -u low -i $music_icon "Now Playing:" "$song_title by $song_artist"
-  elif [[ "$status" == "Paused" ]]; then
-    notify-send -e -u low -i $music_icon " Playback:" " Paused"
+show() {
+  local status title artist from icon length position pct
+  status=$(pc status)
+  from=$(source_name)
+  case "$player" in
+    *Media_Player*) icon="smartphone-symbolic" ;;   # el cel por Bluetooth
+    *) icon="audio-x-generic-symbolic" ;;
+  esac
+  if [ "$status" = Paused ]; then
+    note "media-playback-pause-symbolic" "$(L Pausa Paused)" "$(pc metadata title) · $from"
+    return
   fi
+  [ "$status" = Playing ] || return
+  title=$(pc metadata title)
+  artist=$(pc metadata artist)
+  length=$(pc metadata mpris:length)          # µs
+  position=$(pc position | cut -d. -f1)        # s
+  pct=""
+  [ -n "$length" ] && [ "$length" -gt 0 ] && pct=$(( position * 100000000 / length ))
+  note "$icon" "${title:-$(L 'Sonando' 'Playing')}" "${artist:+$artist · }$from" "$pct"
 }
 
-# Get media control action from command line argument
 case "$1" in
-"--nxt")
-  play_next
-  ;;
-"--prv")
-  play_previous
-  ;;
-"--pause")
-  toggle_play_pause
-  ;;
-"--stop")
-  stop_playback
-  ;;
-*)
-  echo "Usage: $0 [--nxt|--prv|--pause|--stop]"
-  exit 1
-  ;;
+  --nxt) pc next; sleep 0.4; show ;;
+  --prv) pc previous; sleep 0.4; show ;;
+  --pause) pc play-pause; sleep 0.2; show ;;
+  --stop) pc stop; note "media-playback-stop-symbolic" "$(L Detenido Stopped)" "$(source_name)" ;;
+  --show) show ;;
+  *) echo "Uso: $0 --nxt|--prv|--pause|--stop|--show"; exit 1 ;;
 esac
