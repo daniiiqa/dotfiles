@@ -428,6 +428,30 @@ else
             "Skipping AUR: without mpvpaper/wallust there are no video wallpapers or dynamic colors")"
 fi
 
+# Custom (dany): con el -Syu de arriba Arch puede cambiar la versión de una
+# librería y lo compilado a mano (AUR o hecho en casa) queda roto sin avisar:
+# OpenCV 5.0 → 5.1 (2026-11-19) dejó a libfprint-gxfp buscando la vieja y la
+# huella dejó de funcionar una semana. Aquí se revisa y se avisa qué recompilar.
+if ! ((DRY)); then
+  rotos=()
+  while read -r p; do
+    falta=$(pacman -Qlq "$p" 2>/dev/null | grep -E '^/usr/(bin|lib)/[^/]+$' | while read -r f; do
+      [ -f "$f" ] && ldd "$f" 2>/dev/null | awk '/=> not found/{print $1}'
+    done | sort -u | tr '\n' ' ')
+    [ -n "$falta" ] && rotos+=("$p (${falta% })")
+  done < <(pacman -Qmq 2>/dev/null)
+  if ((${#rotos[@]})); then
+    warn "$(L "La actualización dejó roto algo compilado a mano (le falta una librería); hay que recompilarlo:" \
+              "The update broke something built by hand (a library is missing); it needs a rebuild:")"
+    for r in "${rotos[@]}"; do
+      case "$r" in
+        libfprint-gxfp\ *) warn "   $r → $(L "la huella" "fingerprint"): ~/gxfp5130-linux/scripts/build-arch-package.sh && sudo pacman -U ~/gxfp5130-linux/config/arch/libfprint-gxfp-*.pkg.tar.zst" ;;
+        *) warn "   $r → ${helper:-yay} -S --rebuild ${r%% *}" ;;
+      esac
+    done
+  fi
+fi
+
 # ── 3. Dotfiles ──────────────────────────────────────────────────────────────
 # Con Hyprland abierto: sin autoreload mientras se copia. Recargaba con cada
 # archivo, y a media copia (un `source` a un archivo que aún no llega, uno a
